@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Surgical Safety Checklist</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css"
+        />
+        <style>
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: #fafafa;
+            }
+
+            * {
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .page {
+                height: 210mm;
+                width: 330mm;
+                min-height: 13.97cm;
+                padding: 15mm;
+                margin: 10mm auto;
+                border: 1px #d3d3d3 solid;
+                border-radius: 5px;
+                background: white;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+                position: relative;
+            }
+
+            .subpage {
+                padding: 1cm;
+                border: 5px red solid;
+                height: 257mm;
+                outline: 2cm #ffeaea solid;
+            }
+
+            /* td {
+                padding-top: 5px;
+            } */
+
+            tr th {
+                font-size: 8pt;
+            }
+            tr td {
+                font-size: 9pt;
+            }
+            /* td {
+                padding-top: 5px;
+            } */
+            th {
+                font-size: 10pt !important;
+            }
+            small {
+                font-size: 7pt;
+            }
+
+            .borderhr {
+                color: black;
+                background-color: black;
+                border-color: black;
+                height: 5px;
+                opacity: 100;
+            }
+
+            .header h1 {
+                margin: 0;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            @page {
+                size: landscape;
+                margin: 0;
+            }
+
+            @media print {
+                html,
+                body {
+                    height: 210mm;
+                    width: 330mm;
+                }
+
+                .page {
+                    margin: 0;
+                    border: initial;
+                    border-radius: initial;
+                    width: initial;
+                    min-height: initial;
+                    box-shadow: initial;
+                    background: initial;
+                    page-break-after: always;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <div class="header">
+                <div class="row">
+                    <div class="col-1">
+                        <img src="logo.png" alt="" />
+                    </div>
+                    <div class="col-4">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Tanggal</td>
+                                    <td>:</td>
+                                    <td>18 Januari 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>Nama Operator</td>
+                                    <td>:</td>
+                                    <td>Rahmad Avriantias Aulia</td>
+                                </tr>
+                                <tr>
+                                    <td>Nama Tindakan</td>
+                                    <td>:</td>
+                                    <td>Operasi Kelamin</td>
+                                </tr>
+                                <tr>
+                                    <td>Diagnosa</td>
+                                    <td>:</td>
+                                    <td>Titit Kecil</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-7">
+                        <h1>SURGICAL SAFETY CHECKLIST</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="row">
+                    <div class="col-4 m-0 p-0">
+                        <table class="table-bordered w-100">
+                            <tr>
+                                <td class="p-2">
+                                    <p
+                                        class="fw-bold d-flex align-items-center m-0"
+                                    >
+                                        SIGN IN (Pukul :.....)
+                                    </p>
+                                    <small>
+                                        Dilakukan sebelum induksi anastesi di
+                                        ruang persiapan / ruang. prosedur
+                                        minimalnya oleh perawat & dokter
+                                        anestesi
+                                    </small>
+                                </td>
+
+                                <td class="w-25"></td>
+                            </tr>
+
+                            <tr style="border-bottom: transparent" class="">
+                                <td class="px-2"></td>
+                                <td>
+                                    <div class="row text-capitalize m-0">
+                                        <div class="col-4">
+                                            <small>Sudah</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <small>Belum</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <small>N/A</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 1 -->
+                            <tr
+                                style="
+                                    border-bottom: transparent;
+                                    border-top: none;
+                                "
+                                class=""
+                            >
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        1.pasien telah dikonfirmasikan
+                                    </p>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <!-- sub 1 -->
+                            <tr style="border-block: transparent">
+                                <td class="px-2">
+                                    <ul type="disc" class="text-capitalize m-0">
+                                        <li>identifikasi dan gelang pasien</li>
+                                        <li>lokasi operasi</li>
+                                        <li>prosedur operasi</li>
+                                        <li>informed consent</li>
+                                        <li>
+                                            foto hasil pemeriksaan radiologi
+                                        </li>
+                                        <li>persiapan produk darah</li>
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    <!-- checkbox for identifikasi dan gelang pasien-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4"></div>
+                                    </div>
+
+                                    <!-- checkbox for  lokasi operasi-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- checkbox for  prosedur operasi-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4"></div>
+                                    </div>
+
+                                    <!-- checkbox for  informed consent-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4"></div>
+                                    </div>
+
+                                    <!-- checkbox for  foto hasil pemeriksaan radiologi-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- checkbox for  persiapan produk darah-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-4">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 2 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        2. lokasi operasi sudah diberi tanda
+                                        oleh anggota tim
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 3 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        3. masin dan obat-obatan anestesi sudah
+                                        di cek lengkap
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 4 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        4.pulse oximeter sudah terpasang dan
+                                        berfungsi
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- kosong-->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2"></td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <small>Ya</small>
+                                            </div>
+                                            <div class="col-4">
+                                                <small>Tidak</small>
+                                            </div>
+                                            <div class="col-4">
+                                                <small>N/A</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 5 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        5. Apakah Pasien memiliki riwayat asma?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 6 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        6. Apakah pasien punya riwayat alergi?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 7 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        7. Kesulitan bernafas/risiko aspirasi?
+                                        dan menggunakan peralatan/bantuan?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 8 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        8. Risiko kehilagan darah >500 ml (7
+                                        ml/Kg BB pada anak)?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 9 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        9. Dua akses intravena/akses sentral dan
+                                        rencana terapi cairan?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 10 -->
+                            <tr style="border-top: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        10. Rencana Pemasangan Implant
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="row text-capitalize">
+                                        <div class="row m-0 text-center">
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                />
+                                            </div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!--   <tr style="border-top: transparent; ">
+                                <td class="text-center">
+                                <p>Nama Dan Tanda Tangan</p>
+                                </td>
+                                <td></td>
+                            </tr> -->
+                        </table>
+                    </div>
+                    <div class="col-4 p-0">
+                        <table class="table-bordered w-100">
+                            <!-- header no 2 time out -->
+                            <tr>
+                                <td class="p-2">
+                                    <p
+                                        class="fw-bold d-flex align-items-center m-0"
+                                    >
+                                        TIME OUT (Pukul :.....)
+                                    </p>
+                                    <small class="m-0">
+                                        (Dilakukan sebelum insisi kulit di ruang
+                                        prosedur, dipandu oleh perawat sirkuler
+                                        dan diikuti oleh perawat, dokter
+                                        anestesi, dan operator)
+                                    </small>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <!-- kosong -->
+                            <tr style="border-bottom: transparent" class="">
+                                <td class=""></td>
+                                <td style="width: 70px">
+                                    <div
+                                        class="row text-capitalize"
+                                        style="width: 80px"
+                                    >
+                                        <div class="col-6">
+                                            <small>sudah</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small>belum</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 1 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        1. Konfirmasi seluruh anggota tim
+                                        memperkenalkan nama perannya masing
+                                        masing
+                                    </p>
+                                </td>
+                                <td>
+                                    <div
+                                        class="row text-center text-capitalize m-0"
+                                    >
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 2 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        2. Dokter bedah, dokter anestesi dan
+                                        perawat melakukan konfirmasi secara
+                                        verbal
+                                    </p>
+                                </td>
+                                <td>
+                                    <div
+                                        class="row text-capitalize"
+                                        style="margin: 0px 0 0"
+                                    >
+                                        <div class="col-6"></div>
+                                        <div class="col-6"></div>
+                                        <div class="col-6"></div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- in 2 -->
+                            <tr style="border-block: transparent">
+                                <td class="px-2">
+                                    <ul type="disc" class="text-capitalize m-0">
+                                        <li>Nama Pasien</li>
+                                        <li>Prosedur</li>
+                                        <li>
+                                            Lokasi dimana insisi akan dibuat
+                                        </li>
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    <!-- checkbox for identifikasi dan gelang pasien-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- checkbox for  lokasi operasi-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- checkbox for  prosedur operasi-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 3 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        3. antibiotik profilaksis sudah
+                                        diberikan ?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div
+                                        class="row text-capitalize"
+                                        style="width: 80px"
+                                    >
+                                        <div class="col-6">
+                                            <small>sudah</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small>belum</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- in 3 -->
+                            <tr style="border-block: transparent">
+                                <td class="px-2">
+                                    <ul type="disc" class="text-capitalize m-0">
+                                        <li class="d-flex">Nama : .....</li>
+                                        <li class="d-flex">Dosis : .....</li>
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    <!-- checkbox for  antibotik diberikan-->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 4 -->
+                            <tr style="border-block: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        4. Antisipasi Kejadian Kritis:
+                                    </p>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <!-- in 4 -->
+                            <tr style="border-block: transparent">
+                                <td class="px-2">
+                                    <ol type="a" class="text-capitalize">
+                                        <li class="">
+                                            Review dokter bedah: langkah apa
+                                            yang dilakukan bila kondisi kritis
+                                            atau kejadian yang tidak diharapkan,
+                                            pemanjangan lamanya operasi,
+                                            antisipasi kehilangan darah ? :
+                                            .............
+                                        </li>
+                                        <li class="">
+                                            Review tim anestesi: apakah ada hal
+                                            khusus yang perlu diperhatikan pada
+                                            pasien. <br />
+                                            ............................ <br />
+                                            Jika diperlukan CVC, kapan akan
+                                            dipasang? <br />
+                                            ..............................
+                                        </li>
+                                        <li>
+                                            <ul class="m-0" type="disc">
+                                                <li>
+                                                    Review tim Perawat: apakah
+                                                    peralatan sudah steril?
+                                                </li>
+                                                <li>
+                                                    Instrumen, kasa, dan jarum
+                                                    telah dihitung dengan benar
+                                                </li>
+                                                <li>
+                                                    Adalah alat alat yang perlu
+                                                    diperhatikan khusus atau
+                                                    dalam masalah?
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </td>
+
+                                <td>
+                                    <!-- checkbox for  antibotik diberikan ,  4-->
+                                    <div
+                                        class="row text-center text-capitalize"
+                                        style="width: 90px"
+                                    >
+                                        <div class="col-6">
+                                            <small>ada</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small>tidak</small>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- checkbox for  c-->
+                                    <div
+                                        class="row mt-5 text-center text-capitalize"
+                                    >
+                                        <div class="col-6"></div>
+                                    </div>
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6"></div>
+                                    </div>
+
+                                    <!-- label checkbox for  c 1-->
+                                    <div
+                                        class="row text-center text-capitalize"
+                                        style="width: 80px"
+                                    >
+                                        <div class="col-6">
+                                            <small>Sudah</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small>belum</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- chekbox for c 1 -->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- label checkbox for  c 2-->
+                                    <div
+                                        class="row text-capitalize"
+                                        style="width: 80px"
+                                    >
+                                        <div class="col-6">
+                                            <small>ada</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small>tidak</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- chekbox for c 2 -->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                    <!-- chekbox for c 3 -->
+                                    <div class="row m-0 text-center">
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 5 -->
+                            <tr style="border-top: transparent" class="">
+                                <td class="px-2">
+                                    <p class="m-0">
+                                        5. Apakah foto Rontgen/CT-Scan dan telah
+                                        ditayangkan?
+                                    </p>
+                                </td>
+                                <td>
+                                    <div
+                                        class="row text-center text-capitalize m-0"
+                                    >
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!--  <tr style="border-top: transparent; ">
+                                <td class="text-center">
+                                <p class="m-0">Nama Dan Tanda Tangan</p>
+                                </td>
+                                <td></td>
+                            </tr> -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Mendapatkan tanggal saat ini
+            var today = new Date();
+            var options = { year: "numeric", month: "long", day: "numeric" };
+            document.getElementById("tanggal").innerText =
+                today.toLocaleDateString("id-ID", options);
+        </script>
+    </body>
+</html>

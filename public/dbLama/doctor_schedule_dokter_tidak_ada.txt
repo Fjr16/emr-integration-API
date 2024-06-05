@@ -1,0 +1,127 @@
+ {
+        "id_dokter": "TA",
+        "id_hari": "Senin",
+        "jam_mulai": "13:00:00",
+        "jam_selesai": "16:00:00"
+    },
+    {
+        "id_dokter": "TA",
+        "id_hari": "Selasa",
+        "jam_mulai": "16:00:00",
+        "jam_selesai": "00:00:00"
+    },
+    {
+        "id_dokter": "TA",
+        "id_hari": "Rabu",
+        "jam_mulai": "13:00:00",
+        "jam_selesai": "16:00:00"
+    },
+    {
+        "id_dokter": "TA",
+        "id_hari": "Kamis",
+        "jam_mulai": "00:00:00",
+        "jam_selesai": "00:00:00"
+    },
+    {
+        "id_dokter": "TA",
+        "id_hari": "Jumat",
+        "jam_mulai": "16:00:00",
+        "jam_selesai": "19:00:00"
+    },
+    {
+        "id_dokter": "TA",
+        "id_hari": "Sabtu",
+        "jam_mulai": "00:00:00",
+        "jam_selesai": "00:00:00"
+    },
+     // {
+    //     "id_dokter": "TA",
+    //     "id_hari": "Minggu",
+    //     "jam_mulai": "08:00:00",
+    //     "jam_selesai": "12:00:00"
+    // },
+
+// {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Senin",
+    //     "jam_mulai": "14:00:00",
+    //     "jam_selesai": "16:00:00"
+    // },
+    // {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Selasa",
+    //     "jam_mulai": "16:00:00",
+    //     "jam_selesai": "18:00:00"
+    // },
+    // {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Rabu",
+    //     "jam_mulai": "19:00:00",
+    //     "jam_selesai": "16:00:00"
+    // },
+    // {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Kamis",
+    //     "jam_mulai": "16:00:00",
+    //     "jam_selesai": "16:00:00"
+    // },
+    // {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Jumat",
+    //     "jam_mulai": "19:00:00",
+    //     "jam_selesai": "00:00:00"
+    // },
+    // {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Sabtu",
+    //     "jam_mulai": "00:00:00",
+    //     "jam_selesai": "00:00:00"
+    // },
+    // {
+    //     "id_dokter": "asy",
+    //     "id_hari": "Minggu",
+    //     "jam_mulai": "00:00:00",
+    //     "jam_selesai": "00:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Senin",
+    //     "jam_mulai": "10:00:00",
+    //     "jam_selesai": "11:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Selasa",
+    //     "jam_mulai": "10:00:00",
+    //     "jam_selesai": "11:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Rabu",
+    //     "jam_mulai": "10:00:00",
+    //     "jam_selesai": "11:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Kamis",
+    //     "jam_mulai": "10:00:00",
+    //     "jam_selesai": "11:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Jumat",
+    //     "jam_mulai": "00:00:00",
+    //     "jam_selesai": "00:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Sabtu",
+    //     "jam_mulai": "00:00:00",
+    //     "jam_selesai": "00:00:00"
+    // },
+    // {
+    //     "id_dokter": "dgm",
+    //     "id_hari": "Minggu",
+    //     "jam_mulai": "00:00:00",
+    //     "jam_selesai": "00:00:00"
+    // },

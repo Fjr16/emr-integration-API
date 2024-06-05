@@ -1,0 +1,1182 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="/" class="app-brand-link">
+            <span class="app-brand-logo demo">
+                <img src="{{ asset('/assets/img/logo.svg') }}" alt="">
+            </span>
+            <span class="app-brand-text menu-text fw-bolder text-white fs-4 ms-2 mt-1">ROPANASURI</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+    <div class="menu-inner-shadow"></div>
+    <ul class="menu-inner py-1">
+
+        {{-- Main --}}
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text text-white">Main</span>
+        </li>
+        <!-- Dashboard -->
+        <li class="menu-item {{ $title === 'Dashboard' ? 'active' : '' }}">
+            <a href="/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+            </a>
+        </li>
+        @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Petugas Informasi', 'Rekam Medis Rajal',
+            'Perawat Rajal', 'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA'])
+            {{-- RME --}}
+            <li class="menu-item {{ $title == 'RME' ? 'active' : '' }}">
+                <a href="{{ route('rekam/medis/elektronik.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-notepad"></i>
+                    <div>RME Pasien</div>
+                </a>
+            </li>
+        @endhasanyrole
+        {{-- end Main --}}
+
+
+        {{-- Registrasi --}}
+        @hasanyrole(['Admin', 'Petugas Informasi', 'Rekam Medis Rajal'])
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Registrasi</span>
+            </li>
+            {{-- pasien --}}
+            {{-- @canany('daftar pasien rumah sakit') --}}
+            <li class="menu-item {{ $title == 'Pasien' ? 'active' : '' }}">
+                <a href="{{ route('pasien.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-male"></i>
+                    <div>Daftar Pasien</div>
+                </a>
+            </li>
+            {{-- @endcanany --}}
+            {{-- end pasien --}}
+
+            {{-- Antrian --}}
+            {{-- @canany(['daftar antrian', 'registrasi ulang antrian']) --}}
+            <li class="menu-item {{ $menu == 'Antrian' ? 'open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-add-to-queue"></i>
+                    <div>Antrian</div>
+                </a>
+                <ul class="menu-sub">
+                    {{-- @can('tambah antrian') --}}
+                    @hasanyrole(['Admin', 'Petugas Informasi'])
+                        <li class="menu-item {{ $title == 'Entri Antrian' ? 'active' : '' }}">
+                            <a href="{{ route('antrian.create') }}" class="menu-link">
+                                <div>Antrian</div>
+                            </a>
+                        </li>
+                        {{-- <li class="menu-item {{ $title == 'Entri Antrian Urologi' ? 'active' : '' }}">
+                                    <a href="{{ route('antrian-urologi.create') }}" class="menu-link">
+                                        <div>Antrian Urologi</div>
+                                    </a>
+                                </li> --}}
+                    @endhasanyrole
+                    {{-- @endcan --}}
+                    {{-- @can('registrasi ulang antrian') --}}
+                    @hasanyrole(['Admin', 'Rekam Medis Rajal'])
+                        <li class="menu-item {{ $title == 'Daftar Antrian' ? 'active' : '' }}">
+                            <a href="{{ route('antrian.index') }}" class="menu-link">
+                                <div>Daftar Antrian (Registrasi Ulang)</div>
+                            </a>
+                        </li>
+                    @endhasanyrole
+                    {{-- @endcan --}}
+                </ul>
+            </li>
+            {{-- @endcanany --}}
+            {{-- end Antrian --}}
+        @endhasanyrole
+        {{-- end Registrasi --}}
+
+
+        {{-- Rawatan --}}
+        @hasanyrole([
+            'Admin',
+            'Dokter Poli',
+            'Dokter Ranap',
+            'Dokter Jaga',
+            'DPJP Radiologi',
+            'DPJP Labor PK',
+            'DPJP
+            Labor PA',
+            'Rekam Medis Rajal',
+            'Perawat Rajal',
+            'Apoteker',
+            'Kasir',
+            ])
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Rawatan</span>
+            </li>
+
+            @hasanyrole([
+                'Admin',
+                'DPJP Radiologi',
+                'DPJP Labor PK',
+                'DPJP Labor PA',
+                'Dokter Poli',
+                'Dokter Ranap',
+                'Dokter
+                Jaga',
+                ])
+                {{-- @can('daftar pasien igd') --}}
+                {{-- IGD --}}
+                <li class="menu-item {{ $title == 'IGD' ? 'active' : '' }}">
+                    <a href="{{ route('igd/patient.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-hotel"></i>
+                        <div>IGD</div>
+                    </a>
+                </li>
+                {{-- @endcan --}}
+            @endhasanyrole
+
+            @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Rekam Medis Rajal', 'Perawat Rajal',
+                'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA'])
+                {{-- Rawat Jalan --}}
+                {{-- @canany(['daftar pasien poli', 'daftar pasien rekam medis', 'daftar pasien farmasi rajal', 'daftar pembayaran']) --}}
+                <li class="menu-item {{ $menu == 'In Patient' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-accessibility"></i>
+                        <div>Rawat Jalan</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        {{-- @can('daftar pasien poli') --}}
+                        <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
+                            <a href="{{ route('rajal/index') }}" class="menu-link">
+                                <div>Poli Rawat Jalan</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar pasien rekam medis') --}}
+                        <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
+                            <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
+                                <div>Rekam Medis</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar pasien farmasi rajal') --}}
+                        <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
+                            <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
+                                <div>Farmasi Rawat Jalan</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar pembayaran') --}}
+                        <li class="menu-item {{ $title == 'Pembayaran' ? 'active' : '' }}">
+                            <a href="{{ route('rajal/kasir/pembayaran/index') }}" class="menu-link">
+                                <div>Pembayaran</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                    </ul>
+                </li>
+                {{-- @endcanany --}}
+                {{-- end Rawat Jalan --}}
+            @endhasanyrole
+
+            @hasanyrole([
+                'Admin',
+                'Dokter Ranap',
+                'Dokter Jaga',
+                'Dokter Poli',
+                'DPJP Radiologi',
+                'DPJP Labor PK',
+                'DPJP
+                Labor PA',
+                ])
+                {{-- Ranap --}}
+                {{-- @can('daftar pasien ranap') --}}
+                <li class="menu-item {{ $menu == 'Rawat Inap' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-hotel"></i>
+                        <div>Rawat Inap</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ $title == 'Rawat Inap' ? 'active' : '' }}">
+                            <a href="{{ route('rawat/inap.index') }}" class="menu-link">
+                                <div>Rawat Inap</div>
+                            </a>
+                        </li>
+                        {{-- @can('general consent') --}}
+                        <li class="menu-item {{ $title == 'General Consent' ? 'active' : '' }}">
+                            <a href="{{ route('general-consent-ranap.index') }}" class="menu-link">
+                                <div>General Consent</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        <li class="menu-item {{ $title == 'Konsultasi Penyakit Dalam' ? 'active' : '' }}">
+                            <a href="{{ route('lembar/konsultasi/penyakit/dalam.index') }}" class="menu-link">
+                                <div>Konsultasi Penyakit Dalam</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Ringkasan Masuk Dan Keluar' ? 'active' : '' }}">
+                            <a href="{{ route('ringkasan-masuk-keluar.index') }}" class="menu-link">
+                                <div>Ringkasan Masuk Dan Keluar</div>
+                            </a>
+                        </li>
+                        {{-- @can('persetujuan tindakan bedah') --}}
+                        <li class="menu-item {{ $title == 'Persetujuan Tindakan Bedah' ? 'active' : '' }}">
+                            <a href="{{ route('persetujuan/tindakan/bedah.index') }}" class="menu-link">
+                                <div>Persetujuan Tindakan Bedah</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        <li class="menu-item {{ $title == 'Persetujuan Pelayanan Pasien' ? 'active' : '' }}">
+                            <a href="{{ route('surat/pernyataan/persetujuan/status/pelayanan.index') }}" class="menu-link">
+                                <div>Persetujuan Pelayanan Pasien</div>
+                            </a>
+                        </li>
+                        {{-- @can('persetujuan anestesi') --}}
+                        <li class="menu-item {{ $title == 'Persetujuan Anestesi' ? 'active' : '' }}">
+                            <a href="{{ route('pemberian/informasi/persetujuan/tindakan/anestesi.index') }}" class="menu-link">
+                                <div>Persetujuan Anestesi</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        <li class="menu-item {{ $title == 'Pencegahan HAIs' ? 'active' : '' }}">
+                            <a href="{{ route('hais.index') }}" class="menu-link">
+                                <div>Pencegahan HAIs</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Assesmen Awal Medis' ? 'active' : '' }}">
+                            <a href="{{ route('assesmen/awal/medis/ranap.index') }}" class="menu-link">
+                                <div>Asesmen Awal Medis</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Asesmen Awal Keperawatan Pasien Rawat Inap' ? 'active' : '' }}">
+                            <a href="{{ route('ranap/assesmen/awal/keperawatan.index') }}" class="menu-link">
+                                <div>Asesmen Awal Keperawatan</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Asesmen Dan Monitoring Risiko Jatuh' ? 'active' : '' }}">
+                            <a href="{{ route('assesmen/monitoring/resiko/jatuh.index') }}" class="menu-link">
+                                <div>Monitoring Risiko Jatuh</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Asesmen Monitoring Status Fungsional' ? 'active' : '' }}">
+                            <a href="{{ route('monitoring/status/fungsional.index') }}" class="menu-link">
+                                <div>Monitoring Status Fungsional</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'EWS' ? 'active' : '' }}">
+                            <a href="{{ route('ews/dewasa.index') }}" class="menu-link">
+                                <div>EWS Dewasa</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Laporan Operasi' ? 'active' : '' }}">
+                            <a href="{{ route('laporan/operasi.index') }}" class="menu-link">
+                                <div>Laporan Operasi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Laporan Anestesi' ? 'active' : '' }}">
+                            <a href="{{ route('laporan/anestesi.index') }}" class="menu-link">
+                                <div>Laporan Anestesi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Assesmen PRA Sedasi' ? 'active' : '' }}">
+                            <a href="{{ route('assesmen/pra/sedasi.index') }}" class="menu-link">
+                                <div>Assesmen PRA Sedasi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Assesmen PRA Anestesi Pra Induksi' ? 'active' : '' }}">
+                            <a href="{{ route('assesmen/pra/anestesi/pra/induksi.index') }}" class="menu-link">
+                                <div>Assesmen PRA Anestesi Pra Induksi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'MANAGER PELAYANAN PASIEN' ? 'active' : '' }}">
+                            <a href="{{ route('evaluasi/awal/MPP.index') }}" class="menu-link">
+                                <div>Manager Pelayanan Pasien</div>
+                            </a>
+                        </li>
+                        {{-- @can('discharge planning (perawat)') --}}
+                        <li class="menu-item {{ $title == 'Discharge Planning Perawat' ? 'active' : '' }}">
+                            <a href="{{ route('checklist/rencana/pulang/page/one.index') }}" class="menu-link">
+                                <div>Discharge Planning (Perawat)</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('discharge planning (gizi & farmasi)') --}}
+                        <li class="menu-item {{ $title == 'Discharge Planning Gizi' ? 'active' : '' }}">
+                            <a href="{{ route('checklist/rencana/pulang/page/two.index') }}" class="menu-link">
+                                <div>Discharge Planning (Gizi & Farmasi)</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('monitoring cairan infus') --}}
+                        <li class="menu-item {{ $title == 'Monitoring Cairan Infus' ? 'active' : '' }}">
+                            <a href="{{ route('monitoring/cairan/infus.index') }}" class="menu-link">
+                                <div>Monitoring Cairan Infus</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- <li class="menu-item {{ ($title == "Surat Pernyataan Persetujuan Status Pelayanan Pasien") ? 'active' : '' }}">
+                            <a href="{{ route('surat/pernyataan/persetujuan/status/pelayanan.index') }}" class="menu-link">
+                            <div>Surat Pernyataan Persetujuan Pelayanan Pasien</div>
+                            </a>
+                            </li> --}}
+                        {{-- @can('edukasi pasien anestesi') --}}
+                        <li class="menu-item {{ $title == 'Edukasi Pasien Pra Anestesi' ? 'active' : '' }}">
+                            <a href="{{ route('edukasi/pasien/pra/anestesi.index') }}" class="menu-link">
+                                <div>Edukasi Pasien Pra Anestesi</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('formulir rekonsiliasi obat') --}}
+                        <li class="menu-item {{ $title == 'Formulir Rekonsiliasi Obat' ? 'active' : '' }}">
+                            <a href="{{ route('formulir/rekonsilasi/obat.index') }}" class="menu-link">
+                                <div>Formulir Rekonsiliasi Obat</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar resep dokter') --}}
+                        <li class="menu-item {{ $title == 'Resep Obat Ranap' ? 'active' : '' }}">
+                            <a href="{{ route('ranap/resep/dokter.index') }}" class="menu-link">
+                                <div>Resep Dokter</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                    </ul>
+                </li>
+
+                {{-- Ranap New --}}
+                <li class="menu-item {{ $menu == 'Rawat Inap' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-hotel"></i>
+                        <div>Rawat Inap New</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        {{-- <li class="menu-item {{ $title == 'Rawat Inap' ? 'active' : '' }}">
+                                <a href="{{ route('rawat/inap.index') }}" class="menu-link">
+                                    <div>Rawat Inap</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $title == 'Dashboard Pasien' ? 'active' : '' }}">
+                                <a href="{{ route('rawat.inap.dashboard.patient') }}" class="menu-link">
+                                    <div>Dashboard (Data Pasien)</div>
+                                </a>
+                            </li> --}}
+                        <li class="menu-item {{ $title == 'Assesmen' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.assesmen', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Asesmen</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Catatan Perjalanan Administrasi' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.catatan.perjalanan.administrasi', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Catatan Perjalanan Administrasi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Cppt Ranap' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.cppt', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Cppt Ranap</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Daftar Tilik' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.daftar.tilik', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Daftar Tilik</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Discharge' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.discharge', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Discharge</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Edukasi Pasien Pra Anestesi' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.edukasi.pasien.praAnestesi', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Edukasi Pasien Pra Anestesi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'EWS' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.ews', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>EWS</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Formulir Rekonsiliasi Obat' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.formulir.rekonsilisasi.obat', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Formulir Rekonsiliasi Obat</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'General Consent' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.general.consent', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>General Consent</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'HAIs' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.hais', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>HAIs</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Konsultasi Penyakit Dalam' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.konsultasi.penyakit.dalam', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Konsultasi Penyakit Dalam</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Laporan' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.laporan', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Laporan</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Manager Pelayanan Pasien' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.manager.pelayanan.pasien', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Manager Pelayanan Pasien</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Monitoring' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.monitoring', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Monitoring</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Persetujuan' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.persetujuan', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Persetujuan</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Resep Dokter' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.resep.dokter', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Resep Dokter</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Ringkasan Masuk Dan Keluar' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.ringkasan.masuk.dan.keluar', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Ringkasan Masuk Dan Keluar</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Skrining Covid' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.skrining.covid', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Skrining Covid</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Tindakan Pelayanan' ? 'active' : '' }}">
+                            <a href="{{ isset($id) ? route('rawat.inap.tindakan.pelayanan', $id) : route('rekam/medis/elektronik.index') }}"
+                                class="menu-link">
+                                <div>Tindakan Pelayanan</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- end Ranap New --}}
+                {{-- @endcan --}}
+                {{-- end Ranap --}}
+
+                {{-- Kemoterapi --}}
+                <li class="menu-item {{ $menu == 'Kemoterapi' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-hotel"></i>
+                        <div>Kemoterapi</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ $title == 'Antrian Kemo' ? 'active' : '' }}">
+                            <a href="{{ route('kemoterapi/antrian.index') }}" class="menu-link">
+                                <div>Antrian Kemoterapi</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Pasien Kemo' ? 'active' : '' }}">
+                            <a href="{{ route('kemoterapi/patient.index') }}" class="menu-link">
+                                <div>Pasien Kemoterapi</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- end Kemoterapi --}}
+            @endhasanyrole
+        @endhasanyrole
+        {{-- end Rawatan --}}
+
+        {{-- Additional --}}
+        @hasanyrole(['Admin', 'Perawat Rajal', 'Rekam Medis Rajal', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga'])
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Additional</span>
+            </li>
+            {{-- Diluar Map --}}
+            {{-- @canany(['form Kerohanian luar map', 'form second opinion luar map']) --}}
+            {{-- diluar map --}}
+            @role('Admin')
+                <li class="menu-item {{ $menu == 'Diluar MAP' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-link-external"></i>
+                        <div>Diluar MAP</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        {{-- @can('form Kerohanian luar map') --}}
+                        <li class="menu-item {{ $title == 'Kerohanian' ? 'active' : '' }}">
+                            <a href="/permintaan-pelayanan-kerohanian" class="menu-link">
+                                <div>Kerohanian</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('form second opinion luar map') --}}
+                        <li class="menu-item {{ $title == 'Second Opinion' ? 'active' : '' }}">
+                            <a href="/second-opinion" class="menu-link">
+                                <div>Second Opinion</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        <li class="menu-item {{ $title == 'Komplain' ? 'active' : '' }}">
+                            <a href="/komplain" class="menu-link">
+                                <div>Penyampaian & Penyelesaian Komplain</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Pasien Melarikan Diri' ? 'active' : '' }}">
+                            <a href="/melarikan-diri" class="menu-link">
+                                <div>Laporan Pasien Melarikan Diri</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
+            {{-- @endcanany --}}
+            {{-- end Diluar Map --}}
+            {{-- start SEP --}}
+            <li class="menu-item {{ $menu == 'SEP' ? 'open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-notepad"></i>
+                    <div>Pembuatan SEP</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title == 'list-sep' ? 'active' : '' }}">
+                        <a href="{{ route('sep.beranda') }}" class="menu-link">
+                            <div>List SEP</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == 'sep-create' ? 'active' : '' }}">
+                        <a href="{{ route('sep.index') }}" class="menu-link">
+                            <div>Tambah SEP</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- end SEP  --}}
+            {{-- start kontrol  --}}
+            <li class="menu-item {{ $menu == 'Kontrol' ? 'open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-file"></i>
+                    <div>Surat Kontrol</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title == 'Kontrol Rawat Jalan' ? 'active' : '' }}">
+                        <a href="{{ route('kontrol.rawatJalan') }}" class="menu-link">
+                            <div>Rawat Jalan</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == 'SPRI' ? 'active' : '' }}">
+                        <a href="{{ route('kontrol.spri') }}" class="menu-link">
+                            <div>SPRI</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- end kontrol  --}}
+        @endhasanyrole
+        {{-- end Additional --}}
+
+
+        {{-- Penunjang --}}
+        @hasanyrole([
+            'Admin',
+            'Petugas Radiologi',
+            'Petugas Labor PK',
+            'Petugas Labor PA',
+            'DPJP Radiologi',
+            'DPJP Labor
+            PK',
+            'DPJP Labor PA',
+            ])
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Penunjang</span>
+            </li>
+            @hasanyrole(['Admin', 'Petugas Radiologi', 'DPJP Radiologi'])
+                {{-- Radiologi --}}
+                {{-- @canany(['list permintaan pemeriksaan radiologi', 'daftar jadwal pemeriksaan radiologi']) --}}
+                <li class="menu-item {{ $menu == 'Radiologi' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-bone"></i>
+                        <div>Radiologi</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        {{-- @can('list permintaan pemeriksaan radiologi') --}}
+                        <li class="menu-item {{ $title == 'Radiologi' ? 'active' : '' }}">
+                            <a href="{{ route('radiologi/patient.index') }}" class="menu-link">
+                                <div>Daftar Permintaan Radiologi</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar jadwal pemeriksaan radiologi') --}}
+                        <li class="menu-item {{ $title == 'Antrian Radiologi' ? 'active' : '' }}">
+                            <a href="{{ route('radiologi/patient/queue.index') }}" class="menu-link">
+                                <div>Antrian Radiologi</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                    </ul>
+                </li>
+                {{-- @endcanany --}}
+                {{-- end Radiologi --}}
+            @endhasanyrole
+
+            @hasanyrole(['Admin', 'Petugas Labor PK', 'DPJP Labor PK'])
+                {{-- Laboratorium PK --}}
+                {{-- @canany(['daftar jadwal pemeriksaan laboratorium pk', 'list permintaan pemeriksaan laboratorium pk']) --}}
+                <li class="menu-item {{ $menu == 'Laboratorium PK' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-flask"></i>
+                        <div>Laboratorium PK</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        {{-- @can('list permintaan pemeriksaan laboratorium pk') --}}
+                        <li class="menu-item {{ $title == 'Laboratorium PK' ? 'active' : '' }}">
+                            <a href="{{ route('laboratorium/patient.index') }}" class="menu-link">
+                                <div>Daftar Permintaan Laboratorium PK</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar jadwal pemeriksaan laboratorium pk') --}}
+                        <li class="menu-item {{ $title == 'Antrian Laboratorium PK' ? 'active' : '' }}">
+                            <a href="{{ route('laboratorium/patient/queue.index') }}" class="menu-link">
+                                <div>Antrian Laboratorium PK</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                    </ul>
+                </li>
+                {{-- @endcanany --}}
+                {{-- end Laboratorium PK --}}
+            @endhasanyrole
+
+            @hasanyrole(['Admin', 'Petugas Labor PA', 'DPJP Labor PA'])
+                {{-- laboratorium PA --}}
+                {{-- @canany(['daftar jadwal pemeriksaan laboratorium pa', 'list permintaan pemeriksaan laboratorium pa']) --}}
+                <li class="menu-item {{ $menu == 'Laboratorium PA' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-cut"></i>
+                        <div>Laboratorium PA</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        {{-- @can('list permintaan pemeriksaan laboratorium pa') --}}
+                        <li class="menu-item {{ $title == 'Laboratorium PA' ? 'active' : '' }}">
+                            <a href="{{ route('permintaan/laboratorium/patologi/anatomik.index') }}" class="menu-link">
+                                <div>Daftar Permintaan Laboratorium PA</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                        {{-- @can('daftar jadwal pemeriksaan laboratorium pa') --}}
+                        <li class="menu-item {{ $title == 'Antrian Laboratorium PA' ? 'active' : '' }}">
+                            <a href="{{ route('permintaan/laboratorium/patologi/anatomik.indexAntrian') }}"
+                                class="menu-link">
+                                <div>Antrian Laboratorium PA</div>
+                            </a>
+                        </li>
+                        {{-- @endcan --}}
+                    </ul>
+                </li>
+                {{-- @endcanany --}}
+                {{-- end Laboratorium PA --}}
+            @endhasanyrole
+        @endhasanyrole
+        {{-- end Penunjang --}}
+
+        @role('Admin')
+            {{-- Instalasi --}}
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Instalasi</span>
+            </li>
+            {{-- Gizi --}}
+            <li class="menu-item {{ $menu == 'Gizi' ? 'open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-hotel"></i>
+                    <div>Gizi</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title == 'Asesmen Awal Gizi' ? 'active' : '' }}">
+                        <a href="/asesmen-awal-gizi" class="menu-link">
+                            <div>Asesmen Awal Gizi</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- end Gizi --}}
+
+            {{-- Casemix --}}
+            <li class="menu-item {{ $title == 'Casemix' ? 'active' : '' }}">
+                <a href="{{ route('casemix') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-male"></i>
+                    <div>Casemix</div>
+                </a>
+            </li>
+            {{-- end Casemix --}}
+
+            {{-- Farmasi --}}
+            <?php $permisGudang = ['menu pembelian obat gudang farmasi', 'menu return obat gudang farmasi', 'menu riwayat distribusi obat gudang farmasi', 'menu daftar stok obat di rumah sakit', 'menu daftar total stok obat di rumah sakit', 'menu permintaan distribusi obat antar unit', 'menu respon distribusi obat antar unit'];
+            ?>
+            @canany($permisGudang)
+                {{-- farmasi --}}
+                <li class="menu-item {{ $menu == 'Farmasi' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-capsule"></i>
+                        <div>Farmasi</div>
+                    </a>
+                    <ul class="menu-sub">
+                        {{-- Transaksi --}}
+                        @can('menu pembelian obat gudang farmasi')
+                            <li class="menu-item {{ $title == 'Pembelian' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/pembelian.index') }}" class="menu-link">
+                                    <div>Pembelian</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('menu return obat gudang farmasi')
+                            <li class="menu-item {{ $title == 'Return' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/return.index') }}" class="menu-link">
+                                    <div>Return</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('menu riwayat distribusi obat gudang farmasi')
+                            <li class="menu-item {{ $title == 'Distribusi' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/distribusi.index') }}" class="menu-link">
+                                    <div>Daftar Distribusi</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('menu daftar stok obat di rumah sakit')
+                            <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/stock.index') }}" class="menu-link">
+                                    <div>Stock</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('menu daftar total stok obat di rumah sakit')
+                            <li class="menu-item {{ $title == 'Total Stock Obat' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/stock.all') }}" class="menu-link">
+                                    <div>Total Stock Obat</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('menu permintaan distribusi obat antar unit')
+                            <li class="menu-item {{ $title == 'Distribusi Request' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/distribusi/request.index') }}" class="menu-link">
+                                    <div>Distribusi Request</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('menu respon distribusi obat antar unit')
+                            <li class="menu-item {{ $title == 'Distribusi Response' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/distribusi/response.index') }}" class="menu-link">
+                                    <div>Distribusi Response</div>
+                                </a>
+                            </li>
+                        @endcan
+                        {{-- <li class="menu-item {{ $title == "Distribusi Return" ? 'active' : '' }}">
+                <a href="{{ route('farmasi/obat/distribusi/return.index') }}" class="menu-link">
+                    <div>Daftar Distribusi Return</div>
+                </a>
+                </li>
+                <li class="menu-item {{ $title == "Return Request" ? 'active' : '' }}">
+                <a href="{{ route('farmasi/obat/distribusi/return/request.index') }}" class="menu-link">
+                    <div>Return Request</div>
+                </a>
+                </li>
+                <li class="menu-item {{ $title == "Return Response" ? 'active' : '' }}">
+                <a href="{{ route('farmasi/obat/distribusi/return/response.index') }}" class="menu-link">
+                    <div>Return Response</div>
+                </a>
+                </li> --}}
+                    </ul>
+                </li>
+            @endcanany
+            {{-- end Farmasi --}}
+            {{-- end Instalasi --}}
+
+
+
+            {{-- Master Data --}}
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Master Data</span>
+            </li>
+            {{-- Settings --}}
+            @php
+                $arrPermissions = [
+                    'master user simrs',
+                    'master radiologi',
+                    'master laboratorium pk',
+                    'master tanggungan pasien',
+                    'master konsultasi',
+                    'master jenis tindakan',
+                    'master tindakan',
+                    'master operasi',
+                    'master ruangan',
+                    'master unit',
+                    'master spesialis',
+                    'master role',
+                    'master pekerjaan',
+                    'master diagnosa',
+                    'master daftar icd',
+                    'master supplier',
+                    'master pabrik',
+                    'master obat',
+                    'master jenis obat',
+                    'master golongan obat',
+                    'master bentuk sediaan obat',
+                    'master tabel konversi',
+                    'master lantai',
+                    'master kamar',
+                    'master tipe ranjang',
+                    'master ranjang',
+                ];
+            @endphp
+            @canany($arrPermissions)
+                <li class="menu-item {{ $menu == 'Setting' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-cog"></i>
+                        <div>Setting</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        @can('master user simrs')
+                            <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
+                                <a href="{{ route('user.index') }}" class="menu-link">
+                                    <div>Daftar Staff</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master laboratorium pk')
+                            <li class="menu-item {{ $title == 'Master Labor PK' ? 'active' : '' }}">
+                                <a href="{{ route('laboratorium/pk/variabel/pemeriksaan.create') }}" class="menu-link">
+                                    <div>Master Labor PK</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master radiologi')
+                            <li class="menu-item {{ $title == 'Master Radiologi' ? 'active' : '' }}">
+                                <a href="{{ route('rajal/master/radiologi.index') }}" class="menu-link">
+                                    <div>Master Radiologi</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master tanggungan pasien')
+                            <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
+                                <a href="{{ route('pasien/category') }}" class="menu-link">
+                                    <div>Kategori Pasien</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master konsultasi')
+                            <li class="menu-item {{ $title == 'Konsultasi' ? 'active' : '' }}">
+                                <a href="{{ route('konsultasi') }}" class="menu-link">
+                                    <div>Konsultasi</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master jenis tindakan')
+                            <li class="menu-item {{ $title == 'Jenis Tindakan' ? 'active' : '' }}">
+                                <a href="{{ route('tindakan/category') }}" class="menu-link">
+                                    <div>Jenis Tindakan</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master tindakan')
+                            <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
+                                <a href="{{ route('action/members.index') }}" class="menu-link">
+                                    <div>Tindakan</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master operasi')
+                            <li class="menu-item {{ $title == 'Operasi' ? 'active' : '' }}">
+                                <a href="/operasi" class="menu-link">
+                                    <div>Operasi</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master ruangan')
+                            <li class="menu-item {{ $title == 'Ruang' ? 'active' : '' }}">
+                                <a href="{{ route('ruang.index') }}" class="menu-link">
+                                    <div>Ruangan</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master unit')
+                            <li class="menu-item {{ $title == 'Unit' ? 'active' : '' }}">
+                                <a href="{{ route('unit.index') }}" class="menu-link">
+                                    <div>Unit / Departemen</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master spesialis')
+                            <li class="menu-item {{ $title == 'Specialist' ? 'active' : '' }}">
+                                <a href="{{ route('user/specialist.index') }}" class="menu-link">
+                                    <div>Spesialis</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master role')
+                            <li class="menu-item {{ $title == 'Role' ? 'active' : '' }}">
+                                <a href="{{ route('user/role.index') }}" class="menu-link">
+                                    <div>Role</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master pekerjaan')
+                            <li class="menu-item {{ $title == 'Pekerjaan' ? 'active' : '' }}">
+                                <a href="{{ route('job.index') }}" class="menu-link">
+                                    <div>List Pekerjaan</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master diagnosa')
+                            <li class="menu-item {{ $title == 'Diagnosa' ? 'active' : '' }}">
+                                <a href="{{ route('diagnosa.index') }}" class="menu-link">
+                                    <div>Diagnosa</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master daftar icd')
+                            <li class="menu-item {{ $title == 'ICD' ? 'active' : '' }}">
+                                <a href="{{ route('icd.index') }}" class="menu-link">
+                                    <div>Daftar ICD</div>
+                                </a>
+                            </li>
+                        @endcan
+                        {{-- Konfigurasi Farmasi --}}
+                        @can('master supplier')
+                            <li class="menu-item {{ $title == 'Supplier' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/supplier.index') }}" class="menu-link">
+                                    <div>Supplier</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master pabrik')
+                            <li class="menu-item {{ $title == 'Pabrik' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/pabrik.index') }}" class="menu-link">
+                                    <div>Pabrik</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master obat')
+                            <li class="menu-item {{ $title == 'Master Obat' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat.index') }}" class="menu-link">
+                                    <div>Obat</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master jenis obat')
+                            <li class="menu-item {{ $title == 'Jenis Obat' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/jenis.index') }}" class="menu-link">
+                                    <div>Jenis Obat</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master golongan obat')
+                            <li class="menu-item {{ $title == 'Golongan Obat' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/golongan.index') }}" class="menu-link">
+                                    <div>Golongan Obat</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master bentuk sediaan obat')
+                            <li class="menu-item {{ $title == 'Bentuk Sediaan Obat' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/bentuk.index') }}" class="menu-link">
+                                    <div>Bentuk Sediaan Obat</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master tabel konversi')
+                            <li class="menu-item {{ $title == 'Konversi' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/konversi.index') }}" class="menu-link">
+                                    <div>Tabel Konversi</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master lantai')
+                            <li class="menu-item {{ $title == 'Lantai' ? 'active' : '' }}">
+                                <a href="{{ route('kamar/lantai.index') }}" class="menu-link">
+                                    <div>Lantai</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master kamar')
+                            <li class="menu-item {{ $title == 'Kamar' ? 'active' : '' }}">
+                                <a href="{{ route('kamar.index') }}" class="menu-link">
+                                    <div>Kamar</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master tipe ranjang')
+                            <li class="menu-item {{ $title == 'Tipe Ranjang' ? 'active' : '' }}">
+                                <a href="{{ route('kamar/ranjang/tipe.index') }}" class="menu-link">
+                                    <div>Tipe Ranjang</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('master ranjang')
+                            <li class="menu-item {{ $title == 'Ranjang' ? 'active' : '' }}">
+                                <a href="{{ route('kamar/ranjang.index') }}" class="menu-link">
+                                    <div>Ranjang</div>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
+            {{-- end Settings --}}
+
+            {{-- Poliklinik --}}
+            @canany(['edit jadwal dokter poli', 'jadwal poli'])
+                {{-- Poli --}}
+                <li class="menu-item {{ $menu == 'Poliklinik' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-clinic"></i>
+                        <div>Poliklinik</div>
+                    </a>
+                    <ul class="menu-sub">
+                        @can('edit jadwal dokter poli')
+                            <li class="menu-item {{ $title == 'Jadwal Dokter' ? 'active' : '' }}">
+                                <a href="{{ route('dokter/jadwal.index') }}" class="menu-link">
+                                    <div>Edit Jadwal Dokter Poli</div>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('jadwal poli')
+                            <li class="menu-item {{ $title == 'Informasi Jadwal Dokter' ? 'active' : '' }}">
+                                <a href="{{ route('dokter/jadwal.all') }}" class="menu-link">
+                                    <div>Info Jadwal Poli</div>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
+            {{-- end Poliklinik --}}
+
+            {{-- Kamar --}}
+            @can('lihat status penggunaan ranjang')
+                {{-- Kamar --}}
+                <li class="menu-item {{ $menu == 'Kamar' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-bed"></i>
+                        <div>Kamar</div>
+                    </a>
+
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ $title == 'Status Ranjang' ? 'active' : '' }}">
+                            <a href="{{ route('kamar/ranjang.show') }}" class="menu-link">
+                                <div>Status Ranjang</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
+            {{-- end Kamar --}}
+
+            {{-- Keuangan --}}
+            <li class="menu-item {{ $menu == 'KEUANGAN' ? 'open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-add-to-queue"></i>
+                    <div>Keuangan</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title == 'TARIF LAYANAN' ? 'active' : '' }}">
+                        <a href="{{ route('tarif/layanan.index') }}" class="menu-link">
+                            <div>Master Tarif RS</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == 'ASURANSI' ? 'active' : '' }}">
+                        <a href="{{ route('asuransi.index') }}" class="menu-link">
+                            <div>Asuransi</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- end Keuangan --}}
+            {{-- end Master Data --}}
+
+
+
+            {{-- Report --}}
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Report</span>
+            </li>
+            {{-- Laporan --}}
+            {{-- @canany() --}}
+            <li class="menu-item {{ $menu == 'Laporan' ? 'open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bxs-report"></i>
+                    <div>Laporan</div>
+                </a>
+                <ul class="menu-sub">
+                    {{-- @can('master user simrs') --}}
+                    <li class="menu-item {{ $title == 'Laporan Penggunaan Obat' ? 'active' : '' }}">
+                        <a href="{{ route('laporan/penggunaan/obat.index') }}" class="menu-link">
+                            <div>Penggunaan Obat Pasien</div>
+                        </a>
+                    </li>
+                    {{-- @endcan --}}
+                    {{-- @can('master laboratorium pk') --}}
+                    <li class="menu-item {{ $title == 'Laporan Kasir' ? 'active' : '' }}">
+                        <a href="{{ route('laporan/kasir.index') }}" class="menu-link">
+                            <div>Kasir Report</div>
+                        </a>
+                    </li>
+                    {{-- @endcan --}}
+                    {{-- @can('master radiologi') --}}
+                    <li class="menu-item {{ $title == 'Laporan Lab Pk' ? 'active' : '' }}">
+                        <a href="{{ route('laporan/lab/patologi/klinik.index') }}" class="menu-link">
+                            <div>Lab Patologi Klinik</div>
+                        </a>
+                    </li>
+                    {{-- @endcan --}}
+                    {{-- @can('master tanggungan pasien') --}}
+                    <li class="menu-item {{ $title == 'Laporan Lab PA' ? 'active' : '' }}">
+                        <a href="{{ route('laporan/lab/patologi/anatomi.index') }}" class="menu-link">
+                            <div>Lab Patologi Anatomi</div>
+                        </a>
+                    </li>
+                    {{-- @endcan --}}
+                    {{-- @can('master konsultasi') --}}
+                    <li class="menu-item {{ $title == 'Laporan Radiologi' ? 'active' : '' }}">
+                        <a href="{{ route('laporan/lab/radiologi.index') }}" class="menu-link">
+                            <div>Radiologi</div>
+                        </a>
+                    </li>
+                    {{-- @endcan --}}
+                    <li class="menu-item {{ $title == 'Simulasi Ranap' ? 'active' : '' }}">
+                        <a href="{{ route('ranap/simulasi/biaya.index') }}" class="menu-link">
+                            <div>Simulasi Biaya Ranap</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- @endcanany --}}
+            {{-- end Laporan --}}
+            {{-- end Report --}}
+        @endrole
+    </ul>
+</aside>

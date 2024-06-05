@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>General Consent</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+            crossorigin="anonymous"
+        />
+
+        <style>
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: #fafafa;
+            }
+
+            * {
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .page {
+                width: 210mm;
+                /* height: 330mm; */
+                min-height: 13.97cm;
+                padding: 13mm;
+                padding-top: 35px;
+                margin: 10mm auto;
+                border: 1px #d3d3d3 solid;
+                border-radius: 5px;
+                background: white;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+                position: relative;
+            }
+
+            .subpage {
+                padding: 1cm;
+                border: 5px red solid;
+                height: 257mm;
+                outline: 2cm #ffeaea solid;
+            }
+
+            tr th {
+                font-size: 10pt;
+            }
+
+            tr td {
+                font-size: 10pt;
+            }
+
+            /* td {
+                padding-top: 5px;
+            } */
+            th {
+                font-size: 10pt !important;
+            }
+
+            ol li {
+                margin: none;
+                margin-top: 0px;
+            }
+
+            .borderhr {
+                color: black;
+                background-color: black;
+                border-color: black;
+                height: 5px;
+                opacity: 100;
+            }
+
+            .header h1 {
+                margin: 0;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            @media print {
+                html,
+                body {
+                    width: 215mm;
+                    height: 330mm;
+                }
+
+                .page {
+                    margin: 0;
+                    border: initial;
+                    border-radius: initial;
+                    width: initial;
+                    min-height: initial;
+                    box-shadow: initial;
+                    background: initial;
+                    page-break-after: always;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="page">
+            <div class="header">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="logo.png" alt="" />
+                    </div>
+                    <div class="col-7 d-flex align-self-center">
+                        <h1 class="mx-auto text-uppercase text-center">
+                            persetujuan umum <br />(General consent)
+                        </h1>
+                    </div>
+                    <div class="col-3">
+                        <!-- <div
+                            class="border border-3 border-rounded py-4 px-5"
+                        ></div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <table class="table-bordered w-100 mt-2">
+                    <tbody>
+                        <!--  -->
+                        <tr>
+                            <td>
+                                <p class="m-0 fw-bold" style="font-size: 8pt">
+                                    Persetujuan Umum (General Consent) diisi
+                                    oleh pasien atau keluarga yang berusia &ge;
+                                    18 tahun. <br />
+                                    Pasien, Keluarga dan atau Wali selaku kuasa
+                                    dari pasien diminta untuk membaca, memahami
+                                    dan mengisi informasi berikut:
+                                </p>
+
+                                <p>Yang bertanda tangan di bawah ini:</p>
+                                <div style="margin: -2mm 4mm">
+                                    <div class="d-flex">
+                                        <p style="width: 25mm">Nama</p>
+                                        <p style="margin: 0 1mm">:</p>
+                                        <p>
+                                            ....................................................................................................
+                                        </p>
+                                    </div>
+                                    <!--  -->
+                                    <div
+                                        class="d-flex"
+                                        style="margin-top: -3mm"
+                                    >
+                                        <p style="width: 25mm">Tanggal Lahir</p>
+                                        <p style="margin: 0 1mm">:</p>
+                                        <p>
+                                            ....................................................................................................
+                                        </p>
+                                    </div>
+
+                                    <!--  -->
+                                    <div
+                                        class="d-flex"
+                                        style="margin-top: -3mm"
+                                    >
+                                        <p style="width: 25mm">Jenis Kelamin</p>
+                                        <p style="margin: 0 1mm">:</p>
+                                        <p>
+                                            ....................................................................................................
+                                        </p>
+                                    </div>
+
+                                    <!--  -->
+                                    <div
+                                        class="d-flex"
+                                        style="margin-top: -3mm"
+                                    >
+                                        <p style="width: 25mm">Alamat</p>
+                                        <p style="margin: 0 1mm">:</p>
+                                        <p>
+                                            ....................................................................................................
+                                        </p>
+                                    </div>
+
+                                    <!--  -->
+                                    <div
+                                        class="d-flex"
+                                        style="margin-top: -3mm"
+                                    >
+                                        <p style="width: 25mm">No. Telp / HP</p>
+                                        <p style="margin: 0 1mm">:</p>
+                                        <p>
+                                            ....................................................................................................
+                                        </p>
+                                    </div>
+
+                                    <!--  -->
+                                </div>
+
+                                <div class="px-1">
+                                    <p
+                                        style="margin-bottom: -1mm"
+                                        class="d-flex justify-content-start align-items-center"
+                                    >
+                                        <span style="margin-right: 2mm"
+                                            >Hubungan dengan pasien :</span
+                                        >
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                id="diri_sendiri"
+                                            />
+                                            <label for="diri_sendiri"
+                                                >Diri sendiri</label
+                                            >
+                                        </span>
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input type="checkbox" id="suami" />
+                                            <label for="suami">Suami</label>
+                                        </span>
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input type="checkbox" id="Istri" />
+                                            <label for="Istri">Istri</label>
+                                        </span>
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input type="checkbox" id="Ayah" />
+                                            <label for="Ayah">Ayah</label>
+                                        </span>
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input type="checkbox" id="Ibu" />
+                                            <label for="Ibu">Ibu</label>
+                                        </span>
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input type="checkbox" id="Anak" />
+                                            <label for="Anak">Anak</label>
+                                        </span>
+                                        <span
+                                            style="margin-inline: 2mm"
+                                            class="d-inline flex align-items-center"
+                                        >
+                                            <input type="checkbox" id="dll" />
+                                            <label for="dll"
+                                                >...............................</label
+                                            >
+                                        </span>
+                                    </p>
+                                    <p>dengan ini menyatakan persetujuan :</p>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- persetujuan -->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                persetujuan untuk perawatan dan pengobatan
+                            </td>
+                        </tr>
+
+                        <!-- conten persetujuan -->
+                        <tr>
+                            <td>
+                                <ol class="m-0">
+                                    <li>
+                                        Saya menyetujui untuk perawatan di RSK
+                                        Bedah Ropanasuri sebagai pasien rawat
+                                        inap tergantung kepada rencana asuhan
+                                        sesuai dengan kebutuhan pasien dengan
+                                        Dokter Penanggung Jawab Pelayanan (DPJP)
+                                        adalah
+                                        ..........................................................
+                                    </li>
+                                    <li>
+                                        Saya mengetahui bahwa saya memiliki
+                                        kondisi yang membutuhkan perawatan
+                                        medis, saya mengizinkan dokter dan
+                                        profesional kesehatan lainnya untuk
+                                        melakukan prosedur diagnostik dan untuk
+                                        memberikan pengobatan medis seperti yang
+                                        diperlukan dalam profesional mereka.
+                                        Prosedur diagnostik dan perawatan medis
+                                        termasuk terapi tidak terbatas pada
+                                        electrocardiogram, x-ray (radiologi),
+                                        tes darah, terapi fisik, pemberian obat
+                                        (kecuali yang membutuhkan persetujuan
+                                        khusus / tertulis), perawatan rutin dan
+                                        prosedur seperti pemasangan infus,
+                                        pemasangan kateter, spalak, pemberian
+                                        oksigen, dan suntikan.
+                                    </li>
+                                    <li>
+                                        Saya sadar bahwa praktik kedokteran
+                                        bukanlah ilmu pasti dan saya mengakui
+                                        bahwa tidak ada jaminan atas hasil
+                                        apapun, terhadap perawatan prosedur atau
+                                        pemeriksaan apapun yang dilakukan kepada
+                                        saya.
+                                    </li>
+                                    <li>
+                                        Persetujuan yang saya berikan tidak
+                                        termasuk prosedur pembedahan atau
+                                        tindakan invasif, anestesi, sedasi,
+                                        penggunaan darah dan produk darah,
+                                        perataan atau tindakan berisiko tinggi
+                                        maka diperlukan persetujuan tindakan
+                                        secara terpisah (informed consent).
+                                    </li>
+                                    <li>
+                                        saya mengerti dan memahami bahwa :
+                                        <ol type="a">
+                                            <li>
+                                                Saya memiliki hak untuk
+                                                mendapatkan akses terhadap
+                                                informasi kesehatan saya dan
+                                                mengajukan pertanyaan tentang
+                                                pengobatan yang diusulkan
+                                                (termasuk identitas setiap orang
+                                                yang memberikan atau mengamati
+                                                pengobatan) setiap saat.
+                                            </li>
+
+                                            <li>
+                                                Saya mengerti dan memahami bahwa
+                                                saya memiliki hak untuk
+                                                menyetujui atau menolak
+                                                persetujuan, untuk setiap
+                                                prosedur/terapi dan saya
+                                                memahami dan menyadari bahwa RSK
+                                                Bedah Ropanasuri atau dokter
+                                                tidak bertanggung jawab atas
+                                                hasil yang merugikan saya.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </td>
+                        </tr>
+
+                        <!-- hak dan tanggung jawab  -->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center">
+                                HAK DAN TANGGUNG JAWAB PASIEN
+                            </td>
+                        </tr>
+
+                        <!-- content hak dan tanggung jawab  -->
+                        <tr>
+                            <td>
+                                <p>
+                                    Saya memiliki hak untuk mengambil bagian
+                                    dalam keputusan mengenai penyakit saya dan
+                                    dalam hal perawatan medis dan rencana
+                                    pengobatan.
+                                </p>
+                                <p style="margin-top: -4mm">
+                                    Saya telah mendapat informasi tentang "Hak
+                                    dan Tanggung Jawab Pasien" di RSK Bedah
+                                    Ropanasuri Padang melalui banner, leaflet,
+                                    dan form tertulis yang disediakan oleh
+                                    petugas
+                                </p>
+                            </td>
+                        </tr>
+
+                        <!-- kebutuhan dan privasi-->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                kebutuhan privasi
+                            </td>
+                        </tr>
+
+                        <!-- isi kkebutuhn dan privasi  -->
+                        <tr>
+                            <td>
+                                <ol>
+                                    <li>
+                                        Saya mengizinkan / tidak mengizinkan*
+                                        RSK Bedah Ropanasuri memberikan akses
+                                        bagi keluarga serta orang yang akan
+                                        membesuk / menemui saya.
+                                    </li>
+                                    <li>
+                                        Saya mengizinkan / tidak mengizinkan*
+                                        RSK Bedah Ropanasuri untuk difoto /
+                                        direkam dan diikutsertakan dalam survei.
+                                    </li>
+                                    <li class="mb-3">
+                                        Saya tidak menginginkan / menginginkan*
+                                        privasi khusus (sebutkan bila ada
+                                        privasi khusus) :
+                                    </li>
+                                    <p style="margin-top: -4mm">
+                                        ...........................................................................................................................................................................................................................
+                                    </p>
+                                    <p style="margin-top: -4mm">
+                                        ...........................................................................................................................................................................................................................
+                                    </p>
+                                </ol>
+                            </td>
+                        </tr>
+
+                        <!-- harta benda milik pasien-->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                harta benda milik pasien
+                            </td>
+                        </tr>
+
+                        <!-- isi harta benda milik pasien  -->
+                        <tr>
+                            <td>
+                                <ol>
+                                    <li>
+                                        <p>
+                                            Saya telah memahami bahwa RSK Bedah
+                                            Ropanasuri bertanggung jawab atas
+                                            semua harta benda yang dibawa pasien
+                                            ODC (Pelayanan Satu Hari), pasien
+                                            rawat inap, serta untuk pasien yang
+                                            tidak mampu mengambil keputusan
+                                            untuk menjaga keamanan harta benda
+                                            mereka karena tidak sadarkan diri
+                                            atau tidak didampingi penunggu. Dan
+                                            apabila saya membutuhkan, maka saya
+                                            dapat menitipkan barang-barang saya
+                                            kepada Rumah Sakit.
+                                        </p>
+                                    </li>
+                                    <li style="margin-top: -2mm">
+                                        <p>
+                                            Saya secara pribadi bertanggung
+                                            jawab atas barang-barang berharga
+                                            yang saya miliki namun tidak
+                                            terbatas pada uang, perhiasan, buku,
+                                            kartu ATM, kartu kredit, handphone
+                                            atau barang lainnya. Dan apabila
+                                            saya membutuhkan maka saya dapat
+                                            menitipkan barang-barang saya kepada
+                                            Rumah Sakit.
+                                        </p>
+                                    </li>
+                                </ol>
+                                <div style="margin-left: 4mm">
+                                    <p class="fw-bold fst-italic">
+                                        *) Coret salah satu
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- persetujua pelepasan informasi-->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                persetujua pelepasan informasi
+                            </td>
+                        </tr>
+
+                        <!-- isi persetujua pelepasan informasi  -->
+                        <tr>
+                            <td>
+                                <ol>
+                                    <li>
+                                        Saya memahami informasi yang ada di
+                                        dalam diri saya, termasuk diagnosis,
+                                        hasil laboratorium, dan hasil tes
+                                        diagnostik yang akan digunakan untuk
+                                        perawatan medis, RSK Bedah Ropanasuri
+                                        akan menjamin kerahasiaannya.
+                                    </li>
+                                    <li>
+                                        Saya memberi wewenang kepada RSK Bedah
+                                        Ropanasuri untuk memberikan informasi
+                                        tentang rahasia kedokteran saya bila
+                                        diperlukan untuk memproses klaim
+                                        Asuransi termasuk namun tidak terbatas
+                                        pada BPJS Kesehatan, BPJS
+                                        Ketenagakerjaan, asuransi kesehatan
+                                        lainnya, Perusahaan, Dinas Kesehatan,
+                                        atau Lembaga Pemerintah lainnya.
+                                    </li>
+                                    <li class="mb-3">
+                                        Saya menyetujui / tidak menyetujui*
+                                        pelepasan informasi (diagnosis, hasil
+                                        pelayanan, dan pengobatan) terkait
+                                        perawatan saya kepada anggota keluarga
+                                        saya (termasuk kondisi kritis atau
+                                        situasi tertentu), sebutkan nama atau
+                                        hubungan dengan pasien
+                                    </li>
+                                    <p style="margin-top: -4mm">
+                                        ...........................................................................................................................................................................................................................
+                                    </p>
+                                    <p style="margin-top: -4mm">
+                                        ...........................................................................................................................................................................................................................
+                                    </p>
+                                </ol>
+                            </td>
+                        </tr>
+
+                        <!-- PENDAPAT KEDUA  -->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center">
+                                PENDAPAT KEDUA (SECOND OPINION)
+                            </td>
+                        </tr>
+
+                        <!-- content PENDAPAT KEDUA  -->
+                        <tr>
+                            <td>
+                                <p>
+                                    RSK Bedah Ropanasuri memfasilitasi
+                                    permintaan pasien untuk mencari pendapat
+                                    kedua (second opinion) tanpa perlu khawatir
+                                    akan mempengaruhi perawatannya selama di
+                                    dalam/luar Rumah Sakit.
+                                </p>
+                            </td>
+                        </tr>
+
+                        <!-- pENYAMPAIAN KELUHAN / PENDAPAT SELAMA PERAWATAN  -->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center">
+                                PENYAMPAIAN KELUHAN / PENDAPAT SELAMA PERAWATAN
+                            </td>
+                        </tr>
+
+                        <!-- content pENYAMPAIAN KELUHAN / PENDAPAT SELAMA PERAWATAN  -->
+                        <tr>
+                            <td>
+                                <p>
+                                    RSK Bedah Ropanasuri meneydiakan fasilitas
+                                    kepada pasien dan keluarga untuk
+                                    menyampaikan keluhan pendapat sejak pasien
+                                    mengakses pelayanan, selama menjalani masa
+                                    perawatan dan pada proses pemulangan
+                                    melalui:
+                                </p>
+                                <ol type="a" style="margin-top: -4mm">
+                                    <li>
+                                        Pengisian kotak saran yang berada di
+                                        IGD/Rawat Jalan/Rawat Inap
+                                    </li>
+                                    <li>
+                                        Melalui layanan pengaduan di Aplikasi
+                                        WhatsApp : 0812-6729-2974
+                                    </li>
+                                </ol>
+                            </td>
+                        </tr>
+
+                        <!-- informasi tata tertip bagi pasien dan keluarga -->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                informasi tata tertip bagi pasien dan keluarga
+                            </td>
+                        </tr>
+
+                        <!-- content informasi tata tertip bagi pasien dan keluarga -->
+                        <tr>
+                            <td>
+                                <p>
+                                    Saya telah menerima informasi tentang tata
+                                    tertib yang diberlakukan oleh RSK Bedah
+                                    Ropanasuri dan saya beserta keluarga
+                                    bersedia untuk mematuhinya, termasuk akan
+                                    mematuhi jam berkunjung pasien sesuai dengan
+                                    aturan di Rumah Sakit.
+                                </p>
+                            </td>
+                        </tr>
+
+                        <!-- informasi biaya -->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                informasi biaya
+                            </td>
+                        </tr>
+
+                        <!-- content informasi biaya -->
+                        <tr>
+                            <td>
+                                <ol>
+                                    <li>
+                                        Sebagai peserta JKN dan atau Asuransi
+                                        lainnya Saya bersedia mengurus jaminan
+                                        Rawat Inap dalam waktu 3 x 24 jam hari
+                                        kerja (terhitung pasien masuk) dan atau
+                                        sebelum pasien pulang. Apabila saya
+                                        tidak mengurus dalam waktu tersebut
+                                        diatas, saya bersedia terdaftar sebagai
+                                        pasien umum / pribadi. Saya memahami
+                                        tentang informasi biaya pengobatan atau
+                                        biaya tindakan yang dijelaskan oleh
+                                        petugas Rumah Sakit.
+                                    </li>
+                                    <li>
+                                        Pasien umum / pribadi pembiayaan yang
+                                        dikenakan mengacu kepada tarif pelayanan
+                                        yang ada di RSK Bedah Ropanasuri Padang.
+                                    </li>
+                                </ol>
+                            </td>
+                        </tr>
+
+                        <!-- PERSETUJUAN UMUM (GENERAL CONSENT)-->
+                        <tr class="bg-secondary">
+                            <td class="fw-bold text-center text-uppercase">
+                                PERSETUJUAN UMUM (GENERAL CONSENT)
+                            </td>
+                        </tr>
+
+                        <!-- content PERSETUJUAN UMUM (GENERAL CONSENT)-->
+                        <tr>
+                            <td>
+                                <p class="fw-bold fst-italic">
+                                    Dengan tanda tangan saya di bawah ini, saya
+                                    menyatakan bahwa saya telah menerima
+                                    informasi, membaca. dan memahami item pada
+                                    Persetujuan Umum/General Consent.
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-5 text-center">
+                                        <p class="m-0 fw-bold mt-3">
+                                            Petugas Admisi
+                                        </p>
+                                        <br /><br /><br />
+                                        <p class="m-0">
+                                            (...................................................................)
+                                        </p>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="col-1"></div>
+                                    <div class="col-5">
+                                        <p class="m-0 fw-bold">
+                                            Padang, .......................
+                                            20......
+                                        </p>
+                                        <p class="m-0 fw-bold">
+                                            Pasien / Keluarga Pasien / Wali**
+                                        </p>
+                                        <br /><br /><br />
+                                        <p class="m-0">
+                                            (...................................................................)
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

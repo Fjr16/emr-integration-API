@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('ranap_detail_hais_patients', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignId('ranap_hais_patient_id')->nullable();
+            $table->string('kategori')->nullable();
+            $table->string('nama')->nullable();
+            $table->string('status')->nullable();
+            $table->string('ket')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('ranap_detail_hais_patients');
+    }
+};
