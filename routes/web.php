@@ -1,14 +1,11 @@
 <?php
 
-use App\Models\Queue;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BedController;
 use App\Http\Controllers\GetConversion;
 use App\Http\Controllers\IcdController;
-use App\Http\Controllers\IgdController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\PoliController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -21,31 +18,22 @@ use App\Http\Controllers\TarifController;
 use App\Http\Controllers\UrineController;
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\InacbgController;
-use App\Models\KemoterapiDischargeSummary;
 use App\Http\Controllers\BedroomController;
 use App\Http\Controllers\BedTypeController;
 use App\Http\Controllers\CasemixController;
 use App\Http\Controllers\FactoryController;
 use App\Http\Controllers\GetStokController;
 use App\Http\Controllers\PatientController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RmeCpptController;
-use App\Http\Controllers\SurgeryController;
 use App\Http\Controllers\AnsietasController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\CpptRanapController;
-use App\Http\Controllers\GeneralConsentRanap;
-use App\Http\Controllers\IgdTriageController;
 use App\Http\Controllers\NyeriAkutController;
-use App\Http\Controllers\RawatInapController;
-use App\Http\Controllers\RawatInapNewController;
 use App\Http\Controllers\ReferensiController;
 use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\DoctorPoliController;
 use App\Http\Controllers\GetWilayahController;
-use App\Http\Controllers\IgdRmeCpptController;
 use App\Http\Controllers\RawatJalanController;
 use App\Http\Controllers\RoomDetailController;
 use App\Http\Controllers\SpecialistController;
@@ -55,138 +43,65 @@ use App\Http\Controllers\MedicineFormController;
 use App\Http\Controllers\MedicineStokController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\QueueConfirmController;
-use App\Http\Controllers\SurgeryRatesController;
 use App\Http\Controllers\ActionMembersController;
-use App\Http\Controllers\IgdPatientRmeController;
 use App\Http\Controllers\InvoiceReturnController;
 use App\Http\Controllers\QueueUriologiController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
 use App\Http\Controllers\AsuransiDetailController;
 use App\Http\Controllers\BillingCaptionController;
-use App\Http\Controllers\CpptKemoterapiController;
 use App\Http\Controllers\DoctorScheduleController;
-use App\Http\Controllers\IgdTriageScaleController;
-use App\Http\Controllers\LaporanOperasiController;
-use App\Http\Controllers\RanapAlihRawatController;
 use App\Http\Controllers\UnitConversionController;
-use App\Models\RanapRekapTindakanPelayananPatient;
 use App\Http\Controllers\AsesmentPerawatController;
 use App\Http\Controllers\MedicineReceiptController;
 use App\Http\Controllers\PatientCategoryController;
 use App\Http\Controllers\ReportDrugUsageController;
 use App\Http\Controllers\ReportPenunjangController;
-use App\Http\Controllers\SurgeryCategoryController;
-use App\Http\Controllers\GetTriageCheckupController;
-use App\Http\Controllers\IgdTriageCheckupController;
 use App\Http\Controllers\InitialAssesmentController;
 use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionMemberRatesController;
 use App\Http\Controllers\AsuhanKeperawatanController;
-use App\Http\Controllers\IgdGeneralConsentController;
-use App\Http\Controllers\KemoterapiPatientController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\UnitCategoryPivotController;
-use App\Http\Controllers\IgdInitialAssesmentController;
 use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
-use App\Http\Controllers\RanapEwsAnakPatientController;
-use App\Http\Controllers\RanapHaisIADPatientController;
-use App\Http\Controllers\RanapHaisIDOPatientController;
-use App\Http\Controllers\RanapHaisISKPatientController;
 use App\Http\Controllers\SuratPengantarRawatController;
 use App\Http\Controllers\MedicineDistributionController;
 use App\Http\Controllers\RadiologiFormRequestController;
-use App\Http\Controllers\RanapEvaluasiAwalMppController;
-use App\Http\Controllers\RanapLaporanAnestesiController;
-use App\Http\Controllers\RanapMedicineReceiptController;
 use App\Http\Controllers\RekamMedisElektronikController;
 use App\Http\Controllers\UnitConversionMasterController;
-use App\Http\Controllers\KemoterapiPersetujuanController;
-use App\Http\Controllers\KemoterapiSbpkPatientController;
 use App\Http\Controllers\RadiologiPatientQueueController;
-use App\Http\Controllers\RanapDischargeSummaryController;
-use App\Http\Controllers\RanapEwsDewasaPatientController;
-use App\Http\Controllers\RanapInitialAssesmentController;
-use App\Http\Controllers\CatatanPerjalananRanapController;
 use App\Http\Controllers\CostEstimateSimulationController;
-use App\Http\Controllers\IgdSuratPengantarRawatController;
-use App\Http\Controllers\RanapAssesmenPraSedasiController;
 use App\Http\Controllers\GangguanIntegritasKulitController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
-use App\Http\Controllers\RingkasanMasukDanKeluarController;
-use App\Http\Controllers\IgdTriageCategoryCheckupController;
-use App\Http\Controllers\KemoterapiAntrianPatientController;
-use App\Http\Controllers\KemoterapiGeneralConsentController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\MedicineTransactionReturnController;
-use App\Http\Controllers\RanapFormulirRekonsilasiObatPatient;
-use App\Http\Controllers\SkriningCovidRanapPatientController;
-use App\Http\Controllers\IgdAssesmenAwalKeperawatanController;
-use App\Http\Controllers\KemoterapiDischargeSummaryController;
-use App\Http\Controllers\KemoterapiInitialAssesmentController;
 use App\Http\Controllers\MedicineDistributionReturnController;
 use App\Http\Controllers\RadiologiFormRequestMasterController;
-use App\Http\Controllers\RadiologiRequestRekamMedisController;
-use App\Http\Controllers\RanapIntervensiResikoJatuhController;
-use App\Http\Controllers\RanapMonitoringCairanInfusController;
-use App\Http\Controllers\RanapMonitoringResikoJatuhController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\MedicineDistributionRequestController;
 use App\Http\Controllers\AsesmentKeperawatanDiagnosisController;
-use App\Http\Controllers\AssesmenAwalKeperawatanRanapController;
-use App\Http\Controllers\KemoterapiMonitoringTindakanController;
 use App\Http\Controllers\MedicineDistributionResponseController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
-use App\Http\Controllers\RanapFormulirRekonsilasiObatController;
-use App\Http\Controllers\RanapSurgicalSafetyChecklistController;
 use App\Http\Controllers\GangguanMobilitasFisikPatientController;
-use App\Http\Controllers\KemoterapiLembarKonsulPatientController;
 use App\Http\Controllers\LaboratoriumRequestMasterRateController;
 use App\Http\Controllers\LaboratoriumRequestRekamMedisController;
 use App\Http\Controllers\LaboratoriumRequestTypeMasterController;
-use App\Http\Controllers\RanapEdukasiPasienPraAnestesiController;
 use App\Http\Controllers\AsesmentKeperawatanStatusFisikController;
 use App\Http\Controllers\RadiologiFormRequestMasterRateController;
-use App\Http\Controllers\IgdAsesmentKeperawatanDiagnosisController;
 use App\Http\Controllers\LaboratoriumRequestMasterDetailController;
-use App\Http\Controllers\RanapMonitoringStatusFungsionalController;
 use App\Http\Controllers\AsesmentKeperawatanRencanaAsuhanController;
 use App\Http\Controllers\RadiologiFormRequestMasterDetailController;
-use App\Http\Controllers\AsesmentKeperawatanDiagnosisRanapController;
-use App\Http\Controllers\AssesmenAwalKeperawatanKemoterapiController;
-use App\Http\Controllers\IgdAsesmentKeperawatanStatusFisikController;
-use App\Http\Controllers\KemoterapiRingkasanMasukdanKeluarController;
 use App\Http\Controllers\LaboratoriumRequestCategoryMasterController;
 use App\Http\Controllers\MedicineDistributionReturnRequestController;
-use App\Http\Controllers\RanapCheklistRencanaPulangPageOneController;
-use App\Http\Controllers\RanapCheklistRencanaPulangPageTwoController;
-use App\Http\Controllers\KemoterapiTindakanPelayananPatientController;
 use App\Http\Controllers\MedicineDistributionReturnResponseController;
 use App\Http\Controllers\RadiologiFormRequestMasterCategoryController;
-use App\Http\Controllers\RanapAssesmenPraAnestesiPraInduksiController;
-use App\Http\Controllers\RanapMonitoringPelayananObatPasienController;
-use App\Http\Controllers\RanapRekapTindakanPelayananPatientController;
-use App\Http\Controllers\AsesmentKeperawatanStatusFisikRanapController;
-use App\Http\Controllers\IgdAsesmentKeperawatanRencanaAsuhanController;
-use App\Http\Controllers\RanapPersetujuanTindakanBedahPatientController;
-use App\Http\Controllers\AsesmentKeperawatanRencanaAsuhanRanapController;
-use App\Http\Controllers\DaftarTilikVerifikasiPasienPraOperasiController;
 use App\Http\Controllers\LaboratoriumMasterVariabelPemeriksaanController;
 use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhController;
-use App\Http\Controllers\KemoterapiIntervensiResikoJatuhPatientController;
-use App\Http\Controllers\KemoterapiMonitoringResikoJatuhPatientController;
-use App\Http\Controllers\AsesmenKeperawatanStatusFisikKemoterapiController;
 use App\Http\Controllers\PermintaanLaboratoriumPatogologiAnatomikController;
-use App\Http\Controllers\IgdAsesmentKeperawatanSkriningResikoJatuhController;
-use App\Http\Controllers\RanapLembarKonsultasiPenyakitDalamPatientController;
-use App\Http\Controllers\RanapPernyataanPersetujuanStatusPelayananController;
-use App\Http\Controllers\RanapJawabanKonsultasiPenyakitDalamPatientController;
-use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhRanapController;
-use App\Http\Controllers\RanapPemberianInformasiPersetujuanTindakanAnestesiController;
 use App\Http\Controllers\RajalGeneralConsentController;
 
 /*
@@ -236,19 +151,6 @@ Route::get('clear/permission', function () {
     return back()->with('success', 'SUKSES RESET');
 })->name('clear.permission');
 
-//migrate refresh laporan anestesi
-Route::get('/laporan/anestesi/clear', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_145633_create_anestesi_reports_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_152010_create_anestesi_report_airways_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_152701_create_anestesi_report_intubasis_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_155925_create_anestesi_report_perifers_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_162229_create_anestesi_report_ventilations_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_195407_create_anestesi_report_anasthesias_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_02_200012_create_anestesi_report_monitorings_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_03_124900_create_anestesi_report_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_02_03_125057_create_anestesi_report_medicine_details_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/laporan/anestesi');
 
 // migrate refresh rajal
 Route::get('/rajal/clear/database', function () {
@@ -494,94 +396,6 @@ Route::get('/db/lama/seed/database', function () {
     Artisan::call('db:seed --class=UnitSeeder');
     return back()->with('success', 'SUKSES SEED');
 })->name('seed/db/lama');
-
-// Route::get('clear/cppt/ranap', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_08_07_153438_create_cppt_ranaps_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_18_000235_create_ranap_cppt_sbar_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_22_144322_create_ranap_cppt_alih_rawat_patients_table.php');
-//     return back()->with('success', 'BERHASIL RESET');
-// })->name('clear/cppt.ranap');
-
-//clear General Consent
-// Route::get('/general/consent/ranap/clear', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_010145_create_general_consent_patients_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/general/consent.ranap');
-
-//clear Assesmen Awal Medis Ranap
-// Route::get('/assesmen/awal/medis/ranap/clear', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_153811_create_ranap_initial_assesments_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_155233_create_ranap_pemeriksaan_fisik_initial_assesments_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_155631_create_ranap_rencana_initial_assesments_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_214155_create_ranap_hasil_pemeriksaan_penunjang_initial_assesments_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_155832_create_ranap_kebutuhan_edukasi_initial_assesments_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_160127_create_ranap_rencana_pemulangan_pasien_initial_assesments_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_221131_create_ranap_medicine_receipts_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_221247_create_ranap_medicine_receipt_details_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/assesmen/awal/medis.ranap');
-
-//clear discharge summary
-// Route::get('/ringkasan/catatan/medis/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015641_create_ranap_discharge_summaries_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015746_create_ranap_detail_diganosa_utama_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015816_create_ranap_detail_karmobiditas_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015842_create_ranap_detail_prosedur_terapi_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015915_create_ranap_detail_obat_dirawat_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015929_create_ranap_detail_obat_dirumah_patients_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/ringkasan/catatan/medis');
-
-//clear Lembar Konsultasi
-// Route::get('/lembar/konsultasi/penyakit/dalam/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_14_194028_create_ranap_permintaan_konsul_penyakit_dalam_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_14_194138_create_ranap_jawaban_konsul_penyakit_dalam_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_15_124736_create_ranap_jawaban_konsul_detail_skrining_covid_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_15_125345_create_ranap_jawaban_konsul_detail_lainnya_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_15_130833_create_ranap_jawaban_konsul_detail_penemuan_patients_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/lembar/konsultasi/penyakit/dalam');
-
-//clear Persetujuan tindakan anestesi
-// Route::get('/persetujuan/tindakan/anestesi/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_18_193746_create_ranap_persetujuan_tindakan_anestesi_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_18_194026_create_ranap_detail_persetujuan_tindakan_anestesi_patients_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/persetujuan/tindakan/anestesi');
-
-//clear Persetujuan tindakan bedah
-// Route::get('/persetujuan/tindakan/bedah/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_23_185502_create_ranap_persetujuan_tindakan_bedah_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_23_185746_create_ranap_detail_persetujuan_tindakan_bedah_patients_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/persetujuan/tindakan/bedah');
-
-//Discharge Planning Perawat
-// Route::get('/discharge/planning/perawat/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_19_202425_create_ranap_discharge_planning_perawat_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_19_213518_create_ranap_detail_discharge_planning_perawat_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_20_195842_create_ranap_child_detail_discharge_planning_surgeries_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2023_11_20_204657_create_ranap_grand_child_detail_discharge_planning_surgeries_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/discharge/planning/perawat');
-
-//MPP Ranap
-// Route::get('/mpp/ranap/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_10_141050_create_ranap_mpp_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_10_141725_create_ranap_mpp_skrining_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_110216_create_ranap_mpp_problem_risk_chances_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_110653_create_ranap_mpp_asses_management_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_110830_create_ranap_mpp_manager_plannings_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_111119_create_ranap_mpp_pelayanan_advanceds_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/mpp/ranap');
-
-//Hais Ranap
-// Route::get('/hais/ranap/clear/database', function () {
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_09_200136_create_ranap_hais_patients_table.php');
-//     Artisan::call('migrate:refresh --path=/database/migrations/2024_01_09_200224_create_ranap_detail_hais_patients_table.php');
-//     return back()->with('success', 'Berhasil Di Reset');
-// })->name('clear/hais/ranap');
 
 // clear asskep igd
 Route::get('/igd/asskep/clear', function () {
@@ -1021,9 +835,6 @@ Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registr
     Route::post('/antrian/konfirmasi/store/{id}', [QueueConfirmController::class, 'store'])->name('antrian/konfirmasi.store');
     Route::get('/antrian/konfirmasi/ulang/create/{id}', [QueueConfirmController::class, 'panggilUlang'])->name('antrian/konfirmasi/ulang.create');
 
-
-
-
     //Antrian urologi
     Route::get('/antrian/urologi/create', [QueueUriologiController::class, 'create'])->name('antrian-urologi.create');
     Route::post('/antrian/urologi/store', [QueueUriologiController::class, 'store'])->name('antrian-urologi.store');
@@ -1159,11 +970,6 @@ Route::group(['middleware' => ['permission:delete permintaan radiologi']], funct
     Route::delete('/rajal/permintaan/radiologi/destroy/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
 });
 
-//ranap request Radiologi
-Route::group(['middleware' => ['permission:tambah permintaan radiologi']], function () {
-    Route::get('/ranap/permintaan/radiologi/create/{id}', [RadiologiFormRequestController::class, 'create'])->name('ranap/permintaan/radiologi.create');
-    Route::post('/ranap/permintaan/radiologi/store/{id}', [RadiologiFormRequestController::class, 'store'])->name('ranap/permintaan/radiologi.store');
-});
 
 Route::group(['middleware', 'permission:master radiologi'], function () {
     //Master Kategori Radiologi
@@ -1486,226 +1292,6 @@ Route::get('/permintaan/laboratorium/patologi/anatomik/print/{id}', [PermintaanL
 Route::get('/permintaan/laboratorium/patologi/anatomik/delete/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'delete'])->name('permintaan/laboratorium/patologi/anatomik.delete');
 // });
 
-//IGD
-Route::get('/igd/patient', [IgdController::class, 'index'])->name('igd/patient.index');
-Route::get('/igd/patient/create', [IgdController::class, 'create'])->name('igd/patient.create');
-Route::post('/igd/patient/store', [IgdController::class, 'store'])->name('igd/patient.store');
-Route::get('/igd/patient/edit/{id}', [IgdController::class, 'edit'])->name('igd/patient.edit');
-Route::get('/igd/patient/show/{id}', [IgdController::class, 'show'])->name('igd/patient.show');
-
-//RME IGD
-Route::get('/igd/patient/rme/show/{id}', [IgdPatientRmeController::class, 'show'])->name('igd/patient/rme.show');
-Route::put('/igd/patient/rme/updateStatus/{id}', [IgdPatientRmeController::class, 'update'])->name('igd/patient/rme.updateStatus');
-
-//igd Skala Triase
-Route::get('/igd/triase/skala/create', [IgdTriageScaleController::class, 'create'])->name('igd/triase/skala.create');
-Route::post('/igd/triase/skala/store', [IgdTriageScaleController::class, 'store'])->name('igd/triase/skala.store');
-Route::delete('/igd/triase/skala/destroy/{id}', [IgdTriageScaleController::class, 'destroy'])->name('igd/triase/skala.destroy');
-//igd kategori Triase
-Route::get('/igd/triase/kategori/create', [IgdTriageCategoryCheckupController::class, 'create'])->name('igd/triase/kategori.create');
-Route::post('/igd/triase/kategori/store', [IgdTriageCategoryCheckupController::class, 'store'])->name('igd/triase/kategori.store');
-Route::delete('/igd/triase/kategori/destroy/{id}', [IgdTriageCategoryCheckupController::class, 'destroy'])->name('igd/triase/kategori.destroy');
-//igd pemeriksaan Triase
-Route::get('/igd/triase/pemeriksaan/create', [IgdTriageCheckupController::class, 'create'])->name('igd/triase/pemeriksaan.create');
-Route::post('/igd/triase/pemeriksaan/store', [IgdTriageCheckupController::class, 'store'])->name('igd/triase/pemeriksaan.store');
-Route::delete('/igd/triase/pemeriksaan/destroy/{id}', [IgdTriageCheckupController::class, 'destroy'])->name('igd/triase/pemeriksaan.destroy');
-
-//igd Triase
-Route::get('/igd/triase/create/{id}', [IgdTriageController::class, 'create'])->name('igd/triase.create');
-Route::post('/igd/triase/store/{id}', [IgdTriageController::class, 'store'])->name('igd/triase.store');
-Route::get('/igd/triase/show/{id}', [IgdTriageController::class, 'show'])->name('igd/triase.show');
-Route::get('/igd/triase/edit/{id}', [IgdTriageController::class, 'edit'])->name('igd/triase.edit');
-Route::post('/igd/triase/update', [IgdTriageController::class, 'update'])->name('igd/triase.update');
-Route::delete('/igd/triase/destroy/{id}', [IgdTriageController::class, 'destroy'])->name('igd/triase.destroy');
-
-//print igd triase
-Route::get('/igd/triase/print/{id}/{dokter_id}', [IgdTriageController::class, 'print'])->name('igd/triase.print');
-Route::get('/igd/triase/printall/{id}', [IgdTriageController::class, 'allPrint'])->name('igd/triase/print.allPrint');
-
-Route::get('/igd/triase/get/checkup/{id}', [GetTriageCheckupController::class, 'show'])->name('igd/triase/get/checkup.show');
-
-//IGD General Consent
-Route::get('igd/general/consent/create/{id}', [IgdGeneralConsentController::class, 'create'])->name('igd/general/consent.create');
-Route::post('igd/general/consent/store/{id}', [IgdGeneralConsentController::class, 'store'])->name('igd/general/consent.store');
-Route::get('igd/general/consent/show/{id}', [IgdGeneralConsentController::class, 'show'])->name('igd/general/consent.show');
-Route::get('igd/general/consent/showtatatertib/{id}', [IgdGeneralConsentController::class, 'showTataTertib'])->name('igd/general/consent.showtatatertib');
-Route::get('igd/general/consent/showhakdankewajiban/{id}', [IgdGeneralConsentController::class, 'showHakDanKewajiban'])->name('igd/general/consent.showhakdankewajiban');
-Route::get('igd/general/consent/edit/{id}', [IgdGeneralConsentController::class, 'edit'])->name('igd/general/consent.edit');
-Route::put('igd/general/consent/update/{id}', [IgdGeneralConsentController::class, 'update'])->name('igd/general/consent.update');
-Route::delete('igd/general/consent/destroy/{id}', [IgdGeneralConsentController::class, 'destroy'])->name('igd/general/consent.destroy');
-
-//assesmen awal medis IGD
-Route::post('/igd/assesmenawal/index', [IgdInitialAssesmentController::class, 'index'])->name('igd/assesmenawal.index');
-Route::get('/igd/assesmenawal/create/{id}', [IgdInitialAssesmentController::class, 'create'])->name('igd/assesmenawal.create');
-Route::post('/igd/assesmenawal/store/{id}', [IgdInitialAssesmentController::class, 'store'])->name('igd/assesmenawal.store');
-Route::get('/igd/assesmenawal/show/{id}', [IgdInitialAssesmentController::class, 'show'])->name('igd/assesmenawal.show');
-Route::delete('/igd/assesmenawal/destroy/{id}', [IgdInitialAssesmentController::class, 'destroy'])->name('igd/assesmenawal.destroy');
-
-// asesmen keperawatan igd
-//Igd Assesmen Awal Keperawatan Pasien Rawat Inap
-Route::get('/igd/assesmen/awal/keperawatan/show/{id}', [IgdAssesmenAwalKeperawatanController::class, 'show'])->name('igd/assesmen/awal/keperawatan.show');
-// Route::get('/igd/assesmen/awal/keperawatan/edit/{id}', [IgdAssesmenAwalKeperawatanController::class, 'edit'])->name('igd/assesmen/awal/keperawatan.edit');
-Route::delete('/igd/assesmen/awal/keperawatan/destroy/{id}', [IgdAssesmenAwalKeperawatanController::class, 'destroy'])->name('igd/assesmen/awal/keperawatan.destroy');
-
-//Igd Assesmen Perawat Status Fisik
-Route::get('/igd/asesmen/status/fisik/index/{id}', [IgdAsesmentKeperawatanStatusFisikController::class, 'index'])->name('igd/asesmen/status/fisik.index');
-Route::post('/igd/asesmen/status/fisik/store/{id}', [IgdAsesmentKeperawatanStatusFisikController::class, 'store'])->name('igd/asesmen/status/fisik.store');
-
-//Igd Assesmen Perawat Skrining Resiko Jatuh
-Route::get('/igd/asesmen/skrining/resiko/jatuh/index/{id}', [IgdAsesmentKeperawatanSkriningResikoJatuhController::class, 'index'])->name('igd/asesmen/skrining/resiko/jatuh.index');
-Route::post('/igd/asesmen/skrining/resiko/jatuh/store/{id}', [IgdAsesmentKeperawatanSkriningResikoJatuhController::class, 'store'])->name('igd/asesmen/skrining/resiko/jatuh.store');
-
-//Igd Assesmen Perawat Diagnosis Keperawatan
-Route::get('/igd/asesmen/diagnosis/keperawatan/index/{id}', [IgdAsesmentKeperawatanDiagnosisController::class, 'index'])->name('igd/asesmen/diagnosis/keperawatan.index');
-Route::post('/igd/asesmen/diagnosis/keperawatan/store/{id}', [IgdAsesmentKeperawatanDiagnosisController::class, 'store'])->name('igd/asesmen/diagnosis/keperawatan.store');
-
-//Igd Assesmen Perawat rencana asuhan
-Route::get('/igd/asesmen/rencana/asuhan/index/{id}', [IgdAsesmentKeperawatanRencanaAsuhanController::class, 'index'])->name('igd/asesmen/rencana/asuhan.index');
-Route::post('/igd/asesmen/rencana/asuhan/store/{id}', [IgdAsesmentKeperawatanRencanaAsuhanController::class, 'store'])->name('igd/asesmen/rencana/asuhan.store');
-// end Assesmen keperawatan igd
-
-//igd CPPT
-Route::post('/igd/cppt/create{id}', [IgdRmeCpptController::class, 'create'])->name('igd/cppt.create');
-Route::post('/igd/cppt/store/{id}', [IgdRmeCpptController::class, 'store'])->name('igd/cppt.store');
-Route::get('/igd/cppt/edit/{id}', [IgdRmeCpptController::class, 'edit'])->name('igd/cppt.edit');
-Route::put('/igd/cppt/update/{id}', [IgdRmeCpptController::class, 'update'])->name('igd/cppt.update');
-Route::get('/igd/cppt/show/{id}', [IgdRmeCpptController::class, 'show'])->name('igd/cppt.show');
-Route::delete('/igd/cppt/destroy/{id}', [IgdRmeCpptController::class, 'destroy'])->name('igd/cppt.destroy');
-
-// igd Surat Pengantar
-// Route::group(['middleware' => ['permission:tambah surat pengantar ranap']], function () {
-Route::get('igd/surat/pengantar/create/{id}', [IgdSuratPengantarRawatController::class, 'create'])->name('igd/suratpengantar.create');
-Route::post('igd/surat/pengantar/store/{id}', [IgdSuratPengantarRawatController::class, 'store'])->name('igd/suratpengantar.store');
-// });
-// Route::group(['middleware' => ['permission:edit surat pengantar ranap']], function () {
-Route::get('igd/surat/pengantar/edit/{id}', [IgdSuratPengantarRawatController::class, 'edit'])->name('igd/suratpengantar.edit');
-Route::put('igd/surat/pengantar/update/{id}', [IgdSuratPengantarRawatController::class, 'update'])->name('igd/suratpengantar.update');
-// });
-// Route::group(['middleware' => ['permission:delete surat pengantar ranap']], function () {
-Route::delete('igd/surat/pengantar/destroy/{id}', [IgdSuratPengantarRawatController::class, 'destroy'])->name('igd/suratpengantar.destroy');
-// });
-
-// start kemoterapi
-Route::get('kemoterapi/antrian/index', [KemoterapiAntrianPatientController::class, 'index'])->name('kemoterapi/antrian.index');
-Route::post('kemoterapi/antrian/create', [KemoterapiAntrianPatientController::class, 'create'])->name('kemoterapi/antrian.create');
-Route::post('kemoterapi/antrian/store/{id}', [KemoterapiAntrianPatientController::class, 'store'])->name('kemoterapi/antrian.store');
-Route::get('kemoterapi/antrian/edit/{id}', [KemoterapiAntrianPatientController::class, 'edit'])->name('kemoterapi/antrian.edit');
-Route::get('kemoterapi/antrian/update/{id}', [KemoterapiAntrianPatientController::class, 'update'])->name('kemoterapi/antrian.update');
-
-Route::get('kemoterapi/patient/index', [KemoterapiPatientController::class, 'index'])->name('kemoterapi/patient.index');
-Route::get('kemoterapi/patient/show/{id}', [KemoterapiPatientController::class, 'show'])->name('kemoterapi/patient.show');
-
-// sbpk
-Route::get('kemoterapi/sbpk/create/{id}', [KemoterapiSbpkPatientController::class, 'create'])->name('kemoterapi/sbpk.create');
-Route::post('kemoterapi/sbpk/store/{id}', [KemoterapiSbpkPatientController::class, 'store'])->name('kemoterapi/sbpk.store');
-Route::get('kemoterapi/sbpk/show/{id}', [KemoterapiSbpkPatientController::class, 'show'])->name('kemoterapi/sbpk.show');
-Route::get('kemoterapi/sbpk/edit/{id}', [KemoterapiSbpkPatientController::class, 'edit'])->name('kemoterapi/sbpk.edit');
-Route::post('kemoterapi/sbpk/update/{id}', [KemoterapiSbpkPatientController::class, 'update'])->name('kemoterapi/sbpk.update');
-Route::get('kemoterapi/sbpk/destroy/{id}', [KemoterapiSbpkPatientController::class, 'destroy'])->name('kemoterapi/sbpk.destroy');
-// end sbpk
-
-// Persetujuan Tindakan kemoterapi
-Route::get('kemoterapi/persetujuan/create/{id}', [KemoterapiPersetujuanController::class, 'create'])->name('kemoterapi/persetujuan.create');
-Route::post('kemoterapi/persetujuan/store/{id}', [KemoterapiPersetujuanController::class, 'store'])->name('kemoterapi/persetujuan.store');
-Route::get('kemoterapi/persetujuan/show/{id}', [KemoterapiPersetujuanController::class, 'show'])->name('kemoterapi/persetujuan.show');
-Route::get('kemoterapi/persetujuan/edit/{id}', [KemoterapiPersetujuanController::class, 'edit'])->name('kemoterapi/persetujuan.edit');
-Route::post('kemoterapi/persetujuan/update/{id}', [KemoterapiPersetujuanController::class, 'update'])->name('kemoterapi/persetujuan.update');
-Route::get('kemoterapi/persetujuan/destroy/{id}', [KemoterapiPersetujuanController::class, 'destroy'])->name('kemoterapi/persetujuan.destroy');
-// end Persetujuan Tindakan kemoterapi
-
-// Kemoterapi Monitoring Resiko Jatuh
-Route::get('kemoterapi/monitoring/resiko/jatuh/create/{id}', [KemoterapiMonitoringResikoJatuhPatientController::class, 'create'])->name('kemoterapi/monitoring/resiko/jatuh.create');
-Route::post('kemoterapi/monitoring/resiko/jatuh/store/{id}', [KemoterapiMonitoringResikoJatuhPatientController::class, 'store'])->name('kemoterapi/monitoring/resiko/jatuh.store');
-Route::get('kemoterapi/monitoring/resiko/jatuh/show/{id}', [KemoterapiMonitoringResikoJatuhPatientController::class, 'show'])->name('kemoterapi/monitoring/resiko/jatuh.show');
-Route::get('kemoterapi/monitoring/resiko/jatuh/edit/{id}', [KemoterapiMonitoringResikoJatuhPatientController::class, 'edit'])->name('kemoterapi/monitoring/resiko/jatuh.edit');
-Route::put('kemoterapi/monitoring/resiko/jatuh/update/{id}', [KemoterapiMonitoringResikoJatuhPatientController::class, 'update'])->name('kemoterapi/monitoring/resiko/jatuh.update');
-Route::get('kemoterapi/monitoring/resiko/jatuh/destroy/{id}', [KemoterapiMonitoringResikoJatuhPatientController::class, 'destroy'])->name('kemoterapi/monitoring/resiko/jatuh.destroy');
-// end Kemoterapi Monitoring Resiko Jatuh
-
-// Kemoterapi Intervensi Pencegahan resiko jatuh
-Route::get('kemoterapi/intervensi/pencegahan/resiko/jatuh/create/{id}', [KemoterapiIntervensiResikoJatuhPatientController::class, 'create'])->name('kemoterapi/intervensi/pencegahan/resiko/jatuh.create');
-Route::post('kemoterapi/intervensi/pencegahan/resiko/jatuh/store/{id}', [KemoterapiIntervensiResikoJatuhPatientController::class, 'store'])->name('kemoterapi/intervensi/pencegahan/resiko/jatuh.store');
-Route::get('kemoterapi/intervensi/pencegahan/resiko/jatuh/show/{id}', [KemoterapiIntervensiResikoJatuhPatientController::class, 'show'])->name('kemoterapi/intervensi/pencegahan/resiko/jatuh.show');
-Route::get('kemoterapi/intervensi/pencegahan/resiko/jatuh/edit/{id}', [KemoterapiIntervensiResikoJatuhPatientController::class, 'edit'])->name('kemoterapi/intervensi/pencegahan/resiko/jatuh.edit');
-Route::post('kemoterapi/intervensi/pencegahan/resiko/jatuh/update/{id}', [KemoterapiIntervensiResikoJatuhPatientController::class, 'update'])->name('kemoterapi/intervensi/pencegahan/resiko/jatuh.update');
-Route::get('kemoterapi/intervensi/pencegahan/resiko/jatuh/destroy/{id}', [KemoterapiIntervensiResikoJatuhPatientController::class, 'destroy'])->name('kemoterapi/intervensi/pencegahan/resiko/jatuh.destroy');
-// end Kemoterapi Intervensi Pencegahan resiko jatuh
-
-
-// Kemoterapi General Consent
-Route::get('kemoterapi/general/consent/create/{id}', [KemoterapiGeneralConsentController::class, 'create'])->name('kemoterapi/general/consent.create');
-Route::post('kemoterapi/general/consent/store/{id}', [KemoterapiGeneralConsentController::class, 'store'])->name('kemoterapi/general/consent.store');
-Route::get('kemoterapi/general/consent/show/{id}', [KemoterapiGeneralConsentController::class, 'show'])->name('kemoterapi/general/consent.show');
-Route::get('kemoterapi/general/consent/showtatatertib/{id}', [KemoterapiGeneralConsentController::class, 'showTataTertib'])->name('kemoterapi/general/consent.showtatatertib');
-Route::get('kemoterapi/general/consent/showhakdankewajiban/{id}', [KemoterapiGeneralConsentController::class, 'showHakDanKewajiban'])->name('kemoterapi/general/consent.showhakdankewajiban');
-Route::get('kemoterapi/general/consent/edit/{id}', [KemoterapiGeneralConsentController::class, 'edit'])->name('kemoterapi/general/consent.edit');
-Route::put('kemoterapi/general/consent/update/{id}', [KemoterapiGeneralConsentController::class, 'update'])->name('kemoterapi/general/consent.update');
-Route::delete('kemoterapi/general/consent/destroy/{id}', [KemoterapiGeneralConsentController::class, 'destroy'])->name('kemoterapi/general/consent.destroy');
-// end Kemoterapi General Consent
-
-//Assesmen Awal Medis Kemoterapi
-Route::get('/kemoterapi/assesmenawal/create/{id}', [KemoterapiInitialAssesmentController::class, 'create'])->name('kemoterapi/assesmenawal.create');
-Route::post('/kemoterapi/assesmenawal/store/{id}', [KemoterapiInitialAssesmentController::class, 'store'])->name('kemoterapi/assesmenawal.store');
-Route::get('/kemoterapi/assesmenawal/show/{id}', [KemoterapiInitialAssesmentController::class, 'show'])->name('kemoterapi/assesmenawal.show');
-Route::delete('/kemoterapi/assesmenawal/destroy/{id}', [KemoterapiInitialAssesmentController::class, 'destroy'])->name('kemoterapi/assesmenawal.destroy');
-// end Assesmen Awal Medis Kemoterapi
-
-
-//Ranap Assesmen Awal Keperawatan Pasien Rawat Inap
-Route::get('/kemoterapi/assesmen/awal/keperawatan/index', [AssesmenAwalKeperawatanKemoterapiController::class, 'index'])->name('kemoterapi/assesmen/awal/keperawatan.index');
-Route::get('/kemoterapi/assesmen/awal/keperawatan/detail/{id}', [AssesmenAwalKeperawatanKemoterapiController::class, 'detail'])->name('kemoterapi/assesmen/awal/keperawatan.detail');
-Route::get('/kemoterapi/assesmen/awal/keperawatan/show/{id}', [AssesmenAwalKeperawatanKemoterapiController::class, 'show'])->name('kemoterapi/assesmen/awal/keperawatan.show');
-Route::get('/kemoterapi/assesmen/awal/keperawatan/edit/{id}', [AssesmenAwalKeperawatanKemoterapiController::class, 'edit'])->name('kemoterapi/assesmen/awal/keperawatan.edit');
-Route::delete('/kemoterapi/assesmen/awal/keperawatan/destroy/{id}', [AssesmenAwalKeperawatanKemoterapiController::class, 'destroy'])->name('kemoterapi/assesmen/awal/keperawatan.destroy');
-
-
-//Ranap Assesmen Perawat Status Fisik
-Route::get('/kemoterapi/asesmen/status/fisik/index/{id}', [AsesmenKeperawatanStatusFisikKemoterapiController::class, 'index'])->name('kemoterapi/asesmen/status/fisik.index');
-Route::post('/kemoterapi/asesmen/status/fisik/store/{id}', [AsesmenKeperawatanStatusFisikKemoterapiController::class, 'store'])->name('kemoterapi/asesmen/status/fisik.store');
-
-
-//Kemoterapi Ringkasan Masuk dan Keluar
-Route::get('kemoterapi/ringkasan/masuk/dan/keluar/create/{id}', [KemoterapiRingkasanMasukdanKeluarController::class, 'create'])->name('kemoterapi/ringkasan-masuk-keluar.create');
-Route::post('kemoterapi/masuk/dan/keluar/store/{id}', [KemoterapiRingkasanMasukdanKeluarController::class, 'store'])->name('kemoterapi/ringkasan-masuk-keluar.store');
-Route::get('kemoterapi/ringkasan/masuk/dan/keluar/show/{id}', [KemoterapiRingkasanMasukdanKeluarController::class, 'show'])->name('kemoterapi/ringkasan-masuk-keluar.show');
-Route::get('kemoterapi/ringkasan/masuk/dan/keluar/edit/{id}', [KemoterapiRingkasanMasukdanKeluarController::class, 'edit'])->name('kemoterapi/ringkasan-masuk-keluar.edit');
-Route::put('kemoterapi/ringkasan/masuk/dan/keluar/update/{id}', [KemoterapiRingkasanMasukdanKeluarController::class, 'update'])->name('kemoterapi/ringkasan-masuk-keluar.update');
-Route::delete('kemoterapi/ringkasan/masuk/dan/keluar/delete/{id}', [KemoterapiRingkasanMasukdanKeluarController::class, 'destroy'])->name('kemoterapi/ringkasan-masuk-keluar.destroy');
-//end Kemoterapi Ringkasan Masuk dan Keluar
-
-// Monitoring Tindakan Kemoterapi
-Route::get('kemoterapi/monitoring/tindakan/kemoterapi/create/{id}', [KemoterapiMonitoringTindakanController::class, 'create'])->name('kemoterapi/monitoring-tindakan.create');
-Route::post('kemoterapi/monitoring/tindakan/kemoterapi/store/{id}', [KemoterapiMonitoringTindakanController::class, 'store'])->name('kemoterapi/monitoring-tindakan.store');
-Route::get('kemoterapi/monitoring/tindakan/kemoterapi/show/{id}', [KemoterapiMonitoringTindakanController::class, 'show'])->name('kemoterapi/monitoring-tindakan.show');
-Route::get('kemoterapi/monitoring/tindakan/kemoterapi/edit/{id}', [KemoterapiMonitoringTindakanController::class, 'edit'])->name('kemoterapi/monitoring-tindakan.edit');
-Route::put('kemoterapi/monitoring/tindakan/kemoterapi/update/{id}', [KemoterapiMonitoringTindakanController::class, 'update'])->name('kemoterapi/monitoring-tindakan.update');
-Route::delete('kemoterapi/monitoring/tindakan/kemoterapi/destroy/{id}', [KemoterapiMonitoringTindakanController::class, 'destroy'])->name('kemoterapi/monitoring-tindakan.destroy');
-Route::get('/monitoring-tindakan-kemoterapi', function () {
-    return view('pages.monitoringTindakanKemoterapi.index', [
-        "title" => "Monitoring Tindakan Kemoterapi",
-        "menu" => ""
-    ]);
-});
-Route::get('/tambah-monitoring-tindakan-kemoterapi', function () {
-    return view('pages.monitoringTindakanKemoterapi.create', [
-        "title" => "Tambah Monitoring Tindakan Kemoterapi",
-        "menu" => ""
-    ]);
-})->name('add-monitoring');
-// end Monitoring Tindakan Kemoterapi
-
-// Tindakan Pelayanan Pasien
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/index/{id}', [KemoterapiTindakanPelayananPatientController::class, 'index'])->name('kemoterapi/tindakan/pelayanan/pasien.index');
-Route::post('/kemoterapi/tindakan/pelayanan/pasien/storeIndex/{id}', [KemoterapiTindakanPelayananPatientController::class, 'storeIndex'])->name('kemoterapi/tindakan/pelayanan/pasien.storeIndex');
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/create/{id}', [KemoterapiTindakanPelayananPatientController::class, 'create'])->name('kemoterapi/tindakan/pelayanan/pasien.create');
-Route::post('/kemoterapi/tindakan/pelayanan/pasien/store/{id}', [KemoterapiTindakanPelayananPatientController::class, 'store'])->name('kemoterapi/tindakan/pelayanan/pasien.store');
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/edit/{id}', [KemoterapiTindakanPelayananPatientController::class, 'edit'])->name('kemoterapi/tindakan/pelayanan/pasien.edit');
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/show/{id}', [KemoterapiTindakanPelayananPatientController::class, 'show'])->name('kemoterapi/tindakan/pelayanan/pasien.show');
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/destroy/{id}', [KemoterapiTindakanPelayananPatientController::class, 'destroy'])->name('kemoterapi/tindakan/pelayanan/pasien.destroy');
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/detail/editDetail/{id}', [KemoterapiTindakanPelayananPatientController::class, 'editDetail'])->name('kemoterapi/tindakan/pelayanan/pasien/detail.editDetail');
-Route::post('/kemoterapi/tindakan/pelayanan/pasien/detail/updateDetail/{id}', [KemoterapiTindakanPelayananPatientController::class, 'updateDetail'])->name('kemoterapi/tindakan/pelayanan/pasien/detail.updateDetail');
-Route::get('/kemoterapi/tindakan/pelayanan/pasien/detail/destroyDetail/{id}', [KemoterapiTindakanPelayananPatientController::class, 'destroyDetail'])->name('kemoterapi/tindakan/pelayanan/pasien/detail.destroyDetail');
-// end Tindakan Pelayanan Pasien
 // Data Sosial
 Route::get('/data-sosial', function () {
     return view('pages.datasosial.index', [
@@ -1728,452 +1314,12 @@ Route::group(['middleware' => ['permission:delete surat pengantar ranap']], func
     Route::delete('/surat/pengantar/destroy/{id}', [SuratPengantarRawatController::class, 'destroy'])->name('suratpengantar.destroy');
 });
 Route::get('/surat/pengantar/show/{id}', [SuratPengantarRawatController::class, 'show'])->name('suratpengantar.show');
-
-//catatan Perjalanan Administrasi Ranap
-Route::get('/catat/perjalanan/ranap', [CatatanPerjalananRanapController::class, 'index'])->name('perjalananadministrasi-ranap.index');
-Route::get('/catat/perjalanan/ranap/pasien', [CatatanPerjalananRanapController::class, 'create'])->name('perjalananadministrasi-ranap.create');
-Route::get('/catat/perjalanan/ranap/pasien/administrasi/{id}', [CatatanPerjalananRanapController::class, 'edit'])->name('perjalananadministrasi-ranap.edit');
-Route::get('/catat/perjalanan/ranap/rekam-medis/{id}', [CatatanPerjalananRanapController::class, 'rekamMedis'])->name('perjalananadministrasi-ranap.rekam-medis');
-Route::get('/catat/perjalanan/ranap/asuransi/{id}', [CatatanPerjalananRanapController::class, 'asuransi'])->name('perjalananadministrasi-ranap.asuransi');
-Route::get('/catat/perjalanan/ranap/registrasi/{id}', [CatatanPerjalananRanapController::class, 'registrasi'])->name('perjalananadministrasi-ranap.registrasi');
-Route::get('/catat/perjalanan/ranap/kamar-bedah/{id}', [CatatanPerjalananRanapController::class, 'bedah'])->name('perjalananadministrasi-ranap.kamar-bedah');
-Route::get('/catat/perjalanan/ranap/laboratorium/{id}', [CatatanPerjalananRanapController::class, 'laboratorium'])->name('perjalananadministrasi-ranap.laboratorium');
-Route::get('/catat/perjalanan/ranap/farmasi-kasir/{id}', [CatatanPerjalananRanapController::class, 'farmasikasir'])->name('perjalananadministrasi-ranap.farmasi-kasir');
-Route::put('/catat/perjalanan/ranap/update/{id}', [CatatanPerjalananRanapController::class, 'update'])->name('perjalananadministrasi-ranap.update');
-Route::post('/catat/perjalanan/ranap/store/{id}', [CatatanPerjalananRanapController::class, 'store'])->name('perjalananadministrasi-ranap.store');
-Route::delete('/catat/perjaalanan/ranap/destroy/{id}', [CatatanPerjalananRanapController::class, 'destroy'])->name('perjalananadministrasi-ranap.destroy');
-
-//Skrining Covid Ranap Pasien
-Route::get('/skrining/covid', [SkriningCovidRanapPatientController::class, 'index'])->name('skrining/covid.index');
-Route::get('/skrining/covid/create/{id}', [SkriningCovidRanapPatientController::class, 'create'])->name('skrining/covid.create');
-Route::post('/skrining/covid/store/{id}', [SkriningCovidRanapPatientController::class, 'store'])->name('skrining/covid.store');
-Route::get('/skrining/covid/edit/{id}', [SkriningCovidRanapPatientController::class, 'edit'])->name('skrining/covid.edit');
-Route::put('/skrining/covid/update/{id}', [SkriningCovidRanapPatientController::class, 'update'])->name('skrining/covid.update');
-Route::delete('/skrining/covid/destroy/{id}', [SkriningCovidRanapPatientController::class, 'destroy'])->name('skrining/covid.destroy');
-
-//Laporan Operasi Ranap
-Route::get('/laporan/operasi', [LaporanOperasiController::class, 'index'])->name('laporan/operasi.index');
-Route::get('/laporan/operasi/create/{id}', [LaporanOperasiController::class, 'create'])->name('laporan/operasi.create');
-Route::get('/laporan/operasi/detail/{id}', [LaporanOperasiController::class, 'detail'])->name('laporan/operasi.detail');
-Route::post('/laporan/operasi/store/{id}', [LaporanOperasiController::class, 'store'])->name('laporan/operasi.store');
-Route::get('/laporan/operasi/edit/{id}', [LaporanOperasiController::class, 'edit'])->name('laporan/operasi.edit');
-Route::put('/laporan/operasi/update/{id}', [LaporanOperasiController::class, 'update'])->name('laporan/operasi.update');
-Route::delete('/laporan/operasi/destroy/{id}', [LaporanOperasiController::class, 'destroy'])->name('laporan/operasi.destroy');
-Route::get('/laporan/operasi/get/ttd', [LaporanOperasiController::class, 'getTtd'])->name('laporan/operasi.ttd');
-//Ranap CPPT
-Route::get('/ranap/cppt/create/{id}', [CpptRanapController::class, 'create'])->name('ranap/cppt.create');
-Route::post('/ranap/cppt/store/{id}', [CpptRanapController::class, 'store'])->name('ranap/cppt.store');
-Route::get('/ranap/cppt/edit/{id}', [CpptRanapController::class, 'edit'])->name('ranap/cppt.edit');
-Route::put('/ranap/cppt/update/{id}', [CpptRanapController::class, 'update'])->name('ranap/cppt.update');
-Route::get('/ranap/cppt/show/{id}', [CpptRanapController::class, 'show'])->name('ranap/cppt.show');
-Route::get('/ranap/cppt/print/{id}', [CpptRanapController::class, 'print'])->name('ranap/cppt.print');
-Route::delete('/ranap/cppt/destroy/{id}', [CpptRanapController::class, 'destroy'])->name('ranap/cppt.destroy');
-Route::get('/ranap/cppt/getTtd', [CpptRanapController::class, 'getTtd'])->name('ranap/cppt.getTtd');
-Route::get('/ranap/cppt/updateTtd', [CpptRanapController::class, 'updateTtd'])->name('ranap/cppt.updateTtd');
-
-//Kemoterapi CPPT
-Route::get('/kemoterapi/cppt/create/{id}', [CpptKemoterapiController::class, 'create'])->name('kemoterapi/cppt.create');
-Route::post('/kemoterapi/cppt/store/{id}', [CpptKemoterapiController::class, 'store'])->name('kemoterapi/cppt.store');
-Route::get('/kemoterapi/cppt/edit/{id}', [CpptKemoterapiController::class, 'edit'])->name('kemoterapi/cppt.edit');
-Route::put('/kemoterapi/cppt/update/{id}', [CpptKemoterapiController::class, 'update'])->name('kemoterapi/cppt.update');
-Route::get('/kemoterapi/cppt/show/{id}', [CpptKemoterapiController::class, 'show'])->name('kemoterapi/cppt.show');
-Route::get('/kemoterapi/cppt/print/{id}', [CpptKemoterapiController::class, 'print'])->name('kemoterapi/cppt.print');
-Route::delete('/kemoterapi/cppt/destroy/{id}', [CpptKemoterapiController::class, 'destroy'])->name('kemoterapi/cppt.destroy');
-Route::get('/kemoterapi/cppt/getTtd', [CpptKemoterapiController::class, 'getTtd'])->name('kemoterapi/cppt.getTtd');
-Route::get('/kemoterapi/cppt/updateTtd', [CpptKemoterapiController::class, 'updateTtd'])->name('kemoterapi/cppt.updateTtd');
-
-
-Route::get('/ranap/alih/rawat/create/{id}', [RanapAlihRawatController::class, 'create'])->name('ranap/alih/rawat.create');
-Route::post('/ranap/alih/rawat/store/{id}', [RanapAlihRawatController::class, 'store'])->name('ranap/alih/rawat.store');
-
-//Ranap resep dokter
-Route::group(['middleware' => ['permission:daftar resep dokter']], function () {
-    Route::get('/ranap/resep/dokter', [RanapMedicineReceiptController::class, 'index'])->name('ranap/resep/dokter.index');
-    Route::get('/ranap/resep/dokter/detail/{id}', [RanapMedicineReceiptController::class, 'detail'])->name('ranap/resep/dokter.detail');
-});
-Route::group(['middleware' => ['permission:tambah resep dokter']], function () {
-    Route::get('/ranap/resep/dokter/create/{id}', [RanapMedicineReceiptController::class, 'create'])->name('ranap/resep/dokter.create');
-    Route::post('/ranap/resep/dokter/store/{id}', [RanapMedicineReceiptController::class, 'store'])->name('ranap/resep/dokter.store');
-});
-Route::group(['middleware' => ['permission:edit resep dokter']], function () {
-    Route::get('/ranap/resep/dokter/edit/{id}', [RanapMedicineReceiptController::class, 'edit'])->name('ranap/resep/dokter.edit');
-    Route::put('/ranap/resep/dokter/update/{id}', [RanapMedicineReceiptController::class, 'update'])->name('ranap/resep/dokter.update');
-});
-Route::group(['middleware' => ['permission:print resep dokter']], function () {
-    Route::get('/ranap/resep/dokter/show/{id}', [RanapMedicineReceiptController::class, 'show'])->name('ranap/resep/dokter.show');
-});
-Route::group(['middleware' => ['permission:hapus resep dokter']], function () {
-    Route::delete('/ranap/resep/dokter/destroy/{id}', [RanapMedicineReceiptController::class, 'destroy'])->name('ranap/resep/dokter.destroy');
-});
-
-//Daftar Tilik Verifikasi Pasien Pra Operasi
-Route::get('daftar/tilik/verifikasi/pasien/', [DaftarTilikVerifikasiPasienPraOperasiController::class, 'index'])->name('daftar-tilik.index');
-Route::get('daftar/tilik/verifikasi/pasien/create/{id}', [DaftarTilikVerifikasiPasienPraOperasiController::class, 'create'])->name('daftar-tilik.create');
-Route::post('daftar/tilik/verifikasi/pasien/store/{id}', [DaftarTilikVerifikasiPasienPraOperasiController::class, 'store'])->name('daftar-tilik.store');
-Route::get('daftar/tilik/verifikasi/pasien/edit/{id}', [DaftarTilikVerifikasiPasienPraOperasiController::class, 'edit'])->name('daftar-tilik.edit');
-Route::put('daftar/tilik/verifikasi/pasien/update/{id}', [DaftarTilikVerifikasiPasienPraOperasiController::class, 'update'])->name('daftar-tilik.update');
-Route::delete('daftar/tilik/verifikasi/pasien/delete/{id}', [DaftarTilikVerifikasiPasienPraOperasiController::class, 'destroy'])->name('daftar-tilik.destroy');
-
-//Assesmen Awal Medis Rawat Inap
-Route::get('assesmen/awal/medis/ranap/', [RanapInitialAssesmentController::class, 'index'])->name('assesmen/awal/medis/ranap.index');
-Route::get('assesmen/awal/medis/ranap/detail/{id}', [RanapInitialAssesmentController::class, 'detail'])->name('assesmen/awal/medis/ranap.detail');
-Route::get('assesmen/awal/medis/ranap/create/{id}', [RanapInitialAssesmentController::class, 'create'])->name('assesmen/awal/medis/ranap.create');
-Route::post('assesmen/awal/medis/ranap/store/{id}', [RanapInitialAssesmentController::class, 'store'])->name('assesmen/awal/medis/ranap.store');
-Route::get('assesmen/awal/medis/ranap/edit/{id}', [RanapInitialAssesmentController::class, 'edit'])->name('assesmen/awal/medis/ranap.edit');
-Route::get('assesmen/awal/medis/ranap/show/{id}', [RanapInitialAssesmentController::class, 'show'])->name('assesmen/awal/medis/ranap.show');
-Route::put('assesmen/awal/medis/ranap/update/{id}', [RanapInitialAssesmentController::class, 'update'])->name('assesmen/awal/medis/ranap.update');
-Route::delete('assesmen/awal/medis/ranap/delete/{id}', [RanapInitialAssesmentController::class, 'destroy'])->name('assesmen/awal/medis/ranap.destroy');
-Route::get('assesmen/awal/medis/ranap/ttd', [RanapInitialAssesmentController::class, 'getTtd'])->name('assesmen/awal/medis/ranap.ttd');
-//Ringkasan Masuk dan Keluar
-Route::get('ringkasan/masuk/dan/keluar/', [RingkasanMasukDanKeluarController::class, 'index'])->name('ringkasan-masuk-keluar.index');
-Route::get('ringkasan/masuk/dan/keluar/detail/{id}', [RingkasanMasukDanKeluarController::class, 'detail'])->name('ringkasan-masuk-keluar.detail');
-Route::get('ringkasan/masuk/dan/keluar/create/{id}', [RingkasanMasukDanKeluarController::class, 'create'])->name('ringkasan-masuk-keluar.create');
-Route::post('ringkasan/masuk/dan/keluar/store/{id}', [RingkasanMasukDanKeluarController::class, 'store'])->name('ringkasan-masuk-keluar.store');
-Route::get('ringkasan/masuk/dan/keluar/show/{id}', [RingkasanMasukDanKeluarController::class, 'show'])->name('ringkasan-masuk-keluar.show');
-Route::get('ringkasan/masuk/dan/keluar/edit/{id}', [RingkasanMasukDanKeluarController::class, 'edit'])->name('ringkasan-masuk-keluar.edit');
-Route::put('ringkasan/masuk/dan/keluar/update/{id}', [RingkasanMasukDanKeluarController::class, 'update'])->name('ringkasan-masuk-keluar.update');
-Route::delete('ringkasan/masuk/dan/keluar/delete/{id}', [RingkasanMasukDanKeluarController::class, 'destroy'])->name('ringkasan-masuk-keluar.destroy');
-Route::get('ringkasan/masuk/dan/keluar/ttd/', [RingkasanMasukDanKeluarController::class, 'ttd'])->name('ringkasan-masuk-keluar.ttd');
-
-//Ringkasan Catatan Medis
-Route::get('ringkasan/catatan/medis/create/{id}', [RanapDischargeSummaryController::class, 'create'])->name('ringkasan/catatan/medis.create');
-Route::post('ringkasan/catatan/medis/store/{id}', [RanapDischargeSummaryController::class, 'store'])->name('ringkasan/catatan/medis.store');
-Route::get('ringkasan/catatan/medis/edit/{id}', [RanapDischargeSummaryController::class, 'edit'])->name('ringkasan/catatan/medis.edit');
-Route::get('ringkasan/catatan/medis/show/{id}', [RanapDischargeSummaryController::class, 'show'])->name('ringkasan/catatan/medis.show');
-Route::put('ringkasan/catatan/medis/update/{id}', [RanapDischargeSummaryController::class, 'update'])->name('ringkasan/catatan/medis.update');
-Route::delete('ringkasan/catatan/medis/delete/{id}', [RanapDischargeSummaryController::class, 'destroy'])->name('ringkasan/catatan/medis.destroy');
-
-//Ringkasan Catatan Medis Kemoterapi
-Route::get('ringkasan/catatan/medis/kemoterapi/create/{id}', [KemoterapiDischargeSummaryController::class, 'create'])->name('ringkasan/catatan/medis/kemoterapi.create');
-Route::post('ringkasan/catatan/medis/kemoterapi/store/{id}', [KemoterapiDischargeSummaryController::class, 'store'])->name('ringkasan/catatan/medis/kemoterapi.store');
-Route::get('ringkasan/catatan/medis/kemoterapi/edit/{id}', [KemoterapiDischargeSummaryController::class, 'edit'])->name('ringkasan/catatan/medis/kemoterapi.edit');
-Route::get('ringkasan/catatan/medis/kemoterapi/show/{id}', [KemoterapiDischargeSummaryController::class, 'show'])->name('ringkasan/catatan/medis/kemoterapi.show');
-Route::put('ringkasan/catatan/medis/kemoterapi/update/{id}', [KemoterapiDischargeSummaryController::class, 'update'])->name('ringkasan/catatan/medis/kemoterapi.update');
-Route::delete('ringkasan/catatan/medis/kemoterapi/delete/{id}', [KemoterapiDischargeSummaryController::class, 'destroy'])->name('ringkasan/catatan/medis/kemoterapi.destroy');
-Route::get('/kemoterapi/discharges/getTtd', [KemoterapiDischargeSummary::class, 'getTtd'])->name('kemoterapi/discharges.getTtd');
-
-//Lembar Konsultasi Penyakit Dalam
-Route::get('lembar/konsultasi/penyakit/dalam/index/', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'index'])->name('lembar/konsultasi/penyakit/dalam.index');
-Route::get('lembar/konsultasi/penyakit/dalam/detail/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'detail'])->name('lembar/konsultasi/penyakit/dalam.detail');
-Route::get('lembar/konsultasi/penyakit/dalam/create/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'create'])->name('lembar/konsultasi/penyakit/dalam.create');
-Route::post('lembar/konsultasi/penyakit/dalam/store/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'store'])->name('lembar/konsultasi/penyakit/dalam.store');
-Route::get('lembar/konsultasi/penyakit/dalam/edit/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'edit'])->name('lembar/konsultasi/penyakit/dalam.edit');
-Route::get('lembar/konsultasi/penyakit/dalam/show/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'show'])->name('lembar/konsultasi/penyakit/dalam.show');
-Route::put('lembar/konsultasi/penyakit/dalam/update/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'update'])->name('lembar/konsultasi/penyakit/dalam.update');
-Route::delete('lembar/konsultasi/penyakit/dalam/delete/{id}', [RanapLembarKonsultasiPenyakitDalamPatientController::class, 'destroy'])->name('lembar/konsultasi/penyakit/dalam.destroy');
-
-//Jawaban Konsultasi Penyakit Dalam
-Route::get('jawaban/konsultasi/penyakit/dalam/create/{id}', [RanapJawabanKonsultasiPenyakitDalamPatientController::class, 'create'])->name('jawaban/konsultasi/penyakit/dalam.create');
-Route::post('jawaban/konsultasi/penyakit/dalam/store/{id}', [RanapJawabanKonsultasiPenyakitDalamPatientController::class, 'store'])->name('jawaban/konsultasi/penyakit/dalam.store');
-Route::get('jawaban/konsultasi/penyakit/dalam/edit/{id}', [RanapJawabanKonsultasiPenyakitDalamPatientController::class, 'edit'])->name('jawaban/konsultasi/penyakit/dalam.edit');
-Route::get('jawaban/konsultasi/penyakit/dalam/show/{id}', [RanapJawabanKonsultasiPenyakitDalamPatientController::class, 'show'])->name('jawaban/konsultasi/penyakit/dalam.show');
-Route::put('jawaban/konsultasi/penyakit/dalam/update/{id}', [RanapJawabanKonsultasiPenyakitDalamPatientController::class, 'update'])->name('jawaban/konsultasi/penyakit/dalam.update');
-Route::delete('jawaban/konsultasi/penyakit/dalam/delete/{id}', [RanapJawabanKonsultasiPenyakitDalamPatientController::class, 'destroy'])->name('jawaban/konsultasi/penyakit/dalam.destroy');
-
-//Pemberian Informasi Dan Persetujuan Tindakan Bedah
-Route::get('persetujuan/tindakan/bedah/index', [RanapPersetujuanTindakanBedahPatientController::class, 'index'])->name('persetujuan/tindakan/bedah.index');
-Route::get('persetujuan/tindakan/bedah/detail/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'detail'])->name('persetujuan/tindakan/bedah.detail');
-Route::get('persetujuan/tindakan/bedah/create/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'create'])->name('persetujuan/tindakan/bedah.create');
-Route::post('persetujuan/tindakan/bedah/store/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'store'])->name('persetujuan/tindakan/bedah.store');
-Route::get('persetujuan/tindakan/bedah/edit/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'edit'])->name('persetujuan/tindakan/bedah.edit');
-Route::get('persetujuan/tindakan/bedah/show/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'show'])->name('persetujuan/tindakan/bedah.show');
-Route::put('persetujuan/tindakan/bedah/update/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'update'])->name('persetujuan/tindakan/bedah.update');
-Route::delete('persetujuan/tindakan/bedah/delete/{id}', [RanapPersetujuanTindakanBedahPatientController::class, 'destroy'])->name('persetujuan/tindakan/bedah.destroy');
-
-//Pemberian Informasi dan Persetujuan Tindakan Anestesi
-Route::get('pemberian/informasi/persetujuan/tindakan/anestesi/index', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'index'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.index');
-Route::get('pemberian/informasi/persetujuan/tindakan/anestesi/detail/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'detail'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.detail');
-Route::get('pemberian/informasi/persetujuan/tindakan/anestesi/create/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'create'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.create');
-Route::post('pemberian/informasi/persetujuan/tindakan/anestesi/store/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'store'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.store');
-Route::get('pemberian/informasi/persetujuan/tindakan/anestesi/edit/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'edit'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.edit');
-Route::get('pemberian/informasi/persetujuan/tindakan/anestesi/show/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'show'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.show');
-Route::put('pemberian/informasi/persetujuan/tindakan/anestesi/update/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'update'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.update');
-Route::delete('pemberian/informasi/persetujuan/tindakan/anestesi/delete/{id}', [RanapPemberianInformasiPersetujuanTindakanAnestesiController::class, 'destroy'])->name('pemberian/informasi/persetujuan/tindakan/anestesi.destroy');
-
-//Monitoring Cairan Infus
-Route::get('monitoring/cairan/infus/index', [RanapMonitoringCairanInfusController::class, 'index'])->name('monitoring/cairan/infus.index');
-Route::get('monitoring/cairan/infus/create/{id}', [RanapMonitoringCairanInfusController::class, 'create'])->name('monitoring/cairan/infus.create');
-Route::post('monitoring/cairan/infus/store/{id}', [RanapMonitoringCairanInfusController::class, 'store'])->name('monitoring/cairan/infus.store');
-Route::get('monitoring/cairan/infus/edit/{id}', [RanapMonitoringCairanInfusController::class, 'edit'])->name('monitoring/cairan/infus.edit');
-Route::get('monitoring/cairan/infus/show/{id}', [RanapMonitoringCairanInfusController::class, 'show'])->name('monitoring/cairan/infus.show');
-Route::put('monitoring/cairan/infus/update/{id}', [RanapMonitoringCairanInfusController::class, 'update'])->name('monitoring/cairan/infus.update');
-Route::delete('monitoring/cairan/infus/delete/{id}', [RanapMonitoringCairanInfusController::class, 'destroy'])->name('monitoring/cairan/infus.destroy');
-
-//Rencana Pulang page 1
-Route::get('checklist/rencana/pulang/page/one/index', [RanapCheklistRencanaPulangPageOneController::class, 'index'])->name('checklist/rencana/pulang/page/one.index');
-Route::get('checklist/rencana/pulang/page/one/create/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'create'])->name('checklist/rencana/pulang/page/one.create');
-Route::post('checklist/rencana/pulang/page/one/store/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'store'])->name('checklist/rencana/pulang/page/one.store');
-Route::get('checklist/rencana/pulang/page/one/edit/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'edit'])->name('checklist/rencana/pulang/page/one.edit');
-Route::put('checklist/rencana/pulang/page/one/update/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'update'])->name('checklist/rencana/pulang/page/one.update');
-Route::get('checklist/rencana/pulang/page/one/show/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'show'])->name('checklist/rencana/pulang/page/one.show');
-Route::get('checklist/rencana/pulang/page/one/print/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'print'])->name('checklist/rencana/pulang/page/one.print');
-Route::delete('checklist/rencana/pulang/page/one/delete/{id}', [RanapCheklistRencanaPulangPageOneController::class, 'destroy'])->name('checklist/rencana/pulang/page/one.destroy');
-
-//Rencana Pulang page 2
-Route::get('checklist/rencana/pulang/page/two/index', [RanapCheklistRencanaPulangPageTwoController::class, 'index'])->name('checklist/rencana/pulang/page/two.index');
-Route::get('checklist/rencana/pulang/page/two/create/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'create'])->name('checklist/rencana/pulang/page/two.create');
-Route::post('checklist/rencana/pulang/page/two/store/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'store'])->name('checklist/rencana/pulang/page/two.store');
-Route::get('checklist/rencana/pulang/page/two/edit/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'edit'])->name('checklist/rencana/pulang/page/two.edit');
-Route::get('checklist/rencana/pulang/page/two/show/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'show'])->name('checklist/rencana/pulang/page/two.show');
-Route::get('checklist/rencana/pulang/page/two/print/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'print'])->name('checklist/rencana/pulang/page/two.print');
-Route::put('checklist/rencana/pulang/page/two/update/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'update'])->name('checklist/rencana/pulang/page/two.update');
-Route::delete('checklist/rencana/pulang/page/two/delete/{id}', [RanapCheklistRencanaPulangPageTwoController::class, 'destroy'])->name('checklist/rencana/pulang/page/two.destroy');
-
-//Surat Pernyataan Persetujuan Status Pelayanan
-Route::get('surat/pernyataan/persetujuan/status/pelayanan/index', [RanapPernyataanPersetujuanStatusPelayananController::class, 'index'])->name('surat/pernyataan/persetujuan/status/pelayanan.index');
-Route::get('surat/pernyataan/persetujuan/status/pelayanan/detail/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'detail'])->name('surat/pernyataan/persetujuan/status/pelayanan.detail');
-Route::get('surat/pernyataan/persetujuan/status/pelayanan/create/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'create'])->name('surat/pernyataan/persetujuan/status/pelayanan.create');
-Route::post('surat/pernyataan/persetujuan/status/pelayanan/store/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'store'])->name('surat/pernyataan/persetujuan/status/pelayanan.store');
-Route::get('surat/pernyataan/persetujuan/status/pelayanan/edit/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'edit'])->name('surat/pernyataan/persetujuan/status/pelayanan.edit');
-Route::get('surat/pernyataan/persetujuan/status/pelayanan/show/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'show'])->name('surat/pernyataan/persetujuan/status/pelayanan.show');
-Route::put('surat/pernyataan/persetujuan/status/pelayanan/update/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'update'])->name('surat/pernyataan/persetujuan/status/pelayanan.update');
-Route::delete('surat/pernyataan/persetujuan/status/pelayanan/delete/{id}', [RanapPernyataanPersetujuanStatusPelayananController::class, 'destroy'])->name('surat/pernyataan/persetujuan/status/pelayanan.destroy');
-
-//Laporan Anestesi
-Route::get('laporan/anestesi/index', [RanapLaporanAnestesiController::class, 'index'])->name('laporan/anestesi.index');
-Route::get('laporan/anestesi/detail/{id}', [RanapLaporanAnestesiController::class, 'detail'])->name('laporan/anestesi.detail');
-Route::get('laporan/anestesi/create/{id}', [RanapLaporanAnestesiController::class, 'create'])->name('laporan/anestesi.create');
-Route::post('laporan/anestesi/store/{id}', [RanapLaporanAnestesiController::class, 'store'])->name('laporan/anestesi.store');
-Route::get('laporan/anestesi/edit/{id}', [RanapLaporanAnestesiController::class, 'edit'])->name('laporan/anestesi.edit');
-Route::get('laporan/anestesi/show/{id}', [RanapLaporanAnestesiController::class, 'show'])->name('laporan/anestesi.show');
-Route::put('laporan/anestesi/update/{id}', [RanapLaporanAnestesiController::class, 'update'])->name('laporan/anestesi.update');
-Route::delete('laporan/anestesi/delete/{id}', [RanapLaporanAnestesiController::class, 'destroy'])->name('laporan/anestesi.destroy');
-
-//Surgical Safety Checklist
-Route::get('surgical/safety/checklist/create/{id}', [RanapSurgicalSafetyChecklistController::class, 'create'])->name('surgical/safety/checklist.create');
-Route::post('surgical/safety/checklist/store/{id}', [RanapSurgicalSafetyChecklistController::class, 'store'])->name('surgical/safety/checklist.store');
-Route::get('surgical/safety/checklist/edit/{id}', [RanapSurgicalSafetyChecklistController::class, 'edit'])->name('surgical/safety/checklist.edit');
-Route::get('surgical/safety/checklist/show/{id}', [RanapSurgicalSafetyChecklistController::class, 'show'])->name('surgical/safety/checklist.show');
-Route::put('surgical/safety/checklist/update/{id}', [RanapSurgicalSafetyChecklistController::class, 'update'])->name('surgical/safety/checklist.update');
-Route::delete('surgical/safety/checklist/delete/{id}', [RanapSurgicalSafetyChecklistController::class, 'destroy'])->name('surgical/safety/checklist.destroy');
-
-//EDUKASI PASIEN PRA ANESTESI INFORMASI TENTANG ANESTESI DAN SEDASI MENENGAH DALAM
-Route::get('edukasi/pasien/pra/anestesi/index', [RanapEdukasiPasienPraAnestesiController::class, 'index'])->name('edukasi/pasien/pra/anestesi.index');
-Route::get('edukasi/pasien/pra/anestesi/create/{id}', [RanapEdukasiPasienPraAnestesiController::class, 'create'])->name('edukasi/pasien/pra/anestesi.create');
-Route::post('edukasi/pasien/pra/anestesi/store/{id}', [RanapEdukasiPasienPraAnestesiController::class, 'store'])->name('edukasi/pasien/pra/anestesi.store');
-Route::get('edukasi/pasien/pra/anestesi/edit/{id}', [RanapEdukasiPasienPraAnestesiController::class, 'edit'])->name('edukasi/pasien/pra/anestesi.edit');
-Route::get('edukasi/pasien/pra/anestesi/show/{id}', [RanapEdukasiPasienPraAnestesiController::class, 'show'])->name('edukasi/pasien/pra/anestesi.show');
-Route::put('edukasi/pasien/pra/anestesi/update/{id}', [RanapEdukasiPasienPraAnestesiController::class, 'update'])->name('edukasi/pasien/pra/anestesi.update');
-Route::delete('edukasi/pasien/pra/anestesi/delete/{id}', [RanapEdukasiPasienPraAnestesiController::class, 'destroy'])->name('edukasi/pasien/pra/anestesi.destroy');
-
-//Formulir Rekonsilasi Obat
-Route::get('formulir/rekonsilasi/obat/index', [RanapFormulirRekonsilasiObatController::class, 'index'])->name('formulir/rekonsilasi/obat.index');
-Route::get('formulir/rekonsilasi/obat/create/{id}', [RanapFormulirRekonsilasiObatController::class, 'create'])->name('formulir/rekonsilasi/obat.create');
-Route::post('formulir/rekonsilasi/obat/store/{id}', [RanapFormulirRekonsilasiObatController::class, 'store'])->name('formulir/rekonsilasi/obat.store');
-Route::get('formulir/rekonsilasi/obat/edit/{id}', [RanapFormulirRekonsilasiObatController::class, 'edit'])->name('formulir/rekonsilasi/obat.edit');
-Route::get('formulir/rekonsilasi/obat/show/{id}', [RanapFormulirRekonsilasiObatController::class, 'show'])->name('formulir/rekonsilasi/obat.show');
-Route::put('formulir/rekonsilasi/obat/update/{id}', [RanapFormulirRekonsilasiObatController::class, 'update'])->name('formulir/rekonsilasi/obat.update');
-Route::delete('formulir/rekonsilasi/obat/delete/{id}', [RanapFormulirRekonsilasiObatController::class, 'destroy'])->name('formulir/rekonsilasi/obat.destroy');
-
-//EWS Dewasa
-Route::get('ews/dewasa/index/', [RanapEwsDewasaPatientController::class, 'index'])->name('ews/dewasa.index');
-Route::get('ews/dewasa/create/{id}', [RanapEwsDewasaPatientController::class, 'create'])->name('ews/dewasa.create');
-Route::post('ews/dewasa/store/{id}', [RanapEwsDewasaPatientController::class, 'store'])->name('ews/dewasa.store');
-Route::get('ews/dewasa/edit/{id}', [RanapEwsDewasaPatientController::class, 'edit'])->name('ews/dewasa.edit');
-Route::get('ews/dewasa/show/{id}', [RanapEwsDewasaPatientController::class, 'show'])->name('ews/dewasa.show');
-Route::get('ews/dewasa/detail/{id}', [RanapEwsDewasaPatientController::class, 'detail'])->name('ews/dewasa.detail');
-Route::put('ews/dewasa/update/{id}', [RanapEwsDewasaPatientController::class, 'update'])->name('ews/dewasa.update');
-Route::delete('ews/dewasa/delete/{id}', [RanapEwsDewasaPatientController::class, 'destroy'])->name('ews/dewasa.destroy');
-
-//EWS Anak
-Route::get('ews/anak/create/{id}', [RanapEwsAnakPatientController::class, 'create'])->name('ews/anak.create');
-Route::post('ews/anak/store/{id}', [RanapEwsAnakPatientController::class, 'store'])->name('ews/anak.store');
-Route::get('ews/anak/edit/{id}', [RanapEwsAnakPatientController::class, 'edit'])->name('ews/anak.edit');
-Route::get('ews/anak/show/{id}', [RanapEwsAnakPatientController::class, 'show'])->name('ews/anak.show');
-Route::put('ews/anak/update/{id}', [RanapEwsAnakPatientController::class, 'update'])->name('ews/anak.update');
-Route::delete('ews/anak/delete/{id}', [RanapEwsAnakPatientController::class, 'destroy'])->name('ews/anak.destroy');
-
-//Assesmen monitoring resiko jatuh
-Route::get('assesmen/monitoring/resiko/jatuh/index', [RanapMonitoringResikoJatuhController::class, 'index'])->name('assesmen/monitoring/resiko/jatuh.index');
-Route::get('assesmen/monitoring/resiko/jatuh/detail/{id}', [RanapMonitoringResikoJatuhController::class, 'detail'])->name('assesmen/monitoring/resiko/jatuh.detail');
-Route::get('assesmen/monitoring/resiko/jatuh/create/{id}', [RanapMonitoringResikoJatuhController::class, 'create'])->name('assesmen/monitoring/resiko/jatuh.create');
-Route::post('assesmen/monitoring/resiko/jatuh/store/{id}', [RanapMonitoringResikoJatuhController::class, 'store'])->name('assesmen/monitoring/resiko/jatuh.store');
-Route::get('assesmen/monitoring/resiko/jatuh/edit/{id}', [RanapMonitoringResikoJatuhController::class, 'edit'])->name('assesmen/monitoring/resiko/jatuh.edit');
-Route::get('assesmen/monitoring/resiko/jatuh/show/{id}', [RanapMonitoringResikoJatuhController::class, 'show'])->name('assesmen/monitoring/resiko/jatuh.show');
-Route::put('assesmen/monitoring/resiko/jatuh/update/{id}', [RanapMonitoringResikoJatuhController::class, 'update'])->name('assesmen/monitoring/resiko/jatuh.update');
-Route::delete('assesmen/monitoring/resiko/jatuh/delete/{id}', [RanapMonitoringResikoJatuhController::class, 'destroy'])->name('assesmen/monitoring/resiko/jatuh.destroy');
-
-//Intervensi Pencegahan resiko jatuh
-Route::get('intervensi/pencegahan/resiko/jatuh/create/{id}', [RanapIntervensiResikoJatuhController::class, 'create'])->name('intervensi/pencegahan/resiko/jatuh.create');
-Route::post('intervensi/pencegahan/resiko/jatuh/store/{id}', [RanapIntervensiResikoJatuhController::class, 'store'])->name('intervensi/pencegahan/resiko/jatuh.store');
-Route::get('intervensi/pencegahan/resiko/jatuh/edit/{id}', [RanapIntervensiResikoJatuhController::class, 'edit'])->name('intervensi/pencegahan/resiko/jatuh.edit');
-Route::get('intervensi/pencegahan/resiko/jatuh/show/{id}', [RanapIntervensiResikoJatuhController::class, 'show'])->name('intervensi/pencegahan/resiko/jatuh.show');
-Route::put('intervensi/pencegahan/resiko/jatuh/update/{id}', [RanapIntervensiResikoJatuhController::class, 'update'])->name('intervensi/pencegahan/resiko/jatuh.update');
-Route::delete('intervensi/pencegahan/resiko/jatuh/delete/{id}', [RanapIntervensiResikoJatuhController::class, 'destroy'])->name('intervensi/pencegahan/resiko/jatuh.destroy');
-
-//Ranap Rekapitulasi tindakan pelayanan pasien
-Route::get('rekapitulasi/tindakan/pelayanan/pasien/index/{id}', [RanapRekapTindakanPelayananPatientController::class, 'index'])->name('rekapitulasi/tindakan/pelayanan/pasien.index');
-Route::post('rekapitulasi/tindakan/pelayanan/pasien/storeIndex/{id}', [RanapRekapTindakanPelayananPatientController::class, 'storeIndex'])->name('rekapitulasi/tindakan/pelayanan/pasien.storeIndex');
-Route::get('rekapitulasi/tindakan/pelayanan/pasien/create/{id}', [RanapRekapTindakanPelayananPatientController::class, 'create'])->name('rekapitulasi/tindakan/pelayanan/pasien.create');
-Route::post('rekapitulasi/tindakan/pelayanan/pasien/store/{id}', [RanapRekapTindakanPelayananPatientController::class, 'store'])->name('rekapitulasi/tindakan/pelayanan/pasien.store');
-Route::get('rekapitulasi/tindakan/pelayanan/pasien/edit/{id}', [RanapRekapTindakanPelayananPatientController::class, 'edit'])->name('rekapitulasi/tindakan/pelayanan/pasien.edit');
-Route::get('rekapitulasi/tindakan/pelayanan/pasien/show/{id}', [RanapRekapTindakanPelayananPatientController::class, 'show'])->name('rekapitulasi/tindakan/pelayanan/pasien.show');
-Route::put('rekapitulasi/tindakan/pelayanan/pasien/update/{id}', [RanapRekapTindakanPelayananPatientController::class, 'update'])->name('rekapitulasi/tindakan/pelayanan/pasien.update');
-Route::delete('rekapitulasi/tindakan/pelayanan/pasien/delete/{id}', [RanapRekapTindakanPelayananPatientController::class, 'destroy'])->name('rekapitulasi/tindakan/pelayanan/pasien.destroy');
-Route::get('rekapitulasi/tindakan/pelayanan/pasien/getBiayaTindakan/{id}', [RanapRekapTindakanPelayananPatientController::class, 'getBiayaTindakan'])->name('rekapitulasi/tindakan/pelayanan/pasien.getBiayaTindakan');
-Route::get('rekapitulasi/tindakan/pelayanan/pasien/getBiayaKonsul/{id}', [RanapRekapTindakanPelayananPatientController::class, 'getBiayaKonsul'])->name('rekapitulasi/tindakan/pelayanan/pasien.getBiayaKonsul');
-
-//General Consent Ranap
-Route::get('general/consent/ranap/index', [GeneralConsentRanap::class, 'index'])->name('general-consent-ranap.index');
-Route::get('general/consent/ranap/detail/{id}', [GeneralConsentRanap::class, 'detail'])->name('general-consent-ranap.detail');
-Route::get('general/consent/ranap/create/{id}', [GeneralConsentRanap::class, 'create'])->name('general-consent-ranap.create');
-Route::get('general/consent/ranap/halaman1/{id}', [GeneralConsentRanap::class, 'halaman1'])->name('general-consent-ranap.halaman1');
-Route::get('general/consent/ranap/halaman2/{id}', [GeneralConsentRanap::class, 'halaman2'])->name('general-consent-ranap.halaman2');
-Route::get('general/consent/ranap/tataTertib/{id}', [GeneralConsentRanap::class, 'tataTertib'])->name('general-consent-ranap.tataTertib');
-Route::post('general/consent/ranap/store/{id}', [GeneralConsentRanap::class, 'store'])->name('general-consent-ranap.store');
-Route::get('general/consent/ranap/show/{id}', [GeneralConsentRanap::class, 'show'])->name('general-consent-ranap.show');
-Route::get('general/consent/ranap/showtatatertib/{id}', [GeneralConsentRanap::class, 'showtatatertib'])->name('general-consent-ranap.showtatatertib');
-Route::get('general/consent/ranap/showhakdankewajiban/{id}', [GeneralConsentRanap::class, 'showhakdankewajiban'])->name('general-consent-ranap.showhakdankewajiban');
-Route::get('general/consent/ranap/edit/{id}', [GeneralConsentRanap::class, 'edit'])->name('general-consent-ranap.edit');
-Route::put('general/consent/ranap/update/{id}', [GeneralConsentRanap::class, 'update'])->name('general-consent-ranap.update');
-Route::delete('general/consent/ranap/destroy/{id}', [GeneralConsentRanap::class, 'destroy'])->name('general-consent-ranap.destroy');
-
-//Hais ISK
-Route::get('hais/index', [RanapHaisISKPatientController::class, 'index'])->name('hais.index');
-Route::get('hais/detail/{id}', [RanapHaisISKPatientController::class, 'detail'])->name('hais.detail');
-Route::get('hais/isk/create/{id}', [RanapHaisISKPatientController::class, 'create'])->name('hais/isk.create');
-Route::post('hais/isk/store/{id}', [RanapHaisISKPatientController::class, 'store'])->name('hais/isk.store');
-Route::get('hais/isk/edit/{id}', [RanapHaisISKPatientController::class, 'edit'])->name('hais/isk.edit');
-Route::get('hais/isk/show/{id}', [RanapHaisISKPatientController::class, 'show'])->name('hais/isk.show');
-Route::put('hais/isk/update/{id}', [RanapHaisISKPatientController::class, 'update'])->name('hais/isk.update');
-Route::delete('hais/isk/delete/{id}', [RanapHaisISKPatientController::class, 'destroy'])->name('hais/isk.destroy');
-
-//Hais IAD
-Route::get('hais/iad/create/{id}', [RanapHaisIADPatientController::class, 'create'])->name('hais/iad.create');
-Route::post('hais/iad/store/{id}', [RanapHaisIADPatientController::class, 'store'])->name('hais/iad.store');
-Route::get('hais/iad/edit/{id}', [RanapHaisIADPatientController::class, 'edit'])->name('hais/iad.edit');
-Route::get('hais/iad/show/{id}', [RanapHaisIADPatientController::class, 'show'])->name('hais/iad.show');
-Route::put('hais/iad/update/{id}', [RanapHaisIADPatientController::class, 'update'])->name('hais/iad.update');
-Route::delete('hais/iad/delete/{id}', [RanapHaisIADPatientController::class, 'destroy'])->name('hais/iad.destroy');
-
-//Hais IDO
-Route::get('hais/ido/create/{id}', [RanapHaisIDOPatientController::class, 'create'])->name('hais/ido.create');
-Route::post('hais/ido/store/{id}', [RanapHaisIDOPatientController::class, 'store'])->name('hais/ido.store');
-Route::get('hais/ido/edit/{id}', [RanapHaisIDOPatientController::class, 'edit'])->name('hais/ido.edit');
-Route::get('hais/ido/show/{id}', [RanapHaisIDOPatientController::class, 'show'])->name('hais/ido.show');
-Route::put('hais/ido/update/{id}', [RanapHaisIDOPatientController::class, 'update'])->name('hais/ido.update');
-Route::delete('hais/ido/delete/{id}', [RanapHaisIDOPatientController::class, 'destroy'])->name('hais/ido.destroy');
-
 Route::get('/interaksi-obat', function () {
     return view('pages.interaksiobat.index', [
         "title" => "Interaksi Obat",
         "menu" => "Obat",
     ]);
 });
-
-Route::get('/tambah-asesmenperawat-igd', function () {
-    return view('pages.asesmenperawatigd.create', [
-        "title" => "Asesmen Perawat",
-        "menu" => "In Patient",
-    ]);
-});
-
-
-Route::group(['middleware' => ['permission:daftar pasien ranap']], function () {
-    Route::get('rawat/inap/index', [RawatInapController::class, 'index'])->name('rawat/inap.index');
-    Route::get('rawat/inap/show/{id}', [RawatInapController::class, 'show'])->name('rawat/inap.show');
-    Route::get('rawat/inap/room/{id}', [RawatInapController::class, 'room'])->name('rawat/inap.room');
-    Route::get('rawat/inap/{id}/cancel', [RawatInapController::class, 'cancel'])->name('rawat/inap.cancel');
-
-
-    //Booking Kamar
-    Route::put('Rawat/Inap/{id}/booking/{bed_id}', [RawatInapController::class, 'bookingKamar'])->name('rawat/inap.booking');
-    //Masuk Kamar
-    Route::put('Rawat/Inap/{id}/masuk/{bed_id}', [RawatInapController::class, 'masukKamar'])->name('rawat/inap.masuk');
-    //Titip Kamar
-    Route::put('Rawat/Inap/{id}/titip/{bed_id}', [RawatInapController::class, 'titipKamar'])->name('rawat/inap.titip');
-    // cancel kamar
-    Route::get('rawat/inap/{id}/cancel/{bed_id}', [RawatInapController::class, 'cancelKamar'])->name('rawat/inap.cancelKamar');
-});
-//Rawat Inap
-// Route::post('rawat/inap/store/{id}', [RawatInapController::class, 'store'])->name('rawat/inap.store');
-
-//kerohanian
-Route::get('/permintaan-pelayanan-kerohanian', function () {
-    return view('pages.pasienPelayananKerohanian.index', [
-        "title" => "Kerohanian",
-        "menu" => "Diluar MAP",
-    ]);
-});
-Route::get('/create-permintaan-pelayanan-kerohanian', function () {
-    return view('pages.pasienPelayananKerohanian.create', [
-        "title" => "Kerohanian",
-        "menu" => "Diluar MAP",
-    ]);
-});
-Route::get('/create-hasil-pelaksanaan-pelayanan-kerohanian', function () {
-    return view('pages.pasienPelaksanaanPelayananKerohanian.create', [
-        "title" => "Kerohanian",
-        "menu" => "Diluar MAP",
-    ]);
-});
-Route::get('/bukti-pelaksanaan-pelayanan-kerohanian', function () {
-    return view('pages.pasienPelaksanaanPelayananKerohanian.show', [
-        "title" => "Kerohanian",
-        "menu" => "Diluar MAP",
-    ]);
-});
-Route::get('/show-permintaan-pelayanan-kerohanian', function () {
-    return view('pages.pasienPelayananKerohanian.show', [
-        "title" => "Kerohanian",
-        "menu" => "Diluar MAP",
-    ]);
-});
-
-//second-opinion
-Route::get('/tambah-second-opinion', function () {
-    return view('pages.pasienSecondOpinion.create', [
-        "title" => "Second Opinion",
-        "menu" => "Diluar MAP",
-    ]);
-});
-
-Route::get('/second-opinion', function () {
-    return view('pages.pasienSecondOpinion.index', [
-        "title" => "Second Opinion",
-        "menu" => "Diluar MAP",
-    ]);
-});
-
-Route::get('/show-permintaan-second-opinion', function () {
-    return view('pages.pasienSecondOpinion.show', [
-        "title" => "Second Opinion",
-        "menu" => "Diluar MAP",
-    ]);
-});
-
-Route::get('/ttv', function () {
-    $farmakologi = [
-        'dingin',
-        'panas',
-        'posisi',
-        'pijat',
-        'musik',
-        'relaksasi dan pernafasan',
-    ];
-    return view('pages.ttvRanap.create', [
-        "farmakologi" => $farmakologi,
-        "title" => "Second Opinion",
-        "menu" => "Diluar MAP",
-    ]);
-});
-
-Route::get('/ttv/balance/cairan', function () {
-    $farmakologi = [
-        'dingin',
-        'panas',
-        'posisi',
-        'pijat',
-        'musik',
-        'relaksasi dan pernafasan',
-    ];
-    return view('pages.ttvBalanceCairanRanap.create', [
-        "farmakologi" => $farmakologi,
-        "title" => "Second Opinion",
-        "menu" => "Diluar MAP",
-    ]);
-});
-
 // Antran RS GET
 Route::get('referensi/poli', [ReferensiController::class, 'getPoli'])->name('referensi/poli.getPoli');
 Route::get('referensi/dokter', [ReferensiController::class, 'getDokter'])->name('referensi/dokter.getDokter');
@@ -2197,83 +1343,6 @@ Route::get('referensi/procedure/{param1}', [ReferensiController::class, 'getProc
 Route::get('referensi/kelasrawat', [ReferensiController::class, 'getKelasRawat'])->name('kelas/rawat.getKelasRawat');
 Route::get('referensi/dokter/{param1}', [ReferensiController::class, 'getDokterDpjpClaim'])->name('dokter/dpjp/claim.getDokterDpjpClaim');
 
-
-
-//Evaluasi Awal MPP
-Route::get('evaluasi/awal/MPP/index', [RanapEvaluasiAwalMppController::class, 'index'])->name('evaluasi/awal/MPP.index');
-Route::get('evaluasi/awal/MPP/detail/{id}', [RanapEvaluasiAwalMppController::class, 'detail'])->name('evaluasi/awal/MPP.detail');
-Route::get('evaluasi/awal/MPP/create/{id}', [RanapEvaluasiAwalMppController::class, 'create'])->name('evaluasi/awal/MPP.create');
-Route::post('evaluasi/awal/MPP/store/{id}', [RanapEvaluasiAwalMppController::class, 'store'])->name('evaluasi/awal/MPP.store');
-Route::get('evaluasi/awal/MPP/edit/{id}', [RanapEvaluasiAwalMppController::class, 'edit'])->name('evaluasi/awal/MPP.edit');
-Route::get('evaluasi/awal/MPP/show/{id}', [RanapEvaluasiAwalMppController::class, 'show'])->name('evaluasi/awal/MPP.show');
-Route::put('evaluasi/awal/MPP/update/{id}', [RanapEvaluasiAwalMppController::class, 'update'])->name('evaluasi/awal/MPP.update');
-Route::delete('evaluasi/awal/MPP/delete/{id}', [RanapEvaluasiAwalMppController::class, 'destroy'])->name('evaluasi/awal/MPP.destroy');
-Route::get('evaluasi/awal/MPP/ttd', [RanapEvaluasiAwalMppController::class, 'getTtd'])->name('evaluasi/awal/MPP.ttd');
-
-
-//Monitoring Pelayanan Obat Pasien
-Route::get('monitoring/pelayanan/obat/pasien/create/{id}', [RanapMonitoringPelayananObatPasienController::class, 'create'])->name('monitoring/pelayanan/obat/pasien.create');
-Route::post('monitoring/pelayanan/obat/pasien/store/{id}', [RanapMonitoringPelayananObatPasienController::class, 'store'])->name('monitoring/pelayanan/obat/pasien.store');
-Route::get('monitoring/pelayanan/obat/pasien/edit/{id}', [RanapMonitoringPelayananObatPasienController::class, 'edit'])->name('monitoring/pelayanan/obat/pasien.edit');
-Route::get('monitoring/pelayanan/obat/pasien/show/{id}', [RanapMonitoringPelayananObatPasienController::class, 'show'])->name('monitoring/pelayanan/obat/pasien.show');
-Route::put('monitoring/pelayanan/obat/pasien/update/{id}', [RanapMonitoringPelayananObatPasienController::class, 'update'])->name('monitoring/pelayanan/obat/pasien.update');
-Route::delete('monitoring/pelayanan/obat/pasien/delete/{id}', [RanapMonitoringPelayananObatPasienController::class, 'destroy'])->name('monitoring/pelayanan/obat/pasien.destroy');
-
-//Assesmen Pra Sedasi
-Route::get('assesmen/pra/sedasi/index/', [RanapAssesmenPraSedasiController::class, 'index'])->name('assesmen/pra/sedasi.index');
-Route::get('assesmen/pra/sedasi/create/{id}', [RanapAssesmenPraSedasiController::class, 'create'])->name('assesmen/pra/sedasi.create');
-Route::post('assesmen/pra/sedasi/store/{id}', [RanapAssesmenPraSedasiController::class, 'store'])->name('assesmen/pra/sedasi.store');
-Route::get('assesmen/pra/sedasi/edit/{id}', [RanapAssesmenPraSedasiController::class, 'edit'])->name('assesmen/pra/sedasi.edit');
-Route::get('assesmen/pra/sedasi/detail/{id}', [RanapAssesmenPraSedasiController::class, 'detail'])->name('assesmen/pra/sedasi.detail');
-Route::get('assesmen/pra/sedasi/show/{id}', [RanapAssesmenPraSedasiController::class, 'show'])->name('assesmen/pra/sedasi.show');
-Route::put('assesmen/pra/sedasi/update/{id}', [RanapAssesmenPraSedasiController::class, 'update'])->name('assesmen/pra/sedasi.update');
-Route::delete('assesmen/pra/sedasi/delete/{id}', [RanapAssesmenPraSedasiController::class, 'destroy'])->name('assesmen/pra/sedasi.destroy');
-
-//Assesmen Pra Anestesi Pra Induksi
-Route::get('assesmen/pra/anestesi/pra/induksi/index', [RanapAssesmenPraAnestesiPraInduksiController::class, 'index'])->name('assesmen/pra/anestesi/pra/induksi.index');
-Route::get('assesmen/pra/anestesi/pra/induksi/detail/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'detail'])->name('assesmen/pra/anestesi/pra/induksi.detail');
-Route::get('assesmen/pra/anestesi/pra/induksi/create/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'create'])->name('assesmen/pra/anestesi/pra/induksi.create');
-Route::post('assesmen/pra/anestesi/pra/induksi/store/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'store'])->name('assesmen/pra/anestesi/pra/induksi.store');
-Route::get('assesmen/pra/anestesi/pra/induksi/edit/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'edit'])->name('assesmen/pra/anestesi/pra/induksi.edit');
-Route::get('assesmen/pra/anestesi/pra/induksi/show/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'show'])->name('assesmen/pra/anestesi/pra/induksi.show');
-Route::put('assesmen/pra/anestesi/pra/induksi/update/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'update'])->name('assesmen/pra/anestesi/pra/induksi.update');
-Route::delete('assesmen/pra/anestesi/pra/induksi/delete/{id}', [RanapAssesmenPraAnestesiPraInduksiController::class, 'destroy'])->name('assesmen/pra/anestesi/pra/induksi.destroy');
-
-// Status fungsional
-Route::get('monitoring/status/fungsional/index', [RanapMonitoringStatusFungsionalController::class, 'index'])->name('monitoring/status/fungsional.index');
-Route::get('monitoring/status/fungsional/detail/{id}', [RanapMonitoringStatusFungsionalController::class, 'detail'])->name('monitoring/status/fungsional.detail');
-Route::get('monitoring/status/fungsional/create/{id}', [RanapMonitoringStatusFungsionalController::class, 'create'])->name('monitoring/status/fungsional.create');
-Route::post('monitoring/status/fungsional/store/{id}', [RanapMonitoringStatusFungsionalController::class, 'store'])->name('monitoring/status/fungsional.store');
-Route::get('monitoring/status/fungsional/edit/{id}', [RanapMonitoringStatusFungsionalController::class, 'edit'])->name('monitoring/status/fungsional.edit');
-Route::get('monitoring/status/fungsional/show/{id}', [RanapMonitoringStatusFungsionalController::class, 'show'])->name('monitoring/status/fungsional.show');
-Route::put('monitoring/status/fungsional/update/{id}', [RanapMonitoringStatusFungsionalController::class, 'update'])->name('monitoring/status/fungsional.update');
-Route::delete('monitoring/status/fungsional/delete/{id}', [RanapMonitoringStatusFungsionalController::class, 'destroy'])->name('monitoring/status/fungsional.destroy');
-
-//Ranap Assesmen Awal Keperawatan Pasien Rawat Inap
-Route::get('/ranap/assesmen/awal/keperawatan/index', [AssesmenAwalKeperawatanRanapController::class, 'index'])->name('ranap/assesmen/awal/keperawatan.index');
-Route::get('/ranap/assesmen/awal/keperawatan/detail/{id}', [AssesmenAwalKeperawatanRanapController::class, 'detail'])->name('ranap/assesmen/awal/keperawatan.detail');
-Route::get('/ranap/assesmen/awal/keperawatan/show/{id}', [AssesmenAwalKeperawatanRanapController::class, 'show'])->name('ranap/assesmen/awal/keperawatan.show');
-Route::get('/ranap/assesmen/awal/keperawatan/edit/{id}', [AssesmenAwalKeperawatanRanapController::class, 'edit'])->name('ranap/assesmen/awal/keperawatan.edit');
-Route::delete('/ranap/assesmen/awal/keperawatan/destroy/{id}', [AssesmenAwalKeperawatanRanapController::class, 'destroy'])->name('ranap/assesmen/awal/keperawatan.destroy');
-
-//Ranap Assesmen Perawat Status Fisik
-Route::get('/ranap/asesmen/status/fisik/index/{id}', [AsesmentKeperawatanStatusFisikRanapController::class, 'index'])->name('ranap/asesmen/status/fisik.index');
-Route::post('/ranap/asesmen/status/fisik/store/{id}', [AsesmentKeperawatanStatusFisikRanapController::class, 'store'])->name('ranap/asesmen/status/fisik.store');
-
-//Ranap Assesmen Perawat Skrining Resiko Jatuh
-Route::get('/ranap/asesmen/skrining/resiko/jatuh/index/{id}', [AsesmentKeperawatanSkriningResikoJatuhRanapController::class, 'index'])->name('ranap/asesmen/skrining/resiko/jatuh.index');
-Route::get('/ranap/asesmen/skrining/resiko/jatuh/edit/{id}', [AsesmentKeperawatanSkriningResikoJatuhRanapController::class, 'edit'])->name('ranap/asesmen/skrining/resiko/jatuh.edit');
-Route::post('/ranap/asesmen/skrining/resiko/jatuh/store/{id}', [AsesmentKeperawatanSkriningResikoJatuhRanapController::class, 'store'])->name('ranap/asesmen/skrining/resiko/jatuh.store');
-
-//Ranap Assesmen Perawat Diagnosis Keperawatan
-Route::get('/ranap/asesmen/diagnosis/keperawatan/index/{id}', [AsesmentKeperawatanDiagnosisRanapController::class, 'index'])->name('ranap/asesmen/diagnosis/keperawatan.index');
-Route::get('/ranap/asesmen/diagnosis/keperawatan/edit/{id}', [AsesmentKeperawatanDiagnosisRanapController::class, 'edit'])->name('ranap/asesmen/diagnosis/keperawatan.edit');
-Route::post('/ranap/asesmen/diagnosis/keperawatan/store/{id}', [AsesmentKeperawatanDiagnosisRanapController::class, 'store'])->name('ranap/asesmen/diagnosis/keperawatan.store');
-
-//Ranap Assesmen Perawat Diagnosis Keperawatan
-Route::get('/ranap/asesmen/rencana/asuhan/index/{id}', [AsesmentKeperawatanRencanaAsuhanRanapController::class, 'index'])->name('ranap/asesmen/rencana/asuhan.index');
-Route::get('/ranap/asesmen/rencana/asuhan/edit/{id}', [AsesmentKeperawatanRencanaAsuhanRanapController::class, 'edit'])->name('ranap/asesmen/rencana/asuhan.edit');
-Route::post('/ranap/asesmen/rencana/asuhan/store/{id}', [AsesmentKeperawatanRencanaAsuhanRanapController::class, 'store'])->name('ranap/asesmen/rencana/asuhan.store');
 
 // rme start
 Route::get('/rekam/medis/elektronik', [RekamMedisElektronikController::class, 'index'])->name('rekam/medis/elektronik.index');
@@ -2311,82 +1380,6 @@ Route::get('/ranap/simulasi/biaya', [CostEstimateSimulationController::class, 'i
 Route::post('/ranap/simulasi/biaya/store', [CostEstimateSimulationController::class, 'store'])->name('ranap/simulasi/biaya.store');
 Route::get('/ranap/simulasi/biaya/show/{id}', [CostEstimateSimulationController::class, 'show'])->name('ranap/simulasi/biaya.show');
 
-
-
-
-//ranap form
-//monitoring pacu
-Route::get('/create-monitoring-pacu', function () {
-    return view('pages.ranapMonitoringPacu.create', [
-        "title" => "Monitoring Pacu",
-        "menu" => "Rawat Inap",
-    ]);
-});
-//-monitoring pacu
-//-ranap form
-
-//diluar MAP
-//komplain
-Route::get('/komplain', function () {
-    return view('pages.diluarMapKomplain.index', [
-        "title" => "Komplain",
-        "menu" => "Diluar MAP"
-    ]);
-});
-Route::get('/create-komplain', function () {
-    return view('pages.diluarMapKomplain.create', [
-        "title" => "Komplain",
-        "menu" => "Diluar MAP"
-    ]);
-});
-Route::get('/show-komplain', function () {
-    return view('pages.diluarMapKomplain.show', [
-        "title" => "Komplain",
-        "menu" => "Diluar MAP"
-    ]);
-});
-//komplain
-Route::get('/melarikan-diri', function () {
-    return view('pages.diluarMapPasienMelarikanDiri.index', [
-        "title" => "Pasien Melarikan Diri",
-        "menu" => "Diluar MAP"
-    ]);
-});
-Route::get('/create-melarikan-diri', function () {
-    return view('pages.diluarMapPasienMelarikanDiri.create', [
-        "title" => "Pasien Melarikan Diri",
-        "menu" => "Diluar MAP"
-    ]);
-});
-Route::get('/show-melarikan-diri', function () {
-    return view('pages.diluarMapPasienMelarikanDiri.show', [
-        "title" => "Pasien Melarikan Diri",
-        "menu" => "Diluar MAP"
-    ]);
-});
-//-diluar MAP
-//testing
-Route::get('/lap-anestes', function () {
-    return view('pages.surat.lapAnestesi', [
-        "title" => "Laporan Anestesi",
-        "menu" => "Diluar MAP"
-    ]);
-});
-
-//gizi
-Route::get('/asesmen-awal-gizi', function () {
-    return view('pages.giziAsesmenAwalGizi.index', [
-        "title" => "Asesmen Awal Gizi",
-        "menu" => "Gizi"
-    ]);
-});
-Route::get('/create-asesmen-awal-gizi', function () {
-    return view('pages.giziAsesmenAwalGizi.create', [
-        "title" => "Create Asesmen Awal Gizi",
-        "menu" => "Gizi"
-    ]);
-});
-
 //Keuangan
 Route::post('tarif/layanan/store', [TarifController::class, 'store'])->name('tarif/layanan.store');
 Route::put('tarif/layanan/update/{id}', [TarifController::class, 'update'])->name('tarif/layanan.update');
@@ -2406,81 +1399,15 @@ Route::get('asuransi/detail/index/{id}', [AsuransiDetailController::class, 'inde
 Route::get('asuransi/detail/create/{id}', [AsuransiDetailController::class, 'create'])->name('asuransi/detail.create');
 Route::get('asuransi/detail/show/{id}', [AsuransiDetailController::class, 'show'])->name('asuransi/detail.show');
 Route::post('asuransi/detail/store/{id}', [AsuransiDetailController::class, 'store'])->name('asuransi/detail.store');
-// Route::get('/pengantar/asuransi', function () {
-//     return view('pages.asuransi.pengantar', [
-//         'title' => 'ASURANSI',
-//         'menu' => 'KEUANGAN',
-//     ]);
-// });
-// Route::get('/lampiran/asuransi', function () {
-//     return view('pages.asuransi.lampiran', [
-//         'title' => 'ASURANSI',
-//         'menu' => 'KEUANGAN',
-//     ]);
-// });
 
 //casemix
 Route::get('/casemix', [CasemixController::class, 'index'])->name('casemix');
 Route::get('/casemix/queue/{id}', [CasemixController::class, 'queue'])->name('casemix.queue');
 Route::get('/casemix/queue/show/{id}', [CasemixController::class, 'showQueue'])->name('casemix/queue.show');
 
-// Route::post('/casemix/grouping/{id}', [CasemixController::class, 'grouping'])->name('casemix.grouping');
-// Route::post('/casemix/pendanaan/{id}', [CasemixController::class, 'pendanaan'])->name('casemix.queue.pendanaan');
-// Route::delete('/casemix/delete/{id}', [CasemixController::class, 'delete'])->name('casemix.queue.delete');
-// Route::delete('/casemix/remove-tindakan/{id}', [CasemixController::class, 'removeDetailTindakan'])->name('casemix.remove-tindakan');
-// Route::get('/casemix/detail-claim/{id}', [CasemixController::class, 'showClaim'])->name('casemix.detail-claim');
-// Route::get('/casemix/coding_grouping', [CasemixController::class, 'codingGrouping'])->name('casemix.coding_grouping');
-// Route::post('/casemix/groupe/{id}', [CasemixController::class, 'pendanaan'])->name('casemix.groupe');
-// Route::post('/casemix/add-grouping/{id}', [CasemixController::class, 'updateDataClaim'])->name('casemix.add-grouping');
-// Route::post('/casemix/tarif/{id}', [CasemixController::class, 'tarif'])->name('casemix.tarif');
-
-
 Route::get('/casemix/csrf', [InacbgController::class, 'getCrsf']);
 Route::post('/casemix/register-claim/{id}', [InacbgController::class, 'registerClaim'])->name('casemix/register.claim');
 Route::post('/casemix/update-claim/{id}', [InacbgController::class, 'updateClaim'])->name('casemix/update.claim');
-
-
-
-// Kemoterapi Lembar Konsul
-Route::get('kemoterapi/lembar/konsul/pasien/create', [KemoterapiLembarKonsulPatientController::class, 'create'])->name('kemoterapi/lembar/konsul.create');
-Route::get('kemoterapi/lembar/konsul/pasien/edit', [KemoterapiLembarKonsulPatientController::class, 'edit'])->name('kemoterapi/lembar/konsul.edit');
-Route::get('kemoterapi/lembar/konsul/pasien/show', [KemoterapiLembarKonsulPatientController::class, 'show'])->name('kemoterapi/lembar/konsul.show');
-// end Kemoterapi Lembar Konsul
-
-// Rawat Inap New Menu
-Route::get('/rawat/inap/dashboard/patient', function () {
-    return view('pages.rawatInapNew.dashboardPasien', [
-        "title" => "Dashboard Pasien",
-        "menu" => "Rawat Inap"
-    ]);
-})->name('rawat.inap.dashboard.patient');
-
-Route::group(['middleware' => 'clear.ranap.session'], function () {
-    Route::get('/rawat/inap/assesmen/{id}', [RawatInapNewController::class, 'assesmen'])->name('rawat.inap.assesmen');
-    // Route::get('/rawat/inap/catatan/perjalanan/administrasi/{id}', [RawatInapNewController::class, 'catatanPerjalananAdministrasi'])->name('rawat.inap.catatan.perjalanan.administrasi');
-    // Route::get('/rawat/inap/cppt/{id}', [RawatInapNewController::class, 'cppt'])->name('rawat.inap.cppt');
-    Route::get('/rawat/inap/catatan/perjalanan/administrasi/{id}', [RawatInapNewController::class, 'catatanPerjalananAdministrasi'])->name('rawat.inap.catatan.perjalanan.administrasi');
-    Route::get('/rawat/inap/cppt/{id}', [RawatInapNewController::class, 'cppt'])->name('rawat.inap.cppt');
-    Route::get('/rawat/inap/daftar/tilik/{id}', [RawatInapNewController::class, 'daftarTilik'])->name('rawat.inap.daftar.tilik');
-    Route::get('/rawat/inap/daftar/tilik/discharge/{id}', [RawatInapNewController::class, 'discharge'])->name('rawat.inap.discharge');
-    Route::get('/rawat/inap/edukasi/pasien/praAnestesi/{id}', [RawatInapNewController::class, 'edukasiPasienPraAnestesi'])->name('rawat.inap.edukasi.pasien.praAnestesi');
-    Route::get('/rawat/inap/ews/{id}', [RawatInapNewController::class, 'ews'])->name('rawat.inap.ews');
-    Route::get('/rawat/inap/formulir/rekonsilisasi/obat/{id}', [RawatInapNewController::class, 'formulirRekonsiliasiObat'])->name('rawat.inap.formulir.rekonsilisasi.obat');
-    Route::get('/rawat/inap/general/consent/{id}', [RawatInapNewController::class, 'generalConsent'])->name('rawat.inap.general.consent');
-    Route::get('/rawat/inap/hais/{id}', [RawatInapNewController::class, 'hais'])->name('rawat.inap.hais');
-    Route::get('/rawat/inap/konsultasi/penyakit/dalam/{id}', [RawatInapNewController::class, 'konsultasiPenyakitDalam'])->name('rawat.inap.konsultasi.penyakit.dalam');
-    Route::get('/rawat/inap/laporan/{id}', [RawatInapNewController::class, 'laporan'])->name('rawat.inap.laporan');
-    Route::get('/rawat/inap/manager/pelayanan/pasien/{id}', [RawatInapNewController::class, 'managerPelayananPasien'])->name('rawat.inap.manager.pelayanan.pasien');
-    Route::get('/rawat/inap/monitoring/{id}', [RawatInapNewController::class, 'monitoring'])->name('rawat.inap.monitoring');
-    Route::get('/rawat/inap/persetujuan/{id}', [RawatInapNewController::class, 'persetujuan'])->name('rawat.inap.persetujuan');
-    Route::get('/rawat/inap/resep/dokter/{id}', [RawatInapNewController::class, 'resepDokter'])->name('rawat.inap.resep.dokter');
-    Route::get('/rawat/inap/ringkasan/masuk/dan/keluar/{id}', [RawatInapNewController::class, 'ringkasanMasukDanKeluar'])->name('rawat.inap.ringkasan.masuk.dan.keluar');
-    Route::get('/rawat/inap/skrining/covid/{id}', [RawatInapNewController::class, 'skriningCovid'])->name('rawat.inap.skrining.covid');
-    Route::get('/rawat/inap/tindakan/pelayanan/{id}', [RawatInapNewController::class, 'tindakanPelayanan'])->name('rawat.inap.tindakan.pelayanan');
-});
-
-
-
 
 Route::get('/e-klaim', function () {
     return view('pages.eKlaim.create', [

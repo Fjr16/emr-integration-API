@@ -69,19 +69,8 @@
                                 <a class="nav-link bg-success text-white" aria-current="page" href="#" id="all"><i class="menu-icon tf-icons bx bx-hotel"></i> All</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" id="tab-igd"><i class="menu-icon tf-icons bx bx-hotel"></i> IGD</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="#" id="tab-rawat-jalan"><i class="menu-icon tf-icons bx bx-accessibility"></i>
                                     Rawat Jalan</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" id="tab-rawat-inap"><i class="menu-icon tf-icons bx bx-hotel"></i> Rawat
-                                    Inap</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" id="tab-kemoterapi"><i class="menu-icon tf-icons bx bx-hotel"></i>
-                                    Kemoterapi</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" id="tab-sep"><i class="menu-icon tf-icons bx bx-book"></i> SEP</a>
@@ -111,18 +100,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($igd as $igdItem)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $igdItem->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $igdItem->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $igdItem->queue->patient->name ?? '-' }}</td>
-                                <td>{{ $igdItem->queue->category ?? '' }}</td>
-                                <td>{{ $igdItem->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('igd/patient/rme.show', $igdItem->id) }}" class="btn btn-sm btn-success">Show</a>
-                                </td>
-                            </tr>
-                            @endforeach
+
                             @foreach ($rajal as $dataRajal)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -132,62 +110,6 @@
                                 <td>{{ $dataRajal->queue->category ?? '' }}</td>
                                 <td>{{ $dataRajal->queue->status_antrian ?? '' }}</td>
                                 <td><a href="{{ route('rajal/show', [$dataRajal->queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
-                            </tr>
-                            @endforeach
-                            @foreach ($ranap as $dataRanap)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $dataRanap->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $dataRanap->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $dataRanap->queue->patient->name ?? '' }}</td>
-                                {{-- <td>{{ $dataRanap->queue->category ?? '' }}</td> --}}
-                                <td>RAWAT INAP</td>
-                                <td>{{ $dataRanap->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('rawat.inap.assesmen', $dataRanap->id) }}" class="btn btn-sm btn-success">Show</a>
-                                </td>
-                            </tr>
-                            @endforeach
-
-                            @foreach ($kemo as $dataKemo)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $dataKemo->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $dataKemo->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $dataKemo->queue->patient->name ?? '' }}</td>
-                                {{-- <td>{{ $dataKemo->queue->category ?? '' }}</td> --}}
-                                <td>KEMOTERAPI</td>
-                                <td>{{ $dataKemo->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('kemoterapi/patient.show', $dataKemo->queue->id) }}" class="btn btn-sm btn-success">Show</a></td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                {{-- IGD --}}
-                <div class="table-responsive" id="table-igd">
-                    <table class="table" id="example">
-                        <thead>
-                            <tr class="text-nowrap bg-dark">
-                                <th>No</th>
-                                <th>No. Antrian</th>
-                                <th>Tanggal Antrian</th>
-                                <th>Nama</th>
-                                <th>Category</th>
-                                <th>Status Antrian</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($igd as $igdItem)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $igdItem->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $igdItem->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $igdItem->queue->patient->name ?? '-' }}</td>
-                                <td>{{ $igdItem->queue->category ?? '' }}</td>
-                                <td>{{ $igdItem->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('igd/patient/rme.show', $igdItem->id) }}" class="btn btn-sm btn-success">Show</a>
-                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -218,69 +140,6 @@
                                 <td>{{ $dataRajal->queue->category ?? '' }}</td>
                                 <td>{{ $dataRajal->queue->status_antrian ?? '' }}</td>
                                 <td><a href="{{ route('rajal/show', [$dataRajal->queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                {{-- Rawat Inap --}}
-                <div class="table-responsive" id="table-rawat-inap">
-                    <table class="table" id="example2">
-                        <thead>
-                            <tr class="text-nowrap bg-dark">
-                                <th>No</th>
-                                <th>No. Antrian</th>
-                                <th>Tanggal Antrian</th>
-                                <th>Nama</th>
-                                <th>Category</th>
-                                <th>Status Antrian</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($ranap as $dataRanap)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $dataRanap->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $dataRanap->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $dataRanap->queue->patient->name ?? '' }}</td>
-                                {{-- <td>{{ $dataRanap->queue->category ?? '' }}</td> --}}
-                                <td>RAWAT INAP</td>
-                                <td>{{ $dataRanap->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('rawat.inap.assesmen', $dataRanap->id) }}" class="btn btn-sm btn-success">Show</a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                {{-- Kemoterapi --}}
-                <div class="table-responsive" id="table-kemoterapi">
-                    <table class="table" id="example3">
-                        <thead>
-                            <tr class="text-nowrap bg-dark">
-                                <th>No</th>
-                                <th>No. Antrian</th>
-                                <th>Tanggal Antrian</th>
-                                <th>Nama</th>
-                                <th>Category</th>
-                                <th>Status Antrian</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($kemo as $dataKemo)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $dataKemo->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $dataKemo->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $dataKemo->queue->patient->name ?? '' }}</td>
-                                {{-- <td>{{ $dataKemo->queue->category ?? '' }}</td> --}}
-                                <td>KEMOTERAPI</td>
-                                <td>{{ $dataKemo->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('kemoterapi/patient.show', $dataKemo->queue->id) }}" class="btn btn-sm btn-success">Show</a></td>
                             </tr>
                             @endforeach
                         </tbody>
