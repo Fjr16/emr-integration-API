@@ -11,9 +11,6 @@ class DoctorsSchedule extends Model
 
     protected $fillable = [
         'user_id',
-        // 'room_detail_id',
-        // 'kuota_jkn',
-        // 'kuota_non_jkn',
         'day',
         'start_at',
         'ends_at',

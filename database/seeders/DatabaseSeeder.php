@@ -9,10 +9,6 @@ use Laravolt\Indonesia\Seeds\VillagesSeeder;
 use Laravolt\Indonesia\Seeds\DistrictsSeeder;
 use Laravolt\Indonesia\Seeds\ProvincesSeeder;
 use Spatie\Permission\Models\Permission;
-use Laravolt\Indonesia\Seeds\CitiesSeeder;
-use Laravolt\Indonesia\Seeds\VillagesSeeder;
-use Laravolt\Indonesia\Seeds\DistrictsSeeder;
-use Laravolt\Indonesia\Seeds\ProvincesSeeder;
 
 class DatabaseSeeder extends Seeder
 {
