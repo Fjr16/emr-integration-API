@@ -101,6 +101,7 @@ use App\Http\Controllers\MedicineDistributionReturnResponseController;
 use App\Http\Controllers\RadiologiFormRequestMasterCategoryController;
 use App\Http\Controllers\LaboratoriumMasterVariabelPemeriksaanController;
 use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhController;
+use App\Http\Controllers\OtherController;
 use App\Http\Controllers\PermintaanLaboratoriumPatogologiAnatomikController;
 use App\Http\Controllers\RajalGeneralConsentController;
 
@@ -396,6 +397,10 @@ Route::get('/db/lama/seed/database', function () {
     Artisan::call('db:seed --class=UnitSeeder');
     return back()->with('success', 'SUKSES SEED');
 })->name('seed/db/lama');
+
+
+// get TTD User
+Route::get('/get/Ttd', [OtherController::class, 'getTtdUser'])->name('ranap/cppt.getTtd');
 
 // clear asskep igd
 Route::get('/igd/asskep/clear', function () {

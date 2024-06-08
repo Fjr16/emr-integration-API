@@ -484,9 +484,13 @@
                         cppt_id: cpptId,
                         ket_ttd: ketTtd,
                     },
-                    success: function() {
+                    success: function(res) {
                         localStorage.setItem('success', 'Berhasil Diperbarui');
-                        location.reload();
+                        if (res.redirect) {
+                            window.location.href = res.redirect;
+                        } else {
+                            location.reload();
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         var errorResponse = jqXHR.responseJSON;

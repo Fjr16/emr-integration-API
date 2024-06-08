@@ -199,19 +199,14 @@ class InitialAssesmentController extends Controller
             session(['penunjang' => session('penunjang')]);
         }
         $item = Queue::with('patient')->findOrFail($id);
-        // dd($item->patient->name);
         $dataPemeriksaan = ['KEPALA', 'MATA', 'THT', 'MULUT', 'LEHER', 'THORAKS', 'ABDOMEN', 'UROGENITAL & ANUS', 'EKSTREMITAS', 'NEUROLOGIS'];
         $dataObat = Medicine::all();
-        $radiologiResults = RadiologiPatient::where('queue_id', $item->id)->where('status', 'SELESAI')->get();
-        $laborResults = LaboratoriumPatientResult::where('queue_id', $item->id)->where('status', 'VALIDATED')->get();
         return view('pages.assesmenAwal.create', [
             'title' => 'Create Assesmen',
             'menu' => 'Rawat Jalan',
             'item' => $item,
             'dataPemeriksaan' => $dataPemeriksaan,
             'dataObat' => $dataObat,
-            'radiologiResults' => $radiologiResults,
-            'laborResults' => $laborResults,
         ]);
     }
 

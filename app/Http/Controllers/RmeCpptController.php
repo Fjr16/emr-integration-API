@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\MedicineReceiptDetail;
 use App\Models\RajalCpptSbarPatient;
 use App\Models\RajalCpptSerahTerimaPatient;
+use App\Models\RawatJalanPoliPatient;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RmeCpptController extends Controller
 {
@@ -24,9 +27,15 @@ class RmeCpptController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private function checkCpptVerif($rawatJalanPoliPatientId)
     {
-        //
+        $item = RawatJalanPoliPatient::find($rawatJalanPoliPatientId);
+        $anyVerif = RmeCppt::where('rawat_jalan_poli_patient_id', $rawatJalanPoliPatientId)
+                ->where('ttd_dpjp', null)
+                ->whereNot('user_id', $item->rawatJalanPatient->queue->doctorPatient->user->id)
+                ->exists();
+
+        return $anyVerif;
     }
 
     /**
@@ -616,6 +625,10 @@ class RmeCpptController extends Controller
                         $data['tanggal'] = date('Y-m-d H:i:s');
                     }
                     $itemCppt->update($data);
+                    $anyVerif = $this->checkCpptVerif($itemCppt->rawat_jalan_poli_patient_id);
+                    if (!$anyVerif) {
+                        return response()->json(['redirect' => '/rajal/cppt/create/' . $itemCppt->rawatJalanPoliPatient->rawatJalanPatient->queue->id]);
+                    }
                 }
             } else {
                 throw new Exception("Terjadi Kesalahan, Mohon Periksa Kembali Password Yang Anda Masukkan", 500);
