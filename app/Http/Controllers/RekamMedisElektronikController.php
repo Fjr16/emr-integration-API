@@ -24,7 +24,7 @@ class RekamMedisElektronikController extends Controller
         Session::forget('idPatient');
         $data = Patient::all();
         return view('pages.rmePasien.index', [
-            "title" => "Rekam Medis Elektronik",
+            "title" => "RME",
             "menu" => "RME",
             "data" => $data
         ]);
