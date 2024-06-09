@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BedController;
 use App\Http\Controllers\GetConversion;
 use App\Http\Controllers\IcdController;
 use App\Http\Controllers\JobController;
@@ -9,7 +8,6 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\FloorController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\PrmrjController;
 use App\Http\Controllers\QueueController;
@@ -18,8 +16,6 @@ use App\Http\Controllers\TarifController;
 use App\Http\Controllers\UrineController;
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\InacbgController;
-use App\Http\Controllers\BedroomController;
-use App\Http\Controllers\BedTypeController;
 use App\Http\Controllers\CasemixController;
 use App\Http\Controllers\FactoryController;
 use App\Http\Controllers\GetStokController;
@@ -37,14 +33,12 @@ use App\Http\Controllers\GetWilayahController;
 use App\Http\Controllers\RawatJalanController;
 use App\Http\Controllers\RoomDetailController;
 use App\Http\Controllers\SpecialistController;
-use App\Http\Controllers\BedroomRatesController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\MedicineFormController;
 use App\Http\Controllers\MedicineStokController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\QueueConfirmController;
 use App\Http\Controllers\ActionMembersController;
-use App\Http\Controllers\InvoiceReturnController;
 use App\Http\Controllers\QueueUriologiController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
@@ -69,7 +63,6 @@ use App\Http\Controllers\UnitCategoryPivotController;
 use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
 use App\Http\Controllers\SuratPengantarRawatController;
-use App\Http\Controllers\MedicineDistributionController;
 use App\Http\Controllers\RadiologiFormRequestController;
 use App\Http\Controllers\RekamMedisElektronikController;
 use App\Http\Controllers\UnitConversionMasterController;
@@ -78,13 +71,9 @@ use App\Http\Controllers\CostEstimateSimulationController;
 use App\Http\Controllers\GangguanIntegritasKulitController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
-use App\Http\Controllers\MedicineTransactionReturnController;
-use App\Http\Controllers\MedicineDistributionReturnController;
 use App\Http\Controllers\RadiologiFormRequestMasterController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
-use App\Http\Controllers\MedicineDistributionRequestController;
 use App\Http\Controllers\AsesmentKeperawatanDiagnosisController;
-use App\Http\Controllers\MedicineDistributionResponseController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\GangguanMobilitasFisikPatientController;
 use App\Http\Controllers\LaboratoriumRequestMasterRateController;
@@ -96,8 +85,6 @@ use App\Http\Controllers\LaboratoriumRequestMasterDetailController;
 use App\Http\Controllers\AsesmentKeperawatanRencanaAsuhanController;
 use App\Http\Controllers\RadiologiFormRequestMasterDetailController;
 use App\Http\Controllers\LaboratoriumRequestCategoryMasterController;
-use App\Http\Controllers\MedicineDistributionReturnRequestController;
-use App\Http\Controllers\MedicineDistributionReturnResponseController;
 use App\Http\Controllers\RadiologiFormRequestMasterCategoryController;
 use App\Http\Controllers\LaboratoriumMasterVariabelPemeriksaanController;
 use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhController;
@@ -177,106 +164,6 @@ Route::get('/rajal/clear/database', function () {
     return back()->with('success', 'SUKSES RESET');
 })->name('clear/rajal');
 
-//migrate refresh rawat inap
-Route::get('/ranap/clear/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_11_133829_create_rawat_inap_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_31_153524_create_catatan_perjalan_ranap_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_01_154802_create_administrasi_cacatan_perjalanan_ranap_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_01_161349_create_detail_administrasi_cacatan_perjalanan_ranap_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_172247_create_initial_assesment_educational_needs_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_31_025531_create_surat_pengantar_rawat_jalan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_31_030120_create_sekunder_surat_pengantar_rawat_jalan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_31_030340_create_operasi_surat_pengantar_rawat_jalan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_31_030457_create_terapi_surat_pengantar_rawat_jalan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_31_032702_create_kebutuhan_surat_pengantar_rawat_jalan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_03_141322_create_skrining_covid_ranap_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_03_140526_create_daftar_tilik_verifikasi_pra_operasi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_03_140713_create_detail_daftar_tilik_verifikasi_pra_operasi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_03_143022_create_detail_petugas_tilik_verifikasi_pra_operasi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_03_140713_create_detail_daftar_tilik_verifikasi_pra_operasi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_05_101350_create_ringkasan_masuk_dan_keluar_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_07_153438_create_cppt_ranaps_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_08_110141_create_change_log_cppt_ranaps_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015641_create_ranap_discharge_summaries_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015746_create_ranap_detail_diganosa_utama_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015816_create_ranap_detail_karmobiditas_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015842_create_ranap_detail_prosedur_terapi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015915_create_ranap_detail_obat_dirawat_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_015929_create_ranap_detail_obat_dirumah_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_153811_create_ranap_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_155233_create_ranap_pemeriksaan_fisik_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_155631_create_ranap_rencana_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_155832_create_ranap_kebutuhan_edukasi_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_160127_create_ranap_rencana_pemulangan_pasien_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_214155_create_ranap_hasil_pemeriksaan_penunjang_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_221131_create_ranap_medicine_receipts_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_10_221247_create_ranap_medicine_receipt_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_14_194028_create_ranap_permintaan_konsul_penyakit_dalam_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_14_194138_create_ranap_jawaban_konsul_penyakit_dalam_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_15_124736_create_ranap_jawaban_konsul_detail_skrining_covid_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_15_125345_create_ranap_jawaban_konsul_detail_lainnya_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_15_130833_create_ranap_jawaban_konsul_detail_penemuan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_18_193746_create_ranap_persetujuan_tindakan_anestesi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_18_194026_create_ranap_detail_persetujuan_tindakan_anestesi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_19_202425_create_ranap_discharge_planning_perawat_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_19_213518_create_ranap_detail_discharge_planning_perawat_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_20_195842_create_ranap_child_detail_discharge_planning_surgeries_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_20_204657_create_ranap_grand_child_detail_discharge_planning_surgeries_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_21_160528_create_ttv_ranap_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_21_204936_create_ranap_discharge_planning_gizi_pharmacies_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_21_205642_create_ranap_discharge_planning_nutrition_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_21_210002_create_ranap_discharge_planning_pharmacies_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_21_222817_create_ranap_monitoring_cairan_infus_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_23_185502_create_ranap_persetujuan_tindakan_bedah_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_23_185746_create_ranap_detail_persetujuan_tindakan_bedah_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_26_175703_create_surat_pernyataan_persetujuan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_26_205450_create_detail_adm_pernyataan_persetujuan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_28_063821_create_ranap_edukasi_pra_anestesi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_28_064326_create_ranap_detail_edukasi_pra_anestesi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_01_042011_create_ranap_form_rekonsiliasi_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_01_043200_create_ranap_form_rekonsiliasi_detail_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_01_043858_create_ranap_form_rekonsiliasi_detail_visites_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_174314_create_ranap_monitoring_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_174333_create_ranap_monitoring_detail_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_174413_create_ranap_another_monitoring_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_200509_create_ranap_monitoring_resiko_jatuh_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_200536_create_ranap_monitoring_resiko_jatuh_detail_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_204818_create_ranap_intervensi_resiko_jatuh_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_02_205342_create_ranap_intervensi_resiko_jatuh_detail_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_015036_create_ranap_ews_dewasa_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_020755_create_ranap_ews_anak_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_021848_create_ranap_rekap_tindakan_pelayanan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_123311_create_ranap_assesmen_pra_anesthesias_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_123909_create_ranap_assesmen_pra_anestesi_checklists_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_124124_create_ranap_assesmen_pra_anestesi_techniques_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_124237_create_ranap_assesmen_pra_anestesi_special_tools_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_124324_create_ranap_assesmen_pra_anestesi_monitorings_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_124535_create_ranap_assesmen_pra_anestesi_inductions_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_142238_create_ranap_assesmen_pra_sedations_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_143118_create_ranap_assesmen_pra_sedation_riwayat_diseases_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_143311_create_ranap_assesmen_pra_sedation_pemeriksaan_physicals_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_143445_create_ranap_assesmen_pra_sedation_nafas_evaluations_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_143605_create_ranap_assesmen_pra_sedation_other_examinations_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_143658_create_ranap_assesmen_pra_sedation_normal_results_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_143800_create_ranap_assesmen_pra_sedation_anestesi_plans_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_144242_create_ranap_assesmen_pra_sedation_anestesi_instructions_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_05_144444_create_ranap_assesmen_pra_sedation_persiapan_bloods_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_10_165101_create_rekap_tindakan_pelayanan_patient_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_20_020714_create_ranap_ases_moni_status_fungsional_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_12_20_020926_create_ranap_ases_moni_status_fungsional_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_10_141050_create_ranap_mpp_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_10_141725_create_ranap_mpp_skrining_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_110216_create_ranap_mpp_problem_risk_chances_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_110653_create_ranap_mpp_asses_management_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_110830_create_ranap_mpp_manager_plannings_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_11_111119_create_ranap_mpp_pelayanan_advanceds_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_18_000235_create_ranap_cppt_sbar_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_22_144322_create_ranap_cppt_alih_rawat_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_11_08_010145_create_general_consent_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_09_200136_create_ranap_hais_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_09_200224_create_ranap_detail_hais_patients_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/ranap');
 //clear asesmen awal keperawatan ranap
 Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_09_25_125442_create_asesment_perawat_ranap_patients_table.php');
@@ -362,11 +249,6 @@ Route::get('/sbpk/clear', function () {
 
 Route::get('/farmasi/gudang/clear/database', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_06_14_150904_create_medicine_stoks_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_06_07_122329_create_medicine_distributions_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_06_07_121026_create_medicine_distribution_requests_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_06_003033_create_medicine_distribution_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_06_07_121958_create_medicine_distribution_responses_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_06_07_121958_create_medicine_distribution_responses_table.php');
     return back()->with('success', 'Berhasil Di Reset');
 })->name('clear/farmasi/medicine');
 
@@ -425,38 +307,6 @@ Route::get('/igd/asskep/clear', function () {
 
 
 Route::group(['middleware' => 'auth'], function () {
-    //DistribusiObat
-    Route::get('/farmasi/obat/distribusi', [MedicineDistributionController::class, 'index'])->name('farmasi/obat/distribusi.index');
-    Route::get('/farmasi/obat/distribusi/create/{id}', [MedicineDistributionController::class, 'create'])->name('farmasi/obat/distribusi.create');
-    Route::post('/farmasi/obat/distribusi/store', [MedicineDistributionController::class, 'store'])->name('farmasi/obat/distribusi.store');
-    Route::get('/farmasi/obat/distribusi/show/{id}', [MedicineDistributionController::class, 'show'])->name('farmasi/obat/distribusi.show');
-    Route::delete('/farmasi/obat/distribusi/destroy/{id}', [MedicineDistributionController::class, 'destroy'])->name('farmasi/obat/distribusi.destroy');
-
-    //Distribusi Request
-    Route::get('/farmasi/obat/distribusi/request', [MedicineDistributionRequestController::class, 'index'])->name('farmasi/obat/distribusi/request.index');
-    Route::post('/farmasi/obat/distribusi/request/show', [MedicineDistributionRequestController::class, 'show'])->name('farmasi/obat/distribusi/request.show');
-    Route::post('/farmasi/obat/distribusi/request/store', [MedicineDistributionRequestController::class, 'store'])->name('farmasi/obat/distribusi/request.store');
-    Route::put('/farmasi/obat/distribusi/request/update/{id}', [MedicineDistributionRequestController::class, 'update'])->name('farmasi/obat/distribusi/request.update');
-
-    //Distribusi Response
-    Route::get('/farmasi/obat/distribusi/response', [MedicineDistributionResponseController::class, 'index'])->name('farmasi/obat/distribusi/response.index');
-    Route::put('/farmasi/obat/distribusi/response/update/{id}', [MedicineDistributionResponseController::class, 'update'])->name('farmasi/obat/distribusi/response.update');
-    Route::get('/farmasi/obat/distribusi/response/cetak/faktur/{id}', [MedicineDistributionResponseController::class, 'show'])->name('farmasi/obat/distribusi/response/cetak/faktur.show');
-
-    //Distribusi ReturnObat
-    Route::get('/farmasi/obat/distribusi/return', [MedicineDistributionReturnController::class, 'index'])->name('farmasi/obat/distribusi/return.index');
-    Route::get('/farmasi/obat/distribusi/return/show/{id}', [MedicineDistributionReturnController::class, 'show'])->name('farmasi/obat/distribusi/return.show');
-    Route::delete('/farmasi/obat/distribusi/return/destroy/{id}', [MedicineDistributionReturnController::class, 'destroy'])->name('farmasi/obat/distribusi/return.destroy');
-
-    //Distribusi Return Request
-    Route::get('/farmasi/obat/distribusi/return/request', [MedicineDistributionReturnRequestController::class, 'index'])->name('farmasi/obat/distribusi/return/request.index');
-    Route::post('/farmasi/obat/distribusi/return/request/store', [MedicineDistributionReturnRequestController::class, 'store'])->name('farmasi/obat/distribusi/return/request.store');
-    Route::put('/farmasi/obat/distribusi/return/request/update/{id}', [MedicineDistributionReturnRequestController::class, 'update'])->name('farmasi/obat/distribusi/return/request.update');
-
-    //Distribusi Return Response
-    Route::get('/farmasi/obat/distribusi/return/response', [MedicineDistributionReturnResponseController::class, 'index'])->name('farmasi/obat/distribusi/return/response.index');
-    Route::put('/farmasi/obat/distribusi/return/response/update/{id}', [MedicineDistributionReturnResponseController::class, 'update'])->name('farmasi/obat/distribusi/return/response.update');
-
     //Konsultasi dan Tarif Konsultasi
     Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('konsultasi');
     Route::get('/konsultasi/create', [ConsultationController::class, 'create'])->name('konsultasi.create');
@@ -623,26 +473,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/farmasi/obat/bentuk/update/{id}', [MedicineFormController::class, 'update'])->name('farmasi/obat/bentuk.update');
     Route::delete('/farmasi/obat/bentuk/destroy/{id}', [MedicineFormController::class, 'destroy'])->name('farmasi/obat/bentuk.destroy');
 
-    //Operasi
-    Route::get('/operasi', [SurgeryController::class, 'index'])->name('surgery.index');
-    Route::get('/operasi/create', [SurgeryController::class, 'create'])->name('surgery.create');
-    Route::post('/operasi/store', [SurgeryController::class, 'store'])->name('surgery.store');
-    Route::get('/operasi/edit/{id}', [SurgeryController::class, 'edit'])->name('surgery.edit');
-    Route::put('/operasi/update/{id}', [SurgeryController::class, 'update'])->name('surgery.update');
-    Route::delete('/operasi/destroy/{id}', [SurgeryController::class, 'destroy'])->name('surgery.destroy');
-
-    //Jasa Operasi
-    Route::get('/operasi/jasa/create', [SurgeryCategoryController::class, 'create'])->name('surgery/category.create');
-    Route::post('/operasi/jasa/store', [SurgeryCategoryController::class, 'store'])->name('surgery/category.store');
-    Route::get('/operasi/jasa/edit/{id}', [SurgeryCategoryController::class, 'edit'])->name('surgery/category.edit');
-    Route::put('/operasi/jasa/update/{id}', [SurgeryCategoryController::class, 'update'])->name('surgery/category.update');
-    Route::delete('/operasi/jasa/destroy/{id}', [SurgeryCategoryController::class, 'destroy'])->name('surgery/category.destroy');
-
-    //Tarif Operasi
-    Route::get('/operasi/tarif/index/{id}', [SurgeryRatesController::class, 'index'])->name('surgery/rates.index');
-    Route::put('/operasi/tarif/update/{id}', [SurgeryRatesController::class, 'update'])->name('surgery/rates.update');
-
-
     //Diagnosa
     Route::get('/diagnosa', [DiagnosticController::class, 'index'])->name('diagnosa.index');
     Route::get('/diagnosa/create', [DiagnosticController::class, 'create'])->name('diagnosa.create');
@@ -650,44 +480,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/diagnosa/edit/{id}', [DiagnosticController::class, 'edit'])->name('diagnosa.edit');
     Route::put('/diagnosa/update/{id}', [DiagnosticController::class, 'update'])->name('diagnosa.update');
     Route::delete('/diagnosa/destroy/{id}', [DiagnosticController::class, 'destroy'])->name('diagnosa.destroy');
-
-    //Kamar
-    Route::get('/kamar/lantai', [FloorController::class, 'index'])->name('kamar/lantai.index');
-    Route::get('/kamar/lantai/create', [FloorController::class, 'create'])->name('kamar/lantai.create');
-    Route::post('/kamar/lantai/store', [FloorController::class, 'store'])->name('kamar/lantai.store');
-    Route::get('/kamar/lantai/edit/{id}', [FloorController::class, 'edit'])->name('kamar/lantai.edit');
-    Route::put('/kamar/lantai/update/{id}', [FloorController::class, 'update'])->name('kamar/lantai.update');
-    Route::delete('/kamar/lantai/destroy/{id}', [FloorController::class, 'destroy'])->name('kamar/lantai.destroy');
-
-    Route::get('/kamar', [BedroomController::class, 'index'])->name('kamar.index');
-    Route::get('/kamar/create', [BedroomController::class, 'create'])->name('kamar.create');
-    Route::post('/kamar/store', [BedroomController::class, 'store'])->name('kamar.store');
-    Route::get('/kamar/edit/{id}', [BedroomController::class, 'edit'])->name('kamar.edit');
-    Route::put('/kamar/update/{id}', [BedroomController::class, 'update'])->name('kamar.update');
-    Route::delete('/kamar/destroy/{id}', [BedroomController::class, 'destroy'])->name('kamar.destroy');
-
-    //tipe ranjang
-    Route::get('/kamar/ranjang/tipe', [BedTypeController::class, 'index'])->name('kamar/ranjang/tipe.index');
-    Route::get('/kamar/ranjang/tipe/create', [BedTypeController::class, 'create'])->name('kamar/ranjang/tipe.create');
-    Route::post('/kamar/ranjang/tipe/store', [BedTypeController::class, 'store'])->name('kamar/ranjang/tipe.store');
-    Route::get('/kamar/ranjang/tipe/edit/{id}', [BedTypeController::class, 'edit'])->name('kamar/ranjang/tipe.edit');
-    Route::put('/kamar/ranjang/tipe/update/{id}', [BedTypeController::class, 'update'])->name('kamar/ranjang/tipe.update');
-    Route::delete('/kamar/ranjang/tipe/destroy/{id}', [BedTypeController::class, 'destroy'])->name('kamar/ranjang/tipe.destroy');
-
-    //ranjang
-    Route::get('/kamar/ranjang', [BedController::class, 'index'])->name('kamar/ranjang.index');
-    Route::get('/kamar/ranjang/create', [BedController::class, 'create'])->name('kamar/ranjang.create');
-    Route::post('/kamar/ranjang/store', [BedController::class, 'store'])->name('kamar/ranjang.store');
-    Route::get('/kamar/ranjang/edit/{id}', [BedController::class, 'edit'])->name('kamar/ranjang.edit');
-    Route::put('/kamar/ranjang/update/{id}', [BedController::class, 'update'])->name('kamar/ranjang.update');
-    Route::delete('/kamar/ranjang/destroy/{id}', [BedController::class, 'destroy'])->name('kamar/ranjang.destroy');
-
-    //status ranjang
-    Route::get('/kamar/ranjang/show', [BedController::class, 'show'])->name('kamar/ranjang.show');
-
-    //tarif kamar
-    Route::get('/kamar/ranjang/tarif/{id}', [BedroomRatesController::class, 'index'])->name('kamar/ranjang/tarif.index');
-    Route::put('/kamar/ranjang/tarif/update/{id}', [BedroomRatesController::class, 'update'])->name('kamar/ranjang/tarif.update');
 
     //Get Wilayah (Provinsi, kota, kecamatan, kelurahan)
     Route::post('/get/wilayah/kota', [GetWilayahController::class, 'kota'])->name('get/wilayah.kota');
@@ -752,20 +544,6 @@ Route::group(['middleware' => 'auth'], function () {
     //FakturPembelianObat
     Route::get('/farmasi/obat/pembelian/faktur/edit/{id}', [InvoicePembelianController::class, 'edit'])->name('farmasi/obat/pembelian/faktur.edit');
     Route::put('/farmasi/obat/pembelian/faktur/update/{id}', [InvoicePembelianController::class, 'update'])->name('farmasi/obat/pembelian/faktur.update');
-
-    //ReturnObat
-    Route::get('/farmasi/obat/return', [MedicineTransactionReturnController::class, 'index'])->name('farmasi/obat/return.index');
-    Route::get('/farmasi/obat/return/create/{id}', [MedicineTransactionReturnController::class, 'create'])->name('farmasi/obat/return.create');
-    Route::post('/farmasi/obat/return/store/{id}', [MedicineTransactionReturnController::class, 'store'])->name('farmasi/obat/return.store');
-    Route::delete('/farmasi/obat/return/destroy/{id}', [MedicineTransactionReturnController::class, 'destroy'])->name('farmasi/obat/return.destroy');
-
-    //Faktur Return Obat
-    Route::get('/farmasi/obat/return/faktur/{id}', [InvoiceReturnController::class, 'index'])->name('farmasi/obat/return/faktur.index');
-    Route::get('/farmasi/obat/return/faktur/create/{id}', [InvoiceReturnController::class, 'create'])->name('farmasi/obat/return/faktur.create');
-    Route::post('/farmasi/obat/return/faktur/store/{id}', [InvoiceReturnController::class, 'store'])->name('farmasi/obat/return/faktur.store');
-    Route::get('/farmasi/obat/return/faktur/edit/{id}', [InvoiceReturnController::class, 'edit'])->name('farmasi/obat/return/faktur.edit');
-    Route::put('/farmasi/obat/return/faktur/update/{id}', [InvoiceReturnController::class, 'update'])->name('farmasi/obat/return/faktur.update');
-    Route::delete('/farmasi/obat/return/faktur/destroy/{id}', [InvoiceReturnController::class, 'destroy'])->name('farmasi/obat/return/faktur.destroy');
 
     //Stock Obat
     Route::get('/farmasi/obat/stock', [MedicineStokController::class, 'index'])->name('farmasi/obat/stock.index');

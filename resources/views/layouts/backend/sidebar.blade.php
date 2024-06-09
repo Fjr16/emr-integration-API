@@ -344,7 +344,7 @@
             {{-- end Casemix --}}
 
             {{-- Farmasi --}}
-            <?php $permisGudang = ['menu pembelian obat gudang farmasi', 'menu return obat gudang farmasi', 'menu riwayat distribusi obat gudang farmasi', 'menu daftar stok obat di rumah sakit', 'menu daftar total stok obat di rumah sakit', 'menu permintaan distribusi obat antar unit', 'menu respon distribusi obat antar unit'];
+            <?php $permisGudang = ['menu pembelian obat gudang farmasi', 'menu daftar stok obat di rumah sakit', 'menu daftar total stok obat di rumah sakit'];
             ?>
             @canany($permisGudang)
                 {{-- farmasi --}}
@@ -362,20 +362,6 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('menu return obat gudang farmasi')
-                            <li class="menu-item {{ $title == 'Return' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/return.index') }}" class="menu-link">
-                                    <div>Return</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('menu riwayat distribusi obat gudang farmasi')
-                            <li class="menu-item {{ $title == 'Distribusi' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/distribusi.index') }}" class="menu-link">
-                                    <div>Daftar Distribusi</div>
-                                </a>
-                            </li>
-                        @endcan
                         @can('menu daftar stok obat di rumah sakit')
                             <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat/stock.index') }}" class="menu-link">
@@ -390,35 +376,6 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('menu permintaan distribusi obat antar unit')
-                            <li class="menu-item {{ $title == 'Distribusi Request' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/distribusi/request.index') }}" class="menu-link">
-                                    <div>Distribusi Request</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('menu respon distribusi obat antar unit')
-                            <li class="menu-item {{ $title == 'Distribusi Response' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/distribusi/response.index') }}" class="menu-link">
-                                    <div>Distribusi Response</div>
-                                </a>
-                            </li>
-                        @endcan
-                        {{-- <li class="menu-item {{ $title == "Distribusi Return" ? 'active' : '' }}">
-                <a href="{{ route('farmasi/obat/distribusi/return.index') }}" class="menu-link">
-                    <div>Daftar Distribusi Return</div>
-                </a>
-                </li>
-                <li class="menu-item {{ $title == "Return Request" ? 'active' : '' }}">
-                <a href="{{ route('farmasi/obat/distribusi/return/request.index') }}" class="menu-link">
-                    <div>Return Request</div>
-                </a>
-                </li>
-                <li class="menu-item {{ $title == "Return Response" ? 'active' : '' }}">
-                <a href="{{ route('farmasi/obat/distribusi/return/response.index') }}" class="menu-link">
-                    <div>Return Response</div>
-                </a>
-                </li> --}}
                     </ul>
                 </li>
             @endcanany
@@ -441,7 +398,6 @@
                     'master konsultasi',
                     'master jenis tindakan',
                     'master tindakan',
-                    'master operasi',
                     'master ruangan',
                     'master unit',
                     'master spesialis',
@@ -456,10 +412,6 @@
                     'master golongan obat',
                     'master bentuk sediaan obat',
                     'master tabel konversi',
-                    'master lantai',
-                    'master kamar',
-                    'master tipe ranjang',
-                    'master ranjang',
                 ];
             @endphp
             @canany($arrPermissions)
@@ -516,13 +468,6 @@
                             <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
                                 <a href="{{ route('action/members.index') }}" class="menu-link">
                                     <div>Tindakan</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master operasi')
-                            <li class="menu-item {{ $title == 'Operasi' ? 'active' : '' }}">
-                                <a href="/operasi" class="menu-link">
-                                    <div>Operasi</div>
                                 </a>
                             </li>
                         @endcan
@@ -625,34 +570,6 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('master lantai')
-                            <li class="menu-item {{ $title == 'Lantai' ? 'active' : '' }}">
-                                <a href="{{ route('kamar/lantai.index') }}" class="menu-link">
-                                    <div>Lantai</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master kamar')
-                            <li class="menu-item {{ $title == 'Kamar' ? 'active' : '' }}">
-                                <a href="{{ route('kamar.index') }}" class="menu-link">
-                                    <div>Kamar</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master tipe ranjang')
-                            <li class="menu-item {{ $title == 'Tipe Ranjang' ? 'active' : '' }}">
-                                <a href="{{ route('kamar/ranjang/tipe.index') }}" class="menu-link">
-                                    <div>Tipe Ranjang</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master ranjang')
-                            <li class="menu-item {{ $title == 'Ranjang' ? 'active' : '' }}">
-                                <a href="{{ route('kamar/ranjang.index') }}" class="menu-link">
-                                    <div>Ranjang</div>
-                                </a>
-                            </li>
-                        @endcan
                     </ul>
                 </li>
             @endcanany
@@ -685,26 +602,6 @@
                 </li>
             @endcanany
             {{-- end Poliklinik --}}
-
-            {{-- Kamar --}}
-            @can('lihat status penggunaan ranjang')
-                {{-- Kamar --}}
-                <li class="menu-item {{ $menu == 'Kamar' ? 'open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bx-bed"></i>
-                        <div>Kamar</div>
-                    </a>
-
-                    <ul class="menu-sub">
-                        <li class="menu-item {{ $title == 'Status Ranjang' ? 'active' : '' }}">
-                            <a href="{{ route('kamar/ranjang.show') }}" class="menu-link">
-                                <div>Status Ranjang</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            @endcan
-            {{-- end Kamar --}}
 
             {{-- Keuangan --}}
             <li class="menu-item {{ $menu == 'KEUANGAN' ? 'open' : '' }}">
@@ -774,12 +671,6 @@
                     <li class="menu-item {{ $title == 'Laporan Radiologi' ? 'active' : '' }}">
                         <a href="{{ route('laporan/lab/radiologi.index') }}" class="menu-link">
                             <div>Radiologi</div>
-                        </a>
-                    </li>
-                    {{-- @endcan --}}
-                    <li class="menu-item {{ $title == 'Simulasi Ranap' ? 'active' : '' }}">
-                        <a href="{{ route('ranap/simulasi/biaya.index') }}" class="menu-link">
-                            <div>Simulasi Biaya Ranap</div>
                         </a>
                     </li>
                 </ul>
