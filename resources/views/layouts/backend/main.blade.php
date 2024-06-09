@@ -29,7 +29,7 @@
 
     <style>
         .menu-link:hover {
-            color: #90d8ff !important;
+            color: #161515 !important;
         }
     </style>
 

@@ -6770,8 +6770,7 @@ label.btn {
 
 .btn-dark {
   color: #fff;
-  /* background-color: #296C91; */
-  background-color: #12826a;
+  background-color: #4F6F52;
   border-color: #296C91;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(35, 52, 70, 0.4);
 }
@@ -10093,7 +10092,7 @@ button.list-group-item-gray.active {
   /* --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important; */
   /* background-color: #296C91 !important; */
-  background-color: #12826a !important;
+  background-color: #4F6F52 !important;
 }
 
 .bg-gray {
