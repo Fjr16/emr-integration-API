@@ -4,6 +4,7 @@ use App\Http\Controllers\API\APIController;
 use App\Http\Controllers\API\ReferensiController;
 use App\Http\Controllers\API\RencanaKontrolController;
 use App\Http\Controllers\API\SepController;
+use App\Http\Controllers\RequestApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -66,3 +67,9 @@ Route::post('sep-kontrol-konsul/insert', [SepController::class, 'postSepRujukanK
 Route::post('sep-rawat-inap/insert', [SepController::class, 'postSepRawatInap'])->name('sep.insertSepRanap');
 Route::post('sep-post-ranap/insert', [SepController::class, 'postSepKontrolRanap'])->name('sep.insertSepPost');
 Route::get('integrasi-inacbg/sep/{noSep}', [SepController::class, 'getInaCBGIntegrasi'])->name('sep.inacbg');
+
+
+// route untuk api dummy
+Route::get('post/data/pasien', [RequestApiController::class, 'postDataPatient'])->name('post/data.pasien');
+Route::get('get/data/pasien', [RequestApiController::class, 'getDataByNik'])->name('get/data.pasien');
+Route::get('get/riwayat/pengobatan', [RequestApiController::class, 'getRiwayatByRm'])->name('get/riwayat.pengobatan');
