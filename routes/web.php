@@ -103,7 +103,6 @@ use App\Http\Controllers\RajalGeneralConsentController;
 |
 */
 
-require __DIR__ . '/arg01web.php';
 Route::get('clear/asesmenawal/igd', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_24_180937_create_igd_initial_assesments_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_24_181745_create_igd_physical_examination_details_table.php');
