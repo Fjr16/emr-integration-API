@@ -5,6 +5,7 @@ namespace App\Services\SatuSehat;
 use App\Services\SatuSehat\TokenService;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class BaseUrlService
 {
@@ -19,33 +20,40 @@ class BaseUrlService
         $this->tokenAccess = $this->tokenService->getAccessToken();
     }
 
-    public function getRequest($uri)
+    public function getRequest($url)
     {
-        $token = $this->tokenService->getAccessToken();
+        $response = Http::get($this->baseUrl . $url);
+        // $token = $this->tokenService->getAccessToken();
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $uri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
+        // $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        //     'Authorization: Bearer ' . $token,
+        // ]);
 
-        /** Nonaktifkan verifikasi SSL - hanya untuk tujuan debugging */
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        // /** Nonaktifkan verifikasi SSL - hanya untuk tujuan debugging */
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
-        /**  Menjalankan sesi cURL */
-        $response = curl_exec($ch);
+        // /**  Menjalankan sesi cURL */
+        // $response = curl_exec($ch);
 
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        curl_close($ch);
+        // curl_close($ch);
+        // $res = json_decode($response, true);
+        
+        $statusCode = $response->getStatusCode();
+        // $body = $response->getBody(); // Dapatkan body respon sebagai string
+        // $headers = $response->getHeaders();
 
+        $data = json_decode($response, true);
         if ($statusCode === 200) {
-            return json_decode($response, true);
+            return $data['data']['entry'][0]['resource'];
         } else {
             /** Tangani error sesuai kebutuhan */
-            return curl_getinfo($ch);
+            return $data;
         }
     }
 
