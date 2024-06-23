@@ -666,10 +666,12 @@
                                     <tr class="text-nowrap">
                                         <th class="text-body">No</th>
                                         <th class="text-body">Tanggal</th>
+                                        <th class="text-body">Jam</th>
                                         <th class="text-body">DPJP</th>
                                         <th class="text-body">Diagnosa Penting</th>
                                         <th class="text-body">Uraian Klinis Penting</th>
                                         <th class="text-body">Rencana Penting</th>
+                                        <th class="text-body">Paraf</th>
                                         @canany(['edit prmrj', 'delete prmrj'])
                                             @if ($title == 'Rawat Jalan')
                                                 <th class="text-body">Action</th>
@@ -681,13 +683,18 @@
                                     @foreach ($item->patient->prmrjs as $prmrj)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ date('Y-m-d H:i', strtotime($prmrj->tanggal ?? '')) }}</td>
+                                            <td>{{ date('Y-m-d', strtotime($prmrj->tanggal ?? '')) }}</td>
+                                            <td>{{ date('H:i', strtotime($prmrj->tanggal ?? '')) }}</td>
                                             <td>
                                                 {{ $prmrj->user->name ?? '' }} <br>
                                             </td>
                                             <td>{!! $prmrj->diagnosa_penting ?? '' !!}</td>
                                             <td>{!! $prmrj->uraian_klinis ?? '' !!}</td>
                                             <td>{!! $prmrj->rencana_penting ?? '' !!}</td>
+                                            <td>
+                                                <a href="{{ Storage::url($prmrj->paraf) }}"><img
+                                                        src="{{ Storage::url($prmrj->paraf) }}" alt=""></a>
+                                            </td>
                                             @canany(['edit prmrj', 'delete prmrj'])
                                                 @if ($title == 'Rawat Jalan')
                                                     <td>
@@ -739,6 +746,9 @@
                                         <th class="text-body">Diagnosa</th>
                                         <th class="text-body">Jenis Tindakan</th>
                                         <th class="text-body">Lokasi</th>
+                                        <th class="text-body">Laporan Tindakan</th>
+                                        <th class="text-body">Intruksi Pasca Tindakan</th>
+                                        <th class="text-body">Paraf</th>
                                         @canany(['edit laporan tindakan', 'delete laporan tindakan'])
                                             <th class="text-body">Action</th>
                                         @endcanany
@@ -753,6 +763,12 @@
                                             <td>{{ $action->diagnosa ?? '' }}</td>
                                             <td>{{ $action->jenis_tindakan ?? '' }}</td>
                                             <td>{{ $action->lokasi ?? '' }}</td>
+                                            <td>{{ $action->laporan_tindakan ?? '' }}</td>
+                                            <td>{{ $action->intruksi ?? '' }}</td>
+                                            <td>
+                                                <a href="{{ Storage::url($item->paraf) }}"><img src="{{ Storage::url($item->paraf) }}" alt=""></a>
+                                                
+                                            </td>
                                             @canany(['edit laporan tindakan', 'delete laporan tindakan'])
                                                 <td>
                                                     <div class="d-flex">
