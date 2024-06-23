@@ -73,8 +73,10 @@
         }
 
         @page {
-            size: 210mm 400mm;
+            size: A4;
             margin: 0;
+            margin-top: 10mm;
+            margin-bottom: 10mm;
         }
 
         @media print {
@@ -101,6 +103,14 @@
                 box-shadow: initial;
                 background: initial;
                 page-break-after: always;
+            }
+
+            .print-footer {
+                position: fixed;
+                bottom: 10mm;
+                right: 10mm;
+                width: 90%;
+                text-align: right;
             }
         }
 
@@ -803,21 +813,8 @@
                             <div class="col-lg-3">
                                 <div class="flex col-span-2 gap-x-1">
                                     <input disabled type="checkbox" class ="form-check-input custom-checkbox-input"
-                                        {{ $ekonomi->status == 'BPJS-TK' ? 'checked' : '' }} />
-                                    <label>BPJS-TK</label>
-                                </div>
-                                <div class="flex col-span-2 col-start-4 gap-x-1">
-                                    <input disabled type="checkbox" class ="form-check-input custom-checkbox-input"
-                                        {{ $ekonomi->status == 'Jasa Raharja' ? 'checked' : '' }} />
-                                    <label>Jasa Raharja</label>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="flex col-span-2 gap-x-1">
-                                    <input disabled type="checkbox" class ="form-check-input custom-checkbox-input"
                                         {{ $ekonomi->status == 'BPJS' ? 'checked' : '' }} />
-                                    <label>BPJS-KES</label>
+                                    <label>BPJS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                 </div>
 
                                 <div class="flex col-span-2 gap-x-1">
@@ -825,7 +822,6 @@
                                         {{ $ekonomi->status == 'Umum' ? 'checked' : '' }} />
                                     <label>Umum</label>
                                 </div>
-
                             </div>
                             <div class="col-md-3">
                                 <div class="flex col-span-2 gap-x-1">
@@ -863,6 +859,19 @@
                                         <label> : ……………</label>
                                     </div>
                                 @endif
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="flex col-span-2 gap-x-1">
+                                    {{-- <input disabled type="checkbox" class ="form-check-input custom-checkbox-input"
+                                        {{ $ekonomi->status == 'BPJS-TK' ? 'checked' : '' }} />
+                                    <label>BPJS-TK</label> --}}
+                                </div>
+                                <div class="flex col-span-2 col-start-4 gap-x-1">
+                                    <input disabled type="checkbox" class ="form-check-input custom-checkbox-input"
+                                        {{ $ekonomi->status == 'Jasa Raharja' ? 'checked' : '' }} />
+                                    <label>Jasa Raharja</label>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -1152,18 +1161,22 @@
         </div>
         {{-- Footer --}}
         <div class="d-flex flex-row justify-content-between mt-4">
-            <div class="d-flex flex-row text-center" style="font-size: 5pt">
-                <div class="col col-3 text-center">
+            <div class="row" style="font-size: 5pt">
+                <div class="col col-3 text-center border-end border-dark">
                     <i class="bi bi-geo-alt-fill"></i>
                     <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
                 </div>
-                <div class="col col-3 text-center">
-                    <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
+                <div class="col col-4 border-end border-dark text-center">
+                    <div class="my-2">
+                        <i class="bi bi-envelope-at-fill"></i>
+                        <p>rskbropanasuripadang@gmail.com</p>
+                    </div>
                 </div>
                 <div class="col col-3 text-center">
-                    <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                    <div class="my-2">
+                        <i class="bi bi-telephone-fill"></i>
+                        <p>(0751) 31938 - 33854 - <br> 25735 - 8955227</p>
+                    </div>
                 </div>
             </div>
             <p class="mt-2"><span class="border border-dark">RM 01.RJ.KEP.REV.1-1/3</span></p>
@@ -1805,18 +1818,22 @@
 
         {{-- Footer --}}
         <div class="d-flex flex-row justify-content-between mt-4">
-            <div class="d-flex flex-row text-center" style="font-size: 5pt">
-                <div class="col col-3 text-center">
+            <div class="row" style="font-size: 5pt">
+                <div class="col col-3 text-center border-end border-dark">
                     <i class="bi bi-geo-alt-fill"></i>
                     <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
                 </div>
-                <div class="col col-3 text-center">
-                    <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
+                <div class="col col-4 border-end border-dark text-center">
+                    <div class="my-2">
+                        <i class="bi bi-envelope-at-fill"></i>
+                        <p>rskbropanasuripadang@gmail.com</p>
+                    </div>
                 </div>
                 <div class="col col-3 text-center">
-                    <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                    <div class="my-2">
+                        <i class="bi bi-telephone-fill"></i>
+                        <p>(0751) 31938 - 33854 - <br> 25735 - 8955227</p>
+                    </div>
                 </div>
             </div>
             <p class="mt-2"><span class="border border-dark">RM 01.RJ.KEP.REV.1-1/3</span></p>
@@ -1879,9 +1896,9 @@
 
                 <div class="row mb-3">
                     <div class="col-sm-3 form-check mx-4">
-                        <input class="form-check-input" type="checkbox" name="diagnosis-keperawatan[]"
+                        <input class="form-check-input custom-checkbox-input" type="checkbox" name="diagnosis-keperawatan[]"
                             value="Ansietas" id="ansietasCheck"
-                            {{ $asesmenDiagnosa->where('diagnosa', 'Ansietas')->first() ? 'checked' : 'disabled' }} />
+                            {{ $asesmenDiagnosa->where('diagnosa', 'Ansietas')->first() ? 'checked' : 'disabled' }} disabled/>
                         <label class="form-check-label" for="ansietasCheck">
                             Ansietas
                         </label>
@@ -2410,18 +2427,22 @@
         </div>
 
         <div class="d-flex flex-row justify-content-between mt-4">
-            <div class="d-flex flex-row text-center" style="font-size: 5pt">
-                <div class="col col-3 text-center">
+            <div class="row" style="font-size: 5pt">
+                <div class="col col-3 text-center border-end border-dark">
                     <i class="bi bi-geo-alt-fill"></i>
                     <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
                 </div>
-                <div class="col col-3 text-center">
-                    <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
+                <div class="col col-4 border-end border-dark text-center">
+                    <div class="my-2">
+                        <i class="bi bi-envelope-at-fill"></i>
+                        <p>rskbropanasuripadang@gmail.com</p>
+                    </div>
                 </div>
                 <div class="col col-3 text-center">
-                    <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                    <div class="my-2">
+                        <i class="bi bi-telephone-fill"></i>
+                        <p>(0751) 31938 - 33854 - <br> 25735 - 8955227</p>
+                    </div>
                 </div>
             </div>
             <p class="mt-2"><span class="border border-dark">RM 01.RJ.KEP.REV.1-3/3</span></p>

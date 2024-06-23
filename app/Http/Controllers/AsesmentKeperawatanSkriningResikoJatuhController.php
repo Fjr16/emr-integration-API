@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\AsesmentKeperawatanSkriningResikoJatuhPatient;
-use App\Models\AsesmentKeperawatanStatusFisikPatient;
 use App\Models\AsesmentStatusFungsionalDiagnosaKeperawatanPatient;
 use App\Models\DetailAsesmentStatusFungsionalDiagnosaKeperawatanPatient;
 use App\Models\DetailResikoRajalDiagnosaKeperawatanPatient;

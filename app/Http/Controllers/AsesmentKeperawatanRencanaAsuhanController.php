@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Models\DiagnosisKeperawatanPatient;
 use App\Models\AsesmentKeperawatanRencanaAsuhanPatient;
 use App\Models\DetailMasalahDiagnosisKeperawatanPatient;

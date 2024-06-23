@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('asuhan_keperawatan_patients', function (Blueprint $table) {
+        Schema::create('detail_asesment_keperawatan_rencana_asuhan_patients', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('diagnosis_keperawatan_patient_id');
-            $table->foreignId('detail_diagnosis_keperawatan_patient_id');
-            $table->foreignId('user_id');
+            $table->foreignId('asesment_keperawatan_rencana_asuhan_patient_id');
+            $table->string('name')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asuhan_keperawatan_patients');
+        Schema::dropIfExists('detail_asesment_keperawatan_rencana_asuhan_patients');
     }
 };

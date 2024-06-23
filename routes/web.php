@@ -143,31 +143,33 @@ Route::get('/rajal/clear/database', function () {
 
 //clear asesmen awal keperawatan ranap
 Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155843_create_diagnosis_keperawatan_patients_table.php');
     // status fisik
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_194723_create_asesment_keperawatan_status_fisik_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224706_create_status_fisik_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224722_create_detail_status_fisik_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224752_create_psiko_sosio_spritual_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224810_create_detail_psiko_sosio_spritual_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_225840_create_ekonomi_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230434_create_riwayat_alergi_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230642_create_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230657_create_detail_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_194723_create_asesment_keperawatan_status_fisik_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230642_create_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230657_create_detail_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224810_create_detail_psiko_sosio_spritual_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224722_create_detail_status_fisik_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155843_create_diagnosis_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_225840_create_ekonomi_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224752_create_psiko_sosio_spritual_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230434_create_riwayat_alergi_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224706_create_status_fisik_diagnosa_keperawatan_patients_table.php');
     //risiko jatuh
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230954_create_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231004_create_detail_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231156_create_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231218_create_detail_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_210330_create_asesment_keperawatan_skrining_resiko_jatuh_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_210330_create_asesment_keperawatan_skrining_resiko_jatuh_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230954_create_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231004_create_detail_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230821_create_detail_resiko_rajal_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231218_create_detail_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230812_create_resiko_rajal_diagnosa_keperawatan_patients_table.php');
+    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231156_create_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
     //diagnosis keperawatan
     Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_210849_create_asesment_keperawatan_diagnosis_keperawatan_patients_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155852_create_detail_diagnosis_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_11_144340_create_hubungan_diagnosa_awal_patients_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155917_create_detail_masalah_diagnosis_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155938_create_detail_rencana_diagnosis_keperawatan_patients_table.php');
+    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_11_144340_create_hubungan_diagnosa_awal_patients_table.php');
     //rencana asuhan
     Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_211337_create_asesment_keperawatan_rencana_asuhan_patients_table.php');
+    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155938_create_detail_rencana_diagnosis_keperawatan_patients_table.php');
 
     return back()->with('success', 'SUKSES RESET');
     return 'success';
@@ -484,30 +486,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/konversi/obat/get/jumlah', [GetConversion::class, 'getJumlah'])->name('konversi/obat/get.jumlah');
 });
 
-// Rencana Asuhan
- //Gangguan Mobilitas Fisik
- Route::get('/asuhan/keperawatan/pasien/gangguan/mobilitas/fisik', [GangguanMobilitasFisikPatientController::class, 'index'])->name('fisik.index');
- Route::post('/asuhan/keperawatan/pasien/gangguan/mobilitas/fisik/store', [GangguanMobilitasFisikPatientController::class, 'store'])->name('fisik.store');
-
- //Ansietas
- Route::get('/asuhan/keperawatan/pasien/ansietas', [AnsietasController::class, 'index'])->name('ansietas.index');
- Route::post('/asuhan/keperawatan/pasien/ansietas/store', [AnsietasController::class, 'store'])->name('ansietas.store');
-
- //Retensi Urine
- Route::get('/asuhan/keperawatan/pasien/retensi/urine', [UrineController::class, 'index'])->name('urine.index');
- Route::post('/asuhan/keperawatan/pasien/retensi/urine/store', [UrineController::class, 'store'])->name('urine.store');
- Route::get('/asuhan/keperawatan/pasien/retensi/urine/show', [UrineController::class, 'show'])->name('urine.show');
-
- //Nyeri Akut
- Route::get('/asuhan/keperawatan/pasien/nyeri/akut', [NyeriAkutController::class, 'index'])->name('nyeri.index');
- Route::post('/asuhan/keperawatan/pasien/nyeri/akut/store', [NyeriAkutController::class, 'store'])->name('nyeri.store');
- Route::get('/asuhan/keperawatan/pasien/nyeri/akut/show', [NyeriAkutController::class, 'show'])->name('nyeri.show');
-
- //Gangguan Integritas kulit / jaringan
- Route::get('/asuhan/keperawatan/pasien/kulit', [GangguanIntegritasKulitController::class, 'index'])->name('kulit.index');
- Route::post('/asuhan/keperawatan/pasien/kulit/store', [GangguanIntegritasKulitController::class, 'store'])->name('kulit.store');
-
-
 //Antrian
 Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registrasi ulang antrian']], function () {
     //Antrian
@@ -818,20 +796,7 @@ Route::post('/rajal/asesmen/rencana/asuhan/store/{id}', [AsesmentKeperawatanRenc
 
 
 // Route::group(['middleware' => ['permission:tambah rme perawat']], function(){
-Route::get('/rajal/asesmen/index/{id}', [AsesmentPerawatController::class, 'index'])->name('rajal/asesmen.index');
-Route::get('/rajal/asesmen/index/statusFisik/{id}', [AsesmentPerawatController::class, 'statusFisik'])->name('rajal/asesmen/statusFisik.index');
-Route::post('/rajal/asesmen/store/{id}', [AsesmentPerawatController::class, 'store'])->name('rajal/asesmen.store');
-Route::get('/ranap/asesmen/index/{id}', [AsesmentPerawatController::class, 'index'])->name('ranap/asesmen.index');
-// });
-Route::group(['middleware' => ['permission:lihat rme perawat']], function () {
-    Route::get('/rajal/asesmen/show/{id}', [AsesmentPerawatController::class, 'show'])->name('rajal/asesmen.show');
-    Route::get('/rajal/asesmen/print/{id}', [AsesmentPerawatController::class, 'print'])->name('rajal/asesmen.print');
-});
-
-//Asuhan Keperawatan Pasien
-Route::group(['middleware' => ['permission:asuhan keperawatan']], function () {
-    Route::get('/rajal/asuhan/keperawatan/index/{id}', [AsuhanKeperawatanController::class, 'index'])->name('rajal/asuhan.index');
-});
+Route::get('/rajal/asesmen/print/{id}', [AsesmentPerawatController::class, 'print'])->name('rajal/asesmen.print');
 
 //rajal farmasi
 Route::group(['middleware' => ['permission:daftar pasien farmasi rajal']], function () {

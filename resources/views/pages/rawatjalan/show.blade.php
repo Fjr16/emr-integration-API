@@ -557,9 +557,6 @@
                                         <th class="text-body">Nama Pasien</th>
                                         <th class="text-body">Petugas</th>
                                         <th class="text-body">Tanggal</th>
-                                        @can('asuhan keperawatan')
-                                            <th class="text-body">Asuhan Keperawatan</th>
-                                        @endcan
                                         @canany(['lihat rme perawat'])
                                             <th class="text-body">Action</th>
                                         @endcanany
@@ -572,35 +569,8 @@
                                             <td>{{ $asesment->patient->name }}</td>
                                             <td>{{ $asesment->user->name }}</td>
                                             <td>{{ date_format($asesment->created_at, 'd - m - Y') }}</td>
-                                            @can('asuhan keperawatan')
-                                                <td>
-                                                    <div class="row">
-                                                        @php
-                                                            $routeName = '';
-                                                            $excludedDiagnoses = [
-                                                                'Ansietas',
-                                                                'Nyeri Akut',
-                                                                'Nyeri Kronis',
-                                                                'Retensi Urine',
-                                                                'Gangguan Mobilitas Fisik',
-                                                                'Gangguan Integritas Kulit',
-                                                                'Gangguan Integritas Jaringan',
-                                                            ];
-                                                        @endphp
-                                                        @foreach ($asesment->detailDiagnosisKeperawatanPatient as $detailDiagnosis)
-                                                            @if (in_array($detailDiagnosis->diagnosa, $excludedDiagnoses))
-                                                                <a href="{{ route('rajal/asuhan.index', $detailDiagnosis->id) }}"
-                                                                    target="_blank"
-                                                                    class="btn btn-sm btn-success mx-1 col-5 my-1">{{ $detailDiagnosis->diagnosa }}</a>
-                                                            @endif
-                                                        @endforeach
-
-                                                    </div>
-                                                </td>
-                                            @endcan
                                             @canany(['lihat rme perawat'])
                                                 <td>
-                                                    {{-- <button class="btn btn-dark btn-sm"><i class='bx bx-low-vision' ></i></button> --}}
                                                     @can('lihat rme perawat')
                                                         <div class="d-flex flex-row">
                                                             <a href="{{ route('rajal/asesmen.print', $asesment->id) }}"
