@@ -8,21 +8,6 @@ use Illuminate\Http\Request;
 class MedicineCategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = MedicineCategory::all();
-        return view('pages.golonganObat.index', [
-            'title' => 'Golongan Obat',
-            'menu' => 'Setting',
-            'data' => $data,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +15,7 @@ class MedicineCategoryController extends Controller
     public function create()
     {
         return view('pages.golonganObat.create', [
-            'title' => 'Golongan Obat',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
         ]);
     }
@@ -46,7 +31,10 @@ class MedicineCategoryController extends Controller
         $data = $request->all();
         MedicineCategory::create($data);
 
-        return redirect()->route('farmasi/obat/golongan.index')->with('success', 'Berhasil Di Tambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Tambahkan',
+            'btn' => 'golObat'
+        ]);
     }
 
     /**
@@ -70,7 +58,7 @@ class MedicineCategoryController extends Controller
     {
         $item = MedicineCategory::find($id);
         return view('pages.golonganObat.edit', [
-            'title' => 'Golongan Obat',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'item' => $item,
         ]);
@@ -89,7 +77,10 @@ class MedicineCategoryController extends Controller
         $item = MedicineCategory::find($id);
         $item->update($data);
 
-        return redirect()->route('farmasi/obat/golongan.index')->with('success', 'Berhasil Di Perbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Perbarui',
+            'btn' => 'golObat'
+        ]);
     }
 
     /**
@@ -103,6 +94,9 @@ class MedicineCategoryController extends Controller
         $item = MedicineCategory::find($id);
         $item->delete();
 
-        return back()->with('success', 'Berhasil Di Hapus');
+        return back()->with([
+            'success' => 'Berhasil Di Hapus',
+            'btn' => 'golObat'
+        ]);
     }
 }

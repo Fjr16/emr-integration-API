@@ -433,7 +433,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/farmasi/supplier/destroy/{id}', [SupplierController::class, 'destroy'])->name('farmasi/supplier.destroy');
 
     //Pabrik
-    Route::get('/farmasi/pabrik', [FactoryController::class, 'index'])->name('farmasi/pabrik.index');
     Route::get('/farmasi/pabrik/create', [FactoryController::class, 'create'])->name('farmasi/pabrik.create');
     Route::post('/farmasi/pabrik/store', [FactoryController::class, 'store'])->name('farmasi/pabrik.store');
     Route::get('/farmasi/pabrik/edit/{id}', [FactoryController::class, 'edit'])->name('farmasi/pabrik.edit');
@@ -449,7 +448,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/farmasi/obat/destroy/{id}', [MedicineController::class, 'destroy'])->name('farmasi/obat.destroy');
 
     //Jenis Obat
-    Route::get('/farmasi/obat/jenis', [MedicineTypeController::class, 'index'])->name('farmasi/obat/jenis.index');
     Route::get('/farmasi/obat/jenis/create', [MedicineTypeController::class, 'create'])->name('farmasi/obat/jenis.create');
     Route::post('/farmasi/obat/jenis/store', [MedicineTypeController::class, 'store'])->name('farmasi/obat/jenis.store');
     Route::get('/farmasi/obat/jenis/edit/{id}', [MedicineTypeController::class, 'edit'])->name('farmasi/obat/jenis.edit');
@@ -457,7 +455,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/farmasi/obat/jenis/destroy/{id}', [MedicineTypeController::class, 'destroy'])->name('farmasi/obat/jenis.destroy');
 
     //Golongan Obat
-    Route::get('/farmasi/obat/golongan', [MedicineCategoryController::class, 'index'])->name('farmasi/obat/golongan.index');
     Route::get('/farmasi/obat/golongan/create', [MedicineCategoryController::class, 'create'])->name('farmasi/obat/golongan.create');
     Route::post('/farmasi/obat/golongan/store', [MedicineCategoryController::class, 'store'])->name('farmasi/obat/golongan.store');
     Route::get('/farmasi/obat/golongan/edit/{id}', [MedicineCategoryController::class, 'edit'])->name('farmasi/obat/golongan.edit');
@@ -465,7 +462,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/farmasi/obat/golongan/destroy/{id}', [MedicineCategoryController::class, 'destroy'])->name('farmasi/obat/golongan.destroy');
 
     //bentuk Sediaan Obat
-    Route::get('/farmasi/obat/bentuk', [MedicineFormController::class, 'index'])->name('farmasi/obat/bentuk.index');
     Route::get('/farmasi/obat/bentuk/create', [MedicineFormController::class, 'create'])->name('farmasi/obat/bentuk.create');
     Route::post('/farmasi/obat/bentuk/store', [MedicineFormController::class, 'store'])->name('farmasi/obat/bentuk.store');
     Route::get('/farmasi/obat/bentuk/edit/{id}', [MedicineFormController::class, 'edit'])->name('farmasi/obat/bentuk.edit');
@@ -550,7 +546,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/farmasi/obat/stock/all', [MedicineStokController::class, 'all'])->name('farmasi/obat/stock.all');
 
     //Konversi
-    Route::get('/farmasi/obat/konversi', [UnitConversionController::class, 'index'])->name('farmasi/obat/konversi.index');
     Route::get('/farmasi/obat/konversi/create', [UnitConversionController::class, 'create'])->name('farmasi/obat/konversi.create');
     Route::post('/farmasi/obat/konversi/store', [UnitConversionController::class, 'store'])->name('farmasi/obat/konversi.store');
     Route::get('/farmasi/obat/konversi/edit/{id}', [UnitConversionController::class, 'edit'])->name('farmasi/obat/konversi.edit');
@@ -1096,12 +1091,6 @@ Route::group(['middleware' => ['permission:delete surat pengantar ranap']], func
     Route::delete('/surat/pengantar/destroy/{id}', [SuratPengantarRawatController::class, 'destroy'])->name('suratpengantar.destroy');
 });
 Route::get('/surat/pengantar/show/{id}', [SuratPengantarRawatController::class, 'show'])->name('suratpengantar.show');
-Route::get('/interaksi-obat', function () {
-    return view('pages.interaksiobat.index', [
-        "title" => "Interaksi Obat",
-        "menu" => "Obat",
-    ]);
-});
 // Antran RS GET
 Route::get('referensi/poli', [ReferensiController::class, 'getPoli'])->name('referensi/poli.getPoli');
 Route::get('referensi/dokter', [ReferensiController::class, 'getDokter'])->name('referensi/dokter.getDokter');
@@ -1171,16 +1160,6 @@ Route::get('tarif/layanan/show/{type}', [TarifController::class, 'show'])->name(
 Route::get('tarif/layanan/create/{type}', [TarifController::class, 'create'])->name('tarif/layanan.create');
 Route::get('tarif/layanan/edit/{id}', [TarifController::class, 'edit'])->name('tarif/layanan.edit');
 Route::delete('tarif/layanan/destroy/{id}', [TarifController::class, 'destroy'])->name('tarif/layanan.destroy');
-
-//Keunganan - asuransi
-Route::get('asuransi/index', [AsuransiController::class, 'index'])->name('asuransi.index');
-Route::get('asuransi/create', [AsuransiController::class, 'create'])->name('asuransi.create');
-Route::get('asuransi/show/{id}', [AsuransiController::class, 'show'])->name('asuransi.show');
-Route::post('asuransi/store', [AsuransiController::class, 'store'])->name('asuransi.store');
-Route::get('asuransi/detail/index/{id}', [AsuransiDetailController::class, 'index'])->name('asuransi/detail.index');
-Route::get('asuransi/detail/create/{id}', [AsuransiDetailController::class, 'create'])->name('asuransi/detail.create');
-Route::get('asuransi/detail/show/{id}', [AsuransiDetailController::class, 'show'])->name('asuransi/detail.show');
-Route::post('asuransi/detail/store/{id}', [AsuransiDetailController::class, 'store'])->name('asuransi/detail.store');
 
 //casemix
 Route::get('/casemix', [CasemixController::class, 'index'])->name('casemix');

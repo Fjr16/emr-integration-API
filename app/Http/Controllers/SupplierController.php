@@ -8,21 +8,6 @@ use Illuminate\Http\Request;
 class SupplierController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = Supplier::all();
-        return view('pages.supplier.index', [
-            'title' => 'Supplier',
-            'menu' => 'Setting',
-            'data' => $data,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +15,7 @@ class SupplierController extends Controller
     public function create()
     {
         return view('pages.supplier.create', [
-            'title' => 'Supplier',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
         ]);
     }
@@ -46,7 +31,10 @@ class SupplierController extends Controller
         $data = $request->all();
         Supplier::create($data);
 
-        return redirect()->route('farmasi/supplier.index')->with('success', 'Berhasil Di Tambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Tambahkan',
+            'btn' => 'supplier' 
+        ]);
     }
 
     /**
@@ -70,7 +58,7 @@ class SupplierController extends Controller
     {
         $item = Supplier::find($id);
         return view('pages.supplier.edit', [
-            'title' => 'Supplier',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'item' => $item
         ]);
@@ -89,7 +77,10 @@ class SupplierController extends Controller
         $data = $request->all();
         $item->update($data);
 
-        return redirect()->route('farmasi/supplier.index')->with('success', 'Berhasil Di Perbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success'=>'Berhasil Di Perbarui',
+            'btn' => 'supplier' 
+        ]);
     }
 
     /**
@@ -103,6 +94,9 @@ class SupplierController extends Controller
         $item = Supplier::find($id);
         $item->delete();
 
-        return back()->with('success', 'Berhasil Di Hapus');
+        return back()->with([
+            'success' => 'Berhasil Di Hapus',
+            'btn' => 'supplier' 
+        ]);
     }
 }

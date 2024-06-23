@@ -8,21 +8,6 @@ use Illuminate\Http\Request;
 class MedicineTypeController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = MedicineType::all();
-        return view('pages.jenisObat.index', [
-            'title' => 'Jenis Obat',
-            'menu' => 'Setting',
-            'data' => $data,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +15,7 @@ class MedicineTypeController extends Controller
     public function create()
     {
         return view('pages.jenisObat.create', [
-            'title' => 'Jenis Obat',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
         ]);
     }
@@ -46,7 +31,10 @@ class MedicineTypeController extends Controller
         $data = $request->all();
         MedicineType::create($data);
 
-        return redirect()->route('farmasi/obat/jenis.index')->with('success', 'Berhasil Di Tambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Tambahkan',
+            'btn' => 'jenisObat'
+        ]);
     }
 
     /**
@@ -70,7 +58,7 @@ class MedicineTypeController extends Controller
     {
         $item = MedicineType::find($id);
         return view('pages.jenisObat.edit', [
-            'title' => 'Jenis Obat',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'item' => $item,
         ]);
@@ -89,7 +77,10 @@ class MedicineTypeController extends Controller
         $item = MedicineType::find($id);
         $item->update($data);
 
-        return redirect()->route('farmasi/obat/jenis.index')->with('success', 'Berhasil Di Perbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Perbarui',
+            'btn' => 'jenisObat'
+        ]);
     }
 
     /**
@@ -103,6 +94,9 @@ class MedicineTypeController extends Controller
         $item = MedicineType::find($id);
         $item->delete();
 
-        return back()->with('success', 'Berhasil Di Hapus');
+        return back()->with([
+            'success' => 'Berhasil Di Hapus',
+            'btn' => 'jenisObat'
+        ]);
     }
 }

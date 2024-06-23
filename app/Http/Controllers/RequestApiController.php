@@ -20,7 +20,7 @@ class RequestApiController extends Controller
         dd($data);
     }
     public function getDataByNik() {
-        $url = "data/pasien/get/130107210792000";
+        $url = "data/pasien/get/1301072107920002";
         $res = $this->apiSatuSehat->getRequest($url);
 
         return $res;

@@ -26,8 +26,8 @@ class UnitConversionMasterController extends Controller
     {
         $data = UnitConversionMaster::all();
         return view('pages.konversiMaster.create', [
-            'title' => 'Master Konversi',
-            'menu' => 'Farmasi',
+            'title' => 'Master Obat',
+            'menu' => 'Setting',
             'data' => $data,
         ]);
     }
@@ -66,8 +66,8 @@ class UnitConversionMasterController extends Controller
     {
         $item = UnitConversionMaster::findOrFail($id);
         return view('pages.konversiMaster.edit', [
-            'title' => 'Master Konversi',
-            'menu' => 'Farmasi',
+            'title' => 'Master Obat',
+            'menu' => 'Setting',
             'item' => $item,
         ]);
     }
@@ -86,7 +86,7 @@ class UnitConversionMasterController extends Controller
 
         $item->update($data);
 
-        return back()->with('success', 'Berhasil Diperbarui');
+        return redirect()->route('farmasi/obat/master/konversi.create')->with('success', 'Berhasil Diperbarui');
     }
 
     /**

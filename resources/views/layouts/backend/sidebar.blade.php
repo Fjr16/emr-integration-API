@@ -173,32 +173,12 @@
         {{-- end Rawatan --}}
 
         {{-- Additional --}}
-        @hasanyrole(['Admin', 'Perawat Rajal', 'Rekam Medis Rajal', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga'])
+        {{-- @hasanyrole(['Admin', 'Perawat Rajal', 'Rekam Medis Rajal', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga'])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Additional</span>
-            </li>
-            {{-- start SEP --}}
-            <li class="menu-item {{ $menu == 'SEP' ? 'open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-notepad"></i>
-                    <div>Pembuatan SEP</div>
-                </a>
-                <ul class="menu-sub">
-                    <li class="menu-item {{ $title == 'list-sep' ? 'active' : '' }}">
-                        <a href="{{ route('sep.beranda') }}" class="menu-link">
-                            <div>List SEP</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ $title == 'sep-create' ? 'active' : '' }}">
-                        <a href="{{ route('sep.index') }}" class="menu-link">
-                            <div>Tambah SEP</div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            {{-- end SEP  --}}
+            </li> --}}
             {{-- start kontrol  --}}
-            <li class="menu-item {{ $menu == 'Kontrol' ? 'open' : '' }}">
+            {{-- <li class="menu-item {{ $menu == 'Kontrol' ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-file"></i>
                     <div>Surat Kontrol</div>
@@ -215,9 +195,9 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             {{-- end kontrol  --}}
-        @endhasanyrole
+        {{-- @endhasanyrole --}}
         {{-- end Additional --}}
 
 
@@ -521,52 +501,10 @@
                             </li>
                         @endcan
                         {{-- Konfigurasi Farmasi --}}
-                        @can('master supplier')
-                            <li class="menu-item {{ $title == 'Supplier' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/supplier.index') }}" class="menu-link">
-                                    <div>Supplier</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master pabrik')
-                            <li class="menu-item {{ $title == 'Pabrik' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/pabrik.index') }}" class="menu-link">
-                                    <div>Pabrik</div>
-                                </a>
-                            </li>
-                        @endcan
                         @can('master obat')
                             <li class="menu-item {{ $title == 'Master Obat' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat.index') }}" class="menu-link">
-                                    <div>Obat</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master jenis obat')
-                            <li class="menu-item {{ $title == 'Jenis Obat' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/jenis.index') }}" class="menu-link">
-                                    <div>Jenis Obat</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master golongan obat')
-                            <li class="menu-item {{ $title == 'Golongan Obat' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/golongan.index') }}" class="menu-link">
-                                    <div>Golongan Obat</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master bentuk sediaan obat')
-                            <li class="menu-item {{ $title == 'Bentuk Sediaan Obat' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/bentuk.index') }}" class="menu-link">
-                                    <div>Bentuk Sediaan Obat</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master tabel konversi')
-                            <li class="menu-item {{ $title == 'Konversi' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/konversi.index') }}" class="menu-link">
-                                    <div>Tabel Konversi</div>
+                                    <div>Manajemen Obat</div>
                                 </a>
                             </li>
                         @endcan
@@ -613,11 +551,6 @@
                     <li class="menu-item {{ $title == 'TARIF LAYANAN' ? 'active' : '' }}">
                         <a href="{{ route('tarif/layanan.index') }}" class="menu-link">
                             <div>Master Tarif RS</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ $title == 'ASURANSI' ? 'active' : '' }}">
-                        <a href="{{ route('asuransi.index') }}" class="menu-link">
-                            <div>Asuransi</div>
                         </a>
                     </li>
                 </ul>

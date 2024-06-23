@@ -67,15 +67,11 @@ class RekamMedisElektronikController extends Controller
                 $query->where('category', 'RAWAT JALAN');
             })->latest()->get();
 
-        /** menampilkan data SEP dan Surat Kontrol berurut sesuai tanggal yang ada */
-        $dataSep = Seps::where('noka', $item->noka)->orderBy('id', 'desc')->get();
-
         return view('pages.rmePasien.show', [
             "title" => "Rekam Medis Elektronik",
             "menu" => "RME",
             "item" => $item,
             "rajal" => $rajal,
-            "dataSep" => $dataSep,
         ]);
     }
 

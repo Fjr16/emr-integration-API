@@ -35,7 +35,7 @@
         <tbody>
             @foreach ($data as $item)
             <tr>
-              <th scope="row">{{ $loop->iteration }}</th>
+              <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
               <td>{{ $item->name }}</td>
               <td>
                 <div class="dropdown">
@@ -67,7 +67,8 @@
 </div>
 <div class="d-flex justify-content-end">
   <div class="row-mx-2">
-      <a href="{{ route('farmasi/obat/konversi.index') }}" class="btn btn-sm btn-danger">Kembali</a>
+    {{ session()->flash('btn','konversi'); }}
+      <a href="{{ route('farmasi/obat.index') }}" class="btn btn-sm btn-danger">Kembali</a>
   </div>
 </div>
 @endsection

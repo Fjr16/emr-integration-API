@@ -72,9 +72,6 @@
                                 <a class="nav-link" href="#" id="tab-rawat-jalan"><i class="menu-icon tf-icons bx bx-accessibility"></i>
                                     Rawat Jalan</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" id="tab-sep"><i class="menu-icon tf-icons bx bx-book"></i> SEP</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -145,32 +142,6 @@
                         </tbody>
                     </table>
                 </div>
-
-                {{-- SEP --}}
-                <div class="table-responsive" id="table-sep">
-                    <table class="table" id="example5">
-                        <thead>
-                            <tr class="text-nowrap bg-dark">
-                                <th>No</th>
-                                <th>Nomor SEP</th>
-                                <th>Tanggal SEP</th>
-                                <th>Sumber SEP</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($dataSep as $key => $sepItem)
-                            <tr>
-                                <td>{{ $key+1 }}</td>
-                                <td>{{ $sepItem->no_sep ?? '' }}</td>
-                                <td>{{ $sepItem->tgl_sep ?? '' }}</td>
-                                <td>{{ $sepItem->sumber_sep }}</td>
-                                <td><a href="{{ route('sep.cetak-sep', ['noSep' => encrypt($sepItem->no_sep)]) }}" class="btn btn-sm btn-success" target="blank">Cetak</a></td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
@@ -189,7 +160,7 @@
             // Tambahkan kelas active ke tab IGD
             $(this).addClass("shadow bg-success text-white");
             // Sembunyikan semua tabel kecuali tabel IGD
-            $("#table-igd, #table-rawat-jalan, #table-rawat-inap, #table-kemoterapi, #table-sep").hide();
+            $("#table-igd, #table-rawat-jalan, #table-rawat-inap, #table-kemoterapi").hide();
             $("#table-all").show();
         });
         $("#tab-igd").click(function() {
@@ -198,7 +169,7 @@
             // Tambahkan kelas active ke tab IGD
             $(this).addClass("shadow bg-success text-white");
             // Sembunyikan semua tabel kecuali tabel IGD
-            $("#table-all, #table-rawat-jalan, #table-rawat-inap, #table-kemoterapi, #table-sep").hide();
+            $("#table-all, #table-rawat-jalan, #table-rawat-inap, #table-kemoterapi").hide();
             $("#table-igd").show();
         });
 
@@ -206,29 +177,22 @@
         $("#tab-rawat-jalan").click(function() {
             $(".nav-link").removeClass("active bg-success text-white shadow");
             $(this).addClass("shadow bg-success text-white");
-            $("#table-all, #table-igd, #table-rawat-inap, #table-kemoterapi, #table-sep").hide();
+            $("#table-all, #table-igd, #table-rawat-inap, #table-kemoterapi").hide();
             $("#table-rawat-jalan").show();
         });
 
         $("#tab-rawat-inap").click(function() {
             $(".nav-link").removeClass("active bg-success text-white shadow");
             $(this).addClass("shadow bg-success text-white");
-            $("#table-all, #table-igd, #table-rawat-jalan, #table-kemoterapi, #table-sep").hide();
+            $("#table-all, #table-igd, #table-rawat-jalan, #table-kemoterapi").hide();
             $("#table-rawat-inap").show();
         });
 
         $("#tab-kemoterapi").click(function() {
             $(".nav-link").removeClass("active bg-success text-white shadow");
             $(this).addClass("shadow bg-success text-white");
-            $("#table-all, #table-igd, #table-rawat-jalan, #table-rawat-inap, #table-sep").hide();
+            $("#table-all, #table-igd, #table-rawat-jalan, #table-rawat-inap").hide();
             $("#table-kemoterapi").show();
-        });
-
-        $("#tab-sep").click(function() {
-            $(".nav-link").removeClass("active bg-success text-white shadow");
-            $(this).addClass("shadow bg-success text-white");
-            $("#table-all, #table-igd, #table-rawat-jalan, #table-rawat-inap, #table-kemoterapi").hide();
-            $("#table-sep").show();
         });
     });
 </script>

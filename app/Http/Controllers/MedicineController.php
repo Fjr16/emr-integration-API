@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Factory;
 use App\Models\Medicine;
 use App\Models\MedicineCategory;
 use App\Models\MedicineForm;
 use App\Models\MedicineType;
+use App\Models\Supplier;
+use App\Models\UnitConversion;
 use App\Models\UnitConversionMaster;
 use Illuminate\Http\Request;
 
@@ -18,11 +21,29 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        $data = Medicine::all();
+        if (session()->has('btn')) {
+            session(['btn' => session('btn')]);
+        }else{
+            session(['btn' => 'listObat']);
+        }
+
+        $data = Medicine::with(['medicineType', 'medicineForm', 'medicineCategory', 'unitConversionMaster'])->get();
+        $dataJenis = MedicineType::all();
+        $dataGol = MedicineCategory::all();
+        $dataBentuk = MedicineForm::all();
+        $dataKonversi = UnitConversion::all();
+        $dataPabrik = Factory::all();
+        $dataSupplier = Supplier::all();
         return view('pages.masterobat.index', [
             "title" => "Master Obat",
             "menu" => "Setting",
             "data" => $data,
+            "dataJenis" => $dataJenis,
+            "dataGol" => $dataGol,
+            "dataBentuk" => $dataBentuk,
+            "dataKonversi" => $dataKonversi,
+            "dataPabrik" => $dataPabrik,
+            "dataSupplier" => $dataSupplier,
         ]);
     }
 
@@ -58,7 +79,10 @@ class MedicineController extends Controller
         $data = $request->all();
         Medicine::create($data);
 
-        return redirect()->route('farmasi/obat.index')->with('success', 'Berhasil Ditambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Ditambahkan',
+            'btn' => 'listObat'
+        ]);
     }
 
     /**
@@ -109,7 +133,10 @@ class MedicineController extends Controller
         $data = $request->all();
         $item->update($data);
 
-        return redirect()->route('farmasi/obat.index')->with('success', 'Berhasil Diperbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Diperbarui',
+            'btn' => 'listObat'
+        ]);
     }
 
     /**
@@ -123,6 +150,9 @@ class MedicineController extends Controller
         $item = Medicine::find($id);
         $item->delete();
 
-        return back()->with('success', 'Berhasil Dihapus');
+        return back()->with([
+            'success' => 'Berhasil Dihapus',
+            'btn' => 'listObat'
+        ]);
     }
 }

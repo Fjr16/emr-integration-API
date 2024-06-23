@@ -22,8 +22,11 @@ class BaseUrlService
 
     public function getRequest($url)
     {
-        $response = Http::get($this->baseUrl . $url);
-        // $token = $this->tokenService->getAccessToken();
+        $token = $this->tokenService->getAccessToken();
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer' . $this->tokenService, 
+        ])->get($this->baseUrl . $url);
 
         // $ch = curl_init();
         // curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
@@ -47,6 +50,7 @@ class BaseUrlService
         $statusCode = $response->getStatusCode();
         // $body = $response->getBody(); // Dapatkan body respon sebagai string
         // $headers = $response->getHeaders();
+        dd($statusCode);
 
         $data = json_decode($response, true);
         if ($statusCode === 200) {

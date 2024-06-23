@@ -10,21 +10,6 @@ use Illuminate\Http\Request;
 class UnitConversionController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = UnitConversion::all();
-        return view('pages.konversi.index', [
-            'title' => 'Konversi',
-            'menu' => 'Setting',
-            'data' => $data,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -34,7 +19,7 @@ class UnitConversionController extends Controller
         $data = UnitConversionMaster::all();
         $medicines = Medicine::all();
         return view('pages.konversi.create', [
-            'title' => 'Konversi',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'data' => $data,
             'medicines' => $medicines,
@@ -52,7 +37,10 @@ class UnitConversionController extends Controller
         $data = $request->all();
         UnitConversion::create($data);
 
-        return redirect()->route('farmasi/obat/konversi.index')->with('success', 'Berhasil Ditambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Ditambahkan',
+            'btn' => 'konversi'
+        ]);
     }
 
     /**
@@ -81,7 +69,7 @@ class UnitConversionController extends Controller
         $medicines = Medicine::all();
         $item = UnitConversion::findOrFail($id);
         return view('pages.konversi.edit', [
-            'title' => 'Konversi',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'item' => $item,
             'data' => $data,
@@ -103,7 +91,10 @@ class UnitConversionController extends Controller
 
         $item->update($data);
 
-        return redirect()->route('farmasi/obat/konversi.index')->with('success', 'Berhasil Diperbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Diperbarui',
+            'btn' => 'konversi'
+        ]);
     }
 
     /**
@@ -117,6 +108,9 @@ class UnitConversionController extends Controller
         $item = UnitConversion::findOrFail($id);
         $item->delete($id);
 
-        return back()->with('success', 'Berhasil Dihapus');
+        return back()->with([
+            'success' => 'Berhasil Dihapus',
+            'btn' => 'konversi'
+        ]);
     }
 }

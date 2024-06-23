@@ -8,21 +8,6 @@ use Illuminate\Http\Request;
 class FactoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = Factory::all();
-        return view('pages.pabrik.index', [
-            'title' => 'Pabrik',
-            'menu' => 'Setting',
-            'data' => $data
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +15,7 @@ class FactoryController extends Controller
     public function create()
     {
         return view('pages.pabrik.create', [
-            'title' => 'Pabrik',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
         ]);
     }
@@ -46,7 +31,10 @@ class FactoryController extends Controller
         $data = $request->all();
         Factory::create($data);
 
-        return redirect()->route('farmasi/pabrik.index')->with('success', 'Berhasil Di Tambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Tambahkan',
+            'btn' => 'pabrik'
+        ]);
     }
 
     /**
@@ -70,7 +58,7 @@ class FactoryController extends Controller
     {
         $item = Factory::find($id);
         return view('pages.pabrik.edit', [
-            'title' => 'Pabrik',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'item' => $item
         ]);
@@ -89,7 +77,10 @@ class FactoryController extends Controller
         $item = Factory::find($id);
         $item->update($data);
 
-        return redirect()->route('farmasi/pabrik.index')->with('success', 'Berhasil Di Perbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Perbarui',
+            'btn' => 'pabrik'
+        ]);
         
     }
 
@@ -104,6 +95,9 @@ class FactoryController extends Controller
         $item = Factory::find($id);
         $item->delete();
         
-        return back()->with('success', 'Berhasil Di Hapus');
+        return back()->with([
+            'success'=>'Berhasil Di Hapus',
+            'btn'=>'pabrik'
+        ]);
     }
 }

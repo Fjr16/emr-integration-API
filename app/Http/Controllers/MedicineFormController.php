@@ -8,21 +8,6 @@ use Illuminate\Http\Request;
 class MedicineFormController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = MedicineForm::all();
-        return view('pages.bentukSediaanObat.index', [
-            'title' => 'Bentuk Sediaan Obat',
-            'menu' => 'Setting',
-            'data' => $data
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +15,7 @@ class MedicineFormController extends Controller
     public function create()
     {
         return view('pages.bentukSediaanObat.create', [
-            'title' => 'Bentuk Sediaan Obat',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
         ]);
     }
@@ -46,7 +31,10 @@ class MedicineFormController extends Controller
         $data = $request->all();
         MedicineForm::create($data);
 
-        return redirect()->route('farmasi/obat/bentuk.index')->with('success', 'Berhasil Di Tambahkan');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Tambahkan',
+            'btn' => 'bentukObat'
+        ]);
     }
 
     /**
@@ -70,7 +58,7 @@ class MedicineFormController extends Controller
     {
         $item = MedicineForm::find($id);
         return view('pages.bentukSediaanObat.edit', [
-            'title' => 'Bentuk Sediaan Obat',
+            'title' => 'Master Obat',
             'menu' => 'Setting',
             'item' => $item
         ]);
@@ -89,7 +77,10 @@ class MedicineFormController extends Controller
         $item = MedicineForm::find($id);
         $item->update($data);
 
-        return redirect()->route('farmasi/obat/bentuk.index')->with('success', 'Berhasil Di Perbarui');
+        return redirect()->route('farmasi/obat.index')->with([
+            'success' => 'Berhasil Di Perbarui',
+            'btn' => 'bentukObat'
+        ]);
     }
 
     /**
@@ -103,6 +94,9 @@ class MedicineFormController extends Controller
         $item = MedicineForm::find($id);
         $item->delete();
 
-        return back()->with('success', 'Berhasil Di Hapus');
+        return back()->with([
+            'success' => 'Berhasil Di Hapus',
+            'btn' => 'bentukObat'
+        ]);
     }
 }
