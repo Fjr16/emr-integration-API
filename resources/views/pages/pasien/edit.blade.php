@@ -279,14 +279,6 @@
                             <label for="exampleFormControlTextarea1" class="form-label">Daftar Alergi Pasien</label>
                             <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi" rows="3">{{ old('alergi', $item->alergi) }}</textarea>
                         </div>
-                        <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="isKaryawan" id="isKaryawan"
-                                    {{ $item->isKaryawan == true ? 'checked' : '' }}>
-                                <label class="form-check-label" for="isKaryawan">Pasien adalah karyawan rumah
-                                    sakit</label>
-                            </div>
-                        </div>
                         <button type="submit" class="btn btn-sm btn-dark mb-3">Simpan</button>
                     </div>
                 </div>

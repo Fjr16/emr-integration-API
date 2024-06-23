@@ -83,10 +83,6 @@
       </div> --}}
     </div>
     <div class="modal-footer">
-        @if ($item->patientCategory->name == 'BPJS')
-        <a href="{{ route('sep.rajal', [$item->id, 'rajal', encrypt($item->patient->noka), $item->no_rujukan ? encrypt($item->no_rujukan) : null ]) }}" class="btn btn-warning btn-sm">Lanjutkan</a>
-        @else
         <a href="{{ route('antrian/konfirmasi.update', $item->id) }}" class="btn btn-warning btn-sm">Lanjutkan</a>
-        @endif
     </div>
 </div>

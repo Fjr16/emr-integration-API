@@ -15,18 +15,14 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TarifController;
 use App\Http\Controllers\UrineController;
 use App\Http\Controllers\ActionController;
-use App\Http\Controllers\InacbgController;
-use App\Http\Controllers\CasemixController;
 use App\Http\Controllers\FactoryController;
 use App\Http\Controllers\GetStokController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RmeCpptController;
 use App\Http\Controllers\AnsietasController;
-use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\NyeriAkutController;
-use App\Http\Controllers\ReferensiController;
 use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\DoctorPoliController;
 use App\Http\Controllers\GetWilayahController;
@@ -42,7 +38,6 @@ use App\Http\Controllers\ActionMembersController;
 use App\Http\Controllers\QueueUriologiController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
-use App\Http\Controllers\AsuransiDetailController;
 use App\Http\Controllers\BillingCaptionController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\UnitConversionController;
@@ -103,15 +98,6 @@ use App\Http\Controllers\RajalGeneralConsentController;
 |
 */
 
-Route::get('clear/asesmenawal/igd', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_24_180937_create_igd_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_24_181745_create_igd_physical_examination_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_25_204220_create_igd_education_need_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_25_204303_create_igd_status_present_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_25_210833_create_igd_plan_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_25_211300_create_igd_supporting_examination_details_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/asesmenawal.igd');
 
 Route::get('clear/user/tabel', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2014_10_12_000000_create_users_table.php');
@@ -120,14 +106,6 @@ Route::get('clear/user/tabel', function () {
     return back()->with('success', 'SUKSES RESET');
     return 'success';
 })->name('clear/tabel.user');
-
-Route::get('storage/link/tabel', function () {
-    Artisan::call('storage:link');
-})->name('storage/link.tabel');
-
-Route::get('migrate/all/tabel', function () {
-    Artisan::call('migrate');
-})->name('migrate/all.tabel');
 
 Route::get('clear/permission', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_08_185341_create_permission_tables.php');
@@ -165,7 +143,6 @@ Route::get('/rajal/clear/database', function () {
 
 //clear asesmen awal keperawatan ranap
 Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_25_125442_create_asesment_perawat_ranap_patients_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155843_create_diagnosis_keperawatan_patients_table.php');
     // status fisik
     Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_194723_create_asesment_keperawatan_status_fisik_patients_table.php');
@@ -178,7 +155,6 @@ Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230642_create_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230657_create_detail_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
     //risiko jatuh
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_28_130035_create_skrining_asesmen_resiko_jatuh_ranaps_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230954_create_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231004_create_detail_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231156_create_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
@@ -192,7 +168,6 @@ Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155938_create_detail_rencana_diagnosis_keperawatan_patients_table.php');
     //rencana asuhan
     Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_211337_create_asesment_keperawatan_rencana_asuhan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_01_31_044543_create_detail_asesment_keperawatan_rencana_asuhan_patients_table.php');
 
     return back()->with('success', 'SUKSES RESET');
     return 'success';
@@ -283,28 +258,6 @@ Route::get('/db/lama/seed/database', function () {
 // get TTD User
 Route::get('/get/Ttd', [OtherController::class, 'getTtdUser'])->name('ranap/cppt.getTtd');
 
-// clear asskep igd
-Route::get('/igd/asskep/clear', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_172003_create_igd_ase_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_180323_create_igd_psiko_spiritual_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_180412_create_igd_status_fisik_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_180435_create_igd_ekonomi_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_180501_create_igd_riwayat_alergi_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_180532_create_igd_asesmen_nyeri_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_181004_create_igd_detail_status_fisik_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_181832_create_igd_detail_asesmen_nyeri_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_182212_create_igd_skrining_resiko_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_182240_create_igd_status_fungsional_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_182311_create_igd_resiko_nutrisional_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_230459_create_igd_detail_skrining_resiko_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_18_154542_create_igd_diagnosis_keperawatan_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_18_154833_create_igd_hub_diagnosis_kep_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_18_155159_create_igd_masalah_keperawatan_ass_kep_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_18_165925_create_igd_rencana_asuhan_ass_kep_patients_table.php');
-    return back()->with('success', 'Berhasil Di Reset');
-})->name('igd/asskep.clear');
-
-
 Route::group(['middleware' => 'auth'], function () {
     //Konsultasi dan Tarif Konsultasi
     Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('konsultasi');
@@ -361,45 +314,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ruang/detail/edit/{id}', [RoomDetailController::class, 'edit'])->name('ruang/detail.edit');
     Route::put('/ruang/detail/update/{id}', [RoomDetailController::class, 'update'])->name('ruang/detail.update');
     Route::delete('/ruang/detail/destroy/{id}', [RoomDetailController::class, 'destroy'])->name('ruang/detail.destroy');
-
-    //Icd
-    Route::get('/icd', [IcdController::class, 'index'])->name('icd.index');
-    Route::get('/icd/create', [IcdController::class, 'create'])->name('icd.create');
-    Route::post('/icd/store', [IcdController::class, 'store'])->name('icd.store');
-    Route::get('/icd/edit/{id}', [IcdController::class, 'edit'])->name('icd.edit');
-    Route::put('/icd/update/{id}', [IcdController::class, 'update'])->name('icd.update');
-    Route::delete('/icd/destroy/{id}', [IcdController::class, 'destroy'])->name('icd.destroy');
-
-    //Unit
-    Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
-    Route::get('/unit/create', [UnitController::class, 'create'])->name('unit.create');
-    Route::post('/unit/store', [UnitController::class, 'store'])->name('unit.store');
-    Route::get('/unit/edit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
-    Route::put('/unit/update/{id}', [UnitController::class, 'update'])->name('unit.update');
-    Route::delete('/unit/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
-
-    //SubUnit
-    Route::get('/sub-unit/create', [UnitCategoryPivotController::class, 'create'])->name('sub-unit.create');
-    Route::post('/sub-unit/store', [UnitCategoryPivotController::class, 'store'])->name('sub-unit.store');
-    Route::get('/sub-unit/edit/{id}', [UnitCategoryPivotController::class, 'edit'])->name('sub-unit.edit');
-    Route::put('/sub-unit/update/{id}', [UnitCategoryPivotController::class, 'update'])->name('sub-unit.update');
-    Route::delete('/sub-unit/destroy/{id}', [UnitCategoryPivotController::class, 'destroy'])->name('sub-unit.destroy');
-
-    //List Pekerjaan
-    Route::get('/job', [JobController::class, 'index'])->name('job.index');
-    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
-    Route::post('/job/store', [JobController::class, 'store'])->name('job.store');
-    Route::get('/job/edit/{id}', [JobController::class, 'edit'])->name('job.edit');
-    Route::put('/job/update/{id}', [JobController::class, 'update'])->name('job.update');
-    Route::delete('/job/destroy/{id}', [JobController::class, 'destroy'])->name('job.destroy');
-
-    //Ruang
-    Route::get('/ruang', [RoomController::class, 'index'])->name('ruang.index');
-    Route::get('/ruang/create', [RoomController::class, 'create'])->name('ruang.create');
-    Route::post('/ruang/store', [RoomController::class, 'store'])->name('ruang.store');
-    Route::get('/ruang/edit/{id}', [RoomController::class, 'edit'])->name('ruang.edit');
-    Route::put('/ruang/update/{id}', [RoomController::class, 'update'])->name('ruang.update');
-    Route::delete('/ruang/destroy/{id}', [RoomController::class, 'destroy'])->name('ruang.destroy');
 
     //Icd
     Route::get('/icd', [IcdController::class, 'index'])->name('icd.index');
@@ -560,29 +474,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/farmasi/obat/master/konversi/update/{id}', [UnitConversionMasterController::class, 'update'])->name('farmasi/obat/master/konversi.update');
     Route::delete('/farmasi/obat/master/konversi/destroy/{id}', [UnitConversionMasterController::class, 'destroy'])->name('farmasi/obat/master/konversi.destroy');
 
-    //Gangguan Mobilitas Fisik
-    Route::get('/asuhan/keperawatan/pasien/gangguan/mobilitas/fisik', [GangguanMobilitasFisikPatientController::class, 'index'])->name('fisik.index');
-    Route::post('/asuhan/keperawatan/pasien/gangguan/mobilitas/fisik/store', [GangguanMobilitasFisikPatientController::class, 'store'])->name('fisik.store');
-
-    //Ansietas
-    Route::get('/asuhan/keperawatan/pasien/ansietas', [AnsietasController::class, 'index'])->name('ansietas.index');
-    Route::post('/asuhan/keperawatan/pasien/ansietas/store', [AnsietasController::class, 'store'])->name('ansietas.store');
-
-    //Retensi Urine
-    Route::get('/asuhan/keperawatan/pasien/retensi/urine', [UrineController::class, 'index'])->name('urine.index');
-    Route::post('/asuhan/keperawatan/pasien/retensi/urine/store', [UrineController::class, 'store'])->name('urine.store');
-    Route::get('/asuhan/keperawatan/pasien/retensi/urine/show', [UrineController::class, 'show'])->name('urine.show');
-
-    //Nyeri Akut
-    Route::get('/asuhan/keperawatan/pasien/nyeri/akut', [NyeriAkutController::class, 'index'])->name('nyeri.index');
-    Route::post('/asuhan/keperawatan/pasien/nyeri/akut/store', [NyeriAkutController::class, 'store'])->name('nyeri.store');
-    Route::get('/asuhan/keperawatan/pasien/nyeri/akut/show', [NyeriAkutController::class, 'show'])->name('nyeri.show');
-
-    //Gangguan Integritas kulit / jaringan
-    Route::get('/asuhan/keperawatan/pasien/kulit', [GangguanIntegritasKulitController::class, 'index'])->name('kulit.index');
-    Route::post('/asuhan/keperawatan/pasien/kulit/store', [GangguanIntegritasKulitController::class, 'store'])->name('kulit.store');
-
-
     //getStok
     Route::post('/farmasi/obat/get/stok', [GetStokController::class, 'index'])->name('farmasi/obat/get/stok.index');
     Route::post('/farmasi/obat/get/medicineStok/all', [GetStokController::class, 'create'])->name('farmasi/obat/get/medicineStok/all.create');
@@ -593,11 +484,32 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/konversi/obat/get/jumlah', [GetConversion::class, 'getJumlah'])->name('konversi/obat/get.jumlah');
 });
 
+// Rencana Asuhan
+ //Gangguan Mobilitas Fisik
+ Route::get('/asuhan/keperawatan/pasien/gangguan/mobilitas/fisik', [GangguanMobilitasFisikPatientController::class, 'index'])->name('fisik.index');
+ Route::post('/asuhan/keperawatan/pasien/gangguan/mobilitas/fisik/store', [GangguanMobilitasFisikPatientController::class, 'store'])->name('fisik.store');
+
+ //Ansietas
+ Route::get('/asuhan/keperawatan/pasien/ansietas', [AnsietasController::class, 'index'])->name('ansietas.index');
+ Route::post('/asuhan/keperawatan/pasien/ansietas/store', [AnsietasController::class, 'store'])->name('ansietas.store');
+
+ //Retensi Urine
+ Route::get('/asuhan/keperawatan/pasien/retensi/urine', [UrineController::class, 'index'])->name('urine.index');
+ Route::post('/asuhan/keperawatan/pasien/retensi/urine/store', [UrineController::class, 'store'])->name('urine.store');
+ Route::get('/asuhan/keperawatan/pasien/retensi/urine/show', [UrineController::class, 'show'])->name('urine.show');
+
+ //Nyeri Akut
+ Route::get('/asuhan/keperawatan/pasien/nyeri/akut', [NyeriAkutController::class, 'index'])->name('nyeri.index');
+ Route::post('/asuhan/keperawatan/pasien/nyeri/akut/store', [NyeriAkutController::class, 'store'])->name('nyeri.store');
+ Route::get('/asuhan/keperawatan/pasien/nyeri/akut/show', [NyeriAkutController::class, 'show'])->name('nyeri.show');
+
+ //Gangguan Integritas kulit / jaringan
+ Route::get('/asuhan/keperawatan/pasien/kulit', [GangguanIntegritasKulitController::class, 'index'])->name('kulit.index');
+ Route::post('/asuhan/keperawatan/pasien/kulit/store', [GangguanIntegritasKulitController::class, 'store'])->name('kulit.store');
+
+
 //Antrian
 Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registrasi ulang antrian']], function () {
-    // cek bpjs
-    Route::get('/antrian/check/bpjs/{noka}/{tgl}', [QueueController::class, 'cekPesertaNoka'])->name('antrian.cekBpjs');
-    Route::get('/antrian/check/nomor/rujukan/{rujukan}', [QueueController::class, 'cariRujukanBerdasarkanNomorRujukanFaskes'])->name('antrian.cekNomorRujukan');
     //Antrian
     Route::get('/antrian/create', [QueueController::class, 'create'])->name('antrian.create');
     Route::post('/antrian/store', [QueueController::class, 'store'])->name('antrian.store');
@@ -1069,14 +981,6 @@ Route::get('/permintaan/laboratorium/patologi/anatomik/print/{id}', [PermintaanL
 Route::get('/permintaan/laboratorium/patologi/anatomik/delete/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'delete'])->name('permintaan/laboratorium/patologi/anatomik.delete');
 // });
 
-// Data Sosial
-Route::get('/data-sosial', function () {
-    return view('pages.datasosial.index', [
-        "title" => "Rekam Medis",
-        "menu" => "Rekam Medis",
-    ]);
-});
-
 //Surat Pengantar Ranap
 // Route::get('/surat/pengantar/index', [SuratPengantarRawatController::class, 'index'])->name('suratpengantar.index');
 Route::group(['middleware' => ['permission:tambah surat pengantar ranap']], function () {
@@ -1091,28 +995,6 @@ Route::group(['middleware' => ['permission:delete surat pengantar ranap']], func
     Route::delete('/surat/pengantar/destroy/{id}', [SuratPengantarRawatController::class, 'destroy'])->name('suratpengantar.destroy');
 });
 Route::get('/surat/pengantar/show/{id}', [SuratPengantarRawatController::class, 'show'])->name('suratpengantar.show');
-// Antran RS GET
-Route::get('referensi/poli', [ReferensiController::class, 'getPoli'])->name('referensi/poli.getPoli');
-Route::get('referensi/dokter', [ReferensiController::class, 'getDokter'])->name('referensi/dokter.getDokter');
-Route::get('referensi/dokterJadwal/{kdPoli}/tanggal/{tgl}', [ReferensiController::class, 'getDokterJadwal'])->name('referensi/dokterJadwal.getDokterJadwal');
-
-//Vclaim GET
-Route::get('referensi/diagnosa/{diagnosa}', [ReferensiController::class, 'getDiagnosa'])->name('referensi/diagnosa.getDiagnosa');
-Route::get('SEP/{sep}', [ReferensiController::class, 'getSep'])->name('sep.getSep');
-Route::post('SEP/2.0/insert', [ReferensiController::class, 'postSep'])->name('sep.postSep');
-Route::get('Peserta/nokartu/{noka}/tglSEP/{tgl}', [ReferensiController::class, 'getNoka'])->name('noka.getNoka');
-Route::get('Peserta/nik/{nik}/tglSEP/{tgl}', [ReferensiController::class, 'getNokaNik'])->name('noka.getNokaNik');
-Route::get('referensi/poli/{kdPoli}', [ReferensiController::class, 'getPoliName'])->name('poli/name.getPoliName');
-Route::get('referensi/faskes/{faskes1}/{faskes2}', [ReferensiController::class, 'getFaskes'])->name('faskes.getFaskes');
-Route::get('referensi/dokter/pelayanan/{param1}/tglPelayanan/{param2}/Spesialis/{param3}', [ReferensiController::class, 'getDokterDpjp'])->name('dokter/dpjp.getDokterDpjp');
-Route::get('referensi/propinsi', [ReferensiController::class, 'getProvince'])->name('province.getProvince');
-Route::get('referensi/kabupaten/propinsi/{param1}', [ReferensiController::class, 'getKabupaten'])->name('kabupaten.getKabupaten');
-Route::get('referensi/kecamatan/kabupaten/{param1}', [ReferensiController::class, 'getKecamatan'])->name('kecamatan.getKecamatan');
-Route::get('referensi/diagnosaprb', [ReferensiController::class, 'getDiagnosaPrb'])->name('diagnosaprb.getDiagnosaPrb');
-Route::get('referensi/obatprb/{param1}', [ReferensiController::class, 'getObatPrb'])->name('obatprb.getObatPrb');
-Route::get('referensi/procedure/{param1}', [ReferensiController::class, 'getProcedure'])->name('procedure.getProcedure');
-Route::get('referensi/kelasrawat', [ReferensiController::class, 'getKelasRawat'])->name('kelas/rawat.getKelasRawat');
-Route::get('referensi/dokter/{param1}', [ReferensiController::class, 'getDokterDpjpClaim'])->name('dokter/dpjp/claim.getDokterDpjpClaim');
 
 
 // rme start
@@ -1146,11 +1028,6 @@ Route::get('/laporan/lab/radiologi', [ReportPenunjangController::class, 'indexRa
 Route::get('/laporan/lab/radiologi/show/{id}', [ReportPenunjangController::class, 'showRad'])->name('laporan/lab/radiologi.show');
 Route::get('/laporan/lab/radiologi/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelRad'])->name('laporan/lab/radiologi.exportExcel');
 
-// simulasi Biaya
-Route::get('/ranap/simulasi/biaya', [CostEstimateSimulationController::class, 'index'])->name('ranap/simulasi/biaya.index');
-Route::post('/ranap/simulasi/biaya/store', [CostEstimateSimulationController::class, 'store'])->name('ranap/simulasi/biaya.store');
-Route::get('/ranap/simulasi/biaya/show/{id}', [CostEstimateSimulationController::class, 'show'])->name('ranap/simulasi/biaya.show');
-
 //Keuangan
 Route::post('tarif/layanan/store', [TarifController::class, 'store'])->name('tarif/layanan.store');
 Route::put('tarif/layanan/update/{id}', [TarifController::class, 'update'])->name('tarif/layanan.update');
@@ -1161,20 +1038,5 @@ Route::get('tarif/layanan/create/{type}', [TarifController::class, 'create'])->n
 Route::get('tarif/layanan/edit/{id}', [TarifController::class, 'edit'])->name('tarif/layanan.edit');
 Route::delete('tarif/layanan/destroy/{id}', [TarifController::class, 'destroy'])->name('tarif/layanan.destroy');
 
-//casemix
-Route::get('/casemix', [CasemixController::class, 'index'])->name('casemix');
-Route::get('/casemix/queue/{id}', [CasemixController::class, 'queue'])->name('casemix.queue');
-Route::get('/casemix/queue/show/{id}', [CasemixController::class, 'showQueue'])->name('casemix/queue.show');
-
-Route::get('/casemix/csrf', [InacbgController::class, 'getCrsf']);
-Route::post('/casemix/register-claim/{id}', [InacbgController::class, 'registerClaim'])->name('casemix/register.claim');
-Route::post('/casemix/update-claim/{id}', [InacbgController::class, 'updateClaim'])->name('casemix/update.claim');
-
-Route::get('/e-klaim', function () {
-    return view('pages.eKlaim.create', [
-        "title" => "E-Klaim",
-        "menu" => "Rawat Inap",
-    ]);
-})->name('e-klaim');
 // end Rawat Inap New Menu
 require __DIR__ . '/auth.php';

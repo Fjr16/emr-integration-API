@@ -314,15 +314,6 @@
                 <span class="menu-header-text text-white">Instalasi</span>
             </li>
 
-            {{-- Casemix --}}
-            <li class="menu-item {{ $title == 'Casemix' ? 'active' : '' }}">
-                <a href="{{ route('casemix') }}" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-male"></i>
-                    <div>Casemix</div>
-                </a>
-            </li>
-            {{-- end Casemix --}}
-
             {{-- Farmasi --}}
             <?php $permisGudang = ['menu pembelian obat gudang farmasi', 'menu daftar stok obat di rumah sakit', 'menu daftar total stok obat di rumah sakit'];
             ?>

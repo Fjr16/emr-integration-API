@@ -9,9 +9,7 @@ use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\PatientCategory;
 use App\Models\User;
-use App\Services\Bpjs\VClaim;
 use Carbon\Carbon;
-use DateTime;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,28 +17,6 @@ use function Pest\Laravel\json;
 
 class QueueController extends Controller
 {
-    protected $sepUatVclaim;
-    public function __construct()
-    {
-        $this->sepUatVclaim = new VClaim();
-    }
-
-    public function cekPesertaNoka($noka, $tglSep)
-    {
-        $cariPeserta = $this->sepUatVclaim->getCekPesertaNoka($noka, $tglSep);
-        return response()->json($cariPeserta);
-    }
-
-    public function cariRujukanBerdasarkanNomorRujukanFaskes($nomorRujukan) {
-        $cariRujukan = $this->sepUatVclaim->getCariRujukanBerdasarkanNomorRujukanFaskes($nomorRujukan);
-        // return $cariRujukan;
-        // $data = [
-        //     "kode" => 1,
-        //     "nama" => "sakit kepala"
-        // ];
-        return response()->json($cariRujukan);
-    }
-
     /**
      * Display a listing of the resource.
      *

@@ -98,122 +98,88 @@
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">NIK</label>
                     <input type="number" class="form-control" id="nik" name="nik" placeholder="" aria-describedby="defaultFormControlHelp" value="" />
-                    {{-- <div class="d-flex">
-                                <a href="#" id="checkPesertaButton" class="btn mt-2 btn-success btn-sm">Check peserta
-                                    BPJS</a>
-                                <a href="{{ route('noka.getNokaNik', ['nik' => 1801154907820001, 'tgl' => '2023-10-22']) }}"
-                    target="_blank" class="btn mx-2 mt-2 btn-primary btn-sm">Check peserta BPJS</a>
-                </div> --}}
+                </div>
+                <div class="mb-3">
+                    <label for="defaultFormControlInput" class="form-label">Penjamin</label>
+                    <select class="form-control select2" id="patient_category_id" name="patient_category_id">
+                        @foreach ($categories as $category)
+                        @if (old('patient_category_id') == $category->id)
+                        <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                        @else
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="defaultFormControlInput" class="form-label">Penjamin</label>
-                <select class="form-control select2" id="patient_category_id" name="patient_category_id">
-                    @foreach ($categories as $category)
-                    @if (old('patient_category_id') == $category->id)
-                    <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
-                    @else
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endif
-                    @endforeach
-                </select>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="noka" class="form-label">Nomor Kartu BPJS</label>
+                    <input type="text" class="form-control" id="noka" name="noka" placeholder="" aria-describedby="defaultFormControlHelp" />
+                </div>
+                <div class="mb-3">
+                    <label for="defaultFormControlInput" class="form-label">No Rujukan / No Kontrol</label>
+                    <input type="text" class="form-control" id="no_rujukan" name="no_rujukan"
+                        placeholder="" aria-describedby="defaultFormControlHelp"/>
+                </div>
+                <div class="mb-3">
+                    <label for="kodeDiagnosa" class="form-label">Kode Diagnosa</label>
+                    <input type="text" class="form-control" id="kodeDiagnosa" name="kodeDiagnosa" placeholder=""
+                        aria-describedby="defaultFormControlHelp"/>
+                </div>
+                <div class="mb-3">
+                    <label for="last_diagnostic" class="form-label">Nama Diagnosa</label>
+                    <input type="text" class="form-control" id="last_diagnostic" name="last_diagnostic"
+                        placeholder="" aria-describedby="defaultFormControlHelp"/>
+                </div>
+                <div class="mb-3" id="diagnosa">
+                </div>
+                <div class="mb-3">
+                    <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
+                    <select class="form-control select2 doctor_id" id="doctor_id" name="doctor_id" required>
+                        <option value="" selected>Pilih</option>
+                        @foreach ($doctors as $doctor)
+                            @if (old('doctor_id') == $doctor->id)
+                                <option value="{{ $doctor->id }}" selected>
+                                    {{ $doctor->roomDetail->name ?? '' }} /
+                                    {{ $doctor->name ?? '' }}</option>
+                            @else
+                                <option value="{{ $doctor->id }}">{{ $doctor->roomDetail->name ?? '' }} /
+                                    {{ $doctor->name ?? '' }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3" id="jadwalAntrian" style="display: none">
+                    <table class="table" id="tableJadwal">
+                        <thead>
+                            <tr class="text-nowrap bg-dark">
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Hari</th>
+                                <th>Total Antrian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mb-3">
+                    <label for="defaultFormControlInput" class="form-label">Tanggal Berobat</label>
+                    <input type="date" class="form-control" value="{{ old('tgl_antrian', $now) }}"
+                        name="tgl_antrian" id="tanggal_antrian" />
+                </div>
+                <button type="button" id="storeModal" class="btn btn-sm btn-dark mb-3"
+                    onclick="">Simpan</button>
             </div>
-
         </div>
     </div>
 </div>
-<div class="col-6">
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="mb-3">
-                <label for="noka" class="form-label">Nomor Kartu BPJS</label>
-                <div class="row">
-                    <div class="col-9">
-                        <input type="text" class="form-control" id="noka" name="noka" placeholder="" aria-describedby="defaultFormControlHelp" />
-                    </div>
-                    <div class="col-3">
-                        <a href="#" id="checkPesertaBPJS" class="btn btn-success btn-sm py-2 form-control" onclick="cekBpjs()">Check
-                        </a>
-                    </div>
-                </div>
-                <label class="text-success small d-none" for="noka" id="bpjsAktif"><i>BPJS AKTIF</i></label>
-                <label class="text-danger small d-none" for="noka" id="bpjsTidakAktif"><i>BPJS TIDAK
-                        AKTIF</i></label>
-                <label class="text-warning small d-none" for="noka" id="bpjsTidakAda"><i>BPJS TIDAK
-                        DITEMUKAN</i></label>
-            </div>
-            <div class="mb-3">
-                <label for="jenisPeserta" class="form-label">Jenis Peserta</label>
-                <input type="text" class="form-control" id="jenisPeserta" name="jenisPeserta" placeholder="" aria-describedby="defaultFormControlHelp" readonly />
-            </div>
-
-
-                        <div class="mb-3">
-                            <label for="defaultFormControlInput" class="form-label">No Rujukan / No Kontrol</label>
-                            <div class="row">
-                                <div class="col-8">
-                                    <input type="text" class="form-control" id="no_rujukan" name="no_rujukan"
-                                        placeholder="" aria-describedby="defaultFormControlHelp" {{-- onkeyup="showDiagnosa()"  --}} />
-                                </div>
-                                <div class="col-4">
-                                    <a href="#" id="checkNoRujuk" class="btn btn-success btn-sm py-2 form-control"
-                                        onclick="cekNoRujuk()">Check Nomor Rujukan</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="kodeDiagnosa" class="form-label">Kode Diagnosa</label>
-                            <input type="text" class="form-control" id="kodeDiagnosa" name="kodeDiagnosa" placeholder=""
-                                aria-describedby="defaultFormControlHelp" readonly />
-                        </div>
-                        <div class="mb-3">
-                            <label for="last_diagnostic" class="form-label">Nama Diagnosa</label>
-                            <input type="text" class="form-control" id="last_diagnostic" name="last_diagnostic"
-                                placeholder="" aria-describedby="defaultFormControlHelp" readonly />
-                        </div>
-                        <div class="mb-3" id="diagnosa">
-                        </div>
-                        <div class="mb-3">
-                            <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
-                            <select class="form-control select2 doctor_id" id="doctor_id" name="doctor_id" required>
-                                <option value="" selected>Pilih</option>
-                                @foreach ($doctors as $doctor)
-                                    @if (old('doctor_id') == $doctor->id)
-                                        <option value="{{ $doctor->id }}" selected>
-                                            {{ $doctor->roomDetail->name ?? '' }} /
-                                            {{ $doctor->name ?? '' }}</option>
-                                    @else
-                                        <option value="{{ $doctor->id }}">{{ $doctor->roomDetail->name ?? '' }} /
-                                            {{ $doctor->name ?? '' }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3" id="jadwalAntrian" style="display: none">
-                            <table class="table" id="tableJadwal">
-                                <thead>
-                                    <tr class="text-nowrap bg-dark">
-                                        <th>No</th>
-                                        <th>Tanggal</th>
-                                        <th>Hari</th>
-                                        <th>Total Antrian</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mb-3">
-                            <label for="defaultFormControlInput" class="form-label">Tanggal Berobat</label>
-                            <input type="date" class="form-control" value="{{ old('tgl_antrian', $now) }}"
-                                name="tgl_antrian" id="tanggal_antrian" />
-                        </div>
-                        <button type="button" id="storeModal" class="btn btn-sm btn-dark mb-3"
-                            onclick="">Simpan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endcan
+@endcan
 
 @can('daftar antrian')
 <div class="card p-3 mt-5">
@@ -368,32 +334,6 @@
         })
     }
 
-    function showDiagnosa() {
-        let exist = $('#no_rujukan').val();
-        let diagnosaDiv = $('#diagnosa');
-        let showDiagnosaDiv = $('#showdiagnosa');
-
-        if (exist) {
-            if (showDiagnosaDiv.length === 0) {
-                diagnosaDiv.append(
-                    '<div id="showdiagnosa">' +
-                    '<div class="mb-3">' +
-                    '<label for="last_diagnostic" class="form-label">Diagnosa</label>' +
-                    '<input type="text" class="form-control form-control-sm" name="last_diagnostic" id="last_diagnostic" aria-describedby="defaultFormControlHelp"/>' +
-                    '</div>' +
-                    '<div class="mb-3">' +
-                    '<label for="diagnostic_code" class="form-label">Kode Diagnosa</label>' +
-                    '<input type="text" class="form-control form-control-sm" name="diagnostic_code" id="diagnostic_code" aria-describedby="defaultFormControlHelp"/>' +
-                    '</div>' +
-                    '</div>'
-                );
-            }
-        } else {
-            showDiagnosaDiv.remove();
-        }
-    }
-
-
     function openModal(id) {
         if (id) {
             $.ajax({
@@ -429,40 +369,6 @@
                 div.innerHTML = data;
                 $('#konfirmasi-antrian').html(div);
                 $('#konfirmasi-antrian').modal('show');
-            }
-        });
-    }
-
-    function cekBpjs() {
-        const nokaValue = $('#noka').val();
-        const tanggal = $('#tanggal_antrian').val();
-        const url = `/antrian/check/bpjs/${nokaValue}/${tanggal}`;
-
-        $.ajax({
-            type: 'GET',
-            url: url,
-            success: function(response) {
-                let data = JSON.parse(response);
-                $('#noka').removeClass('border-success border-warning border-danger');
-                $('#bpjsAktif, #bpjsTidakAktif, #bpjsTidakAda').addClass('d-none');
-
-                if (data.response == null) {
-                    $('#noka').addClass('border border-warning');
-                    $('#bpjsTidakAda').removeClass('d-none');
-                    $('#jenisPeserta').val('')
-                } else if (data.response.peserta.statusPeserta.keterangan == "AKTIF") {
-                    $('#noka').addClass('border border-success');
-                    $('#bpjsAktif').removeClass('d-none');
-                    $('#jenisPeserta').val(data.response.peserta.jenisPeserta.keterangan)
-                } else {
-                    $('#noka').addClass('border border-danger');
-                    $('#bpjsTidakAktif').removeClass('d-none');
-                    $('#jenisPeserta').val('')
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                // Tampilkan pesan error kepada pengguna
             }
         });
     }
