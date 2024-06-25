@@ -407,13 +407,6 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('master radiologi')
-                            <li class="menu-item {{ $title == 'Master Radiologi' ? 'active' : '' }}">
-                                <a href="{{ route('rajal/master/radiologi.index') }}" class="menu-link">
-                                    <div>Master Radiologi</div>
-                                </a>
-                            </li>
-                        @endcan
                         @can('master tanggungan pasien')
                             <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
                                 <a href="{{ route('pasien/category') }}" class="menu-link">

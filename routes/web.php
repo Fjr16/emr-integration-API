@@ -35,7 +35,6 @@ use App\Http\Controllers\ActionMembersController;
 use App\Http\Controllers\QueueUriologiController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
-use App\Http\Controllers\BillingCaptionController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\UnitConversionController;
 use App\Http\Controllers\AsesmentPerawatController;
@@ -47,7 +46,6 @@ use App\Http\Controllers\InitialAssesmentController;
 use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
-use App\Http\Controllers\ActionMemberRatesController;
 use App\Http\Controllers\ActionRatesController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
@@ -411,13 +409,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/tindakan/update/{id}', [ActionController::class, 'update'])->name('tindakan.update');
     Route::delete('/tindakan/destroy/{id}', [ActionController::class, 'destroy'])->name('tindakan.destroy');
 
-    //keterangan tagihan (billing caption)
-    // Route::get('/tagihan', [BillingCaptionController::class, 'index'])->name('billing/caption.index');
-    // Route::post('/tagihan/store', [BillingCaptionController::class, 'store'])->name('billing/caption.store');
-    // Route::get('/tagihan/edit/{id}', [BillingCaptionController::class, 'edit'])->name('billing/caption.edit');
-    // Route::put('/tagihan/update/{id}', [BillingCaptionController::class, 'update'])->name('billing/caption.update');
-    // Route::delete('/tagihan/destroy/{id}', [BillingCaptionController::class, 'destroy'])->name('billing/caption.destroy');
-
     //Tindakan Member
     Route::get('/tindakan/anggota', [ActionMembersController::class, 'index'])->name('action/members.index');
     Route::get('/tindakan/anggota/create', [ActionMembersController::class, 'create'])->name('action/members.create');
@@ -632,35 +623,6 @@ Route::get('/rajal/permintaan/radiologi/edit/{queue_id}/{radiologi_id}', [Radiol
 Route::post('/rajal/permintaan/radiologi/update/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
 Route::group(['middleware' => ['permission:delete permintaan radiologi']], function () {
     Route::delete('/rajal/permintaan/radiologi/destroy/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
-});
-
-
-Route::group(['middleware', 'permission:master radiologi'], function () {
-    //Master Kategori Radiologi
-    Route::get('/rajal/master/category/radiologi/create', [RadiologiFormRequestMasterCategoryController::class, 'create'])->name('rajal/master/category/radiologi.create');
-    Route::post('/rajal/master/category/radiologi/store', [RadiologiFormRequestMasterCategoryController::class, 'store'])->name('rajal/master/category/radiologi.store');
-    Route::get('/rajal/master/category/radiologi/edit/{id}', [RadiologiFormRequestMasterCategoryController::class, 'edit'])->name('rajal/master/category/radiologi.edit');
-    Route::put('/rajal/master/category/radiologi/update/{id}', [RadiologiFormRequestMasterCategoryController::class, 'update'])->name('rajal/master/category/radiologi.update');
-    Route::delete('/rajal/master/category/radiologi/destroy/{id}', [RadiologiFormRequestMasterCategoryController::class, 'destroy'])->name('rajal/master/category/radiologi.destroy');
-    //Master Variabel Radiologi
-    Route::get('/rajal/master/radiologi/index', [RadiologiFormRequestMasterController::class, 'index'])->name('rajal/master/radiologi.index');
-    Route::get('/rajal/master/radiologi/create', [RadiologiFormRequestMasterController::class, 'create'])->name('rajal/master/radiologi.create');
-    Route::post('/rajal/master/radiologi/store', [RadiologiFormRequestMasterController::class, 'store'])->name('rajal/master/radiologi.store');
-    Route::get('/rajal/master/radiologi/edit/{id}', [RadiologiFormRequestMasterController::class, 'edit'])->name('rajal/master/radiologi.edit');
-    Route::put('/rajal/master/radiologi/update/{id}', [RadiologiFormRequestMasterController::class, 'update'])->name('rajal/master/radiologi.update');
-    Route::delete('/rajal/master/radiologi/destroy/{id}', [RadiologiFormRequestMasterController::class, 'destroy'])->name('rajal/master/radiologi.destroy');
-    //Master Detail Variabel Radiologi
-    Route::get('/rajal/master/detail/radiologi/create', [RadiologiFormRequestMasterDetailController::class, 'create'])->name('rajal/master/detail/radiologi.create');
-    Route::post('/rajal/master/detail/radiologi/store', [RadiologiFormRequestMasterDetailController::class, 'store'])->name('rajal/master/detail/radiologi.store');
-    Route::get('/rajal/master/detail/radiologi/edit/{id}', [RadiologiFormRequestMasterDetailController::class, 'edit'])->name('rajal/master/detail/radiologi.edit');
-    Route::put('/rajal/master/detail/radiologi/update/{id}', [RadiologiFormRequestMasterDetailController::class, 'update'])->name('rajal/master/detail/radiologi.update');
-    Route::delete('/rajal/master/detail/radiologi/destroy/{id}', [RadiologiFormRequestMasterDetailController::class, 'destroy'])->name('rajal/master/detail/radiologi.destroy');
-    //Master Tarif Variabel Radiologi
-    Route::get('/rajal/master/tarif/radiologi/index', [RadiologiFormRequestMasterRateController::class, 'index'])->name('rajal/master/tarif/radiologi.index');
-    Route::get('/rajal/master/tarif/radiologi/create/{id}', [RadiologiFormRequestMasterRateController::class, 'create'])->name('rajal/master/tarif/radiologi.create');
-    Route::get('/rajal/master/tarif/radiologi/edit/{id}', [RadiologiFormRequestMasterRateController::class, 'edit'])->name('rajal/master/tarif/radiologi.edit');
-    Route::put('/rajal/master/tarif/radiologi/update/{id}', [RadiologiFormRequestMasterRateController::class, 'update'])->name('rajal/master/tarif/radiologi.update');
-    Route::delete('/rajal/master/tarif/radiologi/destroy/{id}', [RadiologiFormRequestMasterRateController::class, 'destroy'])->name('rajal/master/tarif/radiologi.destroy');
 });
 
 //rajal request labor PK

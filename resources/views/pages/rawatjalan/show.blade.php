@@ -362,8 +362,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {{-- @foreach ($item->patient->radiologiFormRequests as $radiologi) --}}
-                                                            @foreach ($item->patient->newRadiologiFormRequests as $radiologi)
+                                                            @foreach ($item->patient->radiologiFormRequests as $radiologi)
                                                                 <tr>
                                                                     <td>{{ $loop->iteration }}</td>
                                                                     <td>{{ $radiologi->user->name ?? '' }}

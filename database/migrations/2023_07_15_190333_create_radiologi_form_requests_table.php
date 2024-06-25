@@ -19,7 +19,9 @@ return new class extends Migration
             $table->foreignId('patient_id')->nullable();
             $table->foreignId('queue_id')->nullable();
             $table->foreignId('room_detail_id')->nullable();
-            $table->text('diagnosa_klinis')->nullable();
+            $table->string('diagnosa_klinis', 50)->nullable();
+            $table->text('catatan')->nullable();
+            $table->string('ttd_dokter', 100)->nullable();
             $table->timestamps();
         });
     }

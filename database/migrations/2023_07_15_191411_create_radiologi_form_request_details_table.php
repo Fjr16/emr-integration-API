@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('radiologi_form_request_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('radiologi_form_request_id')->nullable();
-            $table->foreignId('radiologi_form_request_master_id')->nullable();
-            $table->foreignId('radiologi_form_request_master_detail_id')->nullable();
+            $table->foreignId('action_id')->nullable();
             $table->string('value')->nullable();
             $table->timestamps();
         });

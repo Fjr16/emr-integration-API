@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Action;
+use App\Models\ActionCategory;
 use App\Models\Queue;
 use Illuminate\Http\Request;
 use App\Models\InitialAssesment;
-use App\Models\NewEkstremitasAtas;
-use App\Models\NewEkstremitasBawah;
-use App\Models\NewKontras;
-use App\Models\NewLainLain;
-use App\Models\NewPemeriksaanLainnya;
 use App\Models\NewRadiologiRequest;
-use App\Models\NewUSG;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\URL;
 use App\Models\RadiologiFormRequest;
+use App\Models\RadiologiFormRequestDetail;
 use Illuminate\Support\Facades\Auth;
-use App\Models\RadiologiFormRequestMaster;
-use App\Models\RadiologiFormRequestMasterDetail;
-use App\Models\RadiologiFormRequestMasterCategory;
-use App\Models\RanapInitialAssesment;
-use Illuminate\Support\Facades\Route;
 
 class RadiologiFormRequestController extends Controller
 {
@@ -41,43 +33,30 @@ class RadiologiFormRequestController extends Controller
      */
     public function create($id)
     {
-        $currentRouteName = Route::currentRouteName();
         $title = 'Rawat Jalan';
         $menu = 'In Patient';
         $urlParent = URL::previous();
 
-        $data = RadiologiFormRequestMasterCategory::where('isActive', true)->get();
-        $details = RadiologiFormRequestMasterDetail::where('isActive', true)->get();
+        $categoryActionRadiologi = ActionCategory::where('name', 'Radiologi')->first(); 
+        $data = Action::where('action_category_id', $categoryActionRadiologi->id)->get();
         $item = Queue::findOrFail($id);
 
         $diagnosa = null;
-        if ($currentRouteName == 'rajal/permintaan/radiologi.create') {
-            $rawat_jalan_poli_patient_id = $item->rawatJalanPatient->rawatJalanPoliPatient->id ?? '';
-            if ($rawat_jalan_poli_patient_id) {
-                $assesmenAwalMedis = InitialAssesment::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
-                $patientActionReport = PatientActionReport::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
+        $rawat_jalan_poli_patient_id = $item->rawatJalanPatient->rawatJalanPoliPatient->id ?? '';
+        if ($rawat_jalan_poli_patient_id) {
+            $assesmenAwalMedis = InitialAssesment::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
+            $patientActionReport = PatientActionReport::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
 
-                if ($assesmenAwalMedis && $patientActionReport) {
-                    if ($assesmenAwalMedis->created_at->isBefore($patientActionReport->created_at)) {
-                        $diagnosa = $patientActionReport->diagnosa;
-                    } else {
-                        $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-                    }
-                } elseif ($assesmenAwalMedis && !$patientActionReport) {
-                    $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-                } elseif (!$assesmenAwalMedis && $patientActionReport) {
+            if ($assesmenAwalMedis && $patientActionReport) {
+                if ($assesmenAwalMedis->created_at->isBefore($patientActionReport->created_at)) {
                     $diagnosa = $patientActionReport->diagnosa;
-                }
-            }
-        } elseif ($currentRouteName == 'ranap/permintaan/radiologi.create') {
-            $title = 'Rawat Inap';
-            $menu = 'Rawat Inap';
-            $ranap_id = $item->rawatInapPatient->id ?? '';
-            if ($ranap_id) {
-                $assesmenAwalMedis = RanapInitialAssesment::where('rawat_inap_patient_id', $ranap_id)->latest()->first();
-                if ($assesmenAwalMedis) {
+                } else {
                     $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
                 }
+            } elseif ($assesmenAwalMedis && !$patientActionReport) {
+                $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
+            } elseif (!$assesmenAwalMedis && $patientActionReport) {
+                $diagnosa = $patientActionReport->diagnosa;
             }
         }
         return view('pages.permintaanRadiologi.create', [
@@ -85,7 +64,6 @@ class RadiologiFormRequestController extends Controller
             'menu' => $menu,
             'item' => $item,
             'data' => $data,
-            'details' => $details,
             'diagnosa' => $diagnosa,
             'urlParent' => $urlParent,
         ]);
@@ -99,6 +77,12 @@ class RadiologiFormRequestController extends Controller
      */
     public function store(Request $request, $id)
     {
+        // $this->validate($request, [
+        //     'patient_id' => 'required',
+        //     'room_detail_id' => 'required',
+        //     'ttd_dokter' => 'required',
+        //     'action_id' => 'required',
+        // ]);
         $queue = Queue::find($id);
 
         // Create new radiology request
@@ -112,193 +96,15 @@ class RadiologiFormRequestController extends Controller
             'ttd_dokter' => $request->ttd_user,
         ];
 
-        $newRadiologiRequest = NewRadiologiRequest::create($newDataRadiologi);
-
-        // List of ekstrimitasAtas to check
-        $ekstrimitasAtas = ['Clavicula', 'Shoulder', 'Humerus', 'Elbow-Joint', 'Antebrachii', 'Wrist-Joint', 'Manus'];
-
-        // Loop melalui setiap field dan cek apakah diisi
-        foreach ($ekstrimitasAtas as $field) {
-            if ($request->has($field) && $request->input($field)) {
-                $checkboxValue = $request->input($field);
-                $radioValue = $request->input($field . '-Radio');
-                if ($radioValue) {
-                    NewEkstremitasAtas::create([
-                        'name' => $checkboxValue,
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'value' => $radioValue,
-                    ]);
-                }
-            }
-        }
-
-        // Cek untuk entri 'ekstremitasAtas' tambahan
-        if ($request->has('ekstremitasAtas') && is_array($request->input('ekstremitasAtas'))) {
-            foreach ($request->input('ekstremitasAtas') as $lainnya) {
-                // Pastikan input tambahan tidak kosong
-                if (!empty($lainnya)) {
-                    NewEkstremitasAtas::create([
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'name' => $lainnya,
-                        'value' => null,
-                    ]);
-                }
-            }
-        }
-
-        // List of ekstrimitasBawah to check
-        $ekstrimitasBawah = ['Femur', 'Genu', 'Cruris', 'Ankle-Joint', 'Calcaneus', 'Pedis'];
-        // Loop melalui setiap field dan cek apakah diisi
-        foreach ($ekstrimitasBawah as $field) {
-            if ($request->has($field) && $request->input($field)) {
-                $checkboxValue = $request->input($field);
-                $radioValue = $request->input($field . '-Radio');
-                if ($radioValue) {
-                    NewEkstremitasBawah::create([
-                        'name' => $checkboxValue,
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'value' => $radioValue,
-                    ]);
-                }
-            }
-        }
-        // Cek untuk entri 'ekstremitasBawah' tambahan
-        if ($request->has('ekstremitasBawah') && is_array($request->input('ekstremitasBawah'))) {
-            foreach ($request->input('ekstremitasBawah') as $lainnya) {
-                // Pastikan input tambahan tidak kosong
-                if (!empty($lainnya)) {
-                    NewEkstremitasBawah::create([
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'name' => $lainnya,
-                        'value' => null,
-                    ]);
-                }
-            }
-        }
-
-        // List of lainLain to check
-        $lainLain = ['Thorax', 'Foto-Polos-Abdomen', 'Abdomen', 'Pelvic', 'Schedel', 'Waters', 'SPN-2-Posisi', 'Vertebrae-Cervical', 'Vertebrae-Thoracal', 'Vertebrae-Thoracolumbal', 'Vertebrae-Lumbosacral', 'Sacrum', 'Coccygeus', 'Mastoid', 'TMJ', 'Nasal', 'Maxila', 'Mandibula'];
-
-        foreach ($lainLain as $field) {
-            $checkboxValue = $request->input($field);
-            if ($request->has($field)) {
-                NewLainLain::create([
-                    'name' => $checkboxValue,
-                    'new_radiologi_request_id' => $newRadiologiRequest->id,
-                    'value' => $request->input($field . '-Radio'),
-                ]);
-            }
-        }
-        // Check for additional 'lain-lain' entries
-        if ($request->has('lain-lain') && is_array($request->input('lain-lain'))) {
-            foreach ($request->input('lain-lain') as $lainnya) {
-                // Pastikan input tambahan tidak kosong
-                if (!empty($lainnya)) {
-                    NewLainLain::create([
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'name' => $lainnya,
-                        'value' => null,
-                    ]);
-                }
-            }
-        }
-
-        // List of usg to check
-        $usg = ['Thorax', 'Mammae', 'Abdomen-Atas', 'Abdomen-2', 'Urologi', 'Prostat', 'Testis', 'Testis-Dople'];
-        foreach ($usg as $field) {
-            $checkboxValue = $request->input($field);
-            if ($request->has($field)) {
-                NewUSG::create([
-                    'name' => $checkboxValue,
-                    'new_radiologi_request_id' => $newRadiologiRequest->id,
-                    'value' => $request->input($field . '-Radio'),
-                ]);
-            }
-        }
-        // return NewUSG::where('new_radiologi_request_id',$newRadiologiRequest->id)->get();
-
-        if ($request->has('Leher/Thyroid-Radio')) {
-            NewUSG::create([
-                'name' => $request->input('Leher/Thyroid-Radio'),
-                'new_radiologi_request_id' => $newRadiologiRequest->id,
-                'value' => null,
+        $newRadiologiRequest = RadiologiFormRequest::create($newDataRadiologi);
+        $details = $request->input('action_id', []);
+        foreach ($details as $detail) {
+            RadiologiFormRequestDetail::create([
+                'radiologi_form_request_id' => $newRadiologiRequest->id,
+                'action_id' => $detail,
+                // 'value' => '',
             ]);
         }
-        // Check for additional 'usg' entries
-        if ($request->has('usg') && is_array($request->input('usg'))) {
-            foreach ($request->input('usg') as $lainnya) {
-                // Pastikan input tambahan tidak kosong
-                if (!empty($lainnya)) {
-                    NewUSG::create([
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'name' => $lainnya,
-                        'value' => null,
-                    ]);
-                }
-            }
-        }
-
-        // List of kontras to check
-        $kontras = ['Appendicogram', 'Cystography'];
-        foreach ($kontras as $field) {
-            $checkboxValue = $request->input($field);
-
-            if ($request->has($field)) {
-                NewKontras::create([
-                    'name' => $checkboxValue,
-                    'new_radiologi_request_id' => $newRadiologiRequest->id,
-                    'value' => $request->input($field . '-Radio'),
-                ]);
-            }
-        }
-        if ($request->has('BNO/IVP-Radio')) {
-            NewKontras::create([
-                'name' => $request->input('BNO/IVP-Radio'),
-                'new_radiologi_request_id' => $newRadiologiRequest->id,
-                'value' => null,
-            ]);
-        }
-        // Check for additional 'kontras' entries
-        if ($request->has('kontras') && is_array($request->input('kontras'))) {
-            foreach ($request->input('kontras') as $lainnya) {
-                // Pastikan input tambahan tidak kosong
-                if (!empty($lainnya)) {
-                    NewKontras::create([
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'name' => $lainnya,
-                        'value' => null,
-                    ]);
-                }
-            }
-        }
-
-        // List of pemeriksaanLainnya to check
-        $pemeriksaanLainnya = ['CT-Scan', 'MRI'];
-        foreach ($pemeriksaanLainnya as $field) {
-            $checkboxValue = $request->input($field);
-            if ($request->has($field)) {
-                NewPemeriksaanLainnya::create([
-                    'name' => $checkboxValue,
-                    'new_radiologi_request_id' => $newRadiologiRequest->id,
-                    'value' => $request->input($field . '-input'),
-                ]);
-            }
-        }
-        // Check for additional 'pemeriksaanLainnya' entries
-        if ($request->has('pemeriksaanLainnya') && is_array($request->input('pemeriksaanLainnya'))) {
-            foreach ($request->input('pemeriksaanLainnya') as $lainnya) {
-                // Pastikan input tambahan tidak kosong
-                if (!empty($lainnya)) {
-                    NewPemeriksaanLainnya::create([
-                        'new_radiologi_request_id' => $newRadiologiRequest->id,
-                        'name' => $lainnya,
-                        'value' => null,
-                    ]);
-                }
-            }
-        }
-
-        // return $dataRadiologi;
 
         return redirect()
             ->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])
@@ -307,49 +113,6 @@ class RadiologiFormRequestController extends Controller
                 'btn' => 'dokter',
                 'dokter' => 'radiologi',
             ]);
-
-        // $dataRadiologi['user_id'] = Auth::user()->id;
-        // $dataRadiologi['patient_id'] = $request->patient_id;
-        // $dataRadiologi['queue_id'] = $queue->id;
-        // $dataRadiologi['room_detail_id'] = $request->room_detail_id;
-        // $dataRadiologi['diagnosa_klinis'] = $request->diagnosa_klinis;
-        // $dataRadiologi['catatan'] = $request->catatan;
-        // if ($item = RadiologiFormRequest::create($dataRadiologi)) {
-        //     $data = $request->input('data', []);
-        //     $others = $request->input('lainnya', []);
-        //     foreach ($data as $detail) {
-        //         $masterId = $detail['radiologi_form_request_master_id'] ?? '';
-        //         $detailId = $detail['radiologi_form_request_master_detail_id'] ?? '';
-        //         if ($masterId && $detailId) {
-        //             $item->radiologiFormRequestMasters()->attach([
-        //                 $masterId => ['radiologi_form_request_master_detail_id' => $detailId],
-        //             ]);
-        //         }
-        //         if ($masterId && !$detailId) {
-        //             $item->radiologiFormRequestMasters()->attach($masterId);
-        //         }
-        //     }
-        //     foreach ($others as $other) {
-        //         if ($other['nilai']) {
-        //             $item->radiologiFormRequestMasters()->attach([
-        //                 $other['radiologi_form_request_master_id'] => ['value' => $other['nilai']],
-        //             ]);
-        //         }
-        //     }
-        // }
-        // if ($request->urlParent) {
-        //     return redirect($request->urlParent)->with([
-        //         'success' => 'Berhasil Ditambahkan',
-        //         'btn' => 'dokter',
-        //         'dokter' => 'radiologi',
-        //     ]);
-        // } else {
-        //     return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])->with([
-        //         'success' => 'Berhasil Ditambahkan',
-        //         'btn' => 'dokter',
-        //         'dokter' => 'radiologi',
-        //     ]);
-        // }
     }
 
     /**

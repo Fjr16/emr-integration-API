@@ -244,9 +244,4 @@ class Patient extends Model
     {
         return $this->hasMany(KemoterapiMonitoringTindakanPatient::class);
     }
-
-    public function newRadiologiFormRequests()
-    {
-        return $this->hasMany(NewRadiologiRequest::class);
-    }
 }

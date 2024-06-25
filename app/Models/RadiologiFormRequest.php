@@ -9,26 +9,18 @@ class RadiologiFormRequest extends Model
 {
     use HasFactory;
 
-    protected $with = ['radiologiFormRequestMasters'];
-
     protected $fillable = [
         'user_id',
         'queue_id', 
         'patient_id', 
         'room_detail_id',
         'diagnosa_klinis',
-        'catatan'
+        'catatan',
+        'ttd_dokter'
     ];
 
     public function user(){
         return $this->belongsTo(User::class);
-    }
-
-    public function radiologiFormRequestMasters(){
-        return $this->belongsToMany(RadiologiFormRequestMaster::class, 'radiologi_form_request_details');
-    }
-    public function radiologiFormRequestMasterDetails(){
-        return $this->belongsToMany(RadiologiFormRequestMasterDetail::class, 'radiologi_form_request_details');
     }
     
     public function queue(){
@@ -39,6 +31,9 @@ class RadiologiFormRequest extends Model
     }
     public function roomDetail(){
         return $this->belongsTo(RoomDetail::class);
+    }
+    public function radiologiFormRequestDetails(){
+        return $this->belongsTo(RadiologiFormRequestDetail::class);
     }
 
     //relasi ke daftar pasien radiologi
