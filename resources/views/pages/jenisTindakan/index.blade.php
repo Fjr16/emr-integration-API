@@ -11,7 +11,7 @@
   
   <div class="d-flex">
     <h4 class="align-self-center m-0">Jenis Tindakan</h4>
-    <a href="{{ route('tindakan/category.create') }}" class="btn btn-success btn-sm m-0 mx-3 ms-auto">+ Tambah Penunjang</a>
+    <a href="{{ route('tindakan/category.create') }}" class="btn btn-success btn-sm m-0 mx-3 ms-auto">+ Tambah Jenis Tindakan</a>
   </div>
   <hr class="m-0 mt-2 mb-3">
   <div class="table-responsive text-nowrap">
@@ -19,34 +19,15 @@
       <thead>
         <tr class="text-nowrap bg-dark">
           <th>No</th>
-          <th>Penunjang</th>
-          <th class="text-center">Tambah Jenis Tindakan</th>
-          <th>Daftar Jenis Tindakan</th>
+          <th>Jenis Tindakan</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
           @foreach ($data as $item)
           <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
+            <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
             <td>{{ $item->name }}</td>
-            <td class="text-center"><a href="{{ route('tindakan.create', $item->id) }}" style="background-color: #49a141" class="btn btn-success btn-sm">Tambah</td>
-            <td>
-              <table class="table" style="max-width: max-content">
-                @foreach ($item->actions as $action)
-                <tr>
-                  <td>{{ $action->name ?? '' }}</td>
-                  <td>
-                    <form action="{{ route('tindakan.destroy', $action->id) }}" method="POST">
-                      @csrf
-                      @method('DELETE')
-                      <button class="btn btn-sm btn-danger" type="submit">Hapus</button>
-                    </form>
-                  </td>
-                </tr>
-                @endforeach
-              </table>
-            </td>
             <td>
               <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

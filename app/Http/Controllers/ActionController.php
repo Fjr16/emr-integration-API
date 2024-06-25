@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Action;
 use Illuminate\Http\Request;
 use App\Models\ActionCategory;
+use App\Models\ActionRate;
+use App\Models\PatientCategory;
 
 class ActionController extends Controller
 {
@@ -16,7 +18,12 @@ class ActionController extends Controller
      */
     public function index()
     {
-        //
+        $data = Action::all();
+        return view('pages.tindakan.index', [
+            "title" => "Tindakan",
+            "menu" => "Setting",
+            "data" => $data
+        ]);
     }
 
     /**
@@ -24,13 +31,13 @@ class ActionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create()
     {
-        $category = ActionCategory::find($id);
+        $data = ActionCategory::all();
         return view('pages.tindakan.create', [
             "title" => "Jenis Tindakan",
             "menu" => "Tindakan",
-            "category" => $category
+            "data" => $data
         ]);
     }
 
@@ -40,12 +47,19 @@ class ActionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
         $data = $request->all();
-        $data['action_category_id'] = $id;
-        Action::create($data);
-        return redirect()->route('tindakan/category')->with('success', 'Tindakan berhasil ditambahkan');
+        $patientCategories = PatientCategory::all();
+        if($item = Action::create($data)){
+            foreach($patientCategories as $category){
+                ActionRate::create([
+                    'action_id' => $item->id,
+                    'patient_category_id' => $category->id
+                ]);
+            }
+        }
+        return redirect()->route('tindakan.index')->with('success', 'Tindakan berhasil ditambahkan');
     }
 
     /**
@@ -56,7 +70,14 @@ class ActionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = ActionCategory::all();
+        $item = Action::find($id);
+        return view('pages.tindakan.edit', [
+            "title" => "Jenis Tindakan",
+            "menu" => "Tindakan",
+            "item" => $item,
+            "data" => $data
+        ]);
         
     }
 
@@ -69,7 +90,10 @@ class ActionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $item = Action::find($id);
+        $item->update($data);
+        return redirect()->route('tindakan.index')->with('success', 'Tindakan berhasil Diperbarui');
     }
 
     /**
@@ -81,6 +105,9 @@ class ActionController extends Controller
     public function destroy($id)
     {
         $item = Action::find($id);
+        foreach ($item->actionRates as $rate) {
+            $rate->delete();
+        }
         $item->delete();
         return back()->with('success', 'Tindakan Berhasil Dihapus');
     }

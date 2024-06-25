@@ -437,7 +437,7 @@
                         @endcan
                         @can('master tindakan')
                             <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
-                                <a href="{{ route('action/members.index') }}" class="menu-link">
+                                <a href="{{ route('tindakan.index') }}" class="menu-link">
                                     <div>Tindakan</div>
                                 </a>
                             </li>

@@ -5,20 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ActionMemberRates extends Model
+class ActionRate extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'action_members_id',
+        'action_id',
         'patient_category_id',
-        'tarif_umum',
-        'tarif_uc',
-        'jasa_dokter'
+        'tarif',
     ];
 
-    public function actionMember(){
-        return $this->belongsTo(ActionMembers::class);
+    public function action(){
+        return $this->belongsTo(Action::class);
     }
 
     public function patientCategory(){

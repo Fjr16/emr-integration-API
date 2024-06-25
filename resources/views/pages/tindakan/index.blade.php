@@ -10,10 +10,9 @@
 <div class="card p-3 mt-5">
   
   <div class="d-flex">
-    <h4 class="align-self-center m-0">Tindakan</h4>
+    <h4 class="align-self-center m-0">Daftar Tindakan</h4>
     <div class="ms-auto">
-      <a href="{{ route('action/members.create') }}" class="btn btn-success btn-sm m-0">+ Tambah Tindakan</a>
-      <a href="{{ route('billing/caption.index') }}" class="btn btn-success btn-sm m-0 mx-2">+ Tambah Keterangan Billing</a>
+      <a href="{{ route('tindakan.create') }}" class="btn btn-success btn-sm m-0">+ Tambah Tindakan</a>
     </div>
   </div>
   <hr class="m-0 mt-2 mb-3">
@@ -22,27 +21,19 @@
       <thead>
         <tr class="text-nowrap bg-dark">
           <th>No</th>
-          <th>Jenis Tindakan</th>
-          <th>Tindakan</th>
-          <th>Code ICD 9</th>
-          <th>Batas</th>
+          <th>Nama Tindakan</th>
+          <th>Kode ICD 9</th>
           <th>Tarif</th>
-          <th>Tarif UC</th>
-          <th>Tarif Umum</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
         @foreach ($data as $item)
         <tr>
-          <th scope="row">{{ $loop->iteration }}</th>
-        <td>{{ $item->action ? $item->action->name : 'NULL' }}</td>
+          <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
           <td>{{ $item->name }}</td>
-          <td>{{ $item->code_icd }}</td>
-          <td>{{ $item->tanggungan }}</td>
-          <td><a href="{{ route('action/members/rates.edit', $item->id) }}"><i class='bx bx-file'></a></td>
-          <td>{{ $item->tarif_uc }}</td>
-          <td>{{ $item->tarif_umum }}</td>
+          <td>{{ $item->icd_code }}</td>
+          <td><a href="{{ route('action/rates.edit', $item->id) }}"><i class='bx bx-file'></a></td>
           <td>
             <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -50,11 +41,11 @@
                     <i class="bx bx-dots-vertical-rounded"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ route('action/members.edit', $item->id) }}">
+                    <a class="dropdown-item" href="{{ route('tindakan.edit', $item->id) }}">
                         <i class="bx bx-edit-alt me-1"></i>
                         Edit
                     </a>
-                    <form action="{{ route('action/members.destroy', $item->id) }}" method="POST">
+                    <form action="{{ route('tindakan.destroy', $item->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="dropdown-item"

@@ -48,6 +48,7 @@ use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionMemberRatesController;
+use App\Http\Controllers\ActionRatesController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\UnitCategoryPivotController;
@@ -403,16 +404,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/category/tindakan/destroy/{id}', [ActionCategoryController::class, 'destroy'])->name('tindakan/category.destroy');
 
     //tindakan
-    Route::get('/tindakan/create/{id}', [ActionController::class, 'create'])->name('tindakan.create');
-    Route::post('/tindakan/store/{id}', [ActionController::class, 'store'])->name('tindakan.store');
+    Route::get('/tindakan/index', [ActionController::class, 'index'])->name('tindakan.index');
+    Route::get('/tindakan/create', [ActionController::class, 'create'])->name('tindakan.create');
+    Route::post('/tindakan/store', [ActionController::class, 'store'])->name('tindakan.store');
+    Route::get('/tindakan/edit/{id}', [ActionController::class, 'edit'])->name('tindakan.edit');
+    Route::put('/tindakan/update/{id}', [ActionController::class, 'update'])->name('tindakan.update');
     Route::delete('/tindakan/destroy/{id}', [ActionController::class, 'destroy'])->name('tindakan.destroy');
 
     //keterangan tagihan (billing caption)
-    Route::get('/tagihan', [BillingCaptionController::class, 'index'])->name('billing/caption.index');
-    Route::post('/tagihan/store', [BillingCaptionController::class, 'store'])->name('billing/caption.store');
-    Route::get('/tagihan/edit/{id}', [BillingCaptionController::class, 'edit'])->name('billing/caption.edit');
-    Route::put('/tagihan/update/{id}', [BillingCaptionController::class, 'update'])->name('billing/caption.update');
-    Route::delete('/tagihan/destroy/{id}', [BillingCaptionController::class, 'destroy'])->name('billing/caption.destroy');
+    // Route::get('/tagihan', [BillingCaptionController::class, 'index'])->name('billing/caption.index');
+    // Route::post('/tagihan/store', [BillingCaptionController::class, 'store'])->name('billing/caption.store');
+    // Route::get('/tagihan/edit/{id}', [BillingCaptionController::class, 'edit'])->name('billing/caption.edit');
+    // Route::put('/tagihan/update/{id}', [BillingCaptionController::class, 'update'])->name('billing/caption.update');
+    // Route::delete('/tagihan/destroy/{id}', [BillingCaptionController::class, 'destroy'])->name('billing/caption.destroy');
 
     //Tindakan Member
     Route::get('/tindakan/anggota', [ActionMembersController::class, 'index'])->name('action/members.index');
@@ -423,8 +427,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/tindakan/anggota/destroy/{id}', [ActionMembersController::class, 'destroy'])->name('action/members.destroy');
 
     //tariftindakanmember
-    Route::get('/tindakan/anggota/tarif/edit/{id}', [ActionMemberRatesController::class, 'edit'])->name('action/members/rates.edit');
-    Route::put('/tindakan/anggota/tarif/update/{id}', [ActionMemberRatesController::class, 'update'])->name('action/members/rates.update');
+    Route::get('/tindakan/tarif/edit/{id}', [ActionRatesController::class, 'edit'])->name('action/rates.edit');
+    Route::put('/tindakan/tarif/update/{id}', [ActionRatesController::class, 'update'])->name('action/rates.update');
 
     //Jadwal Dokter
     Route::get('/dokter/jadwal', [DoctorScheduleController::class, 'index'])->name('dokter/jadwal.index');
