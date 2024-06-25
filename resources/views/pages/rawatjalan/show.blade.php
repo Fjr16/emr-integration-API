@@ -390,7 +390,7 @@
                                                                                 {{-- @endcan --}}
                                                                                 @can('delete permintaan radiologi')
                                                                                     <form
-                                                                                        action="{{ route('rajal/permintaan/radiologi.destroy', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
+                                                                                        action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}"
                                                                                         method="POST">
                                                                                         @method('DELETE')
                                                                                         @csrf

@@ -33,7 +33,7 @@ class RadiologiFormRequest extends Model
         return $this->belongsTo(RoomDetail::class);
     }
     public function radiologiFormRequestDetails(){
-        return $this->belongsTo(RadiologiFormRequestDetail::class);
+        return $this->hasMany(RadiologiFormRequestDetail::class);
     }
 
     //relasi ke daftar pasien radiologi

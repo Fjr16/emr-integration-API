@@ -621,9 +621,7 @@ Route::group(['middleware' => ['permission:print permintaan radiologi']], functi
 });
 Route::get('/rajal/permintaan/radiologi/edit/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'edit'])->name('rajal/permintaan/radiologi.edit');
 Route::post('/rajal/permintaan/radiologi/update/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
-Route::group(['middleware' => ['permission:delete permintaan radiologi']], function () {
-    Route::delete('/rajal/permintaan/radiologi/destroy/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
-});
+Route::delete('/rajal/permintaan/radiologi/destroy/{id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
 
 //rajal request labor PK
 Route::group(['middleware' => ['permission:tambah permintaan labor pk']], function () {

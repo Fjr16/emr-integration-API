@@ -507,41 +507,17 @@ class RadiologiFormRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($queue_id, $radiologi_id)
+    public function destroy($id)
     {
         // code baru
-        $item = NewRadiologiRequest::find($radiologi_id);
-        NewEkstremitasAtas::where('new_radiologi_request_id', $radiologi_id)->delete();
-        NewEkstremitasBawah::where('new_radiologi_request_id', $radiologi_id)->delete();
-        NewLainLain::where('new_radiologi_request_id', $radiologi_id)->delete();
-        NewUSG::where('new_radiologi_request_id', $radiologi_id)->delete();
-        NewKontras::where('new_radiologi_request_id', $radiologi_id)->delete();
-        NewPemeriksaanLainnya::where('new_radiologi_request_id', $radiologi_id)->delete();
+        $item = RadiologiFormRequest::find($id);
+        $item->radiologiFormRequestDetails()->delete();
         $item->delete();
-        return redirect()
-            ->back()
+        return back()
             ->with([
                 'success' => 'Berhasil Dihapus',
                 'btn' => 'dokter',
                 'dokter' => 'radiologi',
             ]);
-
-        // code lama
-        // $item = RadiologiFormRequest::find($radiologi_id);
-        // $item->radiologiFormRequestMasters()->detach();
-
-        // foreach ($item->radiologiPatient as $radio) {
-        //     foreach ($radio->radiologiPatientRequestDetails as $detail) {
-        //         $detail->delete();
-        //     }
-        //     $radio->delete();
-        // }
-        // $item->delete();
-
-        // return redirect()->route('rajal/show', ['id' => $queue_id, 'title' => 'Rawat Jalan'])->with([
-        //     'success' => 'Berhasil Dihapus',
-        //     'btn' => 'dokter',
-        //     'dokter' => 'radiologi',
-        // ]);
     }
 }
