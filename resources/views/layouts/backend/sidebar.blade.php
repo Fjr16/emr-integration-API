@@ -583,13 +583,6 @@
                             <div>Lab Patologi Anatomi</div>
                         </a>
                     </li>
-                    {{-- @endcan --}}
-                    {{-- @can('master konsultasi') --}}
-                    <li class="menu-item {{ $title == 'Laporan Radiologi' ? 'active' : '' }}">
-                        <a href="{{ route('laporan/lab/radiologi.index') }}" class="menu-link">
-                            <div>Radiologi</div>
-                        </a>
-                    </li>
                 </ul>
             </li>
             {{-- @endcanany --}}

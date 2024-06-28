@@ -10,17 +10,26 @@ class RadiologiFormRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'user_id',  //dokter yang membuat permintaan
         'queue_id', 
         'patient_id', 
         'room_detail_id',
         'diagnosa_klinis',
         'catatan',
-        'ttd_dokter'
+        'ttd_dokter',
+        'jadwal_periksa',
+        'no_reg_rad',
+        'status',
+        'validator_rad_id',  //dokter yang validasi relasi ke user
     ];
 
+    // Dokter yang membuat permintaan
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function validator(){
+        return $this->belongsTo(User::class, 'validator_rad_id');
     }
     
     public function queue(){
@@ -34,10 +43,5 @@ class RadiologiFormRequest extends Model
     }
     public function radiologiFormRequestDetails(){
         return $this->hasMany(RadiologiFormRequestDetail::class);
-    }
-
-    //relasi ke daftar pasien radiologi
-    public function radiologiPatient(){
-        return $this->hasOne(RadiologiPatient::class);
     }
 }

@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('diagnosa_klinis', 50)->nullable();
             $table->text('catatan')->nullable();
             $table->string('ttd_dokter', 100)->nullable();
+            $table->dateTime('jadwal_periksa')->nullable();
+            $table->string('no_reg_rad', 20)->nullable(); //format RAD/24/06/27/001
+            $table->enum('status', ['CANCEL', 'DENIED', 'ACCEPTED', 'WAITING', 'ONGOING', 'FINISHED'])->default('WAITING');
+            $table->foreignId('validator_rad_id')->nullable();
             $table->timestamps();
         });
     }

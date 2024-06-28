@@ -369,7 +369,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         // Daftar ID elemen editor
         var editorIds = ['editor', 'editor1', 'editor2', 'editor3', 'editor4', 'editor5', 'editor6', 'editor7', 'editor8',
             'editor9'
@@ -388,7 +388,7 @@
                     console.error(error);
                 });
         });
-    </script>
+    </script> --}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         flatpickr("#tanggal-lahir", {

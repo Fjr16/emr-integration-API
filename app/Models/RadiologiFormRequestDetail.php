@@ -12,7 +12,11 @@ class RadiologiFormRequestDetail extends Model
     protected $fillable = [
         'radiologi_form_request_id',
         'action_id',
-        'value',
+        'user_id',  //petugas radiologi
+        'tanggal_periksa',
+        'hasil',
+        'image',
+        'status',
     ];
 
     public function radiologiFormRequest() {
@@ -20,5 +24,8 @@ class RadiologiFormRequestDetail extends Model
     }
     public function action() {
         return $this->belongsTo(Action::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

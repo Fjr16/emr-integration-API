@@ -86,7 +86,7 @@ class RadiologiFormRequestController extends Controller
         $queue = Queue::find($id);
 
         // Create new radiology request
-        $newDataRadiologi = [
+        $data = [
             'user_id' => Auth::user()->id,
             'patient_id' => $request->patient_id,
             'queue_id' => $queue->id,
@@ -94,15 +94,15 @@ class RadiologiFormRequestController extends Controller
             'diagnosa_klinis' => $request->diagnosa_klinis,
             'catatan' => $request->catatan,
             'ttd_dokter' => $request->ttd_user,
+            'ttd_dokter' => $request->ttd_user,
         ];
 
-        $newRadiologiRequest = RadiologiFormRequest::create($newDataRadiologi);
+        $item = RadiologiFormRequest::create($data);
         $details = $request->input('action_id', []);
         foreach ($details as $detail) {
             RadiologiFormRequestDetail::create([
-                'radiologi_form_request_id' => $newRadiologiRequest->id,
+                'radiologi_form_request_id' => $item->id,
                 'action_id' => $detail,
-                // 'value' => '',
             ]);
         }
 

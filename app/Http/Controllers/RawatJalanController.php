@@ -38,7 +38,7 @@ class RawatJalanController extends Controller
         if ($user->hasRole('Dokter Poli')) {
             $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($today) {
                 $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($today) {
-                    $query1->whereDate('created_at', $today);
+                    // $query1->whereDate('created_at', $today);
                 });
             })->whereHas('doctorPatient', function ($query2) {
                 $query2->where('user_id', Auth::user()->id);
@@ -204,12 +204,12 @@ class RawatJalanController extends Controller
         $item = RawatJalanPoliPatient::find($id);
         $status = $request->input('status');
 
-        $checkAssesmenAwal = $item->rawatJalanPatient->queue->patient->initialAssesments;
-        $checkCppt = $item->rmeCppts;
-        $checkPrmrj = $item->prmrjs;
-        if (($checkAssesmenAwal->isEmpty() && $checkCppt->isEmpty()) || $checkPrmrj->isEmpty()) {
-            $status = 'Belum Lengkap';
-        }
+        // $checkAssesmenAwal = $item->rawatJalanPatient->queue->patient->initialAssesments;
+        // $checkCppt = $item->rmeCppts;
+        // $checkPrmrj = $item->prmrjs;
+        // if (($checkAssesmenAwal->isEmpty() && $checkCppt->isEmpty()) || $checkPrmrj->isEmpty()) {
+        //     $status = 'Belum Lengkap';
+        // }
 
         $item->update([
             'status' => $status,
@@ -232,26 +232,26 @@ class RawatJalanController extends Controller
                 }
             }
             //create radiologi
-            foreach ($queue->radiologiFormRequests as $reqRadiologi) {
-                $checkList = RadiologiPatient::where('queue_id', $queue->id)->where('radiologi_form_request_id', $reqRadiologi->id)->first();
-                if ($checkList) {
-                    continue;
-                }
-                $itemRadiologi = RadiologiPatient::create([
-                    'queue_id' => $queue->id,
-                    'patient_id' => $queue->patient_id,
-                    'radiologi_form_request_id' => $reqRadiologi->id,
-                    'status' => 'WAITING',
-                ]);
-                $detailIds = $itemRadiologi->radiologiFormRequest->radiologiFormRequestMasters()->where('radiologi_form_request_id', $itemRadiologi->radiologiFormRequest->id)->pluck('radiologi_form_request_details.id');
-                foreach ($detailIds as $detailId) {
-                    RadiologiPatientRequestDetail::create([
-                        'radiologi_patient_id' => $itemRadiologi->id,
-                        'radiologi_form_request_detail_id' => $detailId,
-                        'status' => 'WAITING',
-                    ]);
-                }
-            }
+            // foreach ($queue->radiologiFormRequests as $reqRadiologi) {
+            //     $checkList = RadiologiPatient::where('queue_id', $queue->id)->where('radiologi_form_request_id', $reqRadiologi->id)->first();
+            //     if ($checkList) {
+            //         continue;
+            //     }
+            //     $itemRadiologi = RadiologiPatient::create([
+            //         'queue_id' => $queue->id,
+            //         'patient_id' => $queue->patient_id,
+            //         'radiologi_form_request_id' => $reqRadiologi->id,
+            //         'status' => 'WAITING',
+            //     ]);
+            //     $details = $itemRadiologi->radiologiFormRequest->radiologiFormRequestDetails;
+            //     foreach ($details as $detail) {
+            //         RadiologiPatientRequestDetail::create([
+            //             'radiologi_patient_id' => $itemRadiologi->id,
+            //             'action_id' => $detail->action_id,
+            //             'status' => 'WAITING',
+            //         ]);
+            //     }
+            // }
             //create labor
             if ($queue) {
                 foreach ($queue->laboratoriumRequests as $laborReq) {

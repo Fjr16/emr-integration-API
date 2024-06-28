@@ -17,7 +17,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('radiologi_form_request_id')->nullable();
             $table->foreignId('action_id')->nullable();
-            $table->string('value')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->dateTime('tanggal_periksa')->nullable();
+            $table->text('hasil')->nullable();
+            $table->string('image', 100)->nullable();
+            $table->enum('status', ['WAITING', 'UNVALIDATE', 'VALIDATE'])->default('WAITING');
             $table->timestamps();
         });
     }

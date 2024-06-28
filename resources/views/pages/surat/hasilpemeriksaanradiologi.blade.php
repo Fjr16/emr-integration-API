@@ -99,9 +99,6 @@
                         <h1 class="mt-2">HASIL PEMERIKSAAN RADIOLOGI</h1>
                     </div>
                     <div class="col-3">
-                        <div
-                            class="border border-3 border-rounded py-4 px-5"
-                        ></div>
                     </div>
                 </div>
             </div>
@@ -111,9 +108,9 @@
                 <tr>
                     <td style="width: 200px">Nama</td>
                     <td style="width: 20px">:</td>
-                    <td class="fw-bold">{{ $item->radiologiPatient->queue->patient->name ?? '' }}</td>
+                    <td class="fw-bold">{{ $item->radiologiFormRequest->patient->name ?? '' }}</td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td>Usia</td>
                     <td>:</td>
                     @php
@@ -128,61 +125,48 @@
 
                     @endphp
                     <td>{{ $usia ?? '' }} Tahun</td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td>Jenis Kelamin</td>
                     <td>:</td>
-                    <td>{{ $item->radiologiPatient->queue->patient->jenis_kelamin ?? '' }}</td>
+                    <td>{{ $item->radiologiFormRequest->patient->jenis_kelamin ?? '' }}</td>
                 </tr>
                 <tr>
                     <td>No. RM</td>
                     <td>:</td>
-                    <td>{{ $item->radiologiPatient->queue->patient->no_rm ?? '' }}</td>
+                    <td>{{ $item->radiologiFormRequest->patient->no_rm ?? '' }}</td>
                 </tr>
                 <tr>
-                    <td>No. Pemeriksaan</td>
+                    <td>No. Registrasi Radiologi</td>
                     <td>:</td>
-                    <td>{{ $item->nomor ?? '' }}</td>
+                    <td>{{ $item->radiologiFormRequest->no_reg_rad ?? '' }}</td>
                 </tr>
                 <tr>
-                    <td>Tgl. ({{ $item->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }})</td>
+                    <td>Tgl. Periksa</td>
                     <td>:</td>
-                    <td>{{ $item->tanggal ?? ''}}</td>
-                </tr>
-                <tr>
-                    <td>Jenis Pemeriksaan</td>
-                    <td>:</td>
-                    <td>{{ $item->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }}</td>
+                    <td>{{ $item->tanggal_periksa ?? ''}}</td>
                 </tr>
                </table>
                <hr class="m-0 mt-2 mb-2">
-               <p class=" fst-italic">Teman Sejawat Yth,</p>
-               <h5 class="fw-bold">{{ $item->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }} :  {{ $item->radiologiFormRequestDetail->value ? $item->radiologiFormRequestDetail->value : $item->radiologiFormRequestDetail->radiologiFormRequestMasterDetail->name ?? '' }}</h5>
+               <p class="fst-italic">Teman Sejawat Yth,</p>
+               <h5 class="fw-bold">{{ $item->action->name ?? '' }}</h5>
 
                 {!! $item->hasil ?? '' !!}
 
                <p class=" fst-italic">Terima kasih atas kerja samanya.</p>         
-               <p class="m-0">Padang, <span id="tanggal"></span></p>
-               <br><br><br>
-               @if ($item->radiologiPatient->user) 
-               <p class="m-0 text-decoration-underline">{{ $item->radiologiPatient->user->name ?? '' }}</p>
-               <p class="m-0">(
-                   @foreach ($item->radiologiPatient->user->specialists as $spesialis)
-                        {{ $spesialis->name ?? '' }},
-                    @endforeach
-                )</p>
-                @else
-                <p class="fw-bold m-0 border border-dark">Menunggu Validasi</p>
-               @endif
+               @php
+                   $tgl_periksa = new Carbon\Carbon(strtotime($item->tanggal_periksa));
+               @endphp
+               <p class="m-0">Padang, {{ $tgl_periksa->format('d M Y') ?? $item->created_at->format('d M Y') }}<span id="tanggal"></span></p>
+               @isset($item->radiologiFormRequest->validator_rad_id)
+               <br><br>
+               <p class="m-0 text-decoration-underline">{{ $item->radiologiFormRequest->validator->name ?? '' }}</p>
+               <p class="m-0">{{ $item->radiologiFormRequest->validator->roomDetail->name ?? '' }}</p>
+               @else
+               <br>
+                    <h6 class="fw-bold m-0">(UNVALIDATE)</h6>
+                @endisset
             </div>
         </div>
-
-        <script>
-            // Mendapatkan tanggal saat ini
-            var today = new Date();
-            var options = { year: "numeric", month: "long", day: "numeric" };
-            document.getElementById("tanggal").innerText =
-                today.toLocaleDateString("id-ID", options);
-        </script>
     </body>
 </html>

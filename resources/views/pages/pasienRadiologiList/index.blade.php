@@ -39,40 +39,26 @@
     <table id="example" class="table">
       <thead>
         <tr class="text-nowrap bg-dark">
-          <th>No Antrian</th>
-          <th>No Rekam Medis</th>
-          <th>Nama</th>
-          <th>Kategori Pasien</th>
-          <th>Jenis Kelamin</th>
-          <th>Diagnosa</th>
-          <th>Tanggal Periksa</th>
-          <th>Petugas</th>
-          <th>Validator</th>
-          <th>Status</th>
-          @canany(['edit jadwal pemeriksaan radiologi', 'validasi status pemeriksaan radiologi'])
           <th>Action</th>
-          @endcanany
           @can('show detail pemeriksaan radiologi')
           <th class="text-center">Detail</th>
           @endcan
+          <th>No Reg Radiologi</th>
+          <th>No Rekam Medis</th>
+          <th>Nama</th>
+          <th>Kategori Pasien</th>
+          <th>Diagnosa</th>
+          <th>Tanggal Periksa</th>
+          {{-- <th>Petugas</th> --}}
+          <th>Validator</th>
+          {{-- <th>Status</th> --}}
         </tr>
       </thead>
       <tbody>
         @foreach ($data as $item)
         <tr>
-          <td>{{ $item->no_antrian ?? '' }}</td>
-          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
-          <td>{{ $item->queue->patient->name ?? '' }}</td>
-          <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
-          <td>{{ $item->queue->patient->jenis_kelamin ?? '' }}</td>
-          <td>{!! $item->radiologiFormRequest->diagnosa_klinis ?? '' !!}</td>
-          <td>{{ $item->tanggal_periksa ?? '-' }}</td>
-          <td>{{ $item->radiologiPatientRequestDetails->first()->user->name ?? '-' }}</td>
-          <td>{{ $item->user->name ?? '-' }}</td>
-          <td>{{ $item->status ?? '' }}</td>
-          @canany(['edit jadwal pemeriksaan radiologi', 'validasi status pemeriksaan radiologi'])
           <td>
-            @if ($item->status == 'WAITING')
+            @if ($item->status == 'ACCEPTED')
               <button class="btn btn-success btn-sm" onclick="createAntrian({{ $item->id }})">
                 <i class='bx bx-edit-alt me-1'></i>
                 Edit Jadwal
@@ -87,10 +73,11 @@
                 </button>
               </form>
             @else               
+            <button class="btn btn-success btn-sm" disabled>
               {{ $item->status ?? '' }}
+            </button>
             @endif
           </td>
-          @endcanany
           @can('show detail pemeriksaan radiologi')
           <td>
             <a class="btn btn-dark btn-sm" href="{{ route('radiologi/patient.create', $item->id) }}">
@@ -99,6 +86,18 @@
             </a>
           </td>
           @endcan
+          <td>{{ $item->no_reg_rad ?? '' }}</td>
+          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+          <td>{{ $item->queue->patient->name ?? '' }}</td>
+          <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
+          <td>{!! $item->diagnosa_klinis ?? '' !!}</td>
+          @php
+            $waktu = new Carbon\Carbon($item->jadwal_periksa);
+          @endphp
+          <td>{{ $waktu->format('Y-m-d') ?? '-' }}</td>
+          {{-- <td>{{ $item->radiologiFormRequestDetails->first()->user->name ?? '-' }}</td> --}}
+          <td>{{ $item->user->name ?? '-' }}</td>
+          {{-- <td>{{ $item->status ?? '' }}</td> --}}
         </tr>
       @endforeach
       </tbody>
@@ -108,20 +107,41 @@
 
 {{-- modal --}}
 <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
-  
+  <form action="" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">Atur Jadwal Pemeriksaan</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" class="form-control">
+                <input type="hidden" name="status" value="ACCEPTED">
+              </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-dark btn-sm">Simpan</button>
+          </div>
+        </div>
+      </div>
+  </form>
 </div>
 {{-- /modal --}}
 
 <script>
   function createAntrian(id){
-    $.ajax({
-      type : 'GET',
-      url : "{{ route('radiologi/patient/queue.create', '') }}/"+id,
-      success : function(data){
-        $('#basicModal').html(data);
-        $('#basicModal').modal('show');
-      }
-    })
+    var modalCreate = document.getElementById('basicModal');
+    var form = modalCreate.querySelector('form');
+    var url = "{{ route('radiologi/patient/queue.store', '') }}/"+id;
+    form.setAttribute('action', url);
+
+    $(modalCreate).modal('show');
   }
 </script>
 @endsection

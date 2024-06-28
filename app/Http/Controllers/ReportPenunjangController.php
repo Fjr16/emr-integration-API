@@ -93,45 +93,4 @@ class ReportPenunjangController extends Controller
     {
         return Excel::download(new LabPatologiAnatomiExport($id), 'riwayat-pemeriksaan-PA.xlsx');
     }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function indexRad()
-    {
-        $data = Patient::all();
-        return view('pages.laporanPenunjangRadiologi.index', [
-            'menu' => 'Laporan',
-            'title' => 'Laporan Radiologi',
-            'data' => $data,
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showRad($id)
-    {
-        $item = Patient::find($id);
-        $data = RadiologiPatient::where('patient_id', $item->id)->where('status', 'VALIDATED')->get();
-        return view('pages.laporanPenunjangRadiologi.show', [
-            'title' => 'Laporan Radiologi',
-            'menu' => 'Laporan',
-            'item' => $item,
-            'data' => $data
-        ]);
-    }
-
-    public function exportExcelRad($id)
-    {
-        return Excel::download(new RadiologiExport($id), 'riwayat-pemeriksaan-radiologi.xlsx');
-    }
 }

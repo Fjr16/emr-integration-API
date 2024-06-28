@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ChangeLog;
-use App\Models\RadiologiFormRequestMaster;
-use App\Models\RadiologiPatient;
-use App\Models\RadiologiPatientRequestDetail;
+use App\Models\RadiologiFormRequest;
+use App\Models\RadiologiFormRequestDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +16,8 @@ class RadiologiPatientController extends Controller
      */
     public function index()
     {
-        $today = date('Y-m-d');
-        $data = RadiologiPatient::whereDate('created_at', $today)->get();
-        // $data = RadiologiPatient::where('status', 'WAITING')->get();
+        // $data = RadiologiFormRequest::whereDate('created_at', date('Y-m-d'))->get();
+        $data = RadiologiFormRequest::get();
         return view('pages.pasienRadiologi.index', [
             "title" => "Radiologi",
             "menu" => "Radiologi",
@@ -35,35 +32,20 @@ class RadiologiPatientController extends Controller
      */
     public function create($id)
     {
-        $item = RadiologiPatient::find($id);
+        $today = date('Y-m-d H:i:s');
+        $item = RadiologiFormRequest::find($id);
         return view('pages.pasienRadiologi.show', [
             "title" => "Antrian Radiologi",
             "menu" => "Radiologi",
-            'item' => $item
+            'item' => $item,
+            'today' => $today
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $today = date('Y-m-d');
-        $item = RadiologiPatientRequestDetail::find($id);
+        $item = RadiologiFormRequestDetail::find($id);
         return view('pages.surat.hasilpemeriksaanradiologi', [
             "title" => "Radiologi",
             "menu" => "Radiologi",
@@ -72,63 +54,31 @@ class RadiologiPatientController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-         //no reg lab
-         $format = 'RO';
-         $currentYear = date('y');
-         $currentMonth = date('m');
-         $lastItem = RadiologiPatientRequestDetail::where('status', 'SELESAI')->latest()->first();
-         $findUsg = RadiologiFormRequestMaster::whereRaw('UPPER(name) = ?', ['USG'])->first();
-         if($findUsg){
-            if($findUsg->id == $lastItem->radiologiFormRequestDetail->radiologi_form_request_master_id){
-                $lastItem = RadiologiPatientRequestDetail::where('status', 'SELESAI')->whereHas('radiologiFormRequestDetail', function($detail) use ($findUsg){
-                    $detail->where('radiologi_form_request_master_id', $findUsg->id);
-                })->latest()->first();
-                $format = 'U';
-            }
-         }
-         if($lastItem){
-             $arr = explode('-', $lastItem->nomor);
-             $arr2 = explode(' ', $arr[0]);
-             $lastItemYear = $arr2[1] ?? '';
-             $lastItemMonth = $arr[1] ?? '';
-             $lastNumber = $arr[2] ?? '';
-             if($lastItemMonth == $currentMonth && $lastItemYear == $currentYear){
-                 $temp = $lastNumber+1;
-                 if(strlen($temp) == 1){
-                     $newNumber = '00' . $temp;
-                 }elseif(strlen($temp) == 2){
-                     $newNumber = '0' . $temp;
-                 }elseif(strlen($temp) == 3){
-                     $newNumber = $temp;
-                 }else{
-                     return 'NOMOR REGISTRASI RADIOLOGI OVERFLOW';
-                 }
-             }else{
-                 $newNumber = '001';
-             }
-         }else{
-             $newNumber = '001';
-         }
- 
-         $noRegRad = '' .$format . ' '. $currentYear.'-'. $currentMonth. '-' .$newNumber;
 
-        $today = date('Y-m-d');
-        $item = RadiologiPatientRequestDetail::find($id);
-        return view('pages.pasienRadiologi.create', [
-            "title" => "Radiologi",
-            "menu" => "Radiologi",
-            'item' => $item,
-            'today' => $today,
-            'noRegRad' => $noRegRad,
-        ]);
+    private function updateStatusRadiologi($radiologiFormRequestId, $currentStatus) {
+        $itemRadiologiFormRequest = RadiologiFormRequest::find($radiologiFormRequestId);
+            $unfinished = RadiologiFormRequestDetail::where('radiologi_form_request_id', $itemRadiologiFormRequest->id)
+                                    ->where('status', 'UNVALIDATE')->orWhere('status', 'WAITING')->get();
+    
+            if ($unfinished->isNotEmpty()) {
+                $status = $currentStatus;
+                foreach ($unfinished as $stts) {
+                    if ($stts->status == 'WAITING') {
+                        continue;
+                    }elseif($stts->status == 'UNVALIDATE'){
+                        $status = 'ONGOING';
+                    }
+                }
+                $itemRadiologiFormRequest->update([
+                    'status' => $status,
+                ]);
+                
+            }else{
+                $itemRadiologiFormRequest->update([
+                    'status' => 'FINISHED',
+                ]);
+            }
+        
     }
 
     /**
@@ -140,74 +90,35 @@ class RadiologiPatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $data = $request->validate([
-            'nomor' => 'required',
-            'tanggal' => 'required',
-            'image' => 'image',
+        $this->validate($request, [
+            'status' => 'required'
         ]);
-
-        if($request->hasFile('image')){
-            $data['image'] = $request->file('image')->store('assets/hasil-radiologi', 'public');
+        //find item radiologi detail
+        $item = RadiologiFormRequestDetail::find($id);
+        if ($item->radiologiFormRequest->status == 'FINISHED') {
+            return back()->with('error', 'Status Telah FINISH, Tidak Dapat Melakukan Perubahan');
         }
 
-        $data['hasil'] = $request->input('hasil');
-        $data['status'] = 'SELESAI';
-        $data['user_id'] = Auth::user()->id;
-
-        $item = RadiologiPatientRequestDetail::with(['radiologiFormRequestDetail', 'radiologiFormRequestDetail.radiologiFormRequestMaster', 'radiologiFormRequestDetail.radiologiFormRequestMasterDetail'])->find($id);
-
-        $old_data = null;
-        if($item->radiologiPatient->status == 'VALIDATED'){
-            $old_data = json_encode($item);
-        }
-        
-        $item->update($data);
-
-        if($old_data){
-            ChangeLog::create([
-                'user_id' => Auth::user()->id,
-                'record_id' => $item->id,
-                'record_type' => RadiologiPatientRequestDetail::class,
-                'old_data' => $old_data,
-                'new_data' => json_encode($item),
+        if ($request->status == 'VALIDATE') {
+            $item->update(['status' => $request->status]);
+            $this->updateStatusRadiologi($item->radiologiFormRequest->id, $item->radiologiFormRequest->status);
+        }else{
+            $data = $request->validate([
+                'tanggal_periksa' => 'required',
+                'image' => 'image',
             ]);
+    
+            if($request->hasFile('image')){
+                $data['image'] = $request->file('image')->store('assets/hasil-radiologi', 'public');
+            }
+    
+            $data['hasil'] = $request->input('hasil');
+            $data['status'] = $request->status;
+            $data['user_id'] = Auth::user()->id;
+    
+            $item->update($data);
+            $this->updateStatusRadiologi($item->radiologiFormRequest->id, '');
         }
-
-        $itemRadiologiPatient = RadiologiPatient::find($item->radiologiPatient->id);
-        $checkRequestStatus = RadiologiPatientRequestDetail::where('radiologi_patient_id', $itemRadiologiPatient->id)
-                                ->where('status', 'WAITING')->get();
-
-        if($checkRequestStatus->isEmpty()){
-            $itemRadiologiPatient->update([
-                'status' => 'UNVALIDATED',
-            ]);
-        }
-        
         return back()->with('success', 'Data Berhasil Diperbarui');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    
-    
-    public function showChange($id)
-    {
-        $today = date('Y-m-d');
-        $item = RadiologiPatientRequestDetail::find($id);
-        return view('pages.pasienRadiologi.showChange', [
-            "title" => "Radiologi",
-            "menu" => "Radiologi",
-            'item' => $item,
-            'today' => $today,
-        ]);
     }
 }

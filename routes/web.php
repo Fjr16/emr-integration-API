@@ -820,33 +820,14 @@ Route::group(['middleware' => ['permission:validasi status pemeriksaan laborator
 });
 
 //Radiologi Patient
-Route::group(['middleware' => ['permission:list permintaan pemeriksaan radiologi']], function () {
-    Route::get('/radiologi/patient', [RadiologiPatientController::class, 'index'])->name('radiologi/patient.index');
-});
-Route::group(['middleware' => ['permission:show detail pemeriksaan radiologi']], function () {
-    Route::get('/radiologi/patient/create/{id}', [RadiologiPatientController::class, 'create'])->name('radiologi/patient.create');
-});
-Route::group(['middleware' => ['permission:print hasil pemeriksaan radiologi']], function () {
-    Route::get('/radiologi/patient/hasil/show/{id}', [RadiologiPatientController::class, 'show'])->name('radiologi/patient/hasil.show');
-    Route::get('/radiologi/patient/hasil/showChange/{id}', [RadiologiPatientController::class, 'showChange'])->name('radiologi/patient/hasil.showChange');
-});
-Route::group(['middleware' => ['permission:input hasil pemeriksaan radiologi']], function () {
-    Route::get('/radiologi/patient/hasil/edit/{id}', [RadiologiPatientController::class, 'edit'])->name('radiologi/patient/hasil.edit');
-    Route::put('/radiologi/patient/hasil/update/{id}', [RadiologiPatientController::class, 'update'])->name('radiologi/patient/hasil.update');
-});
-
+Route::get('/radiologi/patient', [RadiologiPatientController::class, 'index'])->name('radiologi/patient.index');
+Route::get('/radiologi/patient/create/{id}', [RadiologiPatientController::class, 'create'])->name('radiologi/patient.create');
+Route::get('/radiologi/patient/hasil/show/{id}', [RadiologiPatientController::class, 'show'])->name('radiologi/patient/hasil.show');
+Route::put('/radiologi/patient/hasil/update/{id}', [RadiologiPatientController::class, 'update'])->name('radiologi/patient/hasil.update');
 
 //Radiologi Patient Queue
-Route::group(['middleware' => ['permission:daftar jadwal pemeriksaan radiologi']], function () {
-    Route::get('/radiologi/patient/queue', [RadiologiPatientQueueController::class, 'index'])->name('radiologi/patient/queue.index');
-});
-Route::group(['middleware' => ['permission:edit jadwal pemeriksaan radiologi|permission:atur jadwal pemeriksaan radiologi']], function () {
-    Route::get('/radiologi/patient/queue/create/{id}', [RadiologiPatientQueueController::class, 'create'])->name('radiologi/patient/queue.create');
-    Route::post('/radiologi/patient/queue/store/{id}', [RadiologiPatientQueueController::class, 'store'])->name('radiologi/patient/queue.store');
-});
-Route::group(['middleware' => ['permission:validasi status pemeriksaan radiologi']], function () {
-    Route::put('/radiologi/patient/queue/update/{id}', [RadiologiPatientQueueController::class, 'update'])->name('radiologi/patient/queue.update');
-});
+Route::get('/radiologi/patient/queue', [RadiologiPatientQueueController::class, 'index'])->name('radiologi/patient/queue.index');
+Route::post('/radiologi/patient/queue/store/{id}', [RadiologiPatientQueueController::class, 'store'])->name('radiologi/patient/queue.store');
 
 //Permintaan Laboratorium Patologi Anatomik
 //list permintaan pemeriksaan labor pa
@@ -945,11 +926,6 @@ Route::get('/laporan/lab/patologi/klinik/exportExcel/{id}', [ReportPenunjangCont
 Route::get('/laporan/lab/patologi/anatomi', [ReportPenunjangController::class, 'indexPa'])->name('laporan/lab/patologi/anatomi.index');
 Route::get('/laporan/lab/patologi/anatomi/show/{id}', [ReportPenunjangController::class, 'showPa'])->name('laporan/lab/patologi/anatomi.show');
 Route::get('/laporan/lab/patologi/anatomi/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelPa'])->name('laporan/lab/patologi/anatomi.exportExcel');
-
-Route::get('/laporan/lab/radiologi', [ReportPenunjangController::class, 'indexRad'])->name('laporan/lab/radiologi.index');
-Route::get('/laporan/lab/radiologi/show/{id}', [ReportPenunjangController::class, 'showRad'])->name('laporan/lab/radiologi.show');
-Route::get('/laporan/lab/radiologi/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelRad'])->name('laporan/lab/radiologi.exportExcel');
-
 //Keuangan
 Route::post('tarif/layanan/store', [TarifController::class, 'store'])->name('tarif/layanan.store');
 Route::put('tarif/layanan/update/{id}', [TarifController::class, 'update'])->name('tarif/layanan.update');
@@ -960,5 +936,4 @@ Route::get('tarif/layanan/create/{type}', [TarifController::class, 'create'])->n
 Route::get('tarif/layanan/edit/{id}', [TarifController::class, 'edit'])->name('tarif/layanan.edit');
 Route::delete('tarif/layanan/destroy/{id}', [TarifController::class, 'destroy'])->name('tarif/layanan.destroy');
 
-// end Rawat Inap New Menu
 require __DIR__ . '/auth.php';

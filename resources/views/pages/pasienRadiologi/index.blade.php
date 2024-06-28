@@ -18,53 +18,72 @@
     <table id="example" class="table">
       <thead>
         <tr class="text-nowrap bg-dark">
+          <th class="text-center">Action</th>
           <th>No Rekam Medis</th>
           <th>Nama</th>
-          <th>Kategori Pasien</th>
-          <th>Jenis Kelamin</th>
+          <th>Tanggungan</th>
           <th>Diagnosa Klinis</th>
           <th>Tanggal / Jam Permintaan</th>
-          <th>Nama Pemeriksaan</th>
+          <th>List Pemeriksaan</th>
           <th>Dokter</th>
-          @can('atur jadwal pemeriksaan radiologi')
-          <th class="text-center">Action</th>
-          @endcan
         </tr>
       </thead>
       <tbody>
         @foreach ($data as $item)
           <tr>
-            <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
-            <td>{{ $item->queue->patient->name ?? '' }}</td>
-            <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
-            <td>{{ $item->queue->patient->jenis_kelamin ?? '' }}</td>
-            @if ($item->radiologiFormRequest)          
-            <td>{!! $item->radiologiFormRequest->diagnosa_klinis ?? '' !!}</td>
-            <td>{{ ($item->radiologiFormRequest->created_at != null) ?  $item->radiologiFormRequest->created_at->format('Y-m-d / H:i:s') : '' }}</td>
-            @endif
             <td>
-              @foreach ($item->radiologiPatientRequestDetails as $detail)
-              {{ $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }} {{ $detail->radiologiFormRequestDetail->value ?? '' }} <br>
-              @endforeach
-            </td>
-            <td>{{ $item->queue->doctorPatient->user->name ?? '' }}</td>
-            @can('atur jadwal pemeriksaan radiologi')   
-            <td>
-              @if ($item->radiologiFormRequest->radiologiFormRequestMasters->isNotEmpty())    
-                @if ($item->tanggal_periksa)    
-                  <button type="button" class="btn btn-success btn-sm" disabled>
-                    Terdaftar
-                  </button>
+              @if ($item->radiologiFormRequestDetails)    
+                @if ($item->status == 'WAITING')    
+                  <div class="dropdown">
+                    <button type="button" class="btn bth-sm btn-dark dropdown-toggle hide-arrow"
+                        data-bs-toggle="dropdown">
+                        Action
+                        <i class='bx bx-dots-vertical'></i>
+                    </button>
+                    <div class="dropdown-menu">
+                      <button type="button" class="dropdown-item btn-success" onclick="createAntrian({{ $item->id }})">
+                        Terima
+                      </button>
+                      <form action="{{ route('radiologi/patient/queue.store', $item->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item btn-danger" name="status" value="CANCEL" onclick="return confirm('Yakin Ingin Membatalkan Permintaan Radiologi ?')">
+                          Batal
+                        </button>
+                        <button type="submit" class="dropdown-item btn-warning" name="status" value="DENIED" onclick="return confirm('Yakin Ingin Menolak Permintaan Radiologi ?')">
+                          Tolak
+                        </button>
+                      </form>
+                    </div>
+                  </div>
                 @else
-                  <button type="button" class="btn btn-success btn-sm" onclick="createAntrian({{ $item->id }})">
-                    Daftarkan
+                  @php
+                    if ($item->status == 'DENIED') {
+                      $classBg = 'warning';
+                    } elseif($item->status == 'CANCEL') {
+                      $classBg = 'danger';
+                    } else {
+                      $classBg = 'success';
+                    }
+                  @endphp
+                  <button type="button" class="btn btn-{{ $classBg }} btn-sm" disabled>
+                    {{ $item->status }}
                   </button>
                 @endif
               @else
-                <a class="btn btn-success btn-sm" href="{{ route('radiologi/request.create', $item->radiologiFormRequest->id) }}">Edit Data</a>
+                <a class="btn btn-success btn-sm" href="{{ route('radiologi/request.create', $item->id) }}">Edit Data</a>
               @endif
             </td>
-            @endcan
+            <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+            <td>{{ $item->queue->patient->name ?? '' }}</td>
+            <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
+            <td>{!! $item->diagnosa_klinis ?? '' !!}</td>
+            <td>{{ ($item->created_at != null) ?  $item->created_at->format('Y-m-d / H:i') : '' }}</td>
+            <td>
+              @foreach ($item->radiologiFormRequestDetails as $detail)
+              {{ $detail->action->name ?? '' }} <br>
+              @endforeach
+            </td>
+            <td>{{ $item->user->name ?? '' }}</td>
           </tr>
         @endforeach
         </tbody>
@@ -74,20 +93,41 @@
 
 {{-- modal --}}
 <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
-  
+  <form action="" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">Atur Jadwal Pemeriksaan</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" class="form-control">
+                <input type="hidden" name="status" value="ACCEPTED">
+              </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-dark btn-sm">Simpan</button>
+          </div>
+        </div>
+      </div>
+  </form>
 </div>
 {{-- /modal --}}
 
 <script>
   function createAntrian(id){
-    $.ajax({
-      type : 'GET',
-      url : "{{ route('radiologi/patient/queue.create', '') }}/"+id,
-      success : function(data){
-        $('#basicModal').html(data);
-        $('#basicModal').modal('show');
-      }
-    })
+    var modalCreate = document.getElementById('basicModal');
+    var form = modalCreate.querySelector('form');
+    var url = "{{ route('radiologi/patient/queue.store', '') }}/"+id;
+    form.setAttribute('action', url);
+
+    $(modalCreate).modal('show');
   }
 </script>
 
