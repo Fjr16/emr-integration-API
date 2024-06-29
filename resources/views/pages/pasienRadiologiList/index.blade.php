@@ -24,7 +24,7 @@
           <div class="row">
             <label class="col-form-label col-3"></label>
             <div class="col-9">
-              <input type="date" id="tanggal" name="filter" value="{{ request('filter') }}" class="form-control">
+              <input type="date" id="tanggal" name="filter" value="{{ request('filter', date('Y-m-d')) }}" class="form-control">
             </div>
           </div>
         </div>
@@ -49,9 +49,7 @@
           <th>Kategori Pasien</th>
           <th>Diagnosa</th>
           <th>Tanggal Periksa</th>
-          {{-- <th>Petugas</th> --}}
           <th>Validator</th>
-          {{-- <th>Status</th> --}}
         </tr>
       </thead>
       <tbody>
@@ -95,9 +93,7 @@
             $waktu = new Carbon\Carbon($item->jadwal_periksa);
           @endphp
           <td>{{ $waktu->format('Y-m-d') ?? '-' }}</td>
-          {{-- <td>{{ $item->radiologiFormRequestDetails->first()->user->name ?? '-' }}</td> --}}
-          <td>{{ $item->user->name ?? '-' }}</td>
-          {{-- <td>{{ $item->status ?? '' }}</td> --}}
+          <td>{{ $item->validator->name ?? '-' }}</td>
         </tr>
       @endforeach
       </tbody>

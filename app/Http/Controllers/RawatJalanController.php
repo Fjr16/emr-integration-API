@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdministrasiCacatanPerjalananRanapPatient;
-use App\Models\CatatanPerjalanRanapPatient;
-use App\Models\DetailAdministrasiCacatanPerjalananRanapPatient;
 use DateTime;
 use App\Models\Queue;
 use Illuminate\Http\Request;
-use App\Models\RadiologiPatient;
 use App\Models\RawatJalanPatient;
 use App\Models\PatientActionReport;
 use App\Models\RajalFarmasiPatient;
@@ -18,9 +14,7 @@ use App\Models\LaboratoriumPatientResult;
 use App\Models\DiagnosisKeperawatanPatient;
 use App\Models\MedicineReceipt;
 use App\Models\PermintaanLaboratoriumPatologiAnatomikPatient;
-use App\Models\RadiologiPatientRequestDetail;
-use App\Models\RanapDpjpPatientDetail;
-use App\Models\RawatInapPatient;
+use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
 use App\Models\SuratPengantarRawatJalanPatient;
 
@@ -100,24 +94,6 @@ class RawatJalanController extends Controller
         return redirect()->back()->with('success', 'Status Berhasil Diperbarui');
     }
 
-
-
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      *
@@ -152,7 +128,7 @@ class RawatJalanController extends Controller
         $suratPengantars = SuratPengantarRawatJalanPatient::where('patient_id', $item->patient->id)->latest()->get();
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         //hasil pemeriksaan radiologi
-        $radiologiResults = RadiologiPatient::where('patient_id', $item->patient->id)->where('status', 'VALIDATED')->orWhere('status', 'UNVALIDATED')->latest()->get();
+        $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
         // hasil pemeriksaan labor pk
         $laborPkResults = LaboratoriumPatientResult::where('patient_id', $item->patient->id)->where('status', 'VALIDATED')->orWhere('status', 'UNVALIDATED')->latest()->get();
         // hasil pemeriksaan labor pa
@@ -179,17 +155,6 @@ class RawatJalanController extends Controller
             'laborPaResults' => $laborPaResults,
             'diagnosisPatient' => $diagnosisPatient,
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -270,16 +235,5 @@ class RawatJalanController extends Controller
         }
         return redirect()->route('rajal/index')->with('success', 'Status Berhasil Diperbarui');
         // }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

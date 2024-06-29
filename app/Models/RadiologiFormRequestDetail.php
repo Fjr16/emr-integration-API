@@ -12,6 +12,7 @@ class RadiologiFormRequestDetail extends Model
     protected $fillable = [
         'radiologi_form_request_id',
         'action_id',
+        'keterangan',   //terletak pada add_to_radiologi_form_request_details
         'user_id',  //petugas radiologi
         'tanggal_periksa',
         'hasil',

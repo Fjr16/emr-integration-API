@@ -378,27 +378,27 @@
                                                                         ])
                                                                         <td>
                                                                             <div class="d-flex align-self-center">
-                                                                                @can('print permintaan radiologi')
-                                                                                    <a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
-                                                                                        target="blank" class="btn btn-dark btn-sm mx-2"><i
-                                                                                            class='bx bx-printer'></i></a>
-                                                                                @endcan
-                                                                                {{-- @can('print permintaan radiologi') --}}
-                                                                                <a href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
-                                                                                    class="btn btn-warning btn-sm mx-2"><i
-                                                                                        class='bx bx-edit'></i></a>
-                                                                                {{-- @endcan --}}
-                                                                                @can('delete permintaan radiologi')
-                                                                                    <form
-                                                                                        action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}"
-                                                                                        method="POST">
-                                                                                        @method('DELETE')
-                                                                                        @csrf
-                                                                                        <button type="submit"
-                                                                                            class="btn btn-sm btn-danger"><i
-                                                                                                class="bx bx-trash"></i></button>
-                                                                                    </form>
-                                                                                @endcan
+                                                                                <a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
+                                                                                    target="blank" class="btn btn-dark btn-sm mx-2"><i
+                                                                                        class='bx bx-printer'></i></a>
+                                                                                @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
+                                                                                    <button type="button" class="btn btn-info btn-sm"><i class='bx bx-book-reader'></i></button>
+                                                                                @else    
+                                                                                    <a href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
+                                                                                        class="btn btn-warning btn-sm me-2"><i
+                                                                                            class='bx bx-edit'></i></a>
+                                                                                    @can('delete permintaan radiologi')
+                                                                                        <form
+                                                                                            action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}"
+                                                                                            method="POST">
+                                                                                            @method('DELETE')
+                                                                                            @csrf
+                                                                                            <button type="submit"
+                                                                                                class="btn btn-sm btn-danger"><i
+                                                                                                    class="bx bx-trash"></i></button>
+                                                                                        </form>
+                                                                                    @endcan
+                                                                                @endif
                                                                             </div>
                                                                         </td>
                                                                     @endcanany
@@ -991,12 +991,26 @@
             @canany(['print hasil pemeriksaan radiologi', 'print hasil pemeriksaan laboratorium pk'])
                 <div class="card mb-4 shadow-sm" id="hasilPemeriksaan">
                     <div class="card-header">
-                        <h5 class="mb-0">Hasil Pemeriksaan</h5>
+                        <h5 class="mb-0">Hasil Pemeriksaan Radiologi</h5>
                     </div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Dokter Yang Meminta: </p>
+                                <p>Tgl. Permintaan : </p>
+                                <p>Diagnosis : </p>
+                                <p>Ruangan : </p>
+                            </div>
+                            <div class="col-6">
+                                <p>No. Registrasi Radiologi : </p>
+                                <p>Jadwal : </p>
+                                <p>Status : </p>
+                                <p>Validator : </p>
+                            </div>
+                        </div>
                         <div class="nav-align-top mb-4">
-                            <ul class="nav nav-pills nav-sm mb-3 nav-fill w-100" role="tablist">
-                                @can('print hasil pemeriksaan radiologi')
+                            {{-- <ul class="nav nav-pills nav-sm mb-3 nav-fill w-100" role="tablist"> --}}
+                                {{-- @can('print hasil pemeriksaan radiologi')
                                     <li class="nav-item">
                                         <button type="button"
                                             class="border nav-link {{ session('dokter') == 'radiologi' ? 'active' : '' }}"
@@ -1006,8 +1020,8 @@
                                             Hasil Pemeriksaan Radiologi
                                         </button>
                                     </li>
-                                @endcan
-                                @can('print hasil pemeriksaan laboratorium pk')
+                                @endcan --}}
+                                {{-- @can('print hasil pemeriksaan laboratorium pk')
                                     <li class="nav-item">
                                         <button type="button"
                                             class="border nav-link {{ session('dokter') == 'laboratorium' ? 'active' : '' }}"
@@ -1017,9 +1031,9 @@
                                             Hasil Pemeriksaan Laboratorium PK
                                         </button>
                                     </li>
-                                @endcan
+                                @endcan --}}
                                 {{-- @can('print hasil pemeriksaan laboratorium pa') --}}
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <button type="button"
                                         class="border nav-link {{ session('dokter') == 'laboratorium-pa' ? 'active' : '' }}"
                                         role="tab" data-bs-toggle="tab"
@@ -1027,72 +1041,56 @@
                                         aria-controls="navs-pills-justified-hasillaboratorium-pa" aria-selected="true">
                                         Hasil Pemeriksaan Laboratorium PA
                                     </button>
-                                </li>
+                                </li> --}}
                                 {{-- @endcan --}}
+                            {{-- </ul> --}}
 
-                            </ul>
                             <div class="tab-content">
-                                @can('print hasil pemeriksaan radiologi')
-                                    <div class="tab-pane fade {{ session('dokter') == 'radiologi' ? 'show active' : '' }}"
-                                        id="navs-pills-justified-hasilradiologi" role="tabpanel">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr class="text-nowrap">
-                                                        <th class="text-body">Tanggal Permintaan</th>
-                                                        <th class="text-body">DPJP Radiologi</th>
-                                                        <th class="text-body">Pemeriksaan</th>
-                                                        <th class="text-body">Diagnosa Klinis</th>
-                                                        <th class="text-body">Hasil Gambar</th>
-                                                        <th class="text-body">Status</th>
-                                                        <th class="text-body">Log</th>
-                                                        <th class="text-body">Action</th>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr class="text-nowrap">
+                                                <th class="text-body">Action</th>
+                                                <th class="text-body">Status</th>
+                                                <th class="text-body">Tanggal / Jam</th>
+                                                <th class="text-body">Petugas Radiologi</th>
+                                                <th class="text-body">Pemeriksaan</th>
+                                                <th class="text-body">Hasil Text</th>
+                                                <th class="text-body">Hasil Gambar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- @foreach ($radiologiResults as $result)
+                                                @foreach ($result->radiologiPatientRequestDetails->where('status', 'SELESAI') as $detail)
+                                                    <tr>
+                                                        <td>{{ $result->radiologiFormRequest->created_at->format('Y-m-d / H:i:s') ?? '' }}
+                                                        </td>
+                                                        <td>{{ $detail->user->name ?? '' }}</td>
+                                                        <td>{{ $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }}
+                                                        </td>
+                                                        <td>{!! $result->radiologiFormRequest->diagnosa_klinis ?? '' !!}</td>
+                                                        <td><a href="{{ Storage::url($detail->image ?? '') }}"
+                                                                target="blank">
+                                                                <img src="{{ Storage::url($detail->image ?? '') }}"
+                                                                    alt="{{ $detail->image ?? '' }}" width="100"
+                                                                    height="100">
+                                                            </a></td>
+                                                        <td>{{ $result->status ?? '' }}</td>
+                                                        <td>
+                                                            <a href="{{ route('radiologi/patient/hasil.show', $detail->id) }}"
+                                                                target="blank" class="btn btn-dark btn-sm"><i
+                                                                    class='bx bx-printer'></i></a>
+                                                            <a href="{{ route('radiologi/patient/hasil.showChange', $detail->id) }}"
+                                                                target="blank" class="btn btn-dark btn-sm"><i
+                                                                    class='bx bx-low-vision'></i></a>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($radiologiResults as $result)
-                                                        @foreach ($result->radiologiPatientRequestDetails->where('status', 'SELESAI') as $detail)
-                                                            <tr>
-                                                                <td>{{ $result->radiologiFormRequest->created_at->format('Y-m-d / H:i:s') ?? '' }}
-                                                                </td>
-                                                                <td>{{ $detail->user->name ?? '' }}</td>
-                                                                <td>{{ $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }}
-                                                                </td>
-                                                                <td>{!! $result->radiologiFormRequest->diagnosa_klinis ?? '' !!}</td>
-                                                                <td><a href="{{ Storage::url($detail->image ?? '') }}"
-                                                                        target="blank">
-                                                                        <img src="{{ Storage::url($detail->image ?? '') }}"
-                                                                            alt="{{ $detail->image ?? '' }}" width="100"
-                                                                            height="100">
-                                                                    </a></td>
-                                                                <td>{{ $result->status ?? '' }}</td>
-                                                                @if ($detail->changeLogs->isNotEmpty())
-                                                                    @php
-                                                                        $lastChange = $detail->changeLogs->max(
-                                                                            'created_at',
-                                                                        );
-                                                                    @endphp
-                                                                    <td>Terakhir Diubah pada : {{ $lastChange ?? '' }}</td>
-                                                                @else
-                                                                    <td>Tidak Ada Perubahan</td>
-                                                                @endif
-                                                                <td>
-                                                                    <a href="{{ route('radiologi/patient/hasil.show', $detail->id) }}"
-                                                                        target="blank" class="btn btn-dark btn-sm"><i
-                                                                            class='bx bx-printer'></i></a>
-                                                                    <a href="{{ route('radiologi/patient/hasil.showChange', $detail->id) }}"
-                                                                        target="blank" class="btn btn-dark btn-sm"><i
-                                                                            class='bx bx-low-vision'></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @endcan
-                                @can('print hasil pemeriksaan laboratorium pk')
+                                                @endforeach
+                                            @endforeach --}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {{-- @can('print hasil pemeriksaan laboratorium pk')
                                     <div class="tab-pane fade {{ session('dokter') == 'laboratorium' ? 'show active' : '' }}"
                                         id="navs-pills-justified-hasillaboratorium" role="tabpanel">
                                         <div class="table-responsive">
@@ -1113,7 +1111,6 @@
                                                         <tr>
                                                             <td>{{ $laborPk->laboratoriumRequest->created_at->format('Y-m-d') ?? '' }}
                                                             </td>
-                                                            {{-- <td>{{ $laborPk->user->name ?? '' }}</td> --}}
                                                             <td>{{ $laborPk->laboratoriumUserValidator->user->name ?? '' }}</td>
                                                             <td>{{ $laborPk->nomor_reg_lab ?? '' }}</td>
                                                             <td>{!! $laborPk->laboratoriumRequest->diagnosa ?? '' !!}</td>
@@ -1133,11 +1130,11 @@
                                             </table>
                                         </div>
                                     </div>
-                                @endcan
+                                @endcan --}}
                                 {{-- @can('print hasil pemeriksaan laboratorium pa') --}}
-                                <div class="tab-pane fade {{ session('dokter') == 'laboratorium-pa' ? 'show active' : '' }}"
-                                    id="navs-pills-justified-hasillaboratorium-pa" role="tabpanel">
-                                    <div class="table-responsive">
+                                {{-- <div class="tab-pane fade {{ session('dokter') == 'laboratorium-pa' ? 'show active' : '' }}"
+                                    id="navs-pills-justified-hasillaboratorium-pa" role="tabpanel"> --}}
+                                    {{-- <div class="table-responsive">
                                         <table class="table">
                                             <thead>
                                                 <tr class="text-nowrap">
@@ -1159,7 +1156,6 @@
                                                         <td>{{ $laborPa->antrianLaboratoriumPatologiAnatomiPatient->tgl_diperiksa ?? '' }}
                                                         </td>
                                                         <td class="d-flex">
-                                                            {{-- <a href="{{ route('', $laborPa->id) }}" --}}
                                                             <a href="" target="blank" class="btn btn-dark btn-sm"><i
                                                                     class='bx bx-printer'></i></a>
                                                         </td>
@@ -1167,8 +1163,8 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
+                                    </div> --}}
+                                {{-- </div> --}}
                                 {{-- @endcan --}}
 
                             </div>

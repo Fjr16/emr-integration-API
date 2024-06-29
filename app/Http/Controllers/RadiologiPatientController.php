@@ -16,8 +16,7 @@ class RadiologiPatientController extends Controller
      */
     public function index()
     {
-        // $data = RadiologiFormRequest::whereDate('created_at', date('Y-m-d'))->get();
-        $data = RadiologiFormRequest::get();
+        $data = RadiologiFormRequest::whereDate('created_at', date('Y-m-d'))->get();
         return view('pages.pasienRadiologi.index', [
             "title" => "Radiologi",
             "menu" => "Radiologi",
@@ -76,6 +75,7 @@ class RadiologiPatientController extends Controller
             }else{
                 $itemRadiologiFormRequest->update([
                     'status' => 'FINISHED',
+                    'validator_rad_id' => auth()->user()->id,
                 ]);
             }
         

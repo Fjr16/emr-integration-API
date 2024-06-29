@@ -43,13 +43,20 @@
                     <input type="text" class="form-control" name="diagnosa_klinis">{{ $diagnosa ?? '' }}</input>
                 </div>
                 <div class="my-3">
-                    <h6 class="mb-0">Catatan</h6>
+                    <h6>Catatan</h6>
                     <textarea class="form-control" name="catatan" cols="30" rows="4"></textarea>
                 </div>
-                <div class="my-3 divAdd">
-                    <h6>Nama Tindakan</h6>
+                <div class="my-4 divAdd">
                     <div class="row">
-                        <div class="col-11">
+                        <div class="col-5">
+                            <h6 class="mb-2">Nama Tindakan</h6>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="mb-2">Keterangan</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
                             <select name="action_id[]" id="action_id_1" class="form-control form-select select2">
                                 @foreach ($data as $item)
                                     @if (old('action_id', $item->id))
@@ -59,6 +66,9 @@
                                     @endif
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-6">
+                            <textarea name="keterangan[]" class="form-control" id="" cols="30" rows="1" placeholder="Tambahkan Keterangan Untuk Pemeriksaan Disini ..."></textarea>
                         </div>
                         <div class="col-1">
                             <button type="button" class="btn btn-success addInput"><i class="bx bx-plus"></i></button>
@@ -200,7 +210,7 @@
                     var newDiv = document.createElement('div');
                     newDiv.className = 'row my-2';
                     newDiv.innerHTML = `
-                    <div class="col-11">
+                    <div class="col-5">
                         <select name="action_id[]" id="action_id_${counter}" class="form-control form-select">
                             @foreach ($data as $item)
                                 @if (old('action_id', $item->id))
@@ -210,6 +220,9 @@
                                 @endif
                             @endforeach
                         </select>
+                    </div>
+                    <div class="col-6">
+                        <textarea name="keterangan[]" class="form-control" id="" cols="30" rows="1" placeholder="Tambahkan Keterangan Untuk Pemeriksaan Disini ..."></textarea>
                     </div>
                     <div class="col-1">
                         <button type="button" class="btn btn-danger" onclick="removeInputNew(this)"><i class="bx bx-minus"></i></button>

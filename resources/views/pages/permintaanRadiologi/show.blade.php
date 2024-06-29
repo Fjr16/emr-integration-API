@@ -82,6 +82,14 @@
             vertical-align: top;
         }
 
+        input[type="checkbox"] {
+            pointer-events: none;
+        }
+
+        input[type="radio"] {
+            pointer-events: none;
+        }
+
         @page {
             size: A4;
             margin: 10mm;
@@ -127,293 +135,91 @@
                 <div class="col-7 d-flex align-self-center">
                     <h1 class="mx-auto text-uppercase text-center ">FORMULIR PERMINTAAN RADIOLOGI</h1>
                 </div>
-                {{-- <div class="col-3">
-                    <div class="border border-3 border-rounded py-4 px-5"></div>
-                </div> --}}
             </div>
         </div>
 
         <div class="content">
-            <table class="table-bordered w-100 mt-3">
+            <table class="table w-100 mt-3">
                 <tr>
                     <!-- kiri -->
                     <td class="w-50">
                         <table class="mx-3">
                             <tr>
-                                <td>Nama Pasien</td>
-                                <td>: {{ $itemRadiologi->patient->name ?? '' }}</td>
+                                <td class="fw-bold">Nama Pasien</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $itemRadiologi->patient->name ?? '' }}</td>
                             </tr>
                             <tr>
-                                <td>Tgl lahir</td>
-                                <td>: {{ $itemRadiologi->patient->tanggal_lhr ?? '' }}</td>
+                                <td class="fw-bold">Tgl lahir</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td> {{ $itemRadiologi->patient->tanggal_lhr ?? '' }}</td>
                             </tr>
                             <tr>
-                                <td>No. RM</td>
-                                <td>:
+                                <td class="fw-bold">No. RM</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>
                                     {{ implode('-', str_split(str_pad($itemRadiologi->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                                 </td>
                             </tr>
                             <tr>
-                                <td>NIK</td>
-                                <td>: {{ $itemRadiologi->patient->nik ?? '' }}</td>
+                                <td class="fw-bold">NIK</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $itemRadiologi->patient->nik ?? '' }}</td>
                             </tr>
                         </table>
                     </td>
-
                     <!-- kanan -->
                     <td class="w-50">
                         <table class="mx-3">
                             <tr>
-                                <td>Tanggungan</td>
-                                <td>: {{ $itemQueue->patientCategory->name ?? '' }}</td>
+                                <td class="fw-bold">Tanggungan</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $itemQueue->patientCategory->name ?? '' }}</td>
                                 {{-- <td>: Umum / BPJS / Perusahaan</td> --}}
                             </tr>
                             <tr>
-                                <td>Asal Ruangan</td>
-                                <td>: {{ $itemRadiologi->roomDetail->name ?? '' }}</td>
+                                <td class="fw-bold">Asal Ruangan</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $itemRadiologi->roomDetail->name ?? '' }}</td>
                             </tr>
                             <tr>
-                                <td>Diagnosa Klinis</td>
-                                <td>: {{ strip_tags($itemRadiologi->diagnosa_klinis) ?? '' }}</td>
+                                <td class="fw-bold">Diagnosa Klinis</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ strip_tags($itemRadiologi->diagnosa_klinis) ?? '' }}</td>
                             </tr>
                         </table>
                     </td>
                 </tr>
             </table>
 
-
-
-
-            <p class="m-0 mt-3 small fst-italic">*Pemeriksaan yang diminta harapan diberi tanda ceklis
+            <p class="m-0 mt-3 small fst-italic">
+                {{-- *Pemeriksaan yang diminta harapan diberi tanda ceklis
                 (&check;) dan keterangan
-                seperlunya
+                seperlunya --}}
             </p>
 
 
             <table class="table-bordered w-100">
-                <tr class=" ">
-                    <td colspan="3" class="fw-bolder text-center">X-RAY</td>
-                </tr>
+                <thead>
+                    <tr class="bg-dark text-white text-center">
+                        <th>Kode Pemeriksaan</th>
+                        <th>Nama Pemeriksaan</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    <tr class="text-center fw-bolder">
-                        <td>
-                            EXSTREMITAS ATAS
-                        </td>
-                        <td>
-                            EXSTREMITAS BAWAH
-                        </td>
-                        <td>
-                            LAIN-LAIN
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <!-- ekstremitasi atas-->
-                        <td class="px-1">
-                            <!-- looping here -->
-                            {{-- @php
-                                $atasCheckedId = $itemRadiologi->radiologiFormRequestMasters
-                                    ->where('kategori', 'EKSTREMITAS ATAS')
-                                    ->pluck('id')
-                                    ->toArray();
-                            @endphp --}}
-                            <table>
-                                @foreach ($itemRadiologi->newEkstremitasAtas as $atas)
-                                    <tr>
-                                        <td>
-                                            <div class="form-check d-flex">
-                                                {{-- <input class="form-check-input" type="checkbox" id="atas"
-                                                    {{ in_array($atas->id, $atasCheckedId) ? 'checked' : '' }}
-                                                    style = "pointer-events: none;"> --}}
-                                                <input type="checkbox" checked>
-                                                <label class="form-check-label ms-2">
-                                                    {{ $atas->name ?? '' }}
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="ps-2">
-                                            @if ($atas->value)
-                                                <p class="mx-auto ">/ {{ $atas->value }}</p>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                            <!-- end looping  -->
-                        </td>
-
-                        <!-- ekstremitasi bawah -->
-                        <td class="px-1">
-                            {{-- @php
-                                $bawahCheckedId = $itemRadiologi->radiologiFormRequestMasters
-                                    ->where('kategori', 'EKSTREMITAS BAWAH')
-                                    ->pluck('id')
-                                    ->toArray();
-                            @endphp --}}
-                            <table>
-                                @foreach ($itemRadiologi->newEkstremitasBawah as $bawah)
-                                    <tr>
-                                        <td>
-                                            <div class="form-check d-flex">
-                                                {{-- <input class="form-check-input" type="checkbox" id="bawah"
-                                                    {{ in_array($bawah->id, $bawahCheckedId) ? 'checked' : '' }}
-                                                    style = "pointer-events: none;"> --}}
-                                                <input type="checkbox" checked>
-                                                <label class="form-check-label ms-2">
-                                                    {{ $bawah->name ?? '' }}
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="ps-2">
-                                            @if ($bawah->value)
-                                                <p class="mx-auto ">/ {{ $bawah->value }}</p>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                            <!-- end looping  -->
-                        </td>
-
-                        <!-- LAIN LAIN -->
-                        <td class="px-1">
-                            {{-- @php
-                                $lainCheckedId = $itemRadiologi->radiologiFormRequestMasters
-                                    ->where('kategori', 'LAIN-LAIN')
-                                    ->pluck('id')
-                                    ->toArray();
-                            @endphp --}}
-                            <table>
-                                @foreach ($itemRadiologi->newLainLain as $lain)
-                                    <tr>
-                                        <td>
-                                            <div class="form-check d-flex">
-                                                {{-- <input class="form-check-input" type="checkbox" id="lain"
-                                                    {{ in_array($lain->id, $lainCheckedId) ? 'checked' : '' }}
-                                                    style="pointer-events: none;"> --}}
-                                                <input type="checkbox" checked>
-                                                <label class="form-check-label ms-2">
-                                                    {{ $lain->name ?? '' }}
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @if ($lain->value)
-                                                <p class="">/ {{ $lain->value }}</p>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                            <!-- end looping  -->
-                        </td>
-                    </tr>
+                    @foreach ($itemRadiologi->radiologiFormRequestDetails as $detail)                        
+                        <tr class="text-center">
+                            <td>{{ $detail->action->icd_code ?? '' }}</td>
+                            <td>{{ $detail->action->name ?? '' }}</td>
+                            <td>{{ $detail->keterangan ?? '-' }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
 
 
-            <table class="table-bordered w-100 mt-2">
-                <tbody>
-                    <tr>
-                        <td class="text-center">USG</td>
-                        <td class="text-center">KONTRAS*</td>
-                    </tr>
-
-
-                    <tr>
-                        <td rowspan="3" class="px-1">
-                            <!-- looping here -->
-                            {{-- @php
-                                $usgCheckedId = $itemRadiologi->radiologiFormRequestMasters
-                                    ->where('kategori', 'USG')
-                                    ->pluck('id')
-                                    ->toArray();
-                            @endphp --}}
-                            @foreach ($itemRadiologi->newUsg as $usg)
-                                <div class="form-check d-flex">
-                                    {{-- <input class="form-check-input" type="checkbox" id="usg"
-                                        {{ in_array($usg->id, $usgCheckedId) ? 'checked' : '' }}
-                                        style="pointer-events: none;"> --}}
-                                    <input type="checkbox" checked>
-                                    <label class="form-check-label ms-2">
-                                        {{ $usg->name ?? '' }}
-                                    </label>
-                                    @if ($usg->value)
-                                        <p class="mx-auto">/{{ $usg->value }}</p>
-                                    @endif
-                                </div>
-                            @endforeach
-
-                            <!-- end looping  -->
-                        </td>
-                        <td class="px-1">
-                            {{-- @php
-                                $kontrasCheckedId = $itemRadiologi->radiologiFormRequestMasters
-                                    ->where('kategori', 'KONTRAS')
-                                    ->pluck('id')
-                                    ->toArray();
-                            @endphp --}}
-                            @foreach ($itemRadiologi->newKontras as $kontras)
-                                <div class="form-check d-flex">
-                                    {{-- <input class="form-check-input" type="checkbox" id="kontras"
-                                        {{ in_array($kontras->id, $kontrasCheckedId) ? 'checked' : '' }}
-                                        style="pointer-events: none;"> --}}
-                                    <input type="checkbox" checked>
-                                    <label class="form-check-label ms-2">
-                                        {{ $kontras->name ?? '' }}
-                                    </label>
-                                </div>
-                            @endforeach
-                            <!-- end looping  -->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-uppercase text-center  ">Pemeriksaan lainnya
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-1">
-                            {{-- @php
-                                $lainnyaCheckedId = $itemRadiologi->radiologiFormRequestMasters
-                                    ->where('kategori', 'PEMERIKSAAN LAINNYA')
-                                    ->pluck('id')
-                                    ->toArray();
-                            @endphp --}}
-                            <!-- looping here -->
-                            <table>
-                                @foreach ($itemRadiologi->newPemeriksaanLainnya as $lainnya)
-                                    <tr>
-                                        <td>
-                                            <div class="form-check d-flex">
-                                                {{-- <input class="form-check-input" type="checkbox" value=""
-                                                    id="lainnya"
-                                                    {{ in_array($lainnya->id, $lainnyaCheckedId) ? 'checked' : '' }}
-                                                    style="pointer-events: none;"> --}}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" checked>
-                                            <label class="form-check-label ms-2">
-                                                {{ $lainnya->name ?? '' }}
-                                            </label>
-                                        </td>
-                                        @if ($lainnya->value)
-                                            <td class="ps-2">:</td>
-                                            <td>
-                                                <p class="mx-auto ">{{ $lainnya->value }}</p>
-                                                {{-- <label
-                                                class="form-check-label ms-2">{{ $itemRadiologi->radiologiFormRequestMasters()->where('radiologi_form_request_master_id', $lainnya->id)->pluck('value')->first() ?? '' }}</label> --}}
-                                            </td>
-                                        @endif
-
-                                    </tr>
-                                @endforeach
-                            </table>
-                            <!-- end looping  -->
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+         
 
 
             <div class="row">
@@ -425,20 +231,17 @@
                         <p class="text-center mb-0">Padang,
                             {{ $itemRadiologi->created_at->format('d F Y') }}
                         </p>
-                        <p class="text-center mb-0">Dokter yang Meminta</p>
-                        <img src="{{ Storage::url($itemRadiologi->ttd_dokter) }}" alt="">
+                        <p class="text-center mb-0 fw-bold">Dokter yang Meminta</p>
+                        <p class="text-center {{ $itemRadiologi->ttd_dokter ? 'mb-0' : 'mb-5' }}">
+                            <img src="{{ Storage::url($itemRadiologi->ttd_dokter ?? '') }}" alt="" width="200px">
+                        </p>
                         <p class="text-center">( {{ $itemRadiologi->user->name ?? '' }} )</p>
                     </div>
                 </div>
             </div>
 
         </div>
-
-        <div class="text-end mt-4 print-footer">
-            <p class="small"><span class="border border-dark">RM 26.RI.RS.REV-1</span></p>
-        </div>
     </div>
-
 </body>
 
 </html>

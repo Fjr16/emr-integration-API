@@ -59,7 +59,6 @@ use App\Http\Controllers\UnitConversionMasterController;
 use App\Http\Controllers\RadiologiPatientQueueController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
-use App\Http\Controllers\RadiologiFormRequestMasterController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\AsesmentKeperawatanDiagnosisController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
@@ -67,12 +66,9 @@ use App\Http\Controllers\LaboratoriumRequestMasterRateController;
 use App\Http\Controllers\LaboratoriumRequestRekamMedisController;
 use App\Http\Controllers\LaboratoriumRequestTypeMasterController;
 use App\Http\Controllers\AsesmentKeperawatanStatusFisikController;
-use App\Http\Controllers\RadiologiFormRequestMasterRateController;
 use App\Http\Controllers\LaboratoriumRequestMasterDetailController;
 use App\Http\Controllers\AsesmentKeperawatanRencanaAsuhanController;
-use App\Http\Controllers\RadiologiFormRequestMasterDetailController;
 use App\Http\Controllers\LaboratoriumRequestCategoryMasterController;
-use App\Http\Controllers\RadiologiFormRequestMasterCategoryController;
 use App\Http\Controllers\LaboratoriumMasterVariabelPemeriksaanController;
 use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhController;
 use App\Http\Controllers\OtherController;
@@ -169,16 +165,8 @@ Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
 
 //migrate refresh radiologi
 Route::get('/radiologi/clear/database', function () {
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_10_11_152207_create_radiologi_form_request_master_categories_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_174606_create_radiologi_form_request_masters_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_11_152343_create_radiologi_form_request_master_details_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_10_11_152658_create_radiologi_form_request_master_rates_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_190333_create_radiologi_form_requests_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_191411_create_radiologi_form_request_details_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_08_25_032628_create_radiologi_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_08_25_033326_create_radiologi_patient_request_details_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_10_11_204819_create_radiologi_variabel_detail_pivots_table.php');
-    // Artisan::call('db:seed --class=RadiologiSeeder');
+    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_190333_create_radiologi_form_requests_table.php');
+    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_191411_create_radiologi_form_request_details_table.php');
     return back()->with('success', 'SUKSES RESET');
 })->name('clear/radiologi/request/hasil');
 
@@ -620,7 +608,7 @@ Route::group(['middleware' => ['permission:print permintaan radiologi']], functi
     Route::get('/rajal/permintaan/radiologi/show/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'show'])->name('rajal/permintaan/radiologi.show');
 });
 Route::get('/rajal/permintaan/radiologi/edit/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'edit'])->name('rajal/permintaan/radiologi.edit');
-Route::post('/rajal/permintaan/radiologi/update/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
+Route::post('/rajal/permintaan/radiologi/update/{id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
 Route::delete('/rajal/permintaan/radiologi/destroy/{id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
 
 //rajal request labor PK
