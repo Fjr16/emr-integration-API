@@ -362,8 +362,8 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($item->patient->radiologiFormRequests as $radiologi)
-                                                                <tr>
+                                                            @foreach ($item->patient->radiologiFormRequests()->orderBy('created_at', 'DESC')->get() as $radiologi)
+                                                                <tr class="{{ $item->id == $radiologi->queue->id ? 'text-success' : '' }}">
                                                                     <td>{{ $loop->iteration }}</td>
                                                                     <td>{{ $radiologi->user->name ?? '' }}
                                                                         ({{ $radiologi->user->staff_id ?? '' }})

@@ -80,7 +80,7 @@ class RadiologiFormRequestController extends Controller
         $this->validate($request, [
             'patient_id' => 'required',
             'room_detail_id' => 'required',
-            'ttd_dokter' => 'required',
+            'ttd_user' => 'required',
             'action_id' => 'required',
         ]);
         $queue = Queue::find($id);
