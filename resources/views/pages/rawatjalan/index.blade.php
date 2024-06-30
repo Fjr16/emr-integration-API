@@ -13,10 +13,10 @@
             {{ session('forbidden') }}
         </div>
     @endif
-    <div class="card p-3 mt-5">
+    <div class="card p-3 pb-0 mt-5">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-8">
                     <h4 class="align-self-center m-0">
                         Daftar Pasien
                         @if ($user->hasRole('Dokter Poli'))
@@ -24,8 +24,22 @@
                             {{ Auth::user()->name }} ({{ Auth::user()->staff_id }})
                         @endif
                         <span class="text text-primary text-uppercase fw-bold fs-7">Rawat Jalan</span>
-                        <span class="text text-primary text-uppercase fw-bold fs-7">({{ date('d-m-Y') }})</span>
+                        <span class="text text-primary text-uppercase fw-bold fs-7">({{ $filterDate->format('Y-m-d') ?? date('Y-m-d') }})</span>
                     </h4>
+                </div>
+                <div class="col-3">
+                    <form action="{{ route('rajal/index') }}" method="GET">
+                        <div class="row">
+                        <label class="col-form-label col-3"></label>
+                        <div class="col-9">
+                            <input type="date" id="tanggal" name="filter" value="{{ request('filter', date('Y-m-d')) }}" class="form-control">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>

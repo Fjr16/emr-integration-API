@@ -27,20 +27,23 @@ class RawatJalanController extends Controller
      */
     public function index()
     {
-        $today = now();
+        if (request('filter')) {
+            $filter = new DateTime(request('filter'));
+        }
+        $filterDate = $filter ?? now();
         $user = Auth::user();
         if ($user->hasRole('Dokter Poli')) {
-            $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($today) {
-                $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($today) {
-                    // $query1->whereDate('created_at', $today);
+            $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($filterDate) {
+                $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($filterDate) {
+                    $query1->whereDate('created_at', $filterDate);
                 });
             })->whereHas('doctorPatient', function ($query2) {
                 $query2->where('user_id', Auth::user()->id);
             })->get();
         } else {
-            $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($today) {
-                $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($today) {
-                    $query1->whereDate('created_at', $today);
+            $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($filterDate) {
+                $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($filterDate) {
+                    $query1->whereDate('created_at', $filterDate);
                 });
             })->get();
         }
@@ -52,7 +55,7 @@ class RawatJalanController extends Controller
             "title" => "Rawat Jalan",
             "menu" => "In Patient",
             "data" => $data,
-            "today" => $today,
+            "filterDate" => $filterDate,
             "user" => $user,
         ]);
     }

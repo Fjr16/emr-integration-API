@@ -32,7 +32,6 @@
           <button type="submit" class="btn btn-primary">Filter</button>
         </div>
         </form>
-
     </div>
   <hr class="m-0 mt-2 mb-3">
   <div class="table-responsive text-nowrap">
