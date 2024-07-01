@@ -994,7 +994,7 @@
                         <h5 class="mb-0">Hasil Pemeriksaan Radiologi</h5>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-6">
                                 <p>Dokter Yang Meminta: </p>
                                 <p>Tgl. Permintaan : </p>
@@ -1007,10 +1007,10 @@
                                 <p>Status : </p>
                                 <p>Validator : </p>
                             </div>
-                        </div>
-                        <div class="nav-align-top mb-4">
-                            {{-- <ul class="nav nav-pills nav-sm mb-3 nav-fill w-100" role="tablist"> --}}
-                                {{-- @can('print hasil pemeriksaan radiologi')
+                        </div> --}}
+                        <div class="nav-align-top mb-4 d-flex justify-content-start">
+                            <ul class="nav nav-tabs nav-pills nav-sm mb-3" role="tablist">
+                                @can('print hasil pemeriksaan radiologi')
                                     <li class="nav-item">
                                         <button type="button"
                                             class="border nav-link {{ session('dokter') == 'radiologi' ? 'active' : '' }}"
@@ -1020,8 +1020,8 @@
                                             Hasil Pemeriksaan Radiologi
                                         </button>
                                     </li>
-                                @endcan --}}
-                                {{-- @can('print hasil pemeriksaan laboratorium pk')
+                                @endcan
+                                @can('print hasil pemeriksaan laboratorium pk')
                                     <li class="nav-item">
                                         <button type="button"
                                             class="border nav-link {{ session('dokter') == 'laboratorium' ? 'active' : '' }}"
@@ -1031,9 +1031,9 @@
                                             Hasil Pemeriksaan Laboratorium PK
                                         </button>
                                     </li>
-                                @endcan --}}
-                                {{-- @can('print hasil pemeriksaan laboratorium pa') --}}
-                                {{-- <li class="nav-item">
+                                @endcan
+                                @can('print hasil pemeriksaan laboratorium pa')
+                                <li class="nav-item">
                                     <button type="button"
                                         class="border nav-link {{ session('dokter') == 'laboratorium-pa' ? 'active' : '' }}"
                                         role="tab" data-bs-toggle="tab"
@@ -1041,9 +1041,9 @@
                                         aria-controls="navs-pills-justified-hasillaboratorium-pa" aria-selected="true">
                                         Hasil Pemeriksaan Laboratorium PA
                                     </button>
-                                </li> --}}
-                                {{-- @endcan --}}
-                            {{-- </ul> --}}
+                                </li>
+                                @endcan
+                            </ul>
 
                             <div class="tab-content">
                                 <div class="table-responsive">
@@ -1166,6 +1166,7 @@
                                     </div> --}}
                                 {{-- </div> --}}
                                 {{-- @endcan --}}
+                                
 
                             </div>
                         </div>

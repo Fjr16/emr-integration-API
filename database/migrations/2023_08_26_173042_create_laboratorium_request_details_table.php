@@ -16,8 +16,12 @@ return new class extends Migration
         Schema::create('laboratorium_request_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('laboratorium_request_id')->nullable();
-            $table->foreignId('laboratorium_request_master_variable_id')->nullable();
-            $table->string('value')->nullable();
+            $table->foreignId('action_id')->nullable();
+            $table->string('keterangan')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->dateTime('tanggal_periksa')->nullable();
+            $table->string('hasil', 100)->nullable();
+            $table->enum('status', ['WAITING', 'UNVALIDATE', 'VALIDATE'])->default('WAITING');
             $table->timestamps();
         });
     }

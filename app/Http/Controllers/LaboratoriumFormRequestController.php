@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Queue;
+use App\Models\Action;
 use App\Models\RoomDetail;
 use Illuminate\Http\Request;
+use App\Models\ActionCategory;
 use App\Models\InitialAssesment;
+use App\Models\LaboratoriumMasterTemplate;
+use App\Models\LaboratoriumMasterTemplateDetail;
 use App\Models\RawatInapPatient;
 use App\Models\LaboratoriumRequest;
 use App\Models\PatientActionReport;
@@ -27,63 +31,40 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function index($id)
     {
-        $currentRouteName = Route::currentRouteName();
-
         $item = Queue::find($id);
-        $data = LaboratoriumRequestCategoryMaster::all();
-        $types = LaboratoriumRequestTypeMaster::all();
-        
-        if ($currentRouteName == 'rajal/laboratorium/request.index') {
-            $roomDetails = RoomDetail::where('isActive', true)->get();
-            $rawat_jalan_poli_patient_id = $item->rawatJalanPatient->rawatJalanPoliPatient->id ?? '';
-            $diagnosa = null;
-            if($rawat_jalan_poli_patient_id){
-                $assesmenAwalMedis = InitialAssesment::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
-                $patientActionReport = PatientActionReport::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
+        $categoryActionPk = ActionCategory::where('name', 'Laboratorium Patologi Klinik')->first(); 
+        $data = Action::where('action_category_id', $categoryActionPk->id)->get();
+        $templates = LaboratoriumMasterTemplate::all();
 
-                if($assesmenAwalMedis && $patientActionReport){
-                    if($assesmenAwalMedis->created_at->isBefore($patientActionReport->created_at)){
-                        $diagnosa = $patientActionReport->diagnosa;
-                    }else{
-                        $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-                    }
-                }elseif($assesmenAwalMedis && !$patientActionReport){
-                    $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-                }elseif(!$assesmenAwalMedis && $patientActionReport){
+        $rawat_jalan_poli_patient_id = $item->rawatJalanPatient->rawatJalanPoliPatient->id ?? '';
+        $diagnosa = null;
+        if($rawat_jalan_poli_patient_id){
+            $assesmenAwalMedis = InitialAssesment::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
+            $patientActionReport = PatientActionReport::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
+
+            if($assesmenAwalMedis && $patientActionReport){
+                if($assesmenAwalMedis->created_at->isBefore($patientActionReport->created_at)){
                     $diagnosa = $patientActionReport->diagnosa;
+                }else{
+                    $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
                 }
+            }elseif($assesmenAwalMedis && !$patientActionReport){
+                $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
+            }elseif(!$assesmenAwalMedis && $patientActionReport){
+                $diagnosa = $patientActionReport->diagnosa;
             }
-            $routeStore = 'rajal/laboratorium/request.store';
-
-            return view('pages.permintaanLaboratorium.create', [
-                "title" => "Rawat Jalan",
-                "menu" => "In Patient",
-                'item' => $item,
-                'data' => $data,
-                'types' => $types,
-                'diagnosa' => $diagnosa,
-                'roomDetails' => $roomDetails,
-                'currentRouteName' => $currentRouteName,
-                'routeStore' => $routeStore,
-            ]);
-        }else if ($currentRouteName == 'ranap/laboratorium/request.index'){
-            $diagnosa = '';
-            $room = Room::where('name', 'like', '%PBM%')->first();
-            $roomDetails = RoomDetail::where('isActive', true)->where('room_id', $room->id)->get();
-            $routeStore = 'ranap/laboratorium/request.store';
-            return view('pages.permintaanLaboratorium.create', [
-                "title" => "Rawat Inap",
-                "menu" => "Rawat Inap",
-                'item' => $item,
-                'data' => $data,
-                'types' => $types,
-                'diagnosa' => $diagnosa,
-                'room' => $room,
-                'roomDetails' => $roomDetails,
-                'currentRouteName' => $currentRouteName,
-                'routeStore' => $routeStore,
-            ]);
         }
+        $routeStore = 'rajal/laboratorium/request.store';
+
+        return view('pages.permintaanLaboratorium.create', [
+            "title" => "Rawat Jalan",
+            "menu" => "In Patient",
+            'item' => $item,
+            'data' => $data,
+            'templates' => $templates,
+            'diagnosa' => $diagnosa,
+            'routeStore' => $routeStore,
+        ]);
         
     }
 
@@ -92,9 +73,15 @@ class LaboratoriumFormRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function getTemplate($id)
     {
-        //
+        $categoryActionPk = ActionCategory::where('name', 'Laboratorium Patologi Klinik')->first(); 
+        $data = Action::where('action_category_id', $categoryActionPk->id)->get();
+        $item = LaboratoriumMasterTemplate::find($id);
+        return response()->json([
+            'details' => $item->laboratoriumMasterTemplateDetails,
+            'actions' => $data
+        ]);
     }
 
     /**
@@ -105,70 +92,62 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $currentRouteName = Route::currentRouteName();
-        //get data for Laboratorium Request from request post
-        $diagnosa = $request->input('diagnosa');
-        $ruang = $request->input('ruang');
-        $ruangDetail = $request->input('room_detail_id');
-        $tanggal = $request->input('tanggal');
-        $tipe = $request->input('laboratorium_request_type_master_id');
-        $catatan =  $request->input('catatan');
-        $queue = Queue::find($id);
+        // laboratoriumRequest
+        $this->validate($request, [
+            'action_id' => 'required',
+        ]);
+        // data detail request
+        $detailActions = $request->input('action_id', []); 
+        $detailKets = $request->input('keterangan', []); 
 
-        //get data for request detail
-        $laboratoriumReqIds = $request->input('laboratorium_request_master_variable_id', []);
-
-        $addDetails = [];
-
-        foreach ($laboratoriumReqIds as $reqId) {
-            $addDetails[] = [
-                'laboratorium_request_master_variable_id' => $reqId,
-                'value' => null,
-            ];
+        // create template master lab pk
+        if ($request->generate_template) {
+            $dataTemplate = $request->validate([
+                'name' => 'required'
+            ]);
+            $itemTemplate = LaboratoriumMasterTemplate::create($dataTemplate);
+            foreach ($detailActions as $key => $action_id) {
+                LaboratoriumMasterTemplateDetail::create([
+                    'laboratorium_master_template_id' => $itemTemplate->id,
+                    'action_id' => $action_id,
+                    'keterangan' => $detailKets[$key] ?? '',
+                ]);
+            }
         }
-
-         // create Laboratorium Request
-         $item = LaboratoriumRequest::create([
-            'user_id' => Auth::user()->id,
-            'patient_id' => $queue->patient->id,
-            'queue_id' => $queue->id,
-            'diagnosa' => $diagnosa,
-            'ruang' => $ruang,
-            'room_detail_id' => $ruangDetail,
-            'tanggal' => $tanggal,
-            'catatan' => $catatan,
-            'laboratorium_request_type_master_id' => $tipe,
+        
+        $data = $request->validate([
+            'diagnosa' => 'required',
+            'tanggal_sampel' => 'required',
+            'tipe_permintaan' => 'required',
+            'room_detail_id' => 'required',
+            'ttd_dokter' => 'required',
         ]);
 
+        // find queue
+        $queue = Queue::find($id);
+
+        // create Laboratorium Request
+        $data['user_id'] =  Auth::user()->id;
+        $data['queue_id'] =  $queue->id;
+        $data['patient_id'] =  $queue->patient->id;
+        $data['catatan'] =  $request->input('catatan');
+        $item = LaboratoriumRequest::create($data);
+
         //create Laboratorium Request Detail
-        foreach($addDetails as $new){
+        foreach($detailActions as $key => $action_id){
             LaboratoriumRequestDetail::create([
                 'laboratorium_request_id' => $item->id, 
-                'laboratorium_request_master_variable_id' => $new['laboratorium_request_master_variable_id'], 
-                'value' => $new['value'], 
+                'action_id' => $action_id, 
+                'keterangan' => $detailKets[$key] ?? '', 
             ]);
         }
         
-        if ($currentRouteName == 'rajal/laboratorium/request.store') {
-            return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])
-                    ->with([
-                        'success' => 'Berhasil Ditambahkan',
-                        'btn' => 'dokter',
-                        'dokter' => 'laboratorium',
-                    ]);
-        }else{
-            LaboratoriumPatientResult::create([
-                'queue_id' => $queue->id,
-                'patient_id' => $queue->patient_id,
-                'laboratorium_request_id' => $item->id,
-                'status' => 'WAITING',
-            ]);
-            return redirect()->route('rawat/inap.show', $queue->rawatInapPatient->id)
-                    ->with([
-                        'success' => 'Berhasil Ditambahkan',
-                        'btn' => 'skriningCovid',
-                    ]);
-        }
+        return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])
+                ->with([
+                    'success' => 'Berhasil Ditambahkan',
+                    'btn' => 'dokter',
+                    'dokter' => 'laboratorium',
+                ]);
     }
 
     /**

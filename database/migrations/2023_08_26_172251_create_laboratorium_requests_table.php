@@ -16,14 +16,18 @@ return new class extends Migration
         Schema::create('laboratorium_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('patient_id')->nullable();
             $table->foreignId('queue_id')->nullable();
-            $table->foreignId('laboratorium_request_type_master_id')->nullable();
-            $table->foreignId('patient_category_id')->nullable();
+            $table->foreignId('patient_id')->nullable();
             $table->foreignId('room_detail_id')->nullable();
-            $table->string('diagnosa')->nullable();
-            $table->string('ruang')->nullable();
-            $table->date('tanggal')->nullable();
+            $table->string('diagnosa', 50)->nullable();
+            $table->text('catatan')->nullable();
+            $table->string('ttd_dokter',100)->nullable();
+            $table->string('tipe_permintaan', 20)->nullable();
+            $table->date('tanggal_sampel')->nullable();
+            $table->dateTime('jadwal_periksa')->nullable();
+            $table->string('no_reg', 20)->nullable();
+            $table->enum('status', ['WAITING', 'CANCEL', 'DENIED', 'ACCEPTED', 'ONGOING', 'FINISHED'])->default('WAITING');
+            $table->foreignId('validator_id')->nullable();
             $table->timestamps();
         });
     }

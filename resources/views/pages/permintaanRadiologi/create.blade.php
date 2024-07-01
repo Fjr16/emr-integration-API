@@ -76,6 +76,7 @@
                     </div>
                 </div>
 
+                {{-- tanda tangan --}}
                 <div class="d-flex flex-row justify-content-end mt-5">
                     <span>Padang, Tanggal</span>
                     <div class="ms-2">

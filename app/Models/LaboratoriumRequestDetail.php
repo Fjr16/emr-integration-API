@@ -11,15 +11,22 @@ class LaboratoriumRequestDetail extends Model
 
     protected $fillable = [
         'laboratorium_request_id',
-        'laboratorium_request_master_variable_id',
-        'value',
+        'action_id',
+        'keterangan',  
+        'user_id',  //petugas lab pk
+        'tanggal_periksa',
+        'hasil',
+        'status',
     ];
 
 
     public function laboratoriumRequest(){
         return $this->belongsTo(LaboratoriumRequest::class);
     }
-    public function laboratoriumRequestMasterVariable(){
-        return $this->belongsTo(LaboratoriumRequestMasterVariable::class);
+    public function action(){
+        return $this->belongsTo(Action::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

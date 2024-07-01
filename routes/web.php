@@ -624,6 +624,8 @@ Route::group(['middleware' => ['permission:print permintaan labor pk']], functio
 Route::group(['middleware' => ['permission:delete permintaan labor pk']], function () {
     Route::delete('/rajal/laboratorium/request/destroy/{id}', [LaboratoriumFormRequestController::class, 'destroy'])->name('rajal/laboratorium/request.destroy');
 });
+Route::get('/laboratorium/request/getTemplate/{id}', [LaboratoriumFormRequestController::class, 'getTemplate'])->name('laboratorium/request.getTemplate');
+
 
 //ranap request labor PK
 Route::group(['middleware' => ['permission:tambah permintaan labor pk']], function () {

@@ -10,40 +10,37 @@ class LaboratoriumRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'patient_id',
+        'user_id',  //dokter yang membuat permintaan
         'queue_id',
-        'laboratorium_request_type_master_id',
-        'patient_category_id',
-        'diagnosa',
-        'ruang',
+        'patient_id',
         'room_detail_id',
-        'tanggal',
-        'catatan'
+        'diagnosa',
+        'catatan',
+        'ttd_dokter',
+        'tipe_permintaan',
+        'tanggal_sampel',
+        'jadwal_periksa',
+        'no_reg',
+        'status',
+        'validator_id',
     ];
 
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function patient(){
-        return $this->belongsTo(Patient::class);
-    }
-    public function patientCategory(){
-        return $this->belongsTo(PatientCategory::class);
+    public function validator(){
+        return $this->belongsTo(User::class, 'validator_id');
     }
     public function queue(){
         return $this->belongsTo(Queue::class);
     }
-    public function laboratoriumRequestDetails(){
-        return $this->hasMany(LaboratoriumRequestDetail::class);
-    }
-    public function laboratoriumPatientResult(){
-        return $this->hasOne(laboratoriumPatientResult::class);
-    }
-    public function laboratoriumRequestTypeMaster(){
-        return $this->belongsTo(LaboratoriumRequestTypeMaster::class);
+    public function patient(){
+        return $this->belongsTo(Patient::class);
     }
     public function roomDetail(){
         return $this->belongsTo(RoomDetail::class);
+    }
+    public function laboratoriumRequestDetails(){
+        return $this->hasMany(LaboratoriumRequestDetail::class);
     }
 }
