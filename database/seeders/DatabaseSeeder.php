@@ -20,11 +20,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            LaboratoriumRequestCategoryMasterSeeder::class,
-            LaboratoriumRequestMasterVariableSeeder::class,
-            LaboratoriumRequestMasterDetailSeeder::class,
             PermissionSeeder::class,
-            RadiologiSeeder::class,
             RolePermissionSeeder::class,
             RoleSeeder::class,
             RoomDetailSeeder::class,
@@ -39,7 +35,6 @@ class DatabaseSeeder extends Seeder
             PatientCategorySeeder::class,
             SpecialistSeeder::class,
             UserSpecialistSeeder::class,
-            CostEstimateSimulationSeeder::class,
             TarifLayananSeeder::class,
             DoctorScheduleSeeder::class,
             // seeder untuk daftar wilayah dari package laravolt
