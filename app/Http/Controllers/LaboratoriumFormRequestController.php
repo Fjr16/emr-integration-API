@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use App\Models\Queue;
 use App\Models\Action;
-use App\Models\RoomDetail;
 use Illuminate\Http\Request;
 use App\Models\ActionCategory;
 use App\Models\InitialAssesment;
 use App\Models\LaboratoriumMasterTemplate;
 use App\Models\LaboratoriumMasterTemplateDetail;
-use App\Models\RawatInapPatient;
 use App\Models\LaboratoriumRequest;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Models\LaboratoriumPatientResult;
 use App\Models\LaboratoriumRequestDetail;
-use App\Models\LaboratoriumRequestTypeMaster;
-use App\Models\LaboratoriumRequestCategoryMaster;
-use App\Models\LaboratoriumRequestMasterVariable;
 
 class LaboratoriumFormRequestController extends Controller
 {
@@ -160,20 +152,11 @@ class LaboratoriumFormRequestController extends Controller
     {
         $queue = Queue::find($queue_id);
         $item = LaboratoriumRequest::find($id);
-        $categoryIds = [];
-        foreach ($item->laboratoriumRequestDetails as $detail) {
-            if($detail->laboratoriumRequestMasterVariable->laboratoriumRequestCategoryMaster){
-                $categoryIds[] = $detail->laboratoriumRequestMasterVariable->laboratoriumRequestCategoryMaster->id;
-            }
-        }
-        $dataKategori = LaboratoriumRequestCategoryMaster::all();
         return view('pages.permintaanLaboratorium.show', [
             "title" => "Rawat Jalan",
             "menu" => "In Patient",
             'queue' => $queue,
             'item' => $item,
-            'dataKategori' => $dataKategori,
-            'categoryIds' => $categoryIds,
         ]);
     }
 
@@ -185,9 +168,7 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function edit($id)
     {
-        $item = LaboratoriumRequestCategoryMaster::find($id);
-        $data = $item->laboratoriumRequestMasterVariables->pluck('id');
-        return response()->json($data);
+        //
     }
 
     /**
@@ -211,33 +192,20 @@ class LaboratoriumFormRequestController extends Controller
     public function destroy($id)
     {
         $item = LaboratoriumRequest::find($id);
-        if(!$item->laboratoriumPatientResult){
-            $item->laboratoriumRequestDetails()->delete();
-            $item->delete();
-        }else{
-            if($item->laboratoriumPatientResult->status == 'SELESAI' || $item->laboratoriumPatientResult->tanggal_periksa == null){
-                $item->laboratoriumRequestDetails()->delete();
-                $item->laboratoriumPatientResult->delete();
-                $item->delete();
-            }else{
-                return back()->with([
-                    'error' => 'Gagal!! Pasien telah didaftarkan untuk pemeriksaan',
-                    'btn' => 'dokter',
-                    'dokter' => 'laboratorium',
-                ]);
-            }
+        if ($item->status == 'FINISHED' || $item->status == 'ONGOING') {
+            return back()->with([
+                'error' => 'Data Tidak Dapat Dihapus !! Karena Permintaan Dalam Pemeriksaan / Telah Selesai',
+                'btn' => 'dokter',
+                'dokter' => 'laboratorium',
+            ]);
         }
+        $item->laboratoriumRequestDetails()->delete();
+        $item->delete();
 
         return back()->with([
             'success' => 'Berhasil Dihapus',
             'btn' => 'dokter',
             'dokter' => 'laboratorium',
         ]);
-    }
-
-    public function uncheckCategory($id){
-        $item = LaboratoriumRequestMasterVariable::find($id);
-        $category = $item->laboratorium_request_category_master_id;
-        return response()->json($category);
     }
 }

@@ -616,7 +616,6 @@ Route::group(['middleware' => ['permission:tambah permintaan labor pk']], functi
     Route::get('/rajal/laboratorium/request/create/{id}', [LaboratoriumFormRequestController::class, 'index'])->name('rajal/laboratorium/request.index');
     Route::post('rajal/laboratorium/request/store/{id}', [LaboratoriumFormRequestController::class, 'store'])->name('rajal/laboratorium/request.store');
     Route::get('/rajal/laboratorium/request/edit/{id}', [LaboratoriumFormRequestController::class, 'edit'])->name('rajal/laboratorium/request.edit');
-    Route::get('/rajal/laboratorium/request/uncheckCategory/{id}', [LaboratoriumFormRequestController::class, 'uncheckCategory'])->name('rajal/laboratorium/request.uncheckCategory');
 });
 Route::group(['middleware' => ['permission:print permintaan labor pk']], function () {
     Route::get('/rajal/laboratorium/request/show/{queue_id}/{labor_id}', [LaboratoriumFormRequestController::class, 'show'])->name('rajal/laboratorium/request.show');
@@ -626,54 +625,9 @@ Route::group(['middleware' => ['permission:delete permintaan labor pk']], functi
 });
 Route::get('/laboratorium/request/getTemplate/{id}', [LaboratoriumFormRequestController::class, 'getTemplate'])->name('laboratorium/request.getTemplate');
 
-
-//ranap request labor PK
-Route::group(['middleware' => ['permission:tambah permintaan labor pk']], function () {
-    Route::get('/ranap/laboratorium/request/create/{id}', [LaboratoriumFormRequestController::class, 'index'])->name('ranap/laboratorium/request.index');
-    Route::post('ranap/laboratorium/request/store/{id}', [LaboratoriumFormRequestController::class, 'store'])->name('ranap/laboratorium/request.store');
-    Route::get('/ranap/laboratorium/request/edit/{id}', [LaboratoriumFormRequestController::class, 'edit'])->name('ranap/laboratorium/request.edit');
-    Route::get('/ranap/laboratorium/request/uncheckCategory/{id}', [LaboratoriumFormRequestController::class, 'uncheckCategory'])->name('ranap/laboratorium/request.uncheckCategory');
-});
-
 //Petugas Labor request labor Pk
 Route::get('laboratorium/PK/request/create/{id}', [LaboratoriumRequestRekamMedisController::class, 'create'])->name('laboratorium/PK/request.create');
 Route::post('laboratorium/PK/request/store/{id}', [LaboratoriumRequestRekamMedisController::class, 'store'])->name('laboratorium/PK/request.store');
-
-Route::group(['middleware', 'permission:master laboratorium pk'], function () {
-    //master tipe permintaan labor PK
-    Route::get('/laboratorium/pk/tipe/permintaan/create', [LaboratoriumRequestTypeMasterController::class, 'create'])->name('laboratorium/pk/tipe/permintaan.create');
-    Route::post('/laboratorium/pk/tipe/permintaan/store', [LaboratoriumRequestTypeMasterController::class, 'store'])->name('laboratorium/pk/tipe/permintaan.store');
-    Route::get('/laboratorium/pk/tipe/permintaan/edit/{id}', [LaboratoriumRequestTypeMasterController::class, 'edit'])->name('laboratorium/pk/tipe/permintaan.edit');
-    Route::put('/laboratorium/pk/tipe/permintaan/update/{id}', [LaboratoriumRequestTypeMasterController::class, 'update'])->name('laboratorium/pk/tipe/permintaan.update');
-    Route::delete('/laboratorium/pk/tipe/permintaan/destroy/{id}', [LaboratoriumRequestTypeMasterController::class, 'destroy'])->name('laboratorium/pk/tipe/permintaan.destroy');
-    //master kategori pemeriksaan labor PK
-    Route::get('/laboratorium/pk/category/pemeriksaan/create', [LaboratoriumRequestCategoryMasterController::class, 'create'])->name('laboratorium/pk/category/pemeriksaan.create');
-    Route::post('/laboratorium/pk/category/pemeriksaan/store', [LaboratoriumRequestCategoryMasterController::class, 'store'])->name('laboratorium/pk/category/pemeriksaan.store');
-    Route::get('/laboratorium/pk/category/pemeriksaan/edit/{id}', [LaboratoriumRequestCategoryMasterController::class, 'edit'])->name('laboratorium/pk/category/pemeriksaan.edit');
-    Route::put('/laboratorium/pk/category/pemeriksaan/update/{id}', [LaboratoriumRequestCategoryMasterController::class, 'update'])->name('laboratorium/pk/category/pemeriksaan.update');
-    Route::delete('/laboratorium/pk/category/pemeriksaan/destroy/{id}', [LaboratoriumRequestCategoryMasterController::class, 'destroy'])->name('laboratorium/pk/category/pemeriksaan.destroy');
-    //master variabel pemeriksaan labor PK
-    Route::get('/laboratorium/pk/variabel/pemeriksaan/create', [LaboratoriumMasterVariabelPemeriksaanController::class, 'create'])->name('laboratorium/pk/variabel/pemeriksaan.create');
-    Route::post('/laboratorium/pk/variabel/pemeriksaan/store', [LaboratoriumMasterVariabelPemeriksaanController::class, 'store'])->name('laboratorium/pk/variabel/pemeriksaan.store');
-    Route::get('/laboratorium/pk/variabel/pemeriksaan/edit/{id}', [LaboratoriumMasterVariabelPemeriksaanController::class, 'edit'])->name('laboratorium/pk/variabel/pemeriksaan.edit');
-    Route::put('/laboratorium/pk/variabel/pemeriksaan/update/{id}', [LaboratoriumMasterVariabelPemeriksaanController::class, 'update'])->name('laboratorium/pk/variabel/pemeriksaan.update');
-    Route::delete('/laboratorium/pk/variabel/pemeriksaan/destroy/{id}', [LaboratoriumMasterVariabelPemeriksaanController::class, 'destroy'])->name('laboratorium/pk/variabel/pemeriksaan.destroy');
-    //master detail variabel pemeriksaan labor PK
-    Route::post('/laboratorium/pk/kondisi/normal/variabel/store/{id}', [LaboratoriumRequestMasterDetailController::class, 'store'])->name('laboratorium/pk/kondisi/normal/variabel.store');
-    Route::get('/laboratorium/pk/kondisi/normal/variabel/edit/{id}', [LaboratoriumRequestMasterDetailController::class, 'edit'])->name('laboratorium/pk/kondisi/normal/variabel.edit');
-    Route::put('/laboratorium/pk/kondisi/normal/variabel/update/{id}', [LaboratoriumRequestMasterDetailController::class, 'update'])->name('laboratorium/pk/kondisi/normal/variabel.update');
-    Route::delete('/laboratorium/pk/kondisi/normal/variabel/destroy/{id}', [LaboratoriumRequestMasterDetailController::class, 'destroy'])->name('laboratorium/pk/kondisi/normal/variabel.destroy');
-    //master Tarif variabel pemeriksaan labor PK
-    Route::get('/laboratorium/pk/tarif/pemeriksaan/index', [LaboratoriumRequestMasterRateController::class, 'index'])->name('laboratorium/pk/tarif/pemeriksaan.index');
-    Route::get('/laboratorium/pk/tarif/pemeriksaan/create/{id}', [LaboratoriumRequestMasterRateController::class, 'create'])->name('laboratorium/pk/tarif/pemeriksaan.create');
-    Route::get('/laboratorium/pk/tarif/pemeriksaan/show/{id}', [LaboratoriumRequestMasterRateController::class, 'show'])->name('laboratorium/pk/tarif/pemeriksaan.show');
-    Route::post('/laboratorium/pk/tarif/pemeriksaan/store', [LaboratoriumRequestMasterRateController::class, 'store'])->name('laboratorium/pk/tarif/pemeriksaan.store');
-    Route::get('/laboratorium/pk/tarif/pemeriksaan/edit/{id}', [LaboratoriumRequestMasterRateController::class, 'edit'])->name('laboratorium/pk/tarif/pemeriksaan.edit');
-    //update tarif per kategori pasien
-    Route::put('/laboratorium/pk/tarif/pemeriksaan/update/{id}', [LaboratoriumRequestMasterRateController::class, 'update'])->name('laboratorium/pk/tarif/pemeriksaan.update');
-    //update tarif per variabel pemeriksaan labor
-    Route::put('/laboratorium/pk/variabel/tarif/pemeriksaan/update/{id}', [LaboratoriumRequestMasterRateController::class, 'update'])->name('laboratorium/pk/variabel/tarif/pemeriksaan.update');
-});
 
 //rajal tindakan
 Route::group(['middleware' => ['permission:tambah laporan tindakan']], function () {
@@ -794,15 +748,12 @@ Route::group(['middleware' => ['permission:print hasil pemeriksaan laboratorium 
 Route::get('/laboratorium/patient/hasil/reviewUlang/{id}', [LaboratoriumPatientController::class, 'reviewUlang'])->name('laboratorium/patient/hasil.reviewUlang');
 Route::post('/laboratorium/patient/hasil/reviewUlangStore/{id}', [LaboratoriumPatientController::class, 'reviewUlangStore'])->name('laboratorium/patient/hasil.reviewUlangStore');
 // });
-//checkKondisiKritis
-Route::get('/laboratorium/patient/queue/show/{id}', [LaboratoriumPatientQueueController::class, 'show'])->name('laboratorium/patient/queue.show');
 
 //Laboratorium Patient Queue
 Route::group(['middleware' => ['permission:daftar jadwal pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient/queue', [LaboratoriumPatientQueueController::class, 'index'])->name('laboratorium/patient/queue.index');
 });
 Route::group(['middleware' => ['permission:atur jadwal pemeriksaan laboratorium pk|permission:edit jadwal pemeriksaan laboratorium pk']], function () {
-    Route::get('/laboratorium/patient/queue/create/{id}', [LaboratoriumPatientQueueController::class, 'create'])->name('laboratorium/patient/queue.create');
     Route::post('/laboratorium/patient/queue/store/{id}', [LaboratoriumPatientQueueController::class, 'store'])->name('laboratorium/patient/queue.store');
 });
 Route::group(['middleware' => ['permission:validasi status pemeriksaan laboratorium pk']], function () {

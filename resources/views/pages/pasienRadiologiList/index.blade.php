@@ -45,7 +45,7 @@
           <th>No Reg Radiologi</th>
           <th>No Rekam Medis</th>
           <th>Nama</th>
-          <th>Kategori Pasien</th>
+          <th>Tanggungan</th>
           <th>Diagnosa</th>
           <th>Tanggal Periksa</th>
           <th>Validator</th>

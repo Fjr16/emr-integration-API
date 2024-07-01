@@ -422,8 +422,10 @@
                                                             <tr class="text-nowrap">
                                                                 <th class="text-body">No</th>
                                                                 <th class="text-body">Dokter</th>
-                                                                <th class="text-body">No. Reg. Lab</th>
-                                                                <th class="text-body">Jam Pengambilan Sampel</th>
+                                                                <th class="text-body">Asal Ruang</th>
+                                                                <th class="text-body">Diagnosa</th>
+                                                                <th class="text-body">Kategori</th>
+                                                                <th class="text-body">Tgl. Ambil Sampel</th>
                                                                 <th class="text-body">Tanggal Permintaan</th>
                                                                 @canany(['print permintaan labor pk', 'delete permintaan labor pk'])
                                                                     <th class="text-body">Action</th>
@@ -432,30 +434,33 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($item->patient->laboratoriumRequests as $labor)
-                                                                <tr>
+                                                                <tr class="{{ $item->id == $labor->queue->id ? 'text-success' : '' }}">
                                                                     <td>{{ $loop->iteration }}</td>
                                                                     <td>{{ $labor->user->name ?? '' }}</td>
-                                                                    <td>{{ $labor->no_reg ?? '' }}</td>
-                                                                    <td>{{ $labor->tanggal ?? '' }}</td>
+                                                                    <td>{{ $labor->roomDetail->name ?? '' }}</td>
+                                                                    <td>{{ $labor->diagnosa ?? '' }}</td>
+                                                                    <td>{{ $labor->tipe_permintaan ?? '' }}</td>
+                                                                    <td>{{ $labor->tanggal_sampel ?? '' }}</td>
                                                                     <td>{{ $labor->created_at->format('Y-m-d') ?? '' }}</td>
                                                                     <td>
                                                                         <div class="d-flex align-self-center">
-                                                                            @can('print permintaan labor pk')
-                                                                                <a href="{{ route('rajal/laboratorium/request.show', ['queue_id' => $item->id, 'labor_id' => $labor->id]) }}"
-                                                                                    target="blank" class="btn btn-dark btn-sm"><i
-                                                                                        class='bx bx-printer'></i></a>
-                                                                            @endcan
-                                                                            @can('delete permintaan labor pk')
+                                                                            <a href="{{ route('rajal/laboratorium/request.show', ['queue_id' => $item->id, 'labor_id' => $labor->id]) }}"
+                                                                                target="blank" class="btn btn-dark btn-sm mx-2"><i
+                                                                                    class='bx bx-printer'></i></a>
+                                                                            @if ($labor->status == 'FINISHED' || $labor->status == 'ONGOING')
+                                                                                <button type="button" class="btn btn-info btn-sm"><i class='bx bx-book-reader'></i></button>
+                                                                            @else
+                                                                                <a href="" class="btn btn-warning btn-sm me-2"><i class='bx bx-edit'></i></a>
                                                                                 <form
                                                                                     action="{{ route('rajal/laboratorium/request.destroy', $labor->id) }}"
                                                                                     method="POST">
                                                                                     @method('DELETE')
                                                                                     @csrf
                                                                                     <button type="submit"
-                                                                                        class="btn btn-sm btn-danger mx-2"><i
+                                                                                        class="btn btn-sm btn-danger"><i
                                                                                             class="bx bx-trash"></i></button>
                                                                                 </form>
-                                                                            @endcan
+                                                                            @endif
                                                                         </div>
                                                                     </td>
                                                                 </tr>

@@ -115,152 +115,103 @@
 <body>
     <div class="page">
         <div class="header">
-            <div class="d-flex flex-row align-items-center justify-content-center">
-                <div class="col-1">
+            <div class="row">
+                <div class="col-2">
                     <img src="{{ asset('/assets/img/logo.png') }}" alt="" />
                 </div>
-                <div class="text-center mx-2 col-6">
-                    <h1>FORMULIR PERMINTAAN LABORATORIUM</h1>
-                </div>
-                <div class="">
-                    <div class="border border-dark py-1 px-1" style="border-radius: 15px">
-                        <table class="small small-table">
-                            <tr>
-                                <td class="fs-8">Nama</td>
-                                <td class="px-2 fs-8">:</td>
-                                <td class="fs-8">{{ $item->patient->name }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fs-8">Tanggal Lahir</td>
-                                <td class="px-2 fs-8">:</td>
-                                @php
-                                    $tanggalLahir = new DateTime($item->patient->tanggal_lhr);
-                                    $now = new DateTime();
-                                    $ageDiff = $now->diff($tanggalLahir);
-                                    $ageString = $ageDiff->format('%y tahun %m bulan');
-                                @endphp
-                                <td class="fs-8">{{ $tanggalLahir->format('d-m-Y') ?? '....' }}
-                                    <span>({{ $ageString ?? '....' }})</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fs-8">No Rekam Medis</td>
-                                <td class="px-2 fs-8">:</td>
-                                <td class="fs-8">
-                                    {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fs-8">NIK</td>
-                                <td class="px-2 fs-8">:</td>
-                                <td class="fs-8">{{ $item->patient->nik }}</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="col-8 d-flex align-self-center">
+                    <h1 class="mx-auto text-uppercase text-center ">FORMULIR PERMINTAAN LABORATORIUM</h1>
                 </div>
             </div>
         </div>
 
         <div class="content">
-            <table class="my-3">
+            <table class="w-100 my-3">
                 <tr>
-                    <td>Nama Pasien</td>
-                    <td>:</td>
-                    <td>{{ $item->patient->name ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>Tanggal Lahir</td>
-                    <td>:</td>
-                    <td>{{ $item->patient->tanggal_lhr ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>No RM</td>
-                    <td>:</td>
-                    <td>{{ $item->patient->no_rm ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>Diagnosa</td>
-                    <td>:</td>
-                    <td>{!! $item->diagnosa ?? '' !!}</td>
-                </tr>
-                <tr>
-                    <td>Tanggungan</td>
-                    <td>:</td>
-                    <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>Ruang</td>
-                    <td>:</td>
-                    <td>{{ $item->queue->doctorPatient->user->roomDetail->room->name ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>Detail Ruang</td>
-                    <td>:</td>
-                    <td>{{ $item->queue->doctorPatient->user->roomDetail->name ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>Tanggal Pengambilan Sampel</td>
-                    <td>:</td>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}</td>
-                </tr>
-                <tr>
-                    <td>Kategori Permintaan</td>
-                    <td>:</td>
-                    <td>{{ $item->laboratoriumRequestTypeMaster->name ?? '' }}</td>
+                    <td class="w-50">
+                        <table class="mx-3">
+                            <tr>
+                                <td class="fw-bold">Nama Pasien</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $item->patient->name ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Tgl. Lahir</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $item->patient->tanggal_lhr ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">No. RM</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Tanggungan</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="w-50">
+                        <table class="mx-3">
+                            <tr>
+                                <td class="fw-bold">Diagnosa</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{!! $item->diagnosa ?? '' !!}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Asal Ruang</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $item->queue->doctorPatient->user->roomDetail->name ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Tgl. Ambil Sampel</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Kategori</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td class="{{ $item->tipe_permintaan == 'Urgent' ? 'btn btn-sm btn-danger' : '' }}">{{ $item->tipe_permintaan ?? '' }}</td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
 
-            {{-- @if (in_array($data->first()->id, $categoryIds))
-                    <p class="fw-bold mb-0 mt-2">{{ $data->first()->name ?? '' }}</p>
-                    @foreach ($item->laboratoriumRequestDetails as $operasi)
-                    @if ($operasi->laboratoriumRequestMaster)
-                        @if ($operasi->laboratoriumRequestMaster->laboratoriumRequestCategoryMaster->id == $data->first()->id)
-                        <div class="">
-                            <div class="form-check mt-1">
-                                <input type="radio" class="form-check-input" style="pointer-events: none;" checked/>
-                                <label class="form-check-label m-0">
-                                {{ $operasi->laboratoriumRequestMaster->name ?? '' }}
-                                </label>
-                            </div>
-                        </div>
-                        @endif
-                    @endif
+            <table class="table-bordered w-100">
+                <thead>
+                    <tr class="bg-dark text-white text-center">
+                        <th>Kode Pemeriksaan</th>
+                        <th>Nama Pemeriksaan</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($item->laboratoriumRequestDetails as $detail)                        
+                        <tr class="text-center">
+                            <td>{{ $detail->action->icd_code ?? '' }}</td>
+                            <td>{{ $detail->action->name ?? '' }}</td>
+                            <td>{{ $detail->keterangan ?? '-' }}</td>
+                        </tr>
                     @endforeach
-                @endif --}}
+                </tbody>
+            </table>
 
-            <div class="row mb-3">
-                @foreach ($dataKategori as $category)
-                    @if (in_array($category->id, $categoryIds))
-                        <div class="col-4">
-                            <h6 class="mb-2">{{ $category->name ?? '' }}</h6>
-                            <div class="mb-3 mx-1">
-                                @foreach ($item->laboratoriumRequestDetails as $detail)
-                                    @if ($detail->laboratoriumRequestMasterVariable->laboratoriumRequestCategoryMaster)
-                                        @if ($detail->laboratoriumRequestMasterVariable->laboratoriumRequestCategoryMaster->id == $category->id)
-                                            <div class="form-check mt-1">
-                                                <input type="checkbox" style="pointer-events: none;"
-                                                    class="form-check-input" checked />
-                                                <label class="form-check-label m-0">
-                                                    {{ $detail->laboratoriumRequestMasterVariable->name ?? '' }}
-                                                    {{ $detail->value ? $detail->value : '' }}
-                                                </label>
-                                            </div>
-                                        @endif
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-                <div class="row">
-                    <div class="col-6 ">
-                    </div>
-                    <div class="col-6">
-                        <p class="text-end" style="margin: 3mm;">Padang,</p>
-                        <p class="text-end" style="margin: 3mm;">Dokter yang Meminta</p>
-                        <br>
-                        <br>
-                        <p class="text-end mx-3">{{ $item->user->name ?? '' }}</p>
+            <div class="row">
+                <div class="col-6" style="font-size: 3mm;">
+                    <p class="fst-italic">*) Dijadwalkan dan dipersiapkan oleh Petugas Laboratorium Patologi Klinik</p>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex flex-column justify-content-end small mt-5">
+                        <p class="text-center mb-0">Padang,
+                            {{ $item->created_at->format('d F Y') }}
+                        </p>
+                        <p class="text-center mb-0 fw-bold">Dokter yang Meminta</p>
+                        <p class="text-center {{ $item->ttd_dokter ? 'mb-0' : 'mb-5' }}">
+                            <img src="{{ Storage::url($item->ttd_dokter ?? '') }}" alt="" width="200px">
+                        </p>
+                        <p class="text-center">( {{ $item->user->name ?? '' }} )</p>
                     </div>
                 </div>
             </div>

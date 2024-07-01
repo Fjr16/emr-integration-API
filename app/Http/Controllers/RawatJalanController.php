@@ -132,8 +132,6 @@ class RawatJalanController extends Controller
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         //hasil pemeriksaan radiologi
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
-        // hasil pemeriksaan labor pk
-        $laborPkResults = LaboratoriumPatientResult::where('patient_id', $item->patient->id)->where('status', 'VALIDATED')->orWhere('status', 'UNVALIDATED')->latest()->get();
         // hasil pemeriksaan labor pa
         $laborPaResults = PermintaanLaboratoriumPatologiAnatomikPatient::where('patient_id', $item->patient->id)->whereHas('antrianLaboratoriumPatologiAnatomiPatient', function($query){
             $query->whereHas('detailAntrianLaboratoriumPatologiAnatomiPatient', function ($detail){
@@ -154,7 +152,6 @@ class RawatJalanController extends Controller
             'suratPengantars' => $suratPengantars,
             'sbpks' => $sbpks,
             'radiologiResults' => $radiologiResults,
-            'laborPkResults' => $laborPkResults,
             'laborPaResults' => $laborPaResults,
             'diagnosisPatient' => $diagnosisPatient,
         ]);

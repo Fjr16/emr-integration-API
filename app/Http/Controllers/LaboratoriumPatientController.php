@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\LaboratoriumPatientResult;
-use App\Models\LaboratoriumPatientResultDetail;
-use App\Models\LaboratoriumRequestCategoryMaster;
+use App\Models\LaboratoriumRequest;
 use DateTime;
 
 class LaboratoriumPatientController extends Controller
@@ -18,15 +16,7 @@ class LaboratoriumPatientController extends Controller
      */
     public function index()
     {
-        $today = date('Y-m-d');
-
-        $data = LaboratoriumPatientResult::leftJoin('laboratorium_requests', 'laboratorium_patient_results.laboratorium_request_id', '=', 'laboratorium_requests.id')
-                ->leftJoin('laboratorium_request_type_masters', 'laboratorium_requests.laboratorium_request_type_master_id', '=', 'laboratorium_request_type_masters.id')
-                ->whereDate('laboratorium_patient_results.created_at', '=', $today)
-                ->orderByDesc('laboratorium_request_type_masters.isPrioritas') 
-                ->select('laboratorium_patient_results.*')
-                ->get();
-        // $data = LaboratoriumPatientResult::where('tanggal_periksa', 'WAITING')->get();
+        $data = LaboratoriumRequest::whereDate('created_at', date('Y-m-d'))->get();
         return view('pages.pasienLaboratoriumList.index', [
             "title" => "Laboratorium PK",
             "menu" => "Laboratorium PK",

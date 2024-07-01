@@ -7,6 +7,11 @@
         {{ session('success') }}
       </div>
   @endif
+  @if (session()->has('error'))
+      <div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
+        {{ session('error') }}
+      </div>
+  @endif
 <div class="card p-3 mt-5">
   <div class="row">
     <div class="col-8">
@@ -19,7 +24,7 @@
         <div class="row">
           <label class="col-form-label col-3"></label>
           <div class="col-9">
-            <input type="date" id="tanggal" name="filter" value="{{ request('filter') }}" class="form-control">
+            <input type="date" id="tanggal" name="filter" value="{{ request('filter', date('Y-m-d')) }}" class="form-control">
           </div>
         </div>
       </div>
@@ -34,95 +39,67 @@
     <table id="example" class="table">
       <thead>
         <tr class="text-nowrap bg-dark">
+          <th class="text-center">Action</th>
+          <th>No Reg Lab PK</th>
           <th>Kategori Permintaan</th>
-          <th>No Antrian</th>
           <th>No Rekam Medis</th>
           <th>Nama</th>
-          <th>Kategori Pasien</th>
-          <th>Ruangan</th>
-          <th>Detail Ruangan</th>
+          <th>Tanggungan</th>
           <th>Diagnosa</th>
-          <th>No. Labor</th>
-          <th>Petugas Laboratorium</th>
-          <th>Validator Laboratorium</th>
           <th>Tanggal Periksa</th>
-          <th>Status</th>
-          @can('validasi status pemeriksaan laboratorium pk')
-          <th>Validasi</th>
-          @endcan
-          @canany(['input hasil pemeriksaan laboratorium pk', 'edit hasil pemeriksaan laboratorium pk', 'edit jadwal pemeriksaan laboratorium pk', 'print hasil pemeriksaan laboratorium pk'])
-          <th class="text-center">Action</th>
-          @endcanany
+          <th>Petugas</th>
+          <th>Validator</th>
+          {{-- <th>Validasi</th> --}}
         </tr>
       </thead>
       <tbody>
         @foreach ($data as $item)    
-        <tr class="{{ $item->laboratoriumRequest->laboratoriumRequestTypeMaster->isPrioritas == true ? 'text-danger' : '' }}">
-          <td>{{ $item->laboratoriumRequest->laboratoriumRequestTypeMaster->name ?? '-' }}</td>
-          <td>{{ $item->nomor_antrian_lab ?? '-' }}</td>
-          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
-          <td>{{ $item->queue->patient->name ?? '-' }}</td>
-          <td>{{ $item->queue->patientCategory->name ?? '-' }}</td>
-          <td>{{ $item->laboratoriumRequest->ruang ?? '-' }}</td>
-          <td>{{ $item->laboratoriumRequest->roomDetail->name ?? '-' }}</td>
-          <td>{!! $item->laboratoriumRequest->diagnosa ?? '-' !!}</td>
-          <td>{{ $item->nomor_reg_lab ?? '-' }}</td>
-          <td>{{ $item->user->name ?? '-' }}</td>
-          <td>{{ $item->laboratoriumUserValidator->user->name ?? '-' }}</td>
-          <td>{{ $item->tanggal_periksa ?? '-' }}</td>
-          <td>{{ $item->status ?? '-' }}</td>
-          @can('validasi status pemeriksaan laboratorium pk')  
-          <td>
-            <form action="{{ route('laboratorium/patient/queue.update', $item->id) }}" method="POST">
-              @method('PUT')
-              @csrf
-              <button type="submit" class="btn btn-success btn-sm" {{ $item->status == 'VALIDATED' ? 'disabled' : '' }}>
-                    <i class="bx bx-check"></i>
-                    Validasi
-              </button>
-            </form>
-          </td>
-          @endcan
-          @canany(['input hasil pemeriksaan laboratorium pk', 'edit hasil pemeriksaan laboratorium pk', 'edit jadwal pemeriksaan laboratorium pk', 'print hasil pemeriksaan laboratorium pk'])    
+        <tr class="{{ $item->tipe_permintaan == 'Urgent' ? 'text-danger' : '' }}">
           <td class="text-center">
-            <div class="dropdown">
-              <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                  data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
+            @if ($item->status == 'ACCEPTED')
+              <button class="btn btn-warning btn-sm" onclick="createAntrian({{ $item->id }})">
+                <i class='bx bx-edit-alt me-1'></i>
+                Edit Jadwal
               </button>
-              <div class="dropdown-menu">
-                @if ($item->status == 'WAITING')
-                  @can('input hasil pemeriksaan laboratorium pk')                    
-                  <a class="dropdown-item" href="{{ route('laboratorium/patient/hasil.create', $item->id) }}">
-                      <i class="bx bx-cloud-upload me-1"></i>
-                      Input Hasil
-                  </a>
-                  @endcan
-                  @can('edit jadwal pemeriksaan laboratorium pk')  
-                  <button class="dropdown-item" onclick="createAntrian({{ $item->id }})">
-                      <i class="bx bx-edit-alt me-1"></i>
-                      Reschedule
-                  </button>
-                  @endcan
-                @endif
-                @if ($item->status == 'UNVALIDATED' || $item->status == 'VALIDATED')
-                  @can('edit hasil pemeriksaan laboratorium pk')  
-                  <a class="dropdown-item" href="{{ route('laboratorium/patient/hasil.edit', $item->id) }}">
-                      <i class="bx bx-edit-alt me-1"></i>
-                      Edit
-                  </a>
-                  @endcan
-                  @can('print hasil pemeriksaan laboratorium pk')  
-                  <a class="dropdown-item" target="blank" href="{{ route('laboratorium/patient/hasil.show', $item->id) }}">
-                      <i class="bx bx-printer me-1"></i>
-                      Print
-                  </a>
-                  @endcan
-                @endif
-              </div>
-            </div>
+              <a class="btn btn-success btn-sm" href="{{ route('laboratorium/patient/hasil.create', $item->id) }}">
+                <i class="bx bx-cloud-upload me-1"></i>
+                Input Hasil
+              </a>
+            @elseif ($item->status == 'UNVALIDATED')                
+              <form action="{{ route('laboratorium/patient/queue.update', $item->id) }}" method="POST" disabled>
+                @method('PUT')
+                @csrf
+                <button type="submit" class="btn btn-success btn-sm">
+                  <i class='bx bx-check'></i>
+                  Validasi
+                </button>
+              </form>
+              <a class="dropdown-item" href="{{ route('laboratorium/patient/hasil.edit', $item->id) }}">
+                <i class="bx bx-edit-alt me-1"></i>
+                Edit
+              </a>
+            @else  
+              <button class="btn btn-success btn-sm" disabled>
+                {{ $item->status ?? '' }}
+              </button>
+            @endif
+            <a class="btn btn-sm btn-dark" target="blank" href="{{ route('laboratorium/patient/hasil.show', $item->id) }}">
+              <i class="bx bx-printer me-1"></i>
+              Print
+            </a>
           </td>
-          @endcanany
+          <td>{{ $item->no_reg ?? '-' }}</td>
+          <td>{{ $item->tipe_permintaan ?? '-' }}</td>
+          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+          <td>{{ $item->patient->name ?? '-' }}</td>
+          <td>{{ $item->queue->patientCategory->name ?? '-' }}</td>
+          <td>{!! $item->diagnosa ?? '-' !!}</td>
+          @php
+            $waktu = new Carbon\Carbon($item->jadwal_periksa);
+          @endphp
+          <td>{{ $waktu->format('Y-m-d') ?? '-' }}</td>
+          <td>{{ $item->user->name ?? '-' }}</td>
+          <td>{{ $item->validator->name ?? '-' }}</td>
         </tr>
         @endforeach
         </tbody>
@@ -131,21 +108,42 @@
 </div>
 {{-- modal --}}
 <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
-   
+  <form action="" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">Atur Jadwal Pemeriksaan</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" class="form-control">
+                <input type="hidden" name="status" value="ACCEPTED">
+              </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-dark btn-sm">Simpan</button>
+          </div>
+        </div>
+    </div>
+  </form>
 </div>
 {{-- /modal --}}
 
 <script>
-function createAntrian(id){
-  $.ajax({
-    type : 'GET',
-    url : "{{ route('laboratorium/patient/queue.create', '') }}/"+id,
-    success : function(data){
-      $('#basicModal').html(data);
-      $('#basicModal').modal('show');
-    }
-  })
-}
+  function createAntrian(id){
+    var modalCreate = document.getElementById('basicModal');
+    var form = modalCreate.querySelector('form');
+    var url = "{{ route('laboratorium/patient/queue.store', '') }}/"+id;
+    form.setAttribute('action', url);
+
+    $(modalCreate).modal('show');
+  }
 </script>
 @endsection
 

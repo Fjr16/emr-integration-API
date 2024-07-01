@@ -363,8 +363,6 @@
             @php
                 $arrPermissions = [
                     'master user simrs',
-                    'master radiologi',
-                    'master laboratorium pk',
                     'master tanggungan pasien',
                     'master konsultasi',
                     'master jenis tindakan',
@@ -397,13 +395,6 @@
                             <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
                                 <a href="{{ route('user.index') }}" class="menu-link">
                                     <div>Daftar Staff</div>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('master laboratorium pk')
-                            <li class="menu-item {{ $title == 'Master Labor PK' ? 'active' : '' }}">
-                                <a href="{{ route('laboratorium/pk/variabel/pemeriksaan.create') }}" class="menu-link">
-                                    <div>Master Labor PK</div>
                                 </a>
                             </li>
                         @endcan
