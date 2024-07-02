@@ -40,65 +40,72 @@
       <thead>
         <tr class="text-nowrap bg-dark">
           <th class="text-center">Action</th>
-          <th>No Reg Lab PK</th>
-          <th>Kategori Permintaan</th>
-          <th>No Rekam Medis</th>
-          <th>Nama</th>
-          <th>Tanggungan</th>
-          <th>Diagnosa</th>
+          <th class="text-center">Status</th>
           <th>Tanggal Periksa</th>
+          <th>No Reg</th>
+          <th>Kategori</th>
+          <th>Diagnosa</th>
+          <th>No RM / Nama</th>
+          <th>Tanggungan</th>
           <th>Petugas</th>
           <th>Validator</th>
-          {{-- <th>Validasi</th> --}}
         </tr>
       </thead>
       <tbody>
         @foreach ($data as $item)    
         <tr class="{{ $item->tipe_permintaan == 'Urgent' ? 'text-danger' : '' }}">
-          <td class="text-center">
-            @if ($item->status == 'ACCEPTED')
-              <button class="btn btn-warning btn-sm" onclick="createAntrian({{ $item->id }})">
-                <i class='bx bx-edit-alt me-1'></i>
-                Edit Jadwal
-              </button>
-              <a class="btn btn-success btn-sm" href="{{ route('laboratorium/patient/hasil.create', $item->id) }}">
-                <i class="bx bx-cloud-upload me-1"></i>
-                Input Hasil
-              </a>
-            @elseif ($item->status == 'UNVALIDATED')                
-              <form action="{{ route('laboratorium/patient/queue.update', $item->id) }}" method="POST" disabled>
-                @method('PUT')
-                @csrf
-                <button type="submit" class="btn btn-success btn-sm">
-                  <i class='bx bx-check'></i>
-                  Validasi
-                </button>
-              </form>
-              <a class="dropdown-item" href="{{ route('laboratorium/patient/hasil.edit', $item->id) }}">
-                <i class="bx bx-edit-alt me-1"></i>
-                Edit
-              </a>
-            @else  
-              <button class="btn btn-success btn-sm" disabled>
-                {{ $item->status ?? '' }}
-              </button>
-            @endif
-            <a class="btn btn-sm btn-dark" target="blank" href="{{ route('laboratorium/patient/hasil.show', $item->id) }}">
+          <td class="text-center d-flex">
+            @if ($item->status != 'FINISHED')
+              <div class="btn-group dropup">
+                <button type="button" class="btn bth-sm btn-dark dropdown-toggle hide-arrow py-1 px-2" data-bs-toggle="dropdown"> <small>Action <i class='bx bx-dots-vertical'></i></small></button>
+                <div class="dropdown-menu">      
+                  @if ($item->status == 'ACCEPTED')
+                    <button class="dropdown-item" onclick="createAntrian({{ $item->id }})">
+                      <i class='bx bx-edit-alt'></i>
+                      Reschedule
+                    </button>
+                    <a class="dropdown-item" href="{{ route('laboratorium/patient/hasil.create', $item->id) }}">
+                      <i class="bx bx-cloud-upload"></i>
+                      Input Hasil
+                    </a>
+                  @elseif ($item->status == 'UNVALIDATE')                
+                    <form action="{{ route('laboratorium/patient/queue.update', $item->id) }}" method="POST">
+                      @method('PUT')
+                      @csrf
+                      <button type="submit" class="dropdown-item" value="FINISHED">
+                        <i class='bx bx-check'></i>
+                        Validasi
+                      </button>
+                    </form>
+                    <a class="dropdown-item" href="{{ route('laboratorium/patient/hasil.create', $item->id) }}">
+                      <i class="bx bx-edit-alt me-1"></i>
+                      Edit
+                    </a>
+                  @endif
+                </div>
+              </div>
+            @else
+            <a class="btn btn-sm btn-success pt-2 ms-1" target="blank" href="{{ route('laboratorium/patient/hasil.show', $item->id) }}">
               <i class="bx bx-printer me-1"></i>
               Print
             </a>
+            @endif
           </td>
-          <td>{{ $item->no_reg ?? '-' }}</td>
-          <td>{{ $item->tipe_permintaan ?? '-' }}</td>
-          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
-          <td>{{ $item->patient->name ?? '-' }}</td>
-          <td>{{ $item->queue->patientCategory->name ?? '-' }}</td>
-          <td>{!! $item->diagnosa ?? '-' !!}</td>
+          <td>
+            <button class="btn {{ $item->status == 'FINISHED' ? 'btn-success' : 'btn-danger' }} btn-sm" disabled>
+              {{ $item->status ?? '' }}
+            </button>
+          </td>
           @php
             $waktu = new Carbon\Carbon($item->jadwal_periksa);
           @endphp
           <td>{{ $waktu->format('Y-m-d') ?? '-' }}</td>
-          <td>{{ $item->user->name ?? '-' }}</td>
+          <td>{{ $item->no_reg ?? '-' }}</td>
+          <td>{{ $item->tipe_permintaan ?? '-' }}</td>
+          <td>{!! $item->diagnosa ?? '-' !!}</td>
+          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->patient->name ?? '-' }}</td>
+          <td>{{ $item->queue->patientCategory->name ?? '-' }}</td>
+          <td>{{ $item->petugas->name ?? '-' }}</td>
           <td>{{ $item->validator->name ?? '-' }}</td>
         </tr>
         @endforeach

@@ -13,10 +13,8 @@ class LaboratoriumRequestDetail extends Model
         'laboratorium_request_id',
         'action_id',
         'keterangan',  
-        'user_id',  //petugas lab pk
-        'tanggal_periksa',
-        'hasil',
-        'status',
+        'hasil',    //tipe float
+        'kritis',   //boolean
     ];
 
 
@@ -25,8 +23,5 @@ class LaboratoriumRequestDetail extends Model
     }
     public function action(){
         return $this->belongsTo(Action::class);
-    }
-    public function user(){
-        return $this->belongsTo(User::class);
     }
 }

@@ -132,14 +132,16 @@ class LaboratoriumPatientQueueController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = LaboratoriumPatientResult::find($id);
-        $item->update([
-            'status' => 'VALIDATED',
-        ]);
-        $item->laboratoriumUserValidator()->update([
-            'user_id' => Auth::user()->id,
-        ]);
+        $item = LaboratoriumRequest::find($id);
+        if ($item->status == 'UNVALIDATE' && $item->petugas_id != null) {
+            $item->update([
+                'status' => 'FINISHED',
+                'validator_id' => auth()->user()->id,
+            ]);
+            return back()->with('success', 'Berhasil Validasi');
+        }else{
+            return back()->with('error', 'Gagal !! Petugas Belum Melakukan Pemeriksaan');
+        }
         
-        return back()->with('success', 'Berhasil Validasi');
     }
 }

@@ -729,7 +729,6 @@ Route::group(['middleware' => ['permission:perbarui status pembayaran']], functi
 });
 
 //Laboratorium Patient
-
 Route::group(['middleware' => ['permission:list permintaan pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient', [LaboratoriumPatientController::class, 'index'])->name('laboratorium/patient.index');
 });
@@ -737,17 +736,9 @@ Route::group(['middleware' => ['permission:input hasil pemeriksaan laboratorium 
     Route::get('/laboratorium/patient/hasil/create/{id}', [LaboratoriumPatientController::class, 'create'])->name('laboratorium/patient/hasil.create');
     Route::post('/laboratorium/patient/hasil/store/{id}', [LaboratoriumPatientController::class, 'store'])->name('laboratorium/patient/hasil.store');
 });
-Route::group(['middleware' => ['permission:edit hasil pemeriksaan laboratorium pk']], function () {
-    Route::get('/laboratorium/patient/hasil/edit/{id}', [LaboratoriumPatientController::class, 'edit'])->name('laboratorium/patient/hasil.edit');
-    Route::put('/laboratorium/patient/hasil/update/{id}', [LaboratoriumPatientController::class, 'update'])->name('laboratorium/patient/hasil.update');
-});
 Route::group(['middleware' => ['permission:print hasil pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient/hasil/show/{id}', [LaboratoriumPatientController::class, 'show'])->name('laboratorium/patient/hasil.show');
 });
-// Route::group(['middleware' => ['permission:print hasil pemeriksaan laboratorium pk']], function(){
-Route::get('/laboratorium/patient/hasil/reviewUlang/{id}', [LaboratoriumPatientController::class, 'reviewUlang'])->name('laboratorium/patient/hasil.reviewUlang');
-Route::post('/laboratorium/patient/hasil/reviewUlangStore/{id}', [LaboratoriumPatientController::class, 'reviewUlangStore'])->name('laboratorium/patient/hasil.reviewUlangStore');
-// });
 
 //Laboratorium Patient Queue
 Route::group(['middleware' => ['permission:daftar jadwal pemeriksaan laboratorium pk']], function () {
@@ -756,6 +747,7 @@ Route::group(['middleware' => ['permission:daftar jadwal pemeriksaan laboratoriu
 Route::group(['middleware' => ['permission:atur jadwal pemeriksaan laboratorium pk|permission:edit jadwal pemeriksaan laboratorium pk']], function () {
     Route::post('/laboratorium/patient/queue/store/{id}', [LaboratoriumPatientQueueController::class, 'store'])->name('laboratorium/patient/queue.store');
 });
+// update status pada sidebar permintaan labor pk
 Route::group(['middleware' => ['permission:validasi status pemeriksaan laboratorium pk']], function () {
     Route::put('/laboratorium/patient/queue/update/{id}', [LaboratoriumPatientQueueController::class, 'update'])->name('laboratorium/patient/queue.update');
 });

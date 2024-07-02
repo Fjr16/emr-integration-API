@@ -20,9 +20,12 @@ class LaboratoriumRequest extends Model
         'tipe_permintaan',
         'tanggal_sampel',
         'jadwal_periksa',
+        'tanggal_periksa_selesai',
         'no_reg',
         'status',
         'validator_id',
+        'petugas_id',
+        'kesan_anjuran',
     ];
 
     public function user(){
@@ -30,6 +33,9 @@ class LaboratoriumRequest extends Model
     }
     public function validator(){
         return $this->belongsTo(User::class, 'validator_id');
+    }
+    public function petugas(){
+        return $this->belongsTo(User::class, 'petugas_id');
     }
     public function queue(){
         return $this->belongsTo(Queue::class);

@@ -21,7 +21,7 @@
                             <div class="col-9">
                                 <select name="tipe_permintaan" class="form-select" id="tipe_permintaan">
                                     <option value="Reguler" selected>Reguler</option>
-                                    <option value="Urgent" selected>Urgent</option>
+                                    <option value="Urgent">Urgent</option>
                                 </select>
                             </div>
                         </div>

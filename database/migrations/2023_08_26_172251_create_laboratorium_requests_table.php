@@ -25,9 +25,12 @@ return new class extends Migration
             $table->string('tipe_permintaan', 20)->nullable();
             $table->date('tanggal_sampel')->nullable();
             $table->dateTime('jadwal_periksa')->nullable();
+            $table->date('tanggal_periksa_selesai')->nullable();
             $table->string('no_reg', 20)->nullable();
-            $table->enum('status', ['WAITING', 'CANCEL', 'DENIED', 'ACCEPTED', 'ONGOING', 'FINISHED'])->default('WAITING');
+            $table->enum('status', ['WAITING', 'CANCEL', 'DENIED', 'ACCEPTED', 'UNVALIDATE', 'FINISHED'])->default('WAITING');
             $table->foreignId('validator_id')->nullable();
+            $table->foreignId('petugas_id')->nullable();
+            $table->text('kesan_anjuran')->nullable();
             $table->timestamps();
         });
     }
