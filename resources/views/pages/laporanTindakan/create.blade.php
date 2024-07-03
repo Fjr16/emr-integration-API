@@ -16,15 +16,13 @@
             </div>
           </div>   
           <div class="row mb-3">
-            <label for="defaultFormControlInput" class="form-label col-sm-3">Jenis Tindakan</label>
+            <label for="defaultFormControlInput" class="form-label col-sm-3">Tindakan</label>
             <div class="col-sm-9">
-              <input type="text" name="jenis_tindakan" class="form-control" id="jenis_tindakan" />
-
-              {{-- <select class="select3modal" id="select3basic" name="action_member_id[]" multiple="multiple" style="width: 100%">
+              <select class="select3modal" id="select3basic" name="action_id[]" multiple="multiple" style="width: 100%">
                 @foreach ($data as $action)
-                    <option value="{{ $action->id }}" @selected(old('action_member_id') == $action->id)>{{ $action->name }}</option>
+                    <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
                 @endforeach
-              </select> --}}
+              </select>
             </div>
           </div>
           <div class="row mb-3">

@@ -33,7 +33,7 @@ class SupplierController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Tambahkan',
-            'btn' => 'supplier' 
+            'navOn' => 'supplier' 
         ]);
     }
 
@@ -79,7 +79,7 @@ class SupplierController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success'=>'Berhasil Di Perbarui',
-            'btn' => 'supplier' 
+            'navOn' => 'supplier' 
         ]);
     }
 
@@ -96,7 +96,7 @@ class SupplierController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Di Hapus',
-            'btn' => 'supplier' 
+            'navOn' => 'supplier' 
         ]);
     }
 }

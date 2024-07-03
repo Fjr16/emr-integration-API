@@ -12,49 +12,49 @@
       <div class="nav-align-top mb-2 shadow-sm">
         <ul class="nav nav-tabs nav-sm nav-fill" role="tablist">
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'listObat' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'listObat' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-listObat"
             aria-controls="navs-justified-listObat" aria-selected="false">
             <p class="m-0">Daftar Obat</p>
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'jenisObat' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'jenisObat' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-jenisObat"
             aria-controls="navs-justified-jenisObat" aria-selected="false">
             <p class="m-0">Jenis Obat</p>
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'golObat' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'golObat' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-golObat"
             aria-controls="navs-justified-golObat" aria-selected="false">
             <p class="m-0">Golongan Obat</p>
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'bentukObat' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'bentukObat' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-bentukObat"
             aria-controls="navs-justified-bentukObat" aria-selected="false">
             <p class="m-0">Bentuk Sediaan Obat</p>
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'konversi' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'konversi' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-konversi"
             aria-controls="navs-justified-konversi" aria-selected="false">
             <p class="m-0">Tabel Konversi</p>
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'pabrik' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'pabrik' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-pabrik"
             aria-controls="navs-justified-pabrik" aria-selected="false">
             <p class="m-0">Pabrik</p>
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('btn') == 'supplier' ? 'active' : '' }} d-flex justify-content-center"
+            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'supplier' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-supplier"
             aria-controls="navs-justified-supplier" aria-selected="false">
             <p class="m-0">Supplier</p>
@@ -62,7 +62,7 @@
           </li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane fade {{ session('btn') == 'listObat' ? 'show active' : '' }}" id="navs-justified-listObat" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'listObat' ? 'show active' : '' }}" id="navs-justified-listObat" role="tabpanel">
             <div class="text-end mb-3">
               <a href="{{ route('farmasi/obat.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Master Obat</a>
             </div>
@@ -117,7 +117,7 @@
               </table>
             </div>
           </div>
-          <div class="tab-pane fade {{ session('btn') == 'jenisObat' ? 'show active' : '' }}" id="navs-justified-jenisObat" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'jenisObat' ? 'show active' : '' }}" id="navs-justified-jenisObat" role="tabpanel">
             <div class="text-end mb-3">
                 <a href="{{ route('farmasi/obat/jenis.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Jenis Obat</a>
             </div>
@@ -162,7 +162,7 @@
               </table>
             </div>
           </div>
-          <div class="tab-pane fade {{ session('btn') == 'golObat' ? 'show active' : '' }}" id="navs-justified-golObat" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'golObat' ? 'show active' : '' }}" id="navs-justified-golObat" role="tabpanel">
             <div class="text-end mb-3">
                 <a href="{{ route('farmasi/obat/golongan.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Golongan Obat</a>
             </div>
@@ -207,7 +207,7 @@
               </table>
             </div>>
           </div>
-          <div class="tab-pane fade {{ session('btn') == 'bentukObat' ? 'show active' : '' }}" id="navs-justified-bentukObat" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'bentukObat' ? 'show active' : '' }}" id="navs-justified-bentukObat" role="tabpanel">
             <div class="text-end mb-3">
               <a href="{{ route('farmasi/obat/bentuk.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Bentuk Sediaan Obat</a>
             </div>
@@ -252,7 +252,7 @@
               </table>
             </div>
           </div>
-          <div class="tab-pane fade {{ session('btn') == 'konversi' ? 'show active' : '' }}" id="navs-justified-konversi" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'konversi' ? 'show active' : '' }}" id="navs-justified-konversi" role="tabpanel">
             <div class="text-end mb-3">
               <a href="{{ route('farmasi/obat/konversi.create') }}" class="btn btn-success btn-sm m-0">+ Tambah Konversi</a>
               <a href="{{ route('farmasi/obat/master/konversi.create') }}" class="btn btn-success btn-sm m-0 mx-2">+ Tambah Satuan</a>
@@ -304,7 +304,7 @@
               </table>
             </div>
           </div>
-          <div class="tab-pane fade {{ session('btn') == 'pabrik' ? 'show active' : '' }}" id="navs-justified-pabrik" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'pabrik' ? 'show active' : '' }}" id="navs-justified-pabrik" role="tabpanel">
             <div class="text-end mb-3">
               <a href="{{ route('farmasi/pabrik.create') }}" class="btn btn-success ms-auto btn-sm m-0 ">+ Pabrik</a>
             </div>
@@ -349,7 +349,7 @@
               </table>
             </div>
           </div>
-          <div class="tab-pane fade {{ session('btn') == 'supplier' ? 'show active' : '' }}" id="navs-justified-supplier" role="tabpanel">
+          <div class="tab-pane fade {{ session('navOn') == 'supplier' ? 'show active' : '' }}" id="navs-justified-supplier" role="tabpanel">
             <div class="text-end mb-3">
               <a href="{{ route('farmasi/supplier.create') }}" class="btn btn-success ms-auto btn-sm m-0 mx-3">+ Tambah Supplier</a>
             </div>

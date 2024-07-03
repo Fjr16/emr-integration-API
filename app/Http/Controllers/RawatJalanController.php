@@ -128,7 +128,6 @@ class RawatJalanController extends Controller
     ->orderBy('created_at', 'desc')
     ->get();
 
-        $suratPengantars = SuratPengantarRawatJalanPatient::where('patient_id', $item->patient->id)->latest()->get();
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         //hasil pemeriksaan radiologi
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
@@ -149,7 +148,6 @@ class RawatJalanController extends Controller
             'asesmentPatientLatest' => $asesmentPatientLatest,
             'reportActions' => $reportActions,
             'receipts' => $receipts,
-            'suratPengantars' => $suratPengantars,
             'sbpks' => $sbpks,
             'radiologiResults' => $radiologiResults,
             'laborPaResults' => $laborPaResults,

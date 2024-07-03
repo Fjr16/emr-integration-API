@@ -33,7 +33,7 @@ class MedicineCategoryController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Tambahkan',
-            'btn' => 'golObat'
+            'navOn' => 'golObat'
         ]);
     }
 
@@ -79,7 +79,7 @@ class MedicineCategoryController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Perbarui',
-            'btn' => 'golObat'
+            'navOn' => 'golObat'
         ]);
     }
 
@@ -96,7 +96,7 @@ class MedicineCategoryController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Di Hapus',
-            'btn' => 'golObat'
+            'navOn' => 'golObat'
         ]);
     }
 }

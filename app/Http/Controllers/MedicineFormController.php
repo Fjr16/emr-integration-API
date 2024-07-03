@@ -33,7 +33,7 @@ class MedicineFormController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Tambahkan',
-            'btn' => 'bentukObat'
+            'navOn' => 'bentukObat'
         ]);
     }
 
@@ -79,7 +79,7 @@ class MedicineFormController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Perbarui',
-            'btn' => 'bentukObat'
+            'navOn' => 'bentukObat'
         ]);
     }
 
@@ -96,7 +96,7 @@ class MedicineFormController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Di Hapus',
-            'btn' => 'bentukObat'
+            'navOn' => 'bentukObat'
         ]);
     }
 }

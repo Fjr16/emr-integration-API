@@ -39,7 +39,7 @@ class UnitConversionController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Ditambahkan',
-            'btn' => 'konversi'
+            'navOn' => 'konversi'
         ]);
     }
 
@@ -93,7 +93,7 @@ class UnitConversionController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Diperbarui',
-            'btn' => 'konversi'
+            'navOn' => 'konversi'
         ]);
     }
 
@@ -110,7 +110,7 @@ class UnitConversionController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Dihapus',
-            'btn' => 'konversi'
+            'navOn' => 'konversi'
         ]);
     }
 }

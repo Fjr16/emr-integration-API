@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Action;
+use App\Models\ActionCategory;
 use App\Models\Queue;
 use App\Models\KasirPatient;
 use Illuminate\Http\Request;
@@ -31,7 +33,8 @@ class PatientActionReportController extends Controller
     public function create(Request $request)
     {
         $today = date('Y-m-d H:i');
-        $data = ActionMembers::all();
+        $actCategory = ActionCategory::where('name', 'Tindakan Parasat / Poli')->first();
+        $data = Action::where('action_category_id', $actCategory->id)->get();
         $item = Queue::findOrFail($request->queue_id);
         return view('pages.laporanTindakan.create', [
             'title' => 'Laporan Tindakan',

@@ -68,7 +68,7 @@ class MedicineReceiptController extends Controller
         // }
         // return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])->with([
         //     'success' => 'Berhasil Ditambahkan',
-        //     'btn' => 'resep dokter',
+        //     'navOn' => 'resep dokter',
         // ]);
     }
 
@@ -144,7 +144,7 @@ class MedicineReceiptController extends Controller
 
         return redirect()->route('rajal/show', ['id' => $queue->id, 'title' => 'Rawat Jalan'])->with([
             'success' => 'Berhasil Diperbarui',
-            'btn' => 'resep dokter',
+            'navOn' => 'resep dokter',
         ]);
     }
 
@@ -165,7 +165,7 @@ class MedicineReceiptController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Dihapus',
-            'btn' => 'resep dokter',
+            'navOn' => 'resep dokter',
         ]);
     }
 }

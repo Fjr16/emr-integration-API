@@ -21,12 +21,11 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        if (session()->has('btn')) {
-            session(['btn' => session('btn')]);
+        if (session()->has('navOn')) {
+            session(['navOn' => session('navOn')]);
         }else{
-            session(['btn' => 'listObat']);
+            session(['navOn' => 'listObat']);
         }
-
         $data = Medicine::with(['medicineType', 'medicineForm', 'medicineCategory', 'unitConversionMaster'])->get();
         $dataJenis = MedicineType::all();
         $dataGol = MedicineCategory::all();
@@ -81,7 +80,7 @@ class MedicineController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Ditambahkan',
-            'btn' => 'listObat'
+            'navOn' => 'listObat'
         ]);
     }
 
@@ -135,7 +134,7 @@ class MedicineController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Diperbarui',
-            'btn' => 'listObat'
+            'navOn' => 'listObat'
         ]);
     }
 
@@ -152,7 +151,7 @@ class MedicineController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Dihapus',
-            'btn' => 'listObat'
+            'navOn' => 'listObat'
         ]);
     }
 }

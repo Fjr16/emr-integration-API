@@ -12,7 +12,6 @@ use App\Http\Controllers\KasirController;
 use App\Http\Controllers\PrmrjController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\RolesController;
-use App\Http\Controllers\TarifController;
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\FactoryController;
 use App\Http\Controllers\GetStokController;
@@ -32,7 +31,6 @@ use App\Http\Controllers\MedicineStokController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\QueueConfirmController;
 use App\Http\Controllers\ActionMembersController;
-use App\Http\Controllers\QueueUriologiController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
 use App\Http\Controllers\DoctorScheduleController;
@@ -471,14 +469,6 @@ Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registr
     Route::get('/antrian/konfirmasi/create/{id}', [QueueConfirmController::class, 'create'])->name('antrian/konfirmasi.create');
     Route::post('/antrian/konfirmasi/store/{id}', [QueueConfirmController::class, 'store'])->name('antrian/konfirmasi.store');
     Route::get('/antrian/konfirmasi/ulang/create/{id}', [QueueConfirmController::class, 'panggilUlang'])->name('antrian/konfirmasi/ulang.create');
-
-    //Antrian urologi
-    Route::get('/antrian/urologi/create', [QueueUriologiController::class, 'create'])->name('antrian-urologi.create');
-    Route::post('/antrian/urologi/store', [QueueUriologiController::class, 'store'])->name('antrian-urologi.store');
-    Route::get('/antrian/urologi/show/{id}', [QueueUriologiController::class, 'show'])->name('antrian-urologi.show');
-    Route::get('/antrian/urologi/edit/{id}', [QueueUriologiController::class, 'edit'])->name('antrian-urologi.edit');
-    // //getDataPasien pada antrian
-    Route::post('/antrian/get/pasien/urologi', [QueueUriologiController::class, 'getPasien'])->name('antrian/get/pasien/urologi.getPasien');
     // // Route::delete('/antrian/destroy/{id}', [QueueController::class, 'destroy'])->name('antrian.destroy');
 });
 Route::get('/antrian/konfirmasi/chekin/{id}', [QueueConfirmController::class, 'konfirmasichekin'])->name('antrian/konfirmasi.checkin');
@@ -838,14 +828,5 @@ Route::get('/laporan/lab/patologi/klinik/exportExcel/{id}', [ReportPenunjangCont
 Route::get('/laporan/lab/patologi/anatomi', [ReportPenunjangController::class, 'indexPa'])->name('laporan/lab/patologi/anatomi.index');
 Route::get('/laporan/lab/patologi/anatomi/show/{id}', [ReportPenunjangController::class, 'showPa'])->name('laporan/lab/patologi/anatomi.show');
 Route::get('/laporan/lab/patologi/anatomi/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelPa'])->name('laporan/lab/patologi/anatomi.exportExcel');
-//Keuangan
-Route::post('tarif/layanan/store', [TarifController::class, 'store'])->name('tarif/layanan.store');
-Route::put('tarif/layanan/update/{id}', [TarifController::class, 'update'])->name('tarif/layanan.update');
-Route::get('tarif/layanan/tarifLayananStore', [TarifController::class, 'tarifLayananStore'])->name('tarif/layanan.tarifLayananStore');
-Route::get('tarif/layanan/index', [TarifController::class, 'index'])->name('tarif/layanan.index');
-Route::get('tarif/layanan/show/{type}', [TarifController::class, 'show'])->name('tarif/layanan.show');
-Route::get('tarif/layanan/create/{type}', [TarifController::class, 'create'])->name('tarif/layanan.create');
-Route::get('tarif/layanan/edit/{id}', [TarifController::class, 'edit'])->name('tarif/layanan.edit');
-Route::delete('tarif/layanan/destroy/{id}', [TarifController::class, 'destroy'])->name('tarif/layanan.destroy');
 
 require __DIR__ . '/auth.php';

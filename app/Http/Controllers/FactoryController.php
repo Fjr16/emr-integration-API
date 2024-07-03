@@ -33,7 +33,7 @@ class FactoryController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Tambahkan',
-            'btn' => 'pabrik'
+            'navOn' => 'pabrik'
         ]);
     }
 
@@ -79,7 +79,7 @@ class FactoryController extends Controller
 
         return redirect()->route('farmasi/obat.index')->with([
             'success' => 'Berhasil Di Perbarui',
-            'btn' => 'pabrik'
+            'navOn' => 'pabrik'
         ]);
         
     }
