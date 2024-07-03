@@ -23,8 +23,6 @@
                             Dokter
                             {{ Auth::user()->name }} ({{ Auth::user()->staff_id }})
                         @endif
-                        <span class="text text-primary text-uppercase fw-bold fs-7">Rawat Jalan</span>
-                        <span class="text text-primary text-uppercase fw-bold fs-7">({{ $filterDate->format('Y-m-d') ?? date('Y-m-d') }})</span>
                     </h4>
                 </div>
                 <div class="col-3">
@@ -40,6 +38,9 @@
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </div>
                     </form>
+                </div>
+                <div class="col-12">
+                    <h5 class="text text-primary text-uppercase fw-bold fs-7 d-flex">Rawat Jalan ({{ $filterDate->format('Y-m-d') ?? date('Y-m-d') }})</h5>
                 </div>
             </div>
         </div>
