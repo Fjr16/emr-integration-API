@@ -371,7 +371,7 @@
                                                                                     target="blank" class="btn btn-dark btn-sm mx-2"><i
                                                                                         class='bx bx-printer'></i></a>
                                                                                 @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
-                                                                                    <button type="button" class="btn btn-info btn-sm"><i class='bx bx-book-reader'></i></button>
+                                                                                    <button type="button" class="btn btn-info btn-sm"><i class='bx bx-file'></i></button>
                                                                                 @else    
                                                                                     <a href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
                                                                                         class="btn btn-warning btn-sm me-2"><i
@@ -437,7 +437,7 @@
                                                                                 target="blank" class="btn btn-dark btn-sm mx-2"><i
                                                                                     class='bx bx-printer'></i></a>
                                                                             @if ($labor->status == 'FINISHED' || $labor->status == 'ONGOING')
-                                                                                <button type="button" class="btn btn-info btn-sm"><i class='bx bx-book-reader'></i></button>
+                                                                                <button type="button" class="btn btn-info btn-sm"><i class='bx bx-file'></i></button>
                                                                             @else
                                                                                 <a href="" class="btn btn-warning btn-sm me-2"><i class='bx bx-edit'></i></a>
                                                                                 <form
@@ -900,199 +900,28 @@
                     </div>
                 </div>
             </div>
+            
+            
         </div>
         {{-- end Menu Rajal --}}
-
-        {{-- Hasil Pemeriksaan --}}
-        <div class="card-body">
-            @canany(['print hasil pemeriksaan radiologi', 'print hasil pemeriksaan laboratorium pk'])
-                <div class="card mb-4 shadow-sm" id="hasilPemeriksaan">
-                    <div class="card-header">
-                        <h5 class="mb-0">Hasil Pemeriksaan Radiologi</h5>
-                    </div>
-                    <div class="card-body">
-                        {{-- <div class="row">
-                            <div class="col-6">
-                                <p>Dokter Yang Meminta: </p>
-                                <p>Tgl. Permintaan : </p>
-                                <p>Diagnosis : </p>
-                                <p>Ruangan : </p>
-                            </div>
-                            <div class="col-6">
-                                <p>No. Registrasi Radiologi : </p>
-                                <p>Jadwal : </p>
-                                <p>Status : </p>
-                                <p>Validator : </p>
-                            </div>
-                        </div> --}}
-                        <div class="nav-align-top mb-4 d-flex justify-content-start">
-                            <ul class="nav nav-tabs nav-pills nav-sm mb-3" role="tablist">
-                                @can('print hasil pemeriksaan radiologi')
-                                    <li class="nav-item">
-                                        <button type="button"
-                                            class="border nav-link {{ session('dokter') == 'radiologi' ? 'active' : '' }}"
-                                            role="tab" data-bs-toggle="tab"
-                                            data-bs-target="#navs-pills-justified-hasilradiologi"
-                                            aria-controls="navs-pills-justified-hasilradiologi" aria-selected="true">
-                                            Hasil Pemeriksaan Radiologi
-                                        </button>
-                                    </li>
-                                @endcan
-                                @can('print hasil pemeriksaan laboratorium pk')
-                                    <li class="nav-item">
-                                        <button type="button"
-                                            class="border nav-link {{ session('dokter') == 'laboratorium' ? 'active' : '' }}"
-                                            role="tab" data-bs-toggle="tab"
-                                            data-bs-target="#navs-pills-justified-hasillaboratorium"
-                                            aria-controls="navs-pills-justified-hasillaboratorium" aria-selected="true">
-                                            Hasil Pemeriksaan Laboratorium PK
-                                        </button>
-                                    </li>
-                                @endcan
-                                @can('print hasil pemeriksaan laboratorium pa')
-                                <li class="nav-item">
-                                    <button type="button"
-                                        class="border nav-link {{ session('dokter') == 'laboratorium-pa' ? 'active' : '' }}"
-                                        role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#navs-pills-justified-hasillaboratorium-pa"
-                                        aria-controls="navs-pills-justified-hasillaboratorium-pa" aria-selected="true">
-                                        Hasil Pemeriksaan Laboratorium PA
-                                    </button>
-                                </li>
-                                @endcan
-                            </ul>
-
-                            <div class="tab-content">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr class="text-nowrap">
-                                                <th class="text-body">Action</th>
-                                                <th class="text-body">Status</th>
-                                                <th class="text-body">Tanggal / Jam</th>
-                                                <th class="text-body">Petugas Radiologi</th>
-                                                <th class="text-body">Pemeriksaan</th>
-                                                <th class="text-body">Hasil Text</th>
-                                                <th class="text-body">Hasil Gambar</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{-- @foreach ($radiologiResults as $result)
-                                                @foreach ($result->radiologiPatientRequestDetails->where('status', 'SELESAI') as $detail)
-                                                    <tr>
-                                                        <td>{{ $result->radiologiFormRequest->created_at->format('Y-m-d / H:i:s') ?? '' }}
-                                                        </td>
-                                                        <td>{{ $detail->user->name ?? '' }}</td>
-                                                        <td>{{ $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }}
-                                                        </td>
-                                                        <td>{!! $result->radiologiFormRequest->diagnosa_klinis ?? '' !!}</td>
-                                                        <td><a href="{{ Storage::url($detail->image ?? '') }}"
-                                                                target="blank">
-                                                                <img src="{{ Storage::url($detail->image ?? '') }}"
-                                                                    alt="{{ $detail->image ?? '' }}" width="100"
-                                                                    height="100">
-                                                            </a></td>
-                                                        <td>{{ $result->status ?? '' }}</td>
-                                                        <td>
-                                                            <a href="{{ route('radiologi/patient/hasil.show', $detail->id) }}"
-                                                                target="blank" class="btn btn-dark btn-sm"><i
-                                                                    class='bx bx-printer'></i></a>
-                                                            <a href="{{ route('radiologi/patient/hasil.showChange', $detail->id) }}"
-                                                                target="blank" class="btn btn-dark btn-sm"><i
-                                                                    class='bx bx-low-vision'></i></a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach --}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {{-- @can('print hasil pemeriksaan laboratorium pk')
-                                    <div class="tab-pane fade {{ session('dokter') == 'laboratorium' ? 'show active' : '' }}"
-                                        id="navs-pills-justified-hasillaboratorium" role="tabpanel">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr class="text-nowrap">
-                                                        <th class="text-body">Tanggal Permintaan</th>
-                                                        <th class="text-body">DPJP Laboratorium</th>
-                                                        <th class="text-body">No. Labor</th>
-                                                        <th class="text-body">Diagnosa Klinis</th>
-                                                        <th class="text-body">Tanggal</th>
-                                                        <th class="text-body">status</th>
-                                                        <th class="text-body">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($laborPkResults as $laborPk)
-                                                        <tr>
-                                                            <td>{{ $laborPk->laboratoriumRequest->created_at->format('Y-m-d') ?? '' }}
-                                                            </td>
-                                                            <td>{{ $laborPk->laboratoriumUserValidator->user->name ?? '' }}</td>
-                                                            <td>{{ $laborPk->nomor_reg_lab ?? '' }}</td>
-                                                            <td>{!! $laborPk->laboratoriumRequest->diagnosa ?? '' !!}</td>
-                                                            <td>{{ $laborPk->tanggal_periksa ?? '' }}</td>
-                                                            <td>{{ $laborPk->status ?? '' }}</td>
-                                                            <td class="d-flex">
-                                                                <a href="{{ route('laboratorium/patient/hasil.show', $laborPk->id) }}"
-                                                                    target="blank" class="btn btn-dark btn-sm"><i
-                                                                        class='bx bx-printer'></i></a>
-                                                                <button class="btn btn-dark btn-sm"
-                                                                    onclick="reviewUlang({{ $laborPk->id }})"><i
-                                                                        class='bx bx-revision'></i></button>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @endcan --}}
-                                {{-- @can('print hasil pemeriksaan laboratorium pa') --}}
-                                {{-- <div class="tab-pane fade {{ session('dokter') == 'laboratorium-pa' ? 'show active' : '' }}"
-                                    id="navs-pills-justified-hasillaboratorium-pa" role="tabpanel"> --}}
-                                    {{-- <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr class="text-nowrap">
-                                                    <th class="text-body">Tanggal Permintaan</th>
-                                                    <th class="text-body">No. Sediaan</th>
-                                                    <th class="text-body">Lokasi Jaringan</th>
-                                                    <th class="text-body">Diagnosis Klinik</th>
-                                                    <th class="text-body">Tanggal Pemeriksaan</th>
-                                                    <th class="text-body">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($laborPaResults as $laborPa)
-                                                    <tr>
-                                                        <td>{{ $laborPa->created_at->format('Y-m-d') ?? '' }}</td>
-                                                        <td>{{ $laborPa->no_sediaan ?? '' }}</td>
-                                                        <td>{!! $laborPa->lokasiJaringanYangDiAmbil ?? '' !!}</td>
-                                                        <td>{!! $laborPa->diagnosisKlinik ?? '' !!}</td>
-                                                        <td>{{ $laborPa->antrianLaboratoriumPatologiAnatomiPatient->tgl_diperiksa ?? '' }}
-                                                        </td>
-                                                        <td class="d-flex">
-                                                            <a href="" target="blank" class="btn btn-dark btn-sm"><i
-                                                                    class='bx bx-printer'></i></a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div> --}}
-                                {{-- </div> --}}
-                                {{-- @endcan --}}
-                                
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endcanany
-        </div>
-        {{-- end Hasil Pemeriksaan --}}
     </div>
+
+    {{-- Hasil Pemeriksaan --}}
+    <div class="card overflow-hidden mb-4 mt-3" style="height: 500px;">
+        <h5 class="card-title px-4 mt-3 m-0">
+            Hasil Pemeriksaan
+        </h5>
+        <hr class="mb-0">
+        <div class="card-body mt-0" id="vertical-example">
+          <p>Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
+          <p>Marzipan oat cake caramels chocolate. Lemon drops cheesecake jelly beans sweet icing pudding croissant. Donut candy canes carrot cake soufflé. Croissant candy wafer pie I love oat cake lemon drops caramels jujubes. I love macaroon halvah liquorice cake. Danish sweet roll pudding cookie sweet roll I love. Jelly cake I love bear claw jujubes dragée gingerbread. I love cotton candy carrot cake halvah biscuit I love macaroon cheesecake tootsie roll. Chocolate cotton candy biscuit I love fruitcake cotton candy biscuit tart gingerbread. Powder oat cake I love. Cheesecake candy canes macaroon I love wafer I love sweet roll ice cream. Toffee cookie macaroon lemon drops tart candy canes. Gummies gummies pie tiramisu I love bear claw cheesecake.</p>
+          <p>Marzipan oat cake caramels chocolate. Lemon drops cheesecake jelly beans sweet icing pudding croissant. Donut candy canes carrot cake soufflé. Croissant candy wafer pie I love oat cake lemon drops caramels jujubes. I love macaroon halvah liquorice cake. Danish sweet roll pudding cookie sweet roll I love. Jelly cake I love bear claw jujubes dragée gingerbread. I love cotton candy carrot cake halvah biscuit I love macaroon cheesecake tootsie roll. Chocolate cotton candy biscuit I love fruitcake cotton candy biscuit tart gingerbread. Powder oat cake I love. Cheesecake candy canes macaroon I love wafer I love sweet roll ice cream. Toffee cookie macaroon lemon drops tart candy canes. Gummies gummies pie tiramisu I love bear claw cheesecake.</p>
+          <p>Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
+          <p>Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
+          <p class="mb-0">Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
+        </div>
+      </div>
+    {{-- end Hasil Pemeriksaan --}}
 
     {{-- modal --}}
     <div class="modal fade" id="modalScrollable" tabindex="-1" aria-labelledby="modalScrollableTitle"
@@ -1188,4 +1017,6 @@
             });
         });
     </script>
+    
+    
 @endsection

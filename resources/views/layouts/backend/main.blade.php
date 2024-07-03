@@ -452,6 +452,11 @@
             // defaultDate: "01-01-1990" // Tanggal default jika input kosong
         });
     </script>
+    <script>
+        new PerfectScrollbar(document.getElementById('vertical-example'), {
+        wheelPropagation: false
+        });
+    </script>
 
     @yield('script')
 

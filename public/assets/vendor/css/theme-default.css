@@ -300,7 +300,7 @@ button.list-group-item-primary.active {
 }
 
 .nav-pills .nav-link.active, .nav-pills .nav-link.active:hover, .nav-pills .nav-link.active:focus {
-  background-color: #739072;
+  background-color: #379777;
   color: #fff;
   box-shadow: 0 2px 4px 0 rgba(105, 108, 255, 0.4);
 }
@@ -651,7 +651,7 @@ a:hover {
 .bg-menu-theme {
   /* background-color: #12826a !important; */
   /* background-color: #55AD9B !important; */
-  background-color: #739072 !important;
+  background-color: #36BA98 !important;
   color: #697a8d;
 }
 .bg-menu-theme .menu-link,
@@ -695,7 +695,7 @@ a:hover {
   color: #697a8d;
 }
 .bg-menu-theme .menu-inner-shadow {
-  background: linear-gradient(#97ab97 10%, rgb(145, 171, 144) 10%, rgb(115, 144, 114) 60%);
+  background: linear-gradient(#36BA98 41%, rgba(255, 255, 255, 0.11) 95%, rgba(255, 255, 255, 0));
 }
 .bg-menu-theme .menu-text {
   color: #566a7f;

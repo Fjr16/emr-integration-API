@@ -515,22 +515,6 @@
                 </li>
             @endcanany
             {{-- end Poliklinik --}}
-
-            {{-- Keuangan --}}
-            <li class="menu-item {{ $menu == 'KEUANGAN' ? 'open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-add-to-queue"></i>
-                    <div>Keuangan</div>
-                </a>
-                <ul class="menu-sub">
-                    <li class="menu-item {{ $title == 'TARIF LAYANAN' ? 'active' : '' }}">
-                        <a href="{{ route('tarif/layanan.index') }}" class="menu-link">
-                            <div>Master Tarif RS</div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            {{-- end Keuangan --}}
             {{-- end Master Data --}}
 
 

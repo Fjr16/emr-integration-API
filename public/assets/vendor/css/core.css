@@ -6770,14 +6770,14 @@ label.btn {
 
 .btn-dark {
   color: #fff;
-  background-color: #4F6F52;
-  border-color: #296C91;
+  background-color: #379777;
+  border-color: #379777;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(35, 52, 70, 0.4);
 }
 .btn-dark:hover {
   color: #fff;
-  background-color: #202f3f;
-  border-color: #202f3f;
+  background-color: #36BA98;
+  border-color: #36BA98;
   transform: translateY(-1px);
 }
 .btn-check:focus + .btn-dark, .btn-dark:focus, .btn-dark.focus {
@@ -10092,7 +10092,7 @@ button.list-group-item-gray.active {
   /* --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important; */
   /* background-color: #296C91 !important; */
-  background-color: #4F6F52 !important;
+  background-color: #379777 !important;
 }
 
 .bg-gray {

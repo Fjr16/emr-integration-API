@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-6 d-flex justify-content-start">
           <h5 class="m-0">Input Hasil Pemeriksaan</h5>
-          <span class="btn {{ $item->tipe_permintaan == 'Urgent' ? 'btn-danger' : 'btn-secondary' }} btn-sm ms-2 text-uppercase" @style('pointer-events : none')>{{ $item->tipe_permintaan }}</span>
+          <span class="badge {{ $item->tipe_permintaan == 'Urgent' ? 'bg-danger' : 'bg-secondary' }} ms-2 text-uppercase">{{ $item->tipe_permintaan }}</span>
         </div>
         <div class="col-6 text-end">
           <span class="m-0 text-primary fw-bold">{{ $item->patient->name }} / {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</span>
