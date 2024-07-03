@@ -90,21 +90,11 @@ class LaboratoriumPatientController extends Controller
      */
     public function show($id)
     {
-        $item = LaboratoriumPatientResult::find($id);
-
-        $categoryPemeriksaanIds = [];
-        foreach($item->laboratoriumPatientResultDetails as $detail){
-            if($detail->laboratoriumRequestMasterVariable->laboratorium_request_category_master_id){
-                $categoryPemeriksaanIds[] = $detail->laboratoriumRequestMasterVariable->laboratorium_request_category_master_id;
-            }
-        }
-        $dataCategoryPemeriksaan = LaboratoriumRequestCategoryMaster::whereIn('id', $categoryPemeriksaanIds)->get();
-
+        $item = LaboratoriumRequest::find($id);
         return view('pages.surat.hasilpemeriksaanlabor', [
             "title" => "Laboratorium PK",
             "menu" => "Laboratorium PK",
             'item' => $item,
-            'dataCategoryPemeriksaan' => $dataCategoryPemeriksaan,
         ]);
     }
 }
