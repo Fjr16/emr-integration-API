@@ -174,7 +174,7 @@
                                 role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-tindakan"
                                 aria-controls="navs-justified-tindakan" aria-selected="false">
                                 <i class="tf-icons bx bx-sitemap"></i>
-                                <p class="m-0">Tindakan</p>
+                                <p class="m-0">Laporan Tindakan</p>
                             </button>
                         </li>
                     @endcan
@@ -186,17 +186,6 @@
                                 aria-controls="navs-justified-resep" aria-selected="false">
                                 <i class="tf-icons bx bx-list-ul"></i>
                                 <p class="m-0">Resep Obat</p>
-                            </button>
-                        </li>
-                    @endcan
-                    @can('daftar surat pengantar ranap')
-                        <li class="nav-item">
-                            <button type="button"
-                                class="nav-link d-flex justify-content-center {{ session('btn') == 'pengantar ranap' ? 'active' : '' }}"
-                                role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-pengantar-ranap"
-                                aria-controls="navs-justified-pengantar-ranap" aria-selected="false">
-                                <i class="tf-icons bx bx-mail-send"></i>
-                                <p class="m-0">Pengantar Ranap</p>
                             </button>
                         </li>
                     @endcan
@@ -743,15 +732,14 @@
                             @endcan
                             <table class="table" id="example">
                                 <thead>
-                                    <tr class="text-nowrap">
-                                        <th class="text-body">No</th>
+                                    <tr class="">
                                         <th class="text-body">Tanggal / Jam</th>
                                         <th class="text-body">Dokter</th>
                                         <th class="text-body">Diagnosa</th>
-                                        <th class="text-body">Jenis Tindakan</th>
+                                        <th class="text-body">Tindakan</th>
                                         <th class="text-body">Lokasi</th>
-                                        <th class="text-body">Laporan Tindakan</th>
-                                        <th class="text-body">Intruksi Pasca Tindakan</th>
+                                        <th class="text-body">Laporan</th>
+                                        <th class="text-body">Intruksi</th>
                                         <th class="text-body">Paraf</th>
                                         @canany(['edit laporan tindakan', 'delete laporan tindakan'])
                                             <th class="text-body">Action</th>
@@ -761,7 +749,6 @@
                                 <tbody>
                                     @foreach ($reportActions as $action)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ date('Y-m-d H:i', strtotime($action->tgl_tindakan ?? '')) }}</td>
                                             <td>{{ $action->user->name ?? '' }}</td>
                                             <td>{{ $action->diagnosa ?? '' }}</td>
@@ -864,78 +851,12 @@
 
                         </div>
                     @endcan
-                    @can('daftar surat pengantar ranap')
-                        <div class="tab-pane fade {{ session('btn') == 'pengantar ranap' ? 'show active' : '' }}"
-                            id="navs-justified-pengantar-ranap" role="tabpanel">
-                            @can('tambah surat pengantar ranap')
-                                <div class="text-end mb-3">
-                                    <a href="{{ route('suratpengantar.create', $item->id) }}"
-                                        class="btn btn-success btn-sm">+Tambah
-                                        Pengantar</a>
-                                </div>
-                            @endcan
-                            <table class="table">
-                                <thead>
-                                    <tr class="text-nowrap">
-                                        <th class="text-body">No</th>
-                                        <th class="text-body">Nama Pasien</th>
-                                        <th class="text-body">Alat</th>
-                                        <th class="text-body">Ruangan</th>
-                                        <th class="text-body">Status</th>
-                                        @canany(['edit surat pengantar ranap', 'delete surat pengantar ranap'])
-                                            <th class="text-body">Action</th>
-                                        @endcanany
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($suratPengantars as $suratPengantar)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $suratPengantar->patient->name ?? '' }}</td>
-                                            <td>{{ $suratPengantar->alat ?? '' }}</td>
-                                            <td>{{ $suratPengantar->ruangan ?? '' }}</td>
-                                            <td>{{ strtoupper($suratPengantar->status) }}</td>
-                                            @canany(['edit surat pengantar ranap', 'delete surat pengantar ranap'])
-                                                <td>
-                                                    <div class="d-flex">
-                                                        {{-- @can('print resep dokter') --}}
-                                                        <a href="{{ route('suratpengantar.show', $suratPengantar->id) }}"
-                                                            target="blank" class="btn btn-dark btn-sm"><i
-                                                                class='bx bx-printer'></i></a>
-                                                        {{-- @endcan --}}
-                                                        @can('edit surat pengantar ranap')
-                                                            <a href="{{ route('suratpengantar.edit', $suratPengantar->id) }}"
-                                                                class="btn btn-warning btn-sm mx-2"><i class='bx bx-edit'></i></a>
-                                                        @endcan
-                                                        @can('delete surat pengantar ranap')
-                                                            <form action="{{ route('suratpengantar.destroy', $suratPengantar->id) }}"
-                                                                method="POST"
-                                                                onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                                                                @method('DELETE')
-                                                                @csrf
-                                                                <button type = "submit" class="btn btn-danger btn-sm">
-                                                                    <i class='bx bx-trash'></i>
-                                                                </button>
-                                                            </form>
-                                                        @endcan
-                                                    </div>
-                                                </td>
-                                            @endcanany
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @endcan
-                    {{-- @can('daftar surat pengantar ranap') --}}
                     <div class="tab-pane fade {{ session('btn') == 'sbpk' ? 'show active' : '' }}"
                         id="navs-justified-sbpk" role="tabpanel">
-                        {{-- @can('tambah surat pengantar ranap') --}}
                         <div class="text-end mb-3">
                             <a href="{{ route('rajal/sbpk.create', $item->id) }}" class="btn btn-success btn-sm">+Tambah
                                 SBPK</a>
                         </div>
-                        {{-- @endcan --}}
                         <table class="table">
                             <thead>
                                 <tr class="text-nowrap">
@@ -944,9 +865,7 @@
                                     <th class="text-body">Tanggal Masuk</th>
                                     <th class="text-body">Jam Keluar</th>
                                     <th class="text-body">Keterangan</th>
-                                    {{-- @canany(['edit surat pengantar ranap', 'delete surat pengantar ranap']) --}}
                                     <th class="text-body">Action</th>
-                                    {{-- @endcanany --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -957,16 +876,12 @@
                                         <td>{{ $sbpk->tanggal_masuk ?? '' }}</td>
                                         <td>{{ $sbpk->jam_keluar ?? '' }}</td>
                                         <td>{{ $sbpk->keterangan ?? '' }}</td>
-                                        {{-- @canany(['edit surat pengantar ranap', 'delete surat pengantar ranap']) --}}
                                         <td>
                                             <div class="d-flex">
-                                                {{-- @can('edit surat pengantar ranap') --}}
                                                 <a href="{{ route('rajal/sbpk.show', $sbpk->id) }}" target="blank"
                                                     class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
                                                 <a href="{{ route('rajal/sbpk.edit', $sbpk->id) }}"
                                                     class="btn btn-warning btn-sm mx-2"><i class='bx bx-edit'></i></a>
-                                                {{-- @endcan --}}
-                                                {{-- @can('delete surat pengantar ranap') --}}
                                                 <form action="{{ route('rajal/sbpk.destroy', $sbpk->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
@@ -976,16 +891,13 @@
                                                         <i class='bx bx-trash'></i>
                                                     </button>
                                                 </form>
-                                                {{-- @endcan --}}
                                             </div>
                                         </td>
-                                        {{-- @endcanany --}}
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    {{-- @endcan --}}
                 </div>
             </div>
         </div>
@@ -1276,20 +1188,4 @@
             });
         });
     </script>
-    <script>
-        function reviewUlang(labor_pk_patient_result_id) {
-            $.ajax({
-                type: 'get',
-                url: "{{ route('laboratorium/patient/hasil.reviewUlang', '') }}/" + labor_pk_patient_result_id,
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog modal-lg modal-dialog-scrollable';
-                    div.innerHTML = data;
-                    $('#modalScrollable').html(div);
-                    $('#modalScrollable').modal('show');
-                }
-            });
-        }
-    </script>
-
 @endsection

@@ -52,7 +52,6 @@ use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\UnitCategoryPivotController;
 use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
-use App\Http\Controllers\SuratPengantarRawatController;
 use App\Http\Controllers\RadiologiFormRequestController;
 use App\Http\Controllers\RekamMedisElektronikController;
 use App\Http\Controllers\UnitConversionMasterController;
@@ -62,14 +61,9 @@ use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\AsesmentKeperawatanDiagnosisController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
-use App\Http\Controllers\LaboratoriumRequestMasterRateController;
 use App\Http\Controllers\LaboratoriumRequestRekamMedisController;
-use App\Http\Controllers\LaboratoriumRequestTypeMasterController;
 use App\Http\Controllers\AsesmentKeperawatanStatusFisikController;
-use App\Http\Controllers\LaboratoriumRequestMasterDetailController;
 use App\Http\Controllers\AsesmentKeperawatanRencanaAsuhanController;
-use App\Http\Controllers\LaboratoriumRequestCategoryMasterController;
-use App\Http\Controllers\LaboratoriumMasterVariabelPemeriksaanController;
 use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhController;
 use App\Http\Controllers\OtherController;
 use App\Http\Controllers\PermintaanLaboratoriumPatogologiAnatomikController;
@@ -816,21 +810,6 @@ Route::post('/permintaan/laboratorium/patologi/anatomik/update/{id}', [Permintaa
 Route::get('/permintaan/laboratorium/patologi/anatomik/print/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'print'])->name('permintaan/laboratorium/patologi/anatomik.print');
 Route::get('/permintaan/laboratorium/patologi/anatomik/delete/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'delete'])->name('permintaan/laboratorium/patologi/anatomik.delete');
 // });
-
-//Surat Pengantar Ranap
-// Route::get('/surat/pengantar/index', [SuratPengantarRawatController::class, 'index'])->name('suratpengantar.index');
-Route::group(['middleware' => ['permission:tambah surat pengantar ranap']], function () {
-    Route::get('/surat/pengantar/create/{id}', [SuratPengantarRawatController::class, 'create'])->name('suratpengantar.create');
-    Route::post('/surat/pengantar/store/{id}', [SuratPengantarRawatController::class, 'store'])->name('suratpengantar.store');
-});
-Route::group(['middleware' => ['permission:edit surat pengantar ranap']], function () {
-    Route::get('/surat/pengantar/edit/{id}', [SuratPengantarRawatController::class, 'edit'])->name('suratpengantar.edit');
-    Route::put('/surat/pengantar/update/{id}', [SuratPengantarRawatController::class, 'update'])->name('suratpengantar.update');
-});
-Route::group(['middleware' => ['permission:delete surat pengantar ranap']], function () {
-    Route::delete('/surat/pengantar/destroy/{id}', [SuratPengantarRawatController::class, 'destroy'])->name('suratpengantar.destroy');
-});
-Route::get('/surat/pengantar/show/{id}', [SuratPengantarRawatController::class, 'show'])->name('suratpengantar.show');
 
 
 // rme start

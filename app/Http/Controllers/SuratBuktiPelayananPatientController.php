@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\arg01\SuratKontrolController;
-use App\Models\DoctorPatient;
+use Exception;
+use App\Models\User;
 use App\Models\Queue;
+use Illuminate\Http\Request;
+use App\Models\DoctorPatient;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\SuratKeteranganPatients;
+use Illuminate\Support\Facades\Storage;
 use App\Models\SuratBuktiPelayananPatient;
+use App\Models\DiagnosisKeperawatanPatient;
 use App\Models\SuratBuktiPelayananPatientDetail;
 use App\Models\SuratBuktiPelayananSekunderAction;
 use App\Models\SuratBuktiPelayananSekunderDiagnosis;
-use App\Models\SuratKeteranganPatients;
-use App\Models\User;
-use Exception;
+use App\Http\Controllers\arg01\SuratKontrolController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class SuratBuktiPelayananPatientController extends Controller
 {
@@ -568,12 +569,14 @@ class SuratBuktiPelayananPatientController extends Controller
     {
         // $item = Queue::find($id);
         $item = SuratBuktiPelayananPatient::find($id);
+        $item2 = DiagnosisKeperawatanPatient::where('queue_id', $item->queue_id)->first();
         $suratKeterangan = SuratKeteranganPatients::where('surat_bukti_pelayanan_patient_id', $item->id)->first();
         return view('pages.surat.sbpk', [
             "title" => "Surat Bukti Pelayanan Kesehatan",
             "menu" => "In Patient",
             "item" => $item,
             "suratKeterangan" => $suratKeterangan,
+            'item2' => $item2,
             // "data" => $data,
         ]);
     }
