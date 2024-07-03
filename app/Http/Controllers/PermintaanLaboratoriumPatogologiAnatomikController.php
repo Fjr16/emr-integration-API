@@ -7,9 +7,11 @@ use App\Models\DetailAntrianLaboratoriumPatologiAnatomiPatient;
 use App\Models\HasilHistopatologiPatient;
 use App\Models\HasilSitopatologiPatient;
 use App\Models\LaboratoriumPatientResult;
+use App\Models\LaboratoriumRequest;
 use App\Models\Patient;
 use App\Models\PermintaanLaboratoriumPatologiAnatomikPatient;
 use App\Models\Queue;
+use App\Models\RadiologiFormRequest;
 use App\Models\RadiologiPatient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -59,14 +61,14 @@ class PermintaanLaboratoriumPatogologiAnatomikController extends Controller
         $patien = Patient::find($item->patient_id);
         $tanggal_lahir = Carbon::parse($patien->tanggal_lhr);
         $umur = $tanggal_lahir->diff(Carbon::now())->format('%y');
-        $radiologiResults = RadiologiPatient::where('patient_id', $item->patient->id)
-            ->where('status', 'VALIDATED')
-            ->orWhere('status', 'UNVALIDATED')
+        $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)
+            ->where('status', 'FINISHED')
+            ->with('radiologiFormRequestDetails')
             ->latest()
             ->get();
-        $laborPkResults = LaboratoriumPatientResult::where('patient_id', $item->patient->id)
-            ->where('status', 'VALIDATED')
-            ->orWhere('status', 'UNVALIDATED')
+        $laborPkResults = LaboratoriumRequest::where('patient_id', $item->patient->id)
+            ->where('status', 'FINISHED')
+            // ->orWhere('status', 'UNVALIDATED')
             ->latest()
             ->get();
 

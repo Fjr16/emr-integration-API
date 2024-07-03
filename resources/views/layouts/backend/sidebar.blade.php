@@ -127,45 +127,30 @@
             @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Rekam Medis Rajal', 'Perawat Rajal',
                 'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA'])
                 {{-- Rawat Jalan --}}
-                {{-- @canany(['daftar pasien poli', 'daftar pasien rekam medis', 'daftar pasien farmasi rajal', 'daftar pembayaran']) --}}
-                <li class="menu-item {{ $menu == 'In Patient' ? 'open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
+                    <a href="{{ route('rajal/index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-accessibility"></i>
-                        <div>Rawat Jalan</div>
+                        <div>Poliklinik</div>
                     </a>
-
-                    <ul class="menu-sub">
-                        {{-- @can('daftar pasien poli') --}}
-                        <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
-                            <a href="{{ route('rajal/index') }}" class="menu-link">
-                                <div>Poli Rawat Jalan</div>
-                            </a>
-                        </li>
-                        {{-- @endcan --}}
-                        {{-- @can('daftar pasien rekam medis') --}}
-                        <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
-                            <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
-                                <div>Rekam Medis</div>
-                            </a>
-                        </li>
-                        {{-- @endcan --}}
-                        {{-- @can('daftar pasien farmasi rajal') --}}
-                        <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
-                            <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
-                                <div>Farmasi Rawat Jalan</div>
-                            </a>
-                        </li>
-                        {{-- @endcan --}}
-                        {{-- @can('daftar pembayaran') --}}
-                        <li class="menu-item {{ $title == 'Pembayaran' ? 'active' : '' }}">
-                            <a href="{{ route('rajal/kasir/pembayaran/index') }}" class="menu-link">
-                                <div>Pembayaran</div>
-                            </a>
-                        </li>
-                        {{-- @endcan --}}
-                    </ul>
                 </li>
-                {{-- @endcanany --}}
+                <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
+                    <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-user-voice'></i>
+                        <div>Rekam Medis</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
+                    <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-capsule'></i>
+                        <div>Apotek</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ $title == 'Pembayaran' ? 'active' : '' }}">
+                    <a href="{{ route('rajal/kasir/pembayaran/index') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-credit-card'></i>
+                        <div>Pembayaran</div>
+                    </a>
+                </li>
                 {{-- end Rawat Jalan --}}
             @endhasanyrole
 

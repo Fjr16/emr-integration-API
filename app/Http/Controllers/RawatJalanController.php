@@ -16,7 +16,6 @@ use App\Models\MedicineReceipt;
 use App\Models\PermintaanLaboratoriumPatologiAnatomikPatient;
 use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
-use App\Models\SuratPengantarRawatJalanPatient;
 
 class RawatJalanController extends Controller
 {
@@ -31,6 +30,7 @@ class RawatJalanController extends Controller
             $filter = new DateTime(request('filter'));
         }
         $filterDate = $filter ?? now();
+        $routeToFilter = route('rajal/index');
         $user = Auth::user();
         if ($user->hasRole('Dokter Poli')) {
             $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($filterDate) {
@@ -57,6 +57,7 @@ class RawatJalanController extends Controller
             "data" => $data,
             "filterDate" => $filterDate,
             "user" => $user,
+            "routeToFilter" => $routeToFilter,
         ]);
     }
 

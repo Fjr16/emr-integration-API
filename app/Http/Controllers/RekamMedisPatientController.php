@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\Queue;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,11 +15,15 @@ class RekamMedisPatientController extends Controller
      */
     public function index()
     {
-        $today = now();
+        if (request('filter')) {
+            $filter = new DateTime(request('filter'));
+        }
+        $filterDate = $filter ?? now();
+        $routeToFilter = route('rajal/rekammedis.index');
         $user = Auth::user();
-        $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function($query) use ($today){
-            $query->whereHas('rawatJalanPoliPatient', function($query1) use ($today){
-                $query1->whereDate('created_at', $today);
+        $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function($query) use ($filterDate){
+            $query->whereHas('rawatJalanPoliPatient', function($query1) use ($filterDate){
+                $query1->whereDate('created_at', $filterDate);
             });
         })->get();
         $data = $data->sortBy(function($queue){
@@ -30,8 +35,9 @@ class RekamMedisPatientController extends Controller
             "title" => "Rekam Medis",
             "menu" => "In Patient",
             "data" => $data,
-            "today" => $today,
+            "filterDate" => $filterDate,
             "user" => $user,
+            "routeToFilter" => $routeToFilter,
         ]);
     }
 }

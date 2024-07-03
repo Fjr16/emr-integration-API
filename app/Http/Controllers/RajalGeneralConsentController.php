@@ -198,8 +198,10 @@ class RajalGeneralConsentController extends Controller
             Storage::put('public/' . $file_name_ttd, $ttd);
             $data['ttd'] = $file_name_ttd;
         }else{
-            $data['ttd_admisi'] = $item->ttd_admisi;
             $data['ttd'] = $item->ttd;
+        }
+        if (!$request->input('ttd_admisi')) {
+            $data['ttd_admisi'] = $item->ttd_admisi;
         }
 
         if ($item->update($data)) {

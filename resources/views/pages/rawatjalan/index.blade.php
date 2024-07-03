@@ -26,7 +26,7 @@
                     </h4>
                 </div>
                 <div class="col-3">
-                    <form action="{{ route('rajal/index') }}" method="GET">
+                    <form action="{{ $routeToFilter }}" method="GET">
                         <div class="row">
                         <label class="col-form-label col-3"></label>
                         <div class="col-9">

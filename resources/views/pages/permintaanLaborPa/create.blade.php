@@ -202,7 +202,7 @@
                         <thead>
                             <tr class="text-nowrap">
                                 <th class="text-body">Tanggal Permintaan</th>
-                                <th class="text-body">Petugas Laboratorium</th>
+                                <th class="text-body">Validator</th>
                                 <th class="text-body">No. Labor</th>
                                 <th class="text-body">Diagnosa Klinis</th>
                                 <th class="text-body">Tanggal</th>
@@ -212,19 +212,16 @@
                         <tbody>
                             @foreach ($laborPkResults as $laborPk)
                                 <tr>
-                                    <td>{{ $laborPk->laboratoriumRequest->created_at->format('Y-m-d') ?? '' }}
+                                    <td>{{ $laborPk->created_at->format('Y-m-d') ?? '' }}
                                     </td>
-                                    {{-- <td>{{ $laborPk->user->name ?? '' }}</td> --}}
-                                    <td>{{ $laborPk->laboratoriumUserValidator->user->name ?? '' }}</td>
-                                    <td>{{ $laborPk->nomor_reg_lab ?? '' }}</td>
-                                    <td>{!! $laborPk->laboratoriumRequest->diagnosa ?? '' !!}</td>
-                                    <td>{{ $laborPk->tanggal_periksa ?? '' }}</td>
+                                    <td>{{ $laborPk->validator->name ?? '' }}</td>
+                                    <td>{{ $laborPk->no_reg ?? '' }}</td>
+                                    <td>{!! $laborPk->diagnosa ?? '' !!}</td>
+                                    <td>{{ $laborPk->tanggal_periksa_selesai ?? '' }}</td>
                                     <td>{{ $laborPk->status ?? '' }}</td>
                                     <td>
                                         <a href="{{ route('laboratorium/patient/hasil.show', $laborPk->id) }}"
                                             target="blank" class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
-                                        {{-- <button class="btn btn-dark btn-sm" onclick="reviewUlang({{ $laborPk->id }})"><i
-                                                class='bx bx-revision'></i></button> --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -233,49 +230,93 @@
                 </div>
                 <div class="mb-5 table-responsive">
                     <label for="pemeriksaan_radiologi" class="form-label">Pemeriksaan Radiologi</label>
-                    <table class="table">
-                        <thead>
-                            <tr class="text-nowrap">
-                                <th class="text-body">Tanggal Permintaan</th>
-                                <th class="text-body">Petugas Radiologi</th>
-                                <th class="text-body">Jenis Pemeriksaan</th>
-                                <th class="text-body">Diagnosa Klinis</th>
-                                <th class="text-body">Tanggal Hasil</th>
-                                <th class="text-body">Hasil Gambar</th>
-                                <th class="text-body">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($radiologiResults as $result)
-                                @foreach ($result->radiologiPatientRequestDetails->where('status', 'SELESAI') as $detail)
-                                    <tr>
-                                        <td>{{ $result->radiologiFormRequest->created_at->format('Y-m-d / H:i:s') ?? '' }}
-                                        </td>
-                                        <td>{{ $detail->user->name ?? '' }}</td>
-                                        <td>{{ $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name ?? '' }}
-                                        </td>
-                                        <td>{!! $result->radiologiFormRequest->diagnosa_klinis ?? '' !!}</td>
-                                        <td>{{ $result->radiologiFormRequest->updated_at->format('Y-m-d / H:i:s') ?? '' }}
-                                        </td>
-                                        <td><a href="{{ Storage::url($detail->image ?? '') }}" target="blank">
-                                                <img src="{{ Storage::url($detail->image ?? '') }}"
-                                                    alt="{{ $detail->image ?? '' }}" width="100" height="100">
-                                            </a></td>
-                                        <td>
-                                            <div class="d-flex flex-row">
-                                                <a href="{{ route('radiologi/patient/hasil.show', $detail->id) }}"
-                                                    target="blank" class="btn btn-dark btn-sm"><i
-                                                        class='bx bx-printer'></i></a>
-                                                <a href="{{ route('radiologi/patient/hasil.showChange', $detail->id) }}"
-                                                    target="blank" class="btn btn-dark btn-sm ms-2"><i
-                                                        class='bx bx-low-vision'></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                    
+                    <div class="accordion accordion-header-primary mb-5" id="accordionStyle1">
+                        @foreach ($radiologiResults as $indexMain => $result)   
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header">
+                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionStyle1-{{ $indexMain }}" aria-expanded="false">
+                                    Pemeriksaan <span class="text-primary ms-1">{{ $result->created_at->format('Y-m-d / H:i:s') ?? '' }}</span>
+                                    , No. Antrian <span class="text-primary ms-1"> {{ $result->queue->no_antrian ?? '' }}</span>
+                                    , Dengan Diagnosa <span class="text-primary ms-1">{{ $result->diagnosa_klinis ?? '' }}</span> 
+                                    , Telah Divalidasi oleh <span class="text-primary ms-1">{{ $result->validator->name ?? '' }}</span> 
+                                    </button>
+                                </h2>
+                            
+                                <div id="accordionStyle1-{{ $indexMain }}" class="accordion-collapse collapse" data-bs-parent="#accordionStyle1">
+                                    <div class="accordion-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr class="text-nowrap">
+                                                    <th class="text-body">Jenis Pemeriksaan</th>
+                                                    <th class="text-body">Diagnosa Klinis</th>
+                                                    <th class="text-body">Tanggal Hasil</th>
+                                                    <th class="text-body">Hasil Text</th>
+                                                    <th class="text-body">Hasil Gambar</th>
+                                                    <th class="text-body">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($result->radiologiFormRequestDetails->where('status', 'VALIDATE') as $detail)
+                                                    <tr>
+                                                        <td>{{ $detail->action->name ?? '' }}
+                                                        </td>
+                                                        <td>{{ $result->diagnosa_klinis ?? '' }}</td>
+                                                        <td>{{ $detail->tanggal_periksa ?? '' }}</td>
+                                                        <td>{!! $detail->hasil ?? '' !!}</td>
+                                                        <td><a href="{{ Storage::url($detail->image ?? '') }}" target="blank">
+                                                                <img src="{{ Storage::url($detail->image ?? '') }}"
+                                                                    alt="{{ $detail->image ?? '' }}" width="100" height="100">
+                                                            </a></td>
+                                                        <td>
+                                                            <div class="d-flex flex-row">
+                                                                <a href="{{ route('radiologi/patient/hasil.show', $detail->id) }}"
+                                                                    target="_blank" class="btn btn-dark btn-sm"><i
+                                                                        class='bx bx-printer'></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {{-- <div class="accordion-item card">
+                            <h2 class="accordion-header">
+                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionStyle1-2" aria-expanded="false">
+                                Header Option 2
+                                </button>
+                            </h2>
+                            <div id="accordionStyle1-2" class="accordion-collapse collapse" data-bs-parent="#accordionStyle1">
+                                <div class="accordion-body">
+                                Dessert ice cream donut oat cake jelly-o pie sugar plum cheesecake. Bear claw dragée oat cake dragée ice
+                                cream
+                                halvah tootsie roll. Danish cake oat cake pie macaroon tart donut gummies. Jelly beans candy canes carrot
+                                cake.
+                                Fruitcake chocolate chupa chups.
+                                </div>
+                            </div>
+                            </div>
+                            
+                            <div class="card accordion-item active mb-2">
+                            <h2 class="accordion-header">
+                                <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionStyle1-3" aria-expanded="true">
+                                Header Option 3
+                                </button>
+                            </h2>
+                            <div id="accordionStyle1-3" class="accordion-collapse collapse show" data-bs-parent="#accordionStyle1">
+                                <div class="accordion-body">
+                                Oat cake toffee chocolate bar jujubes. Marshmallow brownie lemon drops cheesecake. Bonbon gingerbread
+                                marshmallow
+                                sweet jelly beans muffin. Sweet roll bear claw candy canes oat cake dragée caramels. Ice cream wafer danish
+                                cookie caramels muffin.
+                                </div>
+                            </div>
+                            </div> --}}
                             @endforeach
-                        </tbody>
-                    </table>
+                        </div>
                 </div>
                 <div class="row mb-3" id="">
                     <label for="sketsa_lokasi" class="col-form-label col-1">Catatan</label>
