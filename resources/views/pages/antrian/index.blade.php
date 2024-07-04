@@ -24,37 +24,24 @@
                         <th>Poli / Dokter</th>
                         <th>No Kartu BPJS</th>
                         <th>Diagnosa</th>
-                        {{-- <th>Status</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $item)
                         <tr>
                             <td>
-                                @if ($item->status_antrian == 'CHECKIN')
-                                    {{-- @can('perbarui status antrian') --}}
-                                        <a class="btn btn-success btn-sm text-white"
-                                            onclick="konfirmasiAntrian({{ $item->id }})">Panggil</a>
-                                    {{-- @endcan --}}
+                                @if ($item->status_antrian == 'WAITING')
+                                    <button class="btn btn-success btn-sm"
+                                    onclick="registerQueue({{ $item->id }})">Daftarkan</button>
                                     <form action="{{ route('antrian/konfirmasi.store', $item->id) }}" class="d-inline"
                                         method="POST">
                                         @csrf
                                         <button class="btn btn-danger btn-sm text-white" name="status_antrian"
-                                            value="BATAL"
+                                            value="CANCEL"
                                             onclick="return confirm('Apakah Anda Yakin Ingin Membatalkan Antrian ?')">Batal</button>
                                     </form>
-                                @elseif ($item->status_antrian == 'TIDAK HADIR')
-                                    {{-- @can('perbarui status antrian') --}}
-                                        <a class="btn btn-warning btn-sm text-white"
-                                            onclick="konfirmasiAntrian({{ $item->id }})">Panggil Ulang</a>
-                                    {{-- @endcan --}}
-                                @elseif ($item->status_antrian == 'BATAL')
-                                    {{-- @can('perbarui status antrian') --}}
-                                        <a class="btn btn-danger disabled btn-sm text-white">Dibatalkan</a>
-                                    {{-- @endcan --}}
-                                @elseif ($item->status_antrian == 'DIPANGGIL')
-                                    <button class="btn btn-success btn-sm"
-                                        onclick="registerQueue({{ $item->id }})">Daftarkan</button>
+                                @elseif ($item->status_antrian == 'CANCEL')
+                                    <span class="badge bg-danger">ANTRIAN BATAL</span>
                                 @endif
                             </td>
                             <td>{{ $item->no_antrian ?? '' }}</td>
@@ -69,7 +56,6 @@
                                 {{ $item->doctorPatient->user->name ?? '' }}</td>
                             <td>{{ $item->patient->noka ?? '' }}</td>
                             <td>{{ $item->last_diagnostic ?? '-' }}</td>
-                            {{-- <td>{{ $item->status_antrian ?? '' }}</td> --}}
                         </tr>
                     @endforeach
                 </tbody>
@@ -94,9 +80,6 @@
 
         </div>
     </div>
-    <div class="modal fade" id="konfirmasi-antrian" data-bs-backdrop="static" tabindex="-1">
-
-    </div>
 
     <script>
         function registerQueue(id) {
@@ -112,21 +95,6 @@
                     $('#openModal').modal('show');
                 }
             })
-        }
-
-
-        function konfirmasiAntrian(id) {
-            $.ajax({
-                type: 'get',
-                url: "{{ route('antrian/konfirmasi/ulang.create', '') }}/" + id,
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog';
-                    div.innerHTML = data;
-                    $('#konfirmasi-antrian').html(div);
-                    $('#konfirmasi-antrian').modal('show');
-                }
-            });
         }
     </script>
 @endsection

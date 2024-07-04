@@ -10,7 +10,7 @@ class Queue extends Model
     use HasFactory;
 
 
-    protected $with = ['rawatJalanPatient'];
+    protected $with = ['rawatJalanPoliPatient'];
 
     protected $fillable = [
         'patient_id',
@@ -22,13 +22,16 @@ class Queue extends Model
         'no_rujukan',
         'last_diagnostic',
         'category',
-        'kuota',
         'created_at'
     ];
 
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+    public function rajalGeneralConsent()
+    {
+        return $this->hasOne(RajalGeneralConsent::class);
     }
 
     public function patientCategory()
@@ -46,9 +49,9 @@ class Queue extends Model
         return $this->hasOne(DoctorPatient::class);
     }
 
-    public function rawatJalanPatient()
+    public function rawatJalanPoliPatient()
     {
-        return $this->hasOne(RawatJalanPatient::class);
+        return $this->hasOne(RawatJalanPoliPatient::class);
     }
 
     //relasi ke daftar pasien radiologi
@@ -56,30 +59,10 @@ class Queue extends Model
     {
         return $this->hasMany(RadiologiFormRequest::class);
     }
-    public function radiologiPatients()
-    {
-        return $this->hasMany(RadiologiPatient::class);
-    }
-
     public function laboratoriumRequests()
     {
         return $this->hasMany(LaboratoriumRequest::class);
     }
-    public function laboratoriumPatientResults()
-    {
-        return $this->hasMany(LaboratoriumPatientResult::class);
-    }
-
-    public function suratPengantarRawatJalanPatient()
-    {
-        return $this->hasOne(SuratPengantarRawatJalanPatient::class);
-    }
-
-    public function rawatInapPatient()
-    {
-        return $this->hasOne(RawatInapPatient::class);
-    }
-
     public function permintaanLaboratoriumPatologiAnatomikPatient()
     {
         return $this->hasMany(PermintaanLaboratoriumPatologiAnatomikPatient::class);
@@ -93,22 +76,6 @@ class Queue extends Model
     {
         return $this->hasMany(DiagnosisKeperawatanPatient::class);
     }
-    public function anestesiReports()
-    {
-        return $this->hasMany(AnestesiReport::class);
-    }
-
-    // kemoterapi
-    public function kemoterapiPatient()
-    {
-        return $this->hasOne(KemoterapiPatient::class);
-    }
-    // casemix
-    public function claimCaseMixPatient()
-    {
-        return $this->hasOne(claimCaseMixPatient::class);
-    }
-
     public function suratKeteranganPatient()
     {
         return $this->hasOne(SuratKeteranganPatients::class);

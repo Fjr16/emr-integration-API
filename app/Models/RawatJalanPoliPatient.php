@@ -10,13 +10,12 @@ class RawatJalanPoliPatient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rawat_jalan_patient_id',
+        'queue_id',
         'status',
-        'status_rekam_medis'
     ];
     
-    public function rawatJalanPatient(){
-        return $this->belongsTo(RawatJalanPatient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
 
     public function initialAssesments(){

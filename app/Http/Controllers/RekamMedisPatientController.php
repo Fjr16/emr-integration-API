@@ -21,14 +21,12 @@ class RekamMedisPatientController extends Controller
         $filterDate = $filter ?? now();
         $routeToFilter = route('rajal/rekammedis.index');
         $user = Auth::user();
-        $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function($query) use ($filterDate){
-            $query->whereHas('rawatJalanPoliPatient', function($query1) use ($filterDate){
-                $query1->whereDate('created_at', $filterDate);
-            });
+        $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function($query) use ($filterDate){
+            $query->whereDate('created_at', $filterDate);
         })->get();
         $data = $data->sortBy(function($queue){
-            $status = $queue->rawatJalanPatient->rawatJalanPoliPatient->status ?? '';
-            return $status == 'WAITING' ? 0 : ($status === 'SELESAI' ? 1 : 2);
+            $status = $queue->rawatJalanPoliPatient->status ?? '';
+            return $status == 'WAITING' ? 0 : ($status === 'ONGOING' ? 1 : 2);
         })->values();
 
         return view('pages.rawatjalan.index', [

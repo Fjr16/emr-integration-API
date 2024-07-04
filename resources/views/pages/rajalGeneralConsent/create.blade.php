@@ -4,7 +4,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">General Consent Pasien
-                <span class="text-primary">{{ $item->queue->patient->name ?? '' }}</span>
+                <span class="text-primary">{{ $item->patient->name ?? '' }}</span>
             </h5>
         </div>
         <div class="card-body">
@@ -23,14 +23,14 @@
                             <label class="col-sm-5 col-form-label" for="basic-default-name">Nama</label>
                             <div class="col-sm-7">
                                 <input type="text" name="name" class="form-control" id="basic-default-name"
-                                    value="{{ $item->queue->patient->name ?? '' }}" @required(true)>
+                                    value="{{ $item->patient->name ?? '' }}" @required(true)>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-5 col-form-label" for="basic-default-name">Tanggal Lahir</label>
                             <div class="col-sm-7">
                                 <input type="date" name="tgl_lhr" class="form-control" id="basic-default-name"
-                                    value="{{ $item->queue->patient->tanggal_lhr ?? '' }}" @required(true)>
+                                    value="{{ $item->patient->tanggal_lhr ?? '' }}" @required(true)>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -38,7 +38,7 @@
                             <div class="col-sm-7">
                                 <select class="form-control select2" name="kelamin" @required(true)>
                                     @foreach ($kelamin as $sex)
-                                        @if ($item->queue->patient->jenis_kelamin == $sex)
+                                        @if ($item->patient->jenis_kelamin == $sex)
                                             <option value="{{ $sex }}" selected>{{ $sex }}</option>
                                         @else
                                             <option value="{{ $sex }}">{{ $sex }}</option>
@@ -53,14 +53,14 @@
                             <label class="col-sm-5 col-form-label" for="basic-default-name">Alamat</label>
                             <div class="col-sm-7">
                                 <input type="text" name="alamat" class="form-control" id="basic-default-name"
-                                    value="{{ $item->queue->patient->alamat ?? '' }}" @required(true)>
+                                    value="{{ $item->patient->alamat ?? '' }}" @required(true)>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-5 col-form-label" for="basic-default-name">Telpon</label>
                             <div class="col-sm-7">
                                 <input type="number" name="phone" class="form-control" id="basic-default-name"
-                                    value="{{ $item->queue->patient->telp ?? '' }}" @required(true)>
+                                    value="{{ $item->patient->telp ?? '' }}" @required(true)>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -373,7 +373,7 @@
                     <div class="col-4"></div>
                     <div class="col-4 text-center">
                         <input type="text" class="form-control form-control-sm text-center" id="nameTtd"
-                            value="{{ $item->queue->patient->name ?? '' }}" disabled>
+                            value="{{ $item->patient->name ?? '' }}" disabled>
                     </div>
                 </div>
                 <div class="col-sm-10 mt-2">

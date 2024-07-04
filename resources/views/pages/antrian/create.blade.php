@@ -220,31 +220,10 @@
                     <tr>
                         @canany(['perbarui status antrian', 'lihat antrian'])
                         <td class="d-flex">
-                            @if ($antrian->status_antrian == 'WAITING')
-                                @can('perbarui status antrian')
-                                    <a class="btn btn-success btn-sm text-white"
-                                        href="{{ route('antrian/konfirmasi.checkin', $antrian->id) }}">CheckIn</a>
-                                @endcan
-                            @elseif ($antrian->status_antrian == 'GAGAL CHECKIN')
-                                @can('perbarui status antrian')
-                                    <a class="btn btn-success btn-sm text-white"
-                                        onclick="konfirmasiAntrian({{ $antrian->id }})">CheckIn Ulang</a>
-                                @endcan
-                            @else
-                                @can('lihat antrian')
-                                    <script>
-                                        // Pastikan fungsi showAntrian() didefinisikan sebelumnya
-
-                                        // Periksa apakah showAntrian diatur
-                                        @if (session('showAntrian'))
-                                            // Panggil fungsi showAntrian
-                                            showAntrian({{ $antrian->id }});
-                                        @endif
-                                    </script>
-                                    <a class="btn btn-dark btn-sm text-white"
-                                        onclick="showAntrian({{ $antrian->id }})">Lihat</a>
-                                @endcan
-                            @endif
+                            @can('lihat antrian')
+                                <a class="btn btn-dark btn-sm text-white"
+                                    onclick="showAntrian({{ $antrian->id }})">Lihat</a>
+                            @endcan
                         </td>
                         @endcanany
                         <td>{{ $antrian->no_antrian ?? '' }}</td>
@@ -254,7 +233,11 @@
                         </td>
                         <td>{{ $antrian->doctorPatient->user->roomDetail->name ?? '' }}</td>
                         <td>{{ $antrian->last_diagnostic ?? '--' }}</td>
-                        <td>{{ $antrian->status_antrian ?? '-' }}</td>
+                        <td>
+                            <span class="badge {{ $antrian->status_antrian == 'ARRIVED' ?  'bg-primary' : ($antrian->status_antrian == 'FINISHED' ? 'bg-sucess' : ($antrian->status_antrian == 'CANCEL' ? 'bg-danger' : 'bg-warning') ) }}">
+                                {{ $antrian->status_antrian == 'ARRIVED' ?  'SEDANG DILAYANI' : ($antrian->status_antrian == 'FINISHED' ? 'SELESAI' : ($antrian->status_antrian == 'CANCEL' ? 'ANTRIAN BATAL' : 'BELUM DILAYANI') ) }}
+                            </span>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -274,9 +257,6 @@
     <div class="modal-dialog modal-xl" id="showModal">
 
     </div>
-</div>
-<div class="modal fade" id="konfirmasi-antrian" data-bs-backdrop="static" tabindex="-1">
-
 </div>
 
 @section('script')
@@ -358,58 +338,8 @@
             })
         }
     }
-
-    function konfirmasiAntrian(id) {
-        $.ajax({
-            type: 'get',
-            url: "{{ route('antrian/konfirmasi.create', '') }}/" + id,
-            success: function(data) {
-                var div = document.createElement('div');
-                div.className = 'modal-dialog';
-                div.innerHTML = data;
-                $('#konfirmasi-antrian').html(div);
-                $('#konfirmasi-antrian').modal('show');
-            }
-        });
-    }
-
-    function cekNoRujuk() {
-        const noRujukanValue = $('#no_rujukan').val();
-        const url = `/antrian/check/nomor/rujukan/${noRujukanValue}`;
-
-        $.ajax({
-            type: 'GET',
-            url: url,
-            success: function(response) {
-                let data = JSON.parse(response);
-                // console.log(response);
-                $('#kodeDiagnosa').val(data?.response?.rujukan?.diagnosa?.kode)
-                $('#last_diagnostic').val(data?.response?.rujukan?.diagnosa?.nama)
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                // Tampilkan pesan error kepada pengguna
-            }
-        });
-    }
 </script>
 
-<script>
-    // Mengambil tombol "Check peserta BPJS" dan input dengan ID "nik"
-    const checkPesertaButton = document.getElementById('checkPesertaButton');
-    const nikInput = document.getElementById('nik');
-
-    // Menambahkan event listener untuk mengubah URL saat tombol diklik
-    checkPesertaButton.addEventListener('click', function() {
-        const nikValue = nikInput.value; // Mengambil nilai dari input
-
-        // Membuat URL dengan nilai NIK yang diambil dari input
-        const url = `/Peserta/nik/${nikValue}/tglSEP/2023-10-22`;
-
-        // Mengarahkan ke URL yang baru
-        window.open(url, '_blank');
-    });
-</script>
 {{-- mengambil jadwal dokter --}}
 <script>
     $(document).ready(function() {

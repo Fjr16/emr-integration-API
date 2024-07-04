@@ -10,12 +10,12 @@ class RajalFarmasiPatient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rawat_jalan_patient_id',
+        'queue_id',
         'status',
     ];
 
-    public function rawatJalanPatient(){
-        return $this->belongsTo(RawatJalanPatient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
     public function rajalFarmasiObatInvoices(){
         return $this->hasMany(RajalFarmasiObatInvoice::class);

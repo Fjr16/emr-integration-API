@@ -11,7 +11,7 @@ class RajalGeneralConsent extends Model
 
     protected $fillable = [
         'user_id',
-        'rawat_jalan_patient_id',
+        'queue_id',
         'patient_id',
         'name',
         'tgl_lhr',
@@ -32,8 +32,8 @@ class RajalGeneralConsent extends Model
     public function rajalGeneralConsentDetails(){
         return $this->hasMany(RajalGeneralConsentDetail::class);
     }
-    public function rawatJalanPatient(){
-        return $this->belongsTo(RawatJalanPatient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
     public function patient(){
         return $this->belongsTo(Patient::class);

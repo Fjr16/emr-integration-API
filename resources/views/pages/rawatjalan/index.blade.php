@@ -72,12 +72,12 @@
                         <tr>
                             @if ($user->hasRole('Rekam Medis Rajal'))
                                 <td class="">
-                                    @if ($item->rawatJalanPatient->rajalGeneralConsent)
+                                    @if ($item->rajalGeneralConsent)
                                       <div class="d-flex flex-row">
-                                        <a class="btn btn-warning btn-sm" href="{{ route('rajal/general/consent.edit', $item->rawatJalanPatient->id) }}">
+                                        <a class="btn btn-warning btn-sm" href="{{ route('rajal/general/consent.edit', $item->id) }}">
                                             <i class='bx bx-edit-alt me-1'></i>
                                         </a>
-                                        <form action="{{ route('rajal/general/consent.destroy', $item->rawatJalanPatient->id) }}" method="POST">
+                                        <form action="{{ route('rajal/general/consent.destroy', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm mx-2"
@@ -90,15 +90,15 @@
                                                 <i class="bx bx-printer"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.show', $item->rawatJalanPatient->id ?? '') }}" target="_blank">
+                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.show', $item->id ?? '') }}" target="_blank">
                                                     <i class='bx bx-printer me-1'></i>
                                                     General Consent
                                                 </a>
-                                            <a class="dropdown-item" href="{{ route('rajal/general/consent.showtatatertib', $item->rawatJalanPatient->id ?? '') }}" target="_blank">
+                                            <a class="dropdown-item" href="{{ route('rajal/general/consent.showtatatertib', $item->id ?? '') }}" target="_blank">
                                                 <i class='bx bx-printer me-1'></i>
                                                 Tata Tertib
                                             </a>
-                                            <a class="dropdown-item" href="{{ route('rajal/general/consent.showhakdankewajiban', $item->rawatJalanPatient->id) }}" target="_blank">
+                                            <a class="dropdown-item" href="{{ route('rajal/general/consent.showhakdankewajiban', $item->id) }}" target="_blank">
                                                 <i class='bx bx-printer me-1'></i>
                                                 Hak Dan Kewajiban
                                             </a>
@@ -115,20 +115,10 @@
                             @endif
                             @can('show pasien poli')
                             <td class="text-center" style="width: 9%">
-                                @if (
-                                    $item->rawatJalanPatient->rawatJalanPoliPatient->status == 'DIPANGGIL' ||
-                                        $item->rawatJalanPatient->rawatJalanPoliPatient->status == 'SELESAI')
-                                    <a class="btn btn-dark btn-sm {{ $item->rawatJalanPatient->rawatJalanPoliPatient->status != 'TIDAK HADIR' ? '' : 'disabled' }}"
-                                        href="{{ route('rajal/show', ['id' => $item->id, 'title' => $title]) }}">
-                                        <i class='bx bx-show-alt me-1'></i>show
-                                    </a>
-                                @elseif($item->rawatJalanPatient->rawatJalanPoliPatient->status == 'TIDAK HADIR')
-                                    <button class="btn btn-warning btn-sm"
-                                        onclick="registerQueue({{ $item->id }})">Panggil Ulang</button>
-                                @else
-                                    <button class="btn btn-success btn-sm"
-                                        onclick="registerQueue({{ $item->id }})">Panggil</button>
-                                @endif
+                                <a class="btn btn-dark btn-sm {{ $item->rawatJalanPoliPatient->status != 'TIDAK HADIR' ? '' : 'disabled' }}"
+                                    href="{{ route('rajal/show', ['id' => $item->id, 'title' => $title]) }}">
+                                    <i class='bx bx-show-alt me-1'></i>show
+                                </a>
                             </td>
                             @endcan
                             <td>{{ $item->no_antrian ?? '-' }}</td>
@@ -138,7 +128,7 @@
                             <td>{{ $item->patientCategory->name ?? '-' }}</td>
                             <td>{{ $item->patient->jenis_kelamin ?? '-' }}</td>
                             <td>{{ $item->patient->telp ?? '-' }}</td>
-                            <td>{{ $item->rawatJalanPatient->rawatJalanPoliPatient->status ?? '-' }}</td>
+                            <td>{{ $item->rawatJalanPoliPatient->status ?? '-' }}</td>
                             @if ($user->hasRole('Perawat Rajal|Rekam Medis Rajal'))
                                 <td>{{ $item->doctorPatient->user->roomDetail->name ?? '' }} / {{ $item->doctorPatient->user->name ?? '' }}</td>
                             @endif
@@ -153,21 +143,5 @@
     <div class="modal fade" id="openModal" data-bs-backdrop="static" tabindex="-1">
 
     </div>
-    <script>
-        function registerQueue(id) {
-            $.ajax({
-                type: 'get',
-                url: "{{ route('rajal/panggil', '') }}/" + id,
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog';
-                    div.innerHTML = data;
-
-                    $('#openModal').html(div);
-                    $('#openModal').modal('show');
-                }
-            });
-        }
-    </script>
 
 @endsection

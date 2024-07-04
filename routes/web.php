@@ -464,14 +464,10 @@ Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registr
     Route::get('/antrian/jadwalDokter/{dokterID}', [QueueController::class, 'jadwalDokter'])->name('antrian.jadwal-dokter');
     //getDataPasien pada antrian
     Route::post('/antrian/get/pasien', [QueueController::class, 'getPasien'])->name('antrian/get/pasien.getPasien');
-    // Route::delete('/antrian/destroy/{id}', [QueueController::class, 'destroy'])->name('antrian.destroy');
     //konfirmasi antrian
     Route::get('/antrian/konfirmasi/create/{id}', [QueueConfirmController::class, 'create'])->name('antrian/konfirmasi.create');
     Route::post('/antrian/konfirmasi/store/{id}', [QueueConfirmController::class, 'store'])->name('antrian/konfirmasi.store');
-    Route::get('/antrian/konfirmasi/ulang/create/{id}', [QueueConfirmController::class, 'panggilUlang'])->name('antrian/konfirmasi/ulang.create');
-    // // Route::delete('/antrian/destroy/{id}', [QueueController::class, 'destroy'])->name('antrian.destroy');
 });
-Route::get('/antrian/konfirmasi/chekin/{id}', [QueueConfirmController::class, 'konfirmasichekin'])->name('antrian/konfirmasi.checkin');
 Route::group(['middleware' => ['permission:registrasi ulang antrian']], function () {
     //list antrian untuk registrasi ulang
     Route::get('/antrian', [QueueController::class, 'index'])->name('antrian.index');
@@ -516,9 +512,6 @@ Route::group(['middleware' => ['permission:finish pasien poli', 'permission:show
 Route::group(['middleware' => ['permission:show pasien poli']], function () {
     Route::get('/rajal/show/{id}/{title}', [RawatJalanController::class, 'show'])->name('rajal/show');
 });
-Route::get('/rajal/panggil/{id}', [RawatJalanController::class, 'panggil'])->name('rajal/panggil');
-Route::put('/rajal/update/panggil/{id}', [RawatJalanController::class, 'updatePanggil'])->name('rajal/update/panggil');
-Route::get('/rajal/gagal/panggil/{id}', [RawatJalanController::class, 'updateTidakHadir'])->name('rajal/gagal/panggil');
 //rekam medis
 Route::group(['middleware' => ['permission:daftar pasien rekam medis']], function () {
     Route::get('/rajal/rekammedis/index', [RekamMedisPatientController::class, 'index'])->name('rajal/rekammedis.index'); //index rajal rekam medis

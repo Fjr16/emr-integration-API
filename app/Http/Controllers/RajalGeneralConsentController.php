@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Queue;
 use Illuminate\Http\Request;
-use App\Models\RawatJalanPatient;
 use App\Models\RajalGeneralConsent;
 use App\Models\RajalGeneralConsentDetail;
 use Illuminate\Support\Facades\Auth;
@@ -44,8 +43,7 @@ class RajalGeneralConsentController extends Controller
             'Pria',
             'Wanita',
         ];
-        $queue = Queue::find($id);
-        $item = RawatJalanPatient::find($queue->rawatJalanPatient->id);
+        $item = Queue::find($id);
         return view('pages.rajalGeneralConsent.create', [
             'title' => "General Consent",
             'menu' => 'Rawat Jalan',
@@ -63,7 +61,7 @@ class RajalGeneralConsentController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $item = RawatJalanPatient::find($id);
+        $item = Queue::find($id);
         $data = $request->all();
 
         if ($data['hubungan'] == 'Lainnya') {
@@ -79,8 +77,8 @@ class RajalGeneralConsentController extends Controller
         Storage::put('public/' . $file_name_ttd, $ttd);
         $data['ttd'] = $file_name_ttd;
         $data['user_id'] = Auth::user()->id;
-        $data['patient_id'] = $item->queue->patient->id;
-        $data['rawat_jalan_patient_id'] = $id;
+        $data['patient_id'] = $item->patient->id;
+        $data['queue_id'] = $id;
         $gc = RajalGeneralConsent::create($data);
 
           // rajal gc detail
@@ -108,8 +106,8 @@ class RajalGeneralConsentController extends Controller
      */
     public function show($id)
     {
-        $rajal = RawatJalanPatient::find($id);
-        $item = RajalGeneralConsent::firstwhere('rawat_jalan_patient_id', $rajal->id);
+        $queue = Queue::find($id);
+        $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.show', [
             'item' => $item,
@@ -118,8 +116,8 @@ class RajalGeneralConsentController extends Controller
 
     public function showTataTertib($id)
     {
-        $rajal = RawatJalanPatient::find($id);
-        $item = RajalGeneralConsent::firstwhere('rawat_jalan_patient_id', $rajal->id);
+        $queue = Queue::find($id);
+        $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.tatatertib', [
             'item' => $item,
@@ -128,8 +126,8 @@ class RajalGeneralConsentController extends Controller
 
     public function showHakDanKewajiban($id)
     {
-        $rajal = RawatJalanPatient::find($id);
-        $item = RajalGeneralConsent::firstwhere('rawat_jalan_patient_id', $rajal->id);
+        $queue = Queue::find($id);
+        $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.hakdankewajiban', [
             'item' => $item,
@@ -160,8 +158,8 @@ class RajalGeneralConsentController extends Controller
             'Perempuan',
         ];
 
-        $rajal = RawatJalanPatient::find($id);
-        $item = RajalGeneralConsent::firstwhere('rawat_jalan_patient_id', $rajal->id);
+        $queue = Queue::find($id);
+        $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.edit', [
             'title' => 'Rekam Medis',
@@ -232,8 +230,8 @@ class RajalGeneralConsentController extends Controller
      */
     public function destroy($id)
     {
-        $rajal = RawatJalanPatient::find($id);
-        $item = RajalGeneralConsent::firstwhere('rawat_jalan_patient_id', $rajal->id);
+        $queue = Queue::find($id);
+        $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
         if($item->delete()){
             $item->rajalGeneralConsentDetails()->delete();
         };

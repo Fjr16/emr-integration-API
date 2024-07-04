@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('rajal_general_consents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('rawat_jalan_patient_id');
+            $table->foreignId('queue_id');
             $table->foreignId('patient_id');
             $table->string('name')->nullable();
             $table->date('tgl_lhr')->nullable();

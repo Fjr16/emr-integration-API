@@ -33,8 +33,6 @@ class RadiologiFormRequestController extends Controller
      */
     public function create($id)
     {
-        $title = 'Rawat Jalan';
-        $menu = 'In Patient';
         $urlParent = URL::previous();
 
         $categoryActionRadiologi = ActionCategory::where('name', 'Radiologi')->first(); 
@@ -60,8 +58,8 @@ class RadiologiFormRequestController extends Controller
             }
         }
         return view('pages.permintaanRadiologi.create', [
-            'title' => $title,
-            'menu' => $menu,
+            'title' => 'Rawat Jalan',
+            'menu' => 'Rawat Jalan',
             'item' => $item,
             'data' => $data,
             'diagnosa' => $diagnosa,

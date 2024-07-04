@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Queue;
 use Illuminate\Http\Request;
-use App\Models\RawatJalanPatient;
 use App\Models\RawatJalanPoliPatient;
 
 class QueueConfirmController extends Controller
@@ -34,16 +33,6 @@ class QueueConfirmController extends Controller
         ]);
     }
 
-    public function panggilUlang($id)
-    {
-        $item = Queue::find($id);
-        return view('pages.antrian-modal.createRegistrasiUlang', [
-            'title' => 'Entri Antrian',
-            'menu' => 'Antrian',
-            'item' => $item,
-        ]);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -58,11 +47,7 @@ class QueueConfirmController extends Controller
             'status_antrian' => $status,
         ]);
 
-        if ($item->status_antrian == 'CHECKIN') {
-            return redirect()->back()->with('success', 'Berhasil Melakukan CHECKIN');
-        } else {
-            return back()->with('success', 'Berhasil Diperbarui');
-        }
+        return back()->with('success', 'Berhasil Diperbarui');
     }
 
     /**
@@ -102,31 +87,17 @@ class QueueConfirmController extends Controller
     public function update($id)
     {
         $item = Queue::find($id);
-        if ($item->status_antrian == 'DIPANGGIL') {
-            $rajal = RawatJalanPatient::create([
-                'queue_id' => $item->id,
-                'patient_id' => $item->patient_id
-            ]);
-
-
+        if ($item->status_antrian == 'WAITING') {
             RawatJalanPoliPatient::create([
-                'rawat_jalan_patient_id' => $rajal->id,
+                'queue_id' => $item->id,
                 'status' => 'WAITING'
             ]);
 
             $item->update([
-                'status_antrian' => 'SELESAI',
+                'status_antrian' => 'ARRIVED',
             ]);
             return redirect()->route('rajal/general/consent.create', $id);
         }
-    }
-    public function konfirmasiChekin($id)
-    {
-        $data = Queue::find($id);
-        $data->update([
-            'status_antrian' => 'CHECKIN'
-        ]);
-        return redirect()->back()->with('success', 'Berhasil melakukan checkin');
     }
 
     /**
