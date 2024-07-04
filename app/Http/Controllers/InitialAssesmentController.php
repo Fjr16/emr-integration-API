@@ -11,19 +11,16 @@ use App\Models\Medicine;
 use Illuminate\Http\Request;
 use App\Models\MedicineReceipt;
 use App\Models\InitialAssesment;
-use App\Models\RadiologiPatient;
 use App\Models\InitialAsessmentPlan;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MedicineReceiptDetail;
-use App\Models\LaboratoriumPatientResult;
 use App\Models\InitialAssesmentEducationalNeed;
 use App\Models\InitialAssesmentPhysicalExamination;
 use App\Models\InitialAssesmentSupportingExaminationResult;
 use App\Models\KasirPatient;
-use App\Models\RawatJalanPatient;
+use App\Models\LaboratoriumRequest;
+use App\Models\RadiologiFormRequest;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class InitialAssesmentController extends Controller
@@ -58,8 +55,8 @@ class InitialAssesmentController extends Controller
         $dataObat = Medicine::all();
         $arrEdukasi = ['Penggunaan obat secara efektif dan aman', 'Penggunaan peralatan medis yang aman', 'Potensi interaksi obat dan makanan', 'Teknik Rehabilitasi'];
         // dd($data);
-        $radiologiResults = RadiologiPatient::where('queue_id', $item->id)->where('status', 'SELESAI')->get();
-        $laborResults = LaboratoriumPatientResult::where('queue_id', $item->id)->where('status', 'VALIDATED')->get();
+        $radiologiResults = RadiologiFormRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->get();
+        $laborResults = LaboratoriumRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->get();
         return view('pages.assesmenAwal.edit', [
             'title' => 'Edit Assesmen',
             'menu' => 'Rawat Jalan',
@@ -114,7 +111,6 @@ class InitialAssesmentController extends Controller
 
         if ($item->update($data)) {
             $dataFisik = $request->input('fisik', []);
-            // $item->initialAssesmentPhysicalExaminations()->delete();
             $item->initialAssesmentPhysicalExaminations()->each(function ($physicalExamination) {
                 $physicalExamination->delete();
             });
@@ -134,7 +130,6 @@ class InitialAssesmentController extends Controller
 
             //Hasil Pemeriksaan Penunjang
             $dataHasilPemeriksaanName = $request->input('hasil_pemeriksaan', []);
-            // $item->initialAssesmentSupportingExaminationResults->delete();
             $item->initialAssesmentSupportingExaminationResults()->each(function ($data) {
                 $data->delete();
             });
@@ -151,7 +146,6 @@ class InitialAssesmentController extends Controller
 
             //rencana
             $dataRencana = $request->input('rencana', []);
-            // $item->initialAssesmentPlan()->delete();
             $item->initialAssesmentPlan()->each(function ($data) {
                 $data->delete();
             });
@@ -182,8 +176,8 @@ class InitialAssesmentController extends Controller
                 InitialAssesmentEducationalNeed::create($newEdukasi);
             }
         }
-        $dataReturn = InitialAssesment::with(['rawatJalanPoliPatient', 'rawatJalanPoliPatient.rawatJalanPatient'])->where('id', '=', $item->id)->first();
-        return redirect()->route('rajal/show', ['id' => $dataReturn->rawatJalanPoliPatient->rawatJalanPatient->queue_id, 'title' => 'Rawat Jalan'])->with([
+        $dataReturn = InitialAssesment::with(['rawatJalanPoliPatient'])->where('id', '=', $item->id)->first();
+        return redirect()->route('rajal/show', ['id' => $dataReturn->rawatJalanPoliPatient->queue_id, 'title' => 'Rawat Jalan'])->with([
             'success' => 'Berhasil Ditambahkan',
             'btn' => 'dokter',
             'dokter' => 'assesmen',
@@ -221,9 +215,9 @@ class InitialAssesmentController extends Controller
         // dd($request);
         $item = Queue::with('patient')->findOrFail($id);
 
-        $medicineIds = $request->input('medicine_id', []);
+        // $medicineIds = $request->input('medicine_id', []);
         $data = $request->all();
-        $data['rawat_jalan_poli_patient_id'] = $item->rawatJalanPatient->rawatJalanPoliPatient->id;
+        $data['rawat_jalan_poli_patient_id'] = $item->rawatJalanPoliPatient->id;
         $data['patient_id'] = $item->patient->id;
         $data['user_id'] = Auth::user()->id;
         //menyimpan ttd
@@ -287,8 +281,8 @@ class InitialAssesmentController extends Controller
             $patient_category_id = $item->patientCategory->id;
             $dpjp_id = $item->doctorPatient->user->id;
             $tarifKonsultasi = ConsultingRates::where('user_id', $dpjp_id)->where('patient_category_id', $patient_category_id)->first();
-            if ($item->rawatJalanPatient->kasirPatient) {
-                $itemKasirPatient = KasirPatient::find($item->rawatJalanPatient->kasirPatient->id);
+            if ($item->kasirPatient) {
+                $itemKasirPatient = KasirPatient::find($item->kasirPatient->id);
 
                 $total = $itemKasirPatient->total;
                 $detailKasirPatient = false;
@@ -318,7 +312,7 @@ class InitialAssesmentController extends Controller
             } else {
                 $total = $tarifKonsultasi->pembayaran;
                 $itemKasirPatient = KasirPatient::create([
-                    'rawat_jalan_patient_id' => $item->rawatJalanPatient->id,
+                    'queue_id' => $item->id,
                     'user_id' => null,
                     'total' => $total,
                     'status' => 'PENDING',
@@ -334,22 +328,22 @@ class InitialAssesmentController extends Controller
             }
         }
 
-        if (!empty($medicineIds)) {
-            $resep['user_id'] = $data['user_id'];
-            $resep['patient_id'] = $item->patient->id;
-            $resep['rawat_jalan_poli_patient_id'] = $item->rawatJalanPatient->rawatJalanPoliPatient->id;
-            if ($itemResep = MedicineReceipt::create($resep)) {
-                foreach ($medicineIds as $index => $medicine_id) {
-                    $resepDetail['medicine_receipt_id'] = $itemResep->id;
-                    $resepDetail['medicine_id'] = $medicine_id;
-                    $resepDetail['jumlah'] = $request['jumlah'][$index] ?? '';
-                    $resepDetail['aturan_pakai'] = $request['aturan_pakai'][$index] ?? '';
-                    $resepDetail['keterangan'] = $request['keterangan'][$index] ?? '';
-                    $resepDetail['other'] = $request['other'][$index] ?? '';
-                    MedicineReceiptDetail::create($resepDetail);
-                }
-            }
-        }
+        // if (!empty($medicineIds)) {
+        //     $resep['user_id'] = $data['user_id'];
+        //     $resep['patient_id'] = $item->patient->id;
+        //     $resep['rawat_jalan_poli_patient_id'] = $item->rawatJalanPatient->rawatJalanPoliPatient->id;
+        //     if ($itemResep = MedicineReceipt::create($resep)) {
+        //         foreach ($medicineIds as $index => $medicine_id) {
+        //             $resepDetail['medicine_receipt_id'] = $itemResep->id;
+        //             $resepDetail['medicine_id'] = $medicine_id;
+        //             $resepDetail['jumlah'] = $request['jumlah'][$index] ?? '';
+        //             $resepDetail['aturan_pakai'] = $request['aturan_pakai'][$index] ?? '';
+        //             $resepDetail['keterangan'] = $request['keterangan'][$index] ?? '';
+        //             $resepDetail['other'] = $request['other'][$index] ?? '';
+        //             MedicineReceiptDetail::create($resepDetail);
+        //         }
+        //     }
+        // }
         return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])->with([
             'success' => 'Berhasil Ditambahkan',
             'btn' => 'dokter',

@@ -33,23 +33,19 @@ class RawatJalanController extends Controller
         $routeToFilter = route('rajal/index');
         $user = Auth::user();
         if ($user->hasRole('Dokter Poli')) {
-            $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($filterDate) {
-                $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($filterDate) {
-                    $query1->whereDate('created_at', $filterDate);
-                });
+            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function ($query) use ($filterDate) {
+                $query->whereDate('created_at', $filterDate);
             })->whereHas('doctorPatient', function ($query2) {
                 $query2->where('user_id', Auth::user()->id);
             })->get();
         } else {
-            $data = Queue::where('status_antrian', 'SELESAI')->whereHas('rawatJalanPatient', function ($query) use ($filterDate) {
-                $query->whereHas('rawatJalanPoliPatient', function ($query1) use ($filterDate) {
-                    $query1->whereDate('created_at', $filterDate);
-                });
+            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function ($query) use ($filterDate) {
+                $query->whereDate('created_at', $filterDate);
             })->get();
         }
         $data = $data->sortBy(function ($queue) {
-            $status = $queue->rawatJalanPatient->rawatJalanPoliPatient->status ?? '';
-            return $status == 'WAITING' ? 0 : ($status === 'DIPANGGIL' ? 1 : 2);
+            $status = $queue->rawatJalanPoliPatient->status ?? '';
+            return $status == 'WAITING' ? 0 : ($status === 'ONGOING' ? 1 : 2);
         })->values();
         return view('pages.rawatjalan.index', [
             "title" => "Rawat Jalan",
@@ -62,43 +58,6 @@ class RawatJalanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function panggil($id)
-    {
-        $item = Queue::find($id);
-        return view('pages.rawatjalan.panggil', [
-            "title" => "Rawat Jalan",
-            "menu" => "In Patient",
-            'item' => $item,
-        ]);
-    }
-
-    public function updatePanggil(Request $request, $id)
-    {
-        $rawatJalan = RawatJalanPatient::where('queue_id', $id)->first();
-        $poli = RawatJalanPoliPatient::where('rawat_jalan_patient_id', $rawatJalan->id)->first();
-        $poli->update([
-            'created_at' => now(),
-            'status' => 'DIPANGGIL',
-        ]);
-        return redirect()->back()->with('success', 'Status Berhasil Diperbarui');
-    }
-    public function updateTidakHadir(Request $request, $id)
-    {
-        $rawatJalan = RawatJalanPatient::where('queue_id', $id)->first();
-        $poli = RawatJalanPoliPatient::where('rawat_jalan_patient_id', $rawatJalan->id)->first();
-        $poli->update([
-            'created_at' => now(),
-            'status' => 'TIDAK HADIR',
-        ]);
-        return redirect()->back()->with('success', 'Status Berhasil Diperbarui');
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -107,7 +66,7 @@ class RawatJalanController extends Controller
     public function show($id, $title)
     {
         if (!session('btn')) {
-            session(['btn' => 'dashboard']);
+            session(['btn' => 'dokter']);
         } else {
             session(['btn' => session('btn')]);
         }
@@ -168,29 +127,21 @@ class RawatJalanController extends Controller
         $item = RawatJalanPoliPatient::find($id);
         $status = $request->input('status');
 
-        // $checkAssesmenAwal = $item->rawatJalanPatient->queue->patient->initialAssesments;
-        // $checkCppt = $item->rmeCppts;
-        // $checkPrmrj = $item->prmrjs;
-        // if (($checkAssesmenAwal->isEmpty() && $checkCppt->isEmpty()) || $checkPrmrj->isEmpty()) {
-        //     $status = 'Belum Lengkap';
-        // }
-
         $item->update([
             'status' => $status,
         ]);
 
-        if ($item->status == 'SELESAI') {
-            $rajal = RawatJalanPatient::find($item->rawatJalanPatient->id);
-            $queue = Queue::find($rajal->queue_id);
-            if ($rajal) {
-                if ($rajal->rajalFarmasiPatient) {
-                    $itemFarmasi = RajalFarmasiPatient::find($rajal->rajalFarmasiPatient->id);
+        if ($item->status == 'FINISHED') {
+            $queue = Queue::find($item->queue_id);
+            if ($queue) {
+                if ($queue->rajalFarmasiPatient) {
+                    $itemFarmasi = RajalFarmasiPatient::find($queue->rajalFarmasiPatient->id);
                     $itemFarmasi->update([
                         'status' => 'WAITING',
                     ]);
                 } else {
                     RajalFarmasiPatient::create([
-                        'rawat_jalan_patient_id' => $rajal->id,
+                        'queue_id' => $queue->id,
                         'status' => 'WAITING',
                     ]);
                 }
@@ -217,22 +168,17 @@ class RawatJalanController extends Controller
             //     }
             // }
             //create labor
-            if ($queue) {
-                foreach ($queue->laboratoriumRequests as $laborReq) {
-                    $checkList = LaboratoriumPatientResult::where('queue_id', $queue->id)->where('laboratorium_request_id', $laborReq->id)->first();
-                    if ($checkList) {
-                        continue;
-                    }
-                    LaboratoriumPatientResult::create([
-                        'queue_id' => $queue->id,
-                        'patient_id' => $queue->patient_id,
-                        'laboratorium_request_id' => $laborReq->id,
-                        'status' => 'WAITING',
-                    ]);
-                }
-            }
+            // if ($queue) {
+            //     foreach ($queue->laboratoriumRequests as $laborReq) {
+            //         LaboratoriumPatientResult::create([
+            //             'queue_id' => $queue->id,
+            //             'patient_id' => $queue->patient_id,
+            //             'laboratorium_request_id' => $laborReq->id,
+            //             'status' => 'WAITING',
+            //         ]);
+            //     }
+            // }
         }
         return redirect()->route('rajal/index')->with('success', 'Status Berhasil Diperbarui');
-        // }
     }
 }

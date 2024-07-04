@@ -457,6 +457,7 @@
         wheelPropagation: false
         });
     </script>
+    
 
     @yield('script')
 
