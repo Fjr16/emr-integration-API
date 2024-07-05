@@ -165,20 +165,11 @@
         var komponen11Checkbox = document.getElementById('komponen11');
         var komponen12Checkbox = document.getElementById('komponen12');
         var komponen13Checkbox = document.getElementById('komponen13');
-        var komponen21Checkbox = document.getElementById('komponen21');
-        var komponen22Checkbox = document.getElementById('komponen22');
-        var komponen23Checkbox = document.getElementById('komponen23');
 
         function updateKomponenCheckbox() {
             komponen11Checkbox.checked = (radioAtidak.checked && radioBtidak.checked);
-            komponen21Checkbox.checked = (radioAtidak.checked && radioBtidak.checked);
             komponen13Checkbox.checked = (radioAya.checked && radioBya.checked);
-            komponen23Checkbox.checked = (radioAya.checked && radioBya.checked);
-            komponen12Checkbox.checked = (radioAya.checked && radioBtidak.checked || radioAtidak.checked && radioBya
-                .checked);
-            komponen22Checkbox.checked = (radioAya.checked && radioBtidak.checked || radioAtidak.checked && radioBya
-                .checked);
-            // komponen12Checkbox.checked = (radioAtidak.checked && radioBya.checked);
+            komponen12Checkbox.checked = (radioAya.checked && radioBtidak.checked || radioAtidak.checked && radioBya.checked);
         }
 
         radioAya.addEventListener('change', updateKomponenCheckbox);

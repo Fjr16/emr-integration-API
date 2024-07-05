@@ -23,6 +23,10 @@ use App\Models\DetailRisikoNutrisionalDiagnosaKeperawatanPatient;
 use App\Models\AsesmentStatusFungsionalDiagnosaKeperawatanPatient;
 use App\Models\DetailPsikoSosioSpritualDiagnosaKeperawatanPatient;
 use App\Models\DetailAsesmentStatusFungsionalDiagnosaKeperawatanPatient;
+use App\Models\PerawatInitialAsesment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AsesmentPerawatController extends Controller
 {
@@ -286,4 +290,185 @@ class AsesmentPerawatController extends Controller
             'detailstatusfungsional' => $detailstatusfungsional,
         ]);
     }
+
+
+    // data baru 
+
+    private function toStoreSession($item){
+        if (Session::has('data')) {
+            $data = Session::get('data');
+            if (!Session::has('queue_id') || Session::has('patient_id')) {
+                $data->fill([
+                    'queue_id' => $item->id,
+                    'patient_id' => $item->id,
+                ]);
+            }
+        }else{
+            $data = new PerawatInitialAsesment();
+            $data->fill([
+                'queue_id' => $item->id,
+                'patient_id' => $item->id,
+            ]);
+        }
+        return $data;
+    }
+
+    private function nextTab($currentTab) {
+        $nextTab = 'anamnesis';
+        if ($currentTab == 'anamnesis') {
+            $nextTab = 'pemeriksaan';
+        }elseif($currentTab == 'pemeriksaan'){
+            $nextTab = 'psikologis';
+        }elseif($currentTab == 'psikologis'){
+            $nextTab = 'soap';
+        }
+
+        return $nextTab;
+    }
+
+    public function create_step_one($id){
+        if (!Session::has('perawat')) {
+            Session::flash('perawat', 'anamnesis');
+        } else {
+            Session::flash('perawat', Session::get('perawat'));
+        }
+        $item = Queue::find($id);
+
+        $data = $this->toStoreSession($item);
+        
+        Session::put('data', $data);
+
+        $arrResikoJatuh = [
+            'Tidak berisiko (tidak ditemukan a dan b)',
+            'Resiko Rendah (ditemukan a atau b)',
+            'Resiko Tinggi (ditemukan a dan b)',
+        ];
+        $arrAssGizi = [
+            [
+                'name' => 'Tidak',
+                'value' => '0',
+            ],
+            [
+                'name' => 'Tidak yakin',
+                'value' => '2',
+            ],
+            [
+                'name' => 'Turun sebanyak 1-5 Kg',
+                'value' => '1',
+            ],
+            [
+                'name' => 'Turun sebanyak 6-10 Kg',
+                'value' => '2',
+            ],
+            [
+                'name' => 'Turun sebanyak 11-15 Kg',
+                'value' => '3',
+            ],
+            [
+                'name' => 'Turun lebih dari 15 Kg',
+                'value' => '4',
+            ],
+            [
+                'name' => 'Tidak tahu berapa kg penurunang',
+                'value' => '2',
+            ],
+        ];
+
+        return view('pages.asesmentPerawat.create', [
+            'title' => 'Rawat Jalan',
+            'menu' => 'Rawat Jalan',
+            'item' => $item,
+            'arrResikoJatuh' => $arrResikoJatuh,
+            'arrAssGizi' => $arrAssGizi,
+        ]);
+    }
+    public function store_step_one(Request $request, $id){
+        $nextStep = $request->input('next-step', 'anamnesis');
+        $reqData = [
+            'keluhan_utama' => $request->input('keluhan', Session::get('data.keluhan_utama')),
+            'riw_penyakit_pasien' => $request->input('riwayat_penyakit_sekarang', Session::get('data.riw_penyakit_pasien')),
+            'riw_penyakit_keluarga' => $request->input('riwayat_penyakit_keluarga', Session::get('data.riw_penyakit_keluarga')),
+            'alergi_makanan' => $request->input('alergi_makanan', Session::get('data.alergi_makanan')),
+            'alergi_obat' => $request->input('alergi_obat', Session::get('data.alergi_obat')),
+            'skor_ass_gizi_1' => $request->input('asesmen_gizi', Session::get('data.skor_ass_gizi_1')),
+            'skor_ass_gizi_2' => $request->input('kurang_nafsu', Session::get('data.skor_ass_gizi_2')),
+            'kondisi_gizi' => $request->input('kondisi_gizi', Session::get('data.kondisi_gizi')),
+            'nadi' => $request->input('ttv_nadi', Session::get('data.nadi')),
+            'td_sistolik' => $request->input('ttv_td_sistolik', Session::get('data.td_sistolik')),
+            'td_diastolik' => $request->input('ttv_td_diastolik', Session::get('data.td_diastolik')),
+            'suhu' => $request->input('ttv_suhu', Session::get('data.suhu')),
+            'nafas' => $request->input('ttv_nafas', Session::get('data.nafas')),
+            'keadaan_umum' => $request->input('keadaan_umum', Session::get('data.keadaan_umum')),
+            'kesadaran' => $request->input('kesadaran', Session::get('data.kesadaran')),
+            'tb' => $request->input('tb', Session::get('data.tb')),
+            'bb' => $request->input('bb', Session::get('data.bb')),
+            'lk' => $request->input('lk', Session::get('data.lk')),
+            'skor_nyeri' => $request->input('ass_nyeri', Session::get('data.skor_nyeri')),
+            'stts_ekonomi' => $request->input('status_ekonomi', Session::get('data.stts_ekonomi')),
+            'resiko_jatuh_a' => $request->input('resiko_jatuh_a', Session::get('data.resiko_jatuh_a')),
+            'resiko_jatuh_b' => $request->input('resiko_jatuh_b', Session::get('data.resiko_jatuh_b')),
+            'resiko_jatuh_result' => $request->input('resiko_jatuh_result', Session::get('data.resiko_jatuh_result')),
+        ];
+
+        $item = Queue::find($id);
+        $data = $this->toStoreSession($item);
+        $data->fill($reqData);
+        Session::put('data', $data);
+
+        return back()->with([
+            'perawat' => $nextStep
+        ]);
+    }
+    public function store_step_two(Request $request, $id){
+
+        $newPerawat = Session::get('data');
+        $newPerawat->fill([
+            'user_id' => Auth::user()->id,
+        ]);
+        if($newPerawat->save()){
+            Session::forget('data');
+        }else{
+            return back()->with([
+                'error' => 'Terjadi Kesalahan!! Mohon Submit Ulang !!'
+            ]);
+        }
+
+        $soap = [
+            'subjective' => $request->input('subjective'),
+            'objective' => $request->input('objective'),
+            'asesmen' => $request->input('asesmen'),
+            'planning' => $request->input('planning'),
+        ];
+        $item = Queue::find($id);
+        return back()->with([
+            'success' => 'Data Asesmen Awal Berhasil Disimpan',
+            'perawat' => 'anamnesis'
+        ]);
+    }
+    // public function store_step_three(Request $request, $id){
+    //     if (!Session::has('perawat')) {
+    //         Session::flash(['perawat' => 'anamnesis']);
+    //     } else {
+    //         Session::flash(['perawat' => Session::get('perawat')]);
+    //     }
+    //     $item = Queue::find($id);
+    //     return view('pages.asesmentPerawat.create', [
+    //         'title' => 'Rawat Jalan',
+    //         'menu' => 'Rawat Jalan',
+    //         'item' => $item,
+    //     ]);
+    // }
+    // public function store_step_four(Request $request, $id){
+    //     if (!Session::has('perawat')) {
+    //         Session::flash(['perawat' => 'anamnesis']);
+    //     } else {
+    //         Session::flash(['perawat' => Session::get('perawat')]);
+    //     }
+    //     $item = Queue::find($id);
+    //     return view('pages.asesmentPerawat.create', [
+    //         'title' => 'Rawat Jalan',
+    //         'menu' => 'Rawat Jalan',
+    //         'item' => $item,
+    //     ]);
+    // }
 }
