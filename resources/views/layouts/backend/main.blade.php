@@ -56,6 +56,10 @@
         #example_filter {
             margin-bottom: 10px !important;
         }
+        .multi-line-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"

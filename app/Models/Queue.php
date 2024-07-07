@@ -82,8 +82,8 @@ class Queue extends Model
     }
 
 
-    public function diagnosisKeperawatanPatien()
+    public function perawatInitialAssesment()
     {
-        return $this->hasOne(DiagnosisKeperawatanPatient::class);
+        return $this->hasOne(PerawatInitialAsesment::class);
     }
 }

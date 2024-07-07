@@ -10,6 +10,7 @@ class PerawatInitialAsesmentPsychology extends Model
     use HasFactory;
 
     protected $fillable = [
+        'perawat_initial_asesment_id',
         'name',
     ];
 

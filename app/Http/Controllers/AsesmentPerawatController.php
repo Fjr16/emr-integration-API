@@ -24,6 +24,7 @@ use App\Models\AsesmentStatusFungsionalDiagnosaKeperawatanPatient;
 use App\Models\DetailPsikoSosioSpritualDiagnosaKeperawatanPatient;
 use App\Models\DetailAsesmentStatusFungsionalDiagnosaKeperawatanPatient;
 use App\Models\PerawatInitialAsesment;
+use App\Models\PerawatInitialAsesmentPsychology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -297,7 +298,7 @@ class AsesmentPerawatController extends Controller
     private function toStoreSession($item){
         if (Session::has('data')) {
             $data = Session::get('data');
-            if (!Session::has('queue_id') || Session::has('patient_id')) {
+            if (!Session::has('data.queue_id') || Session::has('data.patient_id')) {
                 $data->fill([
                     'queue_id' => $item->id,
                     'patient_id' => $item->id,
@@ -313,26 +314,15 @@ class AsesmentPerawatController extends Controller
         return $data;
     }
 
-    private function nextTab($currentTab) {
-        $nextTab = 'anamnesis';
-        if ($currentTab == 'anamnesis') {
-            $nextTab = 'pemeriksaan';
-        }elseif($currentTab == 'pemeriksaan'){
-            $nextTab = 'psikologis';
-        }elseif($currentTab == 'psikologis'){
-            $nextTab = 'soap';
-        }
-
-        return $nextTab;
-    }
-
     public function create_step_one($id){
+        $item = Queue::find($id);
+        $itemAss = $item->perawatInitialAssesment;
+
         if (!Session::has('perawat')) {
             Session::flash('perawat', 'anamnesis');
         } else {
             Session::flash('perawat', Session::get('perawat'));
         }
-        $item = Queue::find($id);
 
         $data = $this->toStoreSession($item);
         
@@ -369,7 +359,7 @@ class AsesmentPerawatController extends Controller
                 'value' => '4',
             ],
             [
-                'name' => 'Tidak tahu berapa kg penurunang',
+                'name' => 'Tidak tahu berapa kg penurunan',
                 'value' => '2',
             ],
         ];
@@ -380,9 +370,14 @@ class AsesmentPerawatController extends Controller
             'item' => $item,
             'arrResikoJatuh' => $arrResikoJatuh,
             'arrAssGizi' => $arrAssGizi,
+            'itemAss' => $itemAss,
         ]);
     }
     public function store_step_one(Request $request, $id){
+        $detailPsikologis = $request->input('status_psikologis', []);
+        if (!empty($detailPsikologis)) {
+            Session::put('detail_psikologis', $detailPsikologis);
+        }
         $nextStep = $request->input('next-step', 'anamnesis');
         $reqData = [
             'keluhan_utama' => $request->input('keluhan', Session::get('data.keluhan_utama')),
@@ -427,6 +422,16 @@ class AsesmentPerawatController extends Controller
         ]);
         if($newPerawat->save()){
             Session::forget('data');
+            $detailPsikologis = Session::get('detail_psikologis');
+            if (!empty($detailPsikologis)) {
+                foreach ($detailPsikologis as $detail) {
+                    PerawatInitialAsesmentPsychology::create([
+                        'perawat_initial_asesment_id' => $newPerawat->id,
+                        'name' => $detail,
+                    ]);
+                }
+                Session::forget('detail_psikologis');
+            }
         }else{
             return back()->with([
                 'error' => 'Terjadi Kesalahan!! Mohon Submit Ulang !!'
@@ -445,30 +450,12 @@ class AsesmentPerawatController extends Controller
             'perawat' => 'anamnesis'
         ]);
     }
-    // public function store_step_three(Request $request, $id){
-    //     if (!Session::has('perawat')) {
-    //         Session::flash(['perawat' => 'anamnesis']);
-    //     } else {
-    //         Session::flash(['perawat' => Session::get('perawat')]);
-    //     }
-    //     $item = Queue::find($id);
-    //     return view('pages.asesmentPerawat.create', [
-    //         'title' => 'Rawat Jalan',
-    //         'menu' => 'Rawat Jalan',
-    //         'item' => $item,
-    //     ]);
-    // }
-    // public function store_step_four(Request $request, $id){
-    //     if (!Session::has('perawat')) {
-    //         Session::flash(['perawat' => 'anamnesis']);
-    //     } else {
-    //         Session::flash(['perawat' => Session::get('perawat')]);
-    //     }
-    //     $item = Queue::find($id);
-    //     return view('pages.asesmentPerawat.create', [
-    //         'title' => 'Rawat Jalan',
-    //         'menu' => 'Rawat Jalan',
-    //         'item' => $item,
-    //     ]);
-    // }
+
+    public function show($id){
+        $item = PerawatInitialAsesment::find($id);
+        return view('pages.asesmentPerawat.print', [
+            'title' => 'Rawat Jalan',
+            'menu' => 'Rawat Jalan',
+        ]);
+    }
 }

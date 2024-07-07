@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('perawat_initial_asesment_psychologies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('perawat_initial_asesment_id');
             $table->string('name', 20)->nullable();
             $table->timestamps();
         });
