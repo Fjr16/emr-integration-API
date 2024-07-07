@@ -15,12 +15,17 @@ return new class extends Migration
     {
         Schema::create('rme_cppts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
+            $table->foreignId('queue_id')->nullable();
             $table->foreignId('patient_id')->nullable();
-            $table->text('soap')->nullable();
-            $table->text('intruksi')->nullable();
-            $table->dateTime('tanggal')->nullable();
-            $table->foreignId('rawat_jalan_poli_patient_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->text('subjective')->nullable();
+            $table->text('objective')->nullable();
+            $table->text('asesment')->nullable();
+            $table->text('planning')->nullable();
+            $table->string('ttd_user')->nullable();
+            $table->string('ttd_dpjp')->nullable();
+            $table->dateTime('tanggal_verif_dpjp')->nullable();
+            $table->enum('category_soap', ['PERAWAT', 'DPJP', 'OTHER'])->default('PERAWAT');
             $table->timestamps();
         });
     }

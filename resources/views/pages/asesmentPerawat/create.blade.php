@@ -86,14 +86,14 @@
         </div>
     </div>
     {{-- end data riwayat pemeriksaan pasien --}}
-    {{-- @if ($itemAss) --}}
+    @if ($itemAss)
         {{-- show assesmen awal perawat --}}
         <div class="card">
             <div class="card-header pb-0">
                 <div class="row">
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-sm btn-dark me-2"><i class="bx bx-printer"></i></button>
-                        <button class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></button>
+                        <a href="{{ route('asesmen/awal/perawat.print', $item->id) }}" class="btn btn-sm btn-dark me-2"><i class="bx bx-printer"></i></a>
+                        <a href="{{ route('asesmen/awal/perawat.edit', $itemAss->id) }}" class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>
                     </div>
                 </div>
                 <div class="row">
@@ -343,69 +343,35 @@
                 <div class="row mb-3">
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Subjective:</label>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
+                        <p class="multi-line-text">{!! $soapPerawat->subjective ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Objective:</label>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
+                        <p class="multi-line-text">{!! $soapPerawat->objective ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Assesment:</label>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
+                        <p class="multi-line-text">{!! $soapPerawat->asesment ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Planning:</label>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
-                        <div class="">Ya (skor: 8)</div>
+                        <p class="multi-line-text">{!! $soapPerawat->planning ?? '' !!}</p>
                     </div>
                 </div>
                 
                 <hr>
                 <div class="row mx-4">
                     <div class="text-end align-self-center">
-                        <p>Kota Padang, 06 Januari 2024</p>
-                        <br>
-                        <br>
-                        <br>
-                        <p>Nama Petugas</p>
+                        <p class="mb-0">Kota Padang, 06 Januari 2024</p>
+                        <img src="{{ asset('storage/' . $soapPerawat->ttd_user) }}" width="180" alt="">
+                        <p>{{ $soapPerawat->user->name ?? '' }}</p>
                     </div>
                 </div>
 
             </div>
-            
-            {{-- Footer --}}
-            {{-- <div class="d-flex flex-row justify-content-between mt-4">
-                <div class="row" style="font-size: 5pt">
-                    <div class="col col-3 text-center border-end border-dark">
-                        <i class="bi bi-geo-alt-fill"></i>
-                        <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
-                    </div>
-                    <div class="col col-4 border-end border-dark text-center">
-                        <div class="my-2">
-                            <i class="bi bi-envelope-at-fill"></i>
-                            <p>rskbropanasuripadang@gmail.com</p>
-                        </div>
-                    </div>
-                    <div class="col col-3 text-center">
-                        <div class="my-2">
-                            <i class="bi bi-telephone-fill"></i>
-                            <p>(0751) 31938 - 33854 - <br> 25735 - 8955227</p>
-                        </div>
-                    </div>
-                </div>
-                <p class="mt-2"><span class="border border-dark">RM 01.RJ.KEP.REV.1-1/3</span></p>
-            </div> --}}
         </div>
         {{-- end show assesmen awal perawat --}}        
-    {{-- @else --}}
+    @else
         {{-- Menu Rajal Perawatan --}}
         <div class="card">
             <div class="card-body">
@@ -487,7 +453,7 @@
                                                 <div class="col-sm-6">
                                                     <label for="asesmen_gizi" class="form-label">Apakah pasien mengalami penurunan berat badan dalam 6 bulan terakhir ?</label>
                                                     <div class="input-group">
-                                                        <select name="asesmen_gizi" id="asesmen_gizi" class="form-control" aria-describedby="basic-addon1">
+                                                        <select name="asesmen_gizi" id="asesmen_gizi" class="form-control" aria-describedby="basic-addon1" onchange="skorGizi(this)">
                                                             @foreach ($arrAssGizi as $itemGizi)
                                                                 @if (session('data.skor_ass_gizi_1') == $itemGizi['value'])
                                                                     <option value="{{ $itemGizi['value'] }}" selected>{{ $itemGizi['name'] }}</option>
@@ -496,17 +462,17 @@
                                                                 @endif
                                                             @endforeach
                                                         </select>
-                                                        <span class="input-group-text" id="basic-addon1">Skor: 0</span>
+                                                        <span class="input-group-text skor-gizi" id="skor_gizi_1">Skor: {{ session('data.skor_ass_gizi_1', '0') }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="form-label" for="kurang_nafsu">Apakah memiliki keluhan kurang nafsu makan ?</label>
                                                     <div class="input-group">
-                                                        <select name="kurang_nafsu" id="kurang_nafsu" class="form-control" aria-describedby="basic-addon2">
+                                                        <select name="kurang_nafsu" id="kurang_nafsu" class="form-control" aria-describedby="basic-addon2" onchange="skorGizi(this)">
                                                             <option value="0" {{ session('data.skor_ass_gizi_2') == '0' ? 'selected' : '' }}>Tidak</option>
                                                             <option value="1" {{ session('data.skor_ass_gizi_2') == '1' ? 'selected' : '' }}>Ya</option>
                                                         </select>
-                                                        <span class="input-group-text" id="basic-addon2">Skor: 0</span>
+                                                        <span class="input-group-text skor-gizi" id="skor_gizi_2">Skor: {{ session('data.skor_ass_gizi_2', '0') }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -766,7 +732,7 @@
                             </form>
                         </div>
                         <div class="tab-pane fade {{ session('perawat') == 'soap' ? 'show active' : '' }}" id="navs-justified-soap" role="tabpanel">
-                            <form action="{{ route('asesmen/awal/perawat.store_step_two', $item->id) }}" method="POST">
+                            <form action="{{ route('asesmen/awal/perawat.store_step_two', $item->id) }}" method="POST" id="formFinal">
                                 @csrf
                                 <div class="card">
                                     <div class="card-body">
@@ -793,6 +759,17 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                     {{-- form hidden ttd --}}
+                                    <div class="row mx-4 text-end align-self-center" id="formParafUser">
+                                        <div class="col-12 text-end mb-0">
+                                        <img src="" alt=""  id="imgTtdUser" class="border" width="170" hidden>
+                                        </div>
+                                        <div class="col-12 text-end mb-0">
+                                        <textarea id="ttd_user" name="ttd_user" style="display: none;"></textarea>
+                                        </div>
+                                    </div>
+
                                     <div class="mb-3 text-end">
                                         <button type="submit" class="btn btn-success btn-sm mx-3">Submit</button>
                                     </div>
@@ -805,70 +782,93 @@
             </div>
         </div>
         {{-- end Menu Rajal Perawat --}}
-    {{-- @endif --}}
+    @endif
 
 
     {{-- modal --}}
-    <div class="modal fade" id="modalScrollable" tabindex="-1" aria-labelledby="modalScrollableTitle" aria-hidden="true">
-    </div>    
+    <div class="modal fade" id="getTtdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalScrollableTitle">Masukkan Password Akun Anda</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div id="signature-pad" class="m-signature-pad">
+                        <div class="m-signature-pad--body mb-3">
+                          <input type="password" class="form-control form-control-sm" name="password_user">
+                          <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                        </div>
+                    
+                        <div class="m-signature-pad--footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-action="clear">Clear</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-action="save">Save</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+        </div>
+      </div>
 
     {{-- untuk ttd --}}
-    {{-- <div class="mb-3 mt-2 mx-3 parent row d-flex justify-content-between">
-        @php
-            $ttd_dokter = '';
-            $ttd_pasien = '';
-            $nama_dokter = '';
-            $nama_pasien = '';
-        @endphp
-        <div class="col-md-5 row d-flex justify-content-center">
-            <h6 class="fw-bold text-center mb-4">Tanda Tangan Dokter</h6>
-            <div class="text-center">
-                <img src="{{ asset('storage/' . $ttd_dokter) }}" alt="" id="ImgTtdDokter" style="max-width: 200px">
-                <textarea id="ttdDokter" name="ttd_dokter" style="display: none;">{{ $ttd_dokter }}</textarea>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="col-12 btn btn-sm btn-dark"
-                                onclick="openModal(this, 'ImgTtdDokter', 'ttdDokter', 'nm_dokter')">Tanda
-                                Tangan</button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="col-12 btn btn-sm btn-secondary"
-                                id="clearImgDokter">Clear</button>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <input type="text" class="form-control form-control-sm text-center"
-                                name="nm_dokter" id="nm_dokter" value="{{ $nama_dokter }}"
-                                placeholder="Nama Lengkap" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-5 row d-flex justify-content-center">
-            <h6 class="fw-bold text-center mb-4">Tanda tangan Pasien/Wali</h6>
-            <div class="text-center">
-                <img src="{{ asset('storage/' . $ttd_pasien) }}" alt="" id="ImgTtdKeluargaPasien" style="max-width: 200px">
-                <textarea id="ttd" name="ttd" style="display: none;">{{ $item->patient->name }}</textarea>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="col-12 btn btn-sm btn-dark"
-                                onclick="openModalTtdBottom(this, 'ImgTtdKeluargaPasien', 'ttd')">Tanda
-                                Tangan</button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="col-12 btn btn-sm btn-secondary"
-                                id="clearImgPerawat">Clear</button>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <input type="text" class="form-control form-control-sm text-center"
-                                name="nm_pasien" id="nm_pasien" value="{{ $item->patient->name }}"
-                                placeholder="Nama Lengkap" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var formSubmit = document.getElementById("formFinal");
+            var modal = document.getElementById("getTtdModal");
+            var clearBtn = modal.querySelector("[data-action=clear]");
+            var saveBtn = modal.querySelector("[data-action=save]");
+            var inputPass = modal.querySelector('input[name="password_user"]');
+            var inputUserId = modal.querySelector('input[name="user_id"]');
+            var formParaf = document.getElementById('formParafUser');
+        
+            formSubmit.addEventListener('submit', function(formSub){
+                formSub.preventDefault();
+                $('#getTtdModal').modal('show');
+            });
+    
+            // function clear input ttd
+            clearBtn.addEventListener('click', function(clear){
+                inputPass.value = '';
+            });
+    
+            // function save ttd
+            saveBtn.addEventListener('click', function(save){
+                save.preventDefault();
+                $.ajax({
+                type : 'get',
+                url : "{{ route('ranap/cppt.getTtd') }}",
+                data : {
+                    user_id : inputUserId.value,
+                    password : inputPass.value,
+                },
+                success: function(data){
+                    var newSrc = `{{ Storage::url('${data}') }}`;
+                    $('#imgTtdUser').attr('src', newSrc);
+                    $('#ttd_user').val(data);
+                    formSubmit.submit();
+                }, error: function(jqXHR, textStatus, errorThrown){
+                    console.log();
+                    var errorResponse = jqXHR.responseJSON;
+                    if (errorResponse && errorResponse.error) {
+                    alert(errorResponse.error)
+                    }else{
+                    alert('Terjadi Kesalahan Dalam Pengambilan Data');
+                    }
+                }
+                });
+        
+                inputPass.value = '';
+        
+                $('#getTtdModal').modal('hide');
+            });
+        });
+    </script>
+    <script>
+        function skorGizi(element){
+            var targetContent = element.closest('.input-group').querySelector('.skor-gizi');
+            targetContent.textContent = 'Skor: ' + element.value;
+        }
+    </script>
 @endsection

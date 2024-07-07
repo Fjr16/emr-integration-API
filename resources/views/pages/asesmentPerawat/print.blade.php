@@ -177,12 +177,6 @@
 </head>
 
 <body>
-    @if (session()->has('success'))
-        <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
     <div class="page">
         <div class="header">
             <div class="d-flex flex-row align-items-center justify-content-center">

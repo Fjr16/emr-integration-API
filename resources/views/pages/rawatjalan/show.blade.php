@@ -504,11 +504,10 @@
                             </thead>
                             <tbody>
                                 @foreach ($item->patient->rmeCppts->sortDesc() as $cppt)
-                                    <tr
-                                        class="{{ $item->id == $cppt->rawatJalanPoliPatient->rawatJalanPatient->queue_id ? 'text-success' : '' }}">
+                                    <tr class="{{ $item->id == $cppt->queue_id ? 'text-success' : '' }}">
                                         <td>{{ $loop->iteration ?? '' }}</td>
                                         <td>{{ $cppt->user->name ?? '' }}</td>
-                                        <td>{{ $cppt->tanggal ?? '' }}</td>
+                                        <td>{{ $cppt->created_at->format('Y-m-d H:i') ?? '' }}</td>
                                         @canany(['edit cppt', 'delete cppt'])
                                             @if ($title == 'Rawat Jalan')
                                                 <td class="d-flex">

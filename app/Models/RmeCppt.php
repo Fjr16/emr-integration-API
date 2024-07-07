@@ -10,16 +10,17 @@ class RmeCppt extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'queue_id',
         'patient_id',
-        'soap',
-        'intruksi',
-        'tanggal',
-        'rawat_jalan_poli_patient_id',
+        'user_id',
+        'subjective',
+        'objective',
+        'asesment',
+        'planning',
         'ttd_user',
         'ttd_dpjp',
-        'tanggal_dpjp',
-        'serah_terima',
+        'tanggal_verif_dpjp',
+        'category_soap',
     ];
 
     public function patient(){
@@ -28,19 +29,7 @@ class RmeCppt extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function changeLogs(){
-        return $this->hasMany(ChangeLog::class, 'record_id')->where('record_type', self::class);
-    }
-
-    public function rawatJalanPoliPatient(){
-        return $this->belongsTo(RawatJalanPoliPatient::class);
-    }
-
-    // include cppt
-    public function rajalCpptSbarPatient(){
-        return $this->hasOne(RajalCpptSbarPatient::class);
-    }
-    public function rajalCpptSerahTerimaPatient(){
-        return $this->hasOne(RajalCpptSerahTerimaPatient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
 }

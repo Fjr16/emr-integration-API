@@ -86,4 +86,8 @@ class Queue extends Model
     {
         return $this->hasOne(PerawatInitialAsesment::class);
     }
+    public function rmeCppts()
+    {
+        return $this->hasMany(RmeCppt::class);
+    }
 }

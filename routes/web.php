@@ -678,7 +678,10 @@ Route::get('/asesmen/awal/perawat/create_step_one/{id}', [AsesmentPerawatControl
 Route::post('/asesmen/awal/perawat/store_step_one/{id}', [AsesmentPerawatController::class, 'store_step_one'])->name('asesmen/awal/perawat.store_step_one');
 Route::post('/asesmen/awal/perawat/store_step_two/{id}', [AsesmentPerawatController::class, 'store_step_two'])->name('asesmen/awal/perawat.store_step_two');
 Route::post('/asesmen/awal/perawat/show/{id}', [AsesmentPerawatController::class, 'show'])->name('asesmen/awal/perawat.show');
-Route::post('/rajal/asesmen/print/{id}', [AsesmentPerawatController::class, 'print'])->name('rajal/asesmen.print');
+Route::get('/asesmen/awal/perawat/edit/{id}', [AsesmentPerawatController::class, 'edit'])->name('asesmen/awal/perawat.edit');
+Route::put('/asesmen/awal/perawat/update_step_one/{id}', [AsesmentPerawatController::class, 'update_step_one'])->name('asesmen/awal/perawat.update_step_one');
+Route::put('/asesmen/awal/perawat/update_step_two/{id}', [AsesmentPerawatController::class, 'update_step_two'])->name('asesmen/awal/perawat.update_step_two');
+Route::get('/asesmen/awal/perawat/print/{id}', [AsesmentPerawatController::class, 'print'])->name('asesmen/awal/perawat.print');
 
 //rajal farmasi
 Route::group(['middleware' => ['permission:daftar pasien farmasi rajal']], function () {
