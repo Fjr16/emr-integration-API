@@ -7,7 +7,6 @@ use App\Models\ActionCategory;
 use App\Models\Queue;
 use App\Models\KasirPatient;
 use Illuminate\Http\Request;
-use App\Models\ActionMembers;
 use App\Models\DetailKasirPatient;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;

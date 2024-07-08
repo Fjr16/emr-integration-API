@@ -2,13 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\arg01\Seps;
-use App\Models\IgdPatient;
-use App\Models\KemoterapiPatient;
 use App\Models\Patient;
-use App\Models\Queue;
-use App\Models\RawatInapPatient;
-use App\Models\RawatJalanPatient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -60,18 +54,10 @@ class RekamMedisElektronikController extends Controller
     public function show($id)
     {
         $item = Patient::with('queues')->find($id);
-
-        $rajal = RawatJalanPatient::with('queue')
-            ->where('patient_id', $id)
-            ->whereHas('queue', function ($query) {
-                $query->where('category', 'RAWAT JALAN');
-            })->latest()->get();
-
         return view('pages.rmePasien.show', [
             "title" => "Rekam Medis Elektronik",
             "menu" => "RME",
             "item" => $item,
-            "rajal" => $rajal,
         ]);
     }
 

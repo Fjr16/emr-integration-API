@@ -98,15 +98,15 @@
                         </thead>
                         <tbody>
 
-                            @foreach ($rajal as $dataRajal)
+                            @foreach ($item->queues as $queue)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $dataRajal->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->patient->name ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->category ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('rajal/show', [$dataRajal->queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
+                                <td>{{ $queue->no_antrian ?? '' }}</td>
+                                <td>{{ $queue->tgl_antrian ?? '' }}</td>
+                                <td>{{ $queue->patient->name ?? '' }}</td>
+                                <td>{{ $queue->category ?? '' }}</td>
+                                <td>{{ $queue->status_antrian ?? '' }}</td>
+                                <td><a href="{{ route('rajal/show', [$queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -128,15 +128,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($rajal as $dataRajal)
+                            @foreach ($item->queues as $queue)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $dataRajal->queue->no_antrian ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->tgl_antrian ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->patient->name ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->category ?? '' }}</td>
-                                <td>{{ $dataRajal->queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('rajal/show', [$dataRajal->queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
+                                <td>{{ $queue->no_antrian ?? '' }}</td>
+                                <td>{{ $queue->tgl_antrian ?? '' }}</td>
+                                <td>{{ $queue->patient->name ?? '' }}</td>
+                                <td>{{ $queue->category ?? '' }}</td>
+                                <td>{{ $queue->status_antrian ?? '' }}</td>
+                                <td><a href="{{ route('rajal/show', [$queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
                             </tr>
                             @endforeach
                         </tbody>

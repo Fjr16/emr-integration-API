@@ -191,11 +191,8 @@
             'Admin',
             'Petugas Radiologi',
             'Petugas Labor PK',
-            'Petugas Labor PA',
             'DPJP Radiologi',
-            'DPJP Labor
-            PK',
-            'DPJP Labor PA',
+            'DPJP Labor PK',
             ])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Penunjang</span>
@@ -236,21 +233,21 @@
                 <li class="menu-item {{ $menu == 'Laboratorium PK' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bxs-flask"></i>
-                        <div>Laboratorium PK</div>
+                        <div>Laboratorium</div>
                     </a>
 
                     <ul class="menu-sub">
                         {{-- @can('list permintaan pemeriksaan laboratorium pk') --}}
                         <li class="menu-item {{ $title == 'Laboratorium PK' ? 'active' : '' }}">
                             <a href="{{ route('laboratorium/patient.index') }}" class="menu-link">
-                                <div>Daftar Permintaan Laboratorium PK</div>
+                                <div>Daftar Permintaan Laboratorium</div>
                             </a>
                         </li>
                         {{-- @endcan --}}
                         {{-- @can('daftar jadwal pemeriksaan laboratorium pk') --}}
                         <li class="menu-item {{ $title == 'Antrian Laboratorium PK' ? 'active' : '' }}">
                             <a href="{{ route('laboratorium/patient/queue.index') }}" class="menu-link">
-                                <div>Antrian Laboratorium PK</div>
+                                <div>Antrian Laboratorium</div>
                             </a>
                         </li>
                         {{-- @endcan --}}
@@ -258,37 +255,6 @@
                 </li>
                 {{-- @endcanany --}}
                 {{-- end Laboratorium PK --}}
-            @endhasanyrole
-
-            @hasanyrole(['Admin', 'Petugas Labor PA', 'DPJP Labor PA'])
-                {{-- laboratorium PA --}}
-                {{-- @canany(['daftar jadwal pemeriksaan laboratorium pa', 'list permintaan pemeriksaan laboratorium pa']) --}}
-                <li class="menu-item {{ $menu == 'Laboratorium PA' ? 'open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bx-cut"></i>
-                        <div>Laboratorium PA</div>
-                    </a>
-
-                    <ul class="menu-sub">
-                        {{-- @can('list permintaan pemeriksaan laboratorium pa') --}}
-                        <li class="menu-item {{ $title == 'Laboratorium PA' ? 'active' : '' }}">
-                            <a href="{{ route('permintaan/laboratorium/patologi/anatomik.index') }}" class="menu-link">
-                                <div>Daftar Permintaan Laboratorium PA</div>
-                            </a>
-                        </li>
-                        {{-- @endcan --}}
-                        {{-- @can('daftar jadwal pemeriksaan laboratorium pa') --}}
-                        <li class="menu-item {{ $title == 'Antrian Laboratorium PA' ? 'active' : '' }}">
-                            <a href="{{ route('permintaan/laboratorium/patologi/anatomik.indexAntrian') }}"
-                                class="menu-link">
-                                <div>Antrian Laboratorium PA</div>
-                            </a>
-                        </li>
-                        {{-- @endcan --}}
-                    </ul>
-                </li>
-                {{-- @endcanany --}}
-                {{-- end Laboratorium PA --}}
             @endhasanyrole
         @endhasanyrole
         {{-- end Penunjang --}}

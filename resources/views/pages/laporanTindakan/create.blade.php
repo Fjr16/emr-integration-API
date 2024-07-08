@@ -10,7 +10,7 @@
           <div class="row mb-3">
             <label for="diagnosa" class="col-sm-3 col-form-label">diagnosa</label>
             <div class="col-sm-9">
-              <input type="hidden" value="{{ $item->rawatJalanPatient->rawatJalanPoliPatient->id }}" name="rawat_jalan_poli_patient_id">
+              <input type="hidden" value="{{ $item->rawatJalanPoliPatient->id }}" name="rawat_jalan_poli_patient_id">
               <input type="hidden" name="patient_id" value="{{ $item->patient->id }}"/>
               <input type="text" name="diagnosa" class="form-control" id="diagnosa" required />
             </div>
