@@ -431,7 +431,6 @@
 
 
 
-                                {{-- <a href="{{ route('clear/asesment/perawat') }}" class="btn btn-success btn-sm">Unit Test Hapus</a> --}}
                             </div>
                             {{-- @endif --}}
                         @endcan
