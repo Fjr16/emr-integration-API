@@ -30,7 +30,6 @@ use App\Http\Controllers\MedicineFormController;
 use App\Http\Controllers\MedicineStokController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\QueueConfirmController;
-use App\Http\Controllers\ActionMembersController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
 use App\Http\Controllers\DoctorScheduleController;
@@ -57,12 +56,7 @@ use App\Http\Controllers\RadiologiPatientQueueController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
-use App\Http\Controllers\AsesmentKeperawatanDiagnosisController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
-use App\Http\Controllers\LaboratoriumRequestRekamMedisController;
-use App\Http\Controllers\AsesmentKeperawatanStatusFisikController;
-use App\Http\Controllers\AsesmentKeperawatanRencanaAsuhanController;
-use App\Http\Controllers\AsesmentKeperawatanSkriningResikoJatuhController;
 use App\Http\Controllers\OtherController;
 use App\Http\Controllers\PermintaanLaboratoriumPatogologiAnatomikController;
 use App\Http\Controllers\RajalGeneralConsentController;
@@ -115,45 +109,8 @@ Route::get('/rajal/clear/database', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_171824_create_initial_asessment_plans_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_172247_create_initial_assesment_educational_needs_table.php');
 
-    //diagnosa keperawtan
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230812_create_resiko_rajal_diagnosa_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230821_create_detail_resiko_rajal_diagnosa_keperawatan_patients_table.php');
     return back()->with('success', 'SUKSES RESET');
 })->name('clear/rajal');
-
-//clear asesmen awal keperawatan ranap
-Route::get('/assesmen/awal/keperawatan/ranap/clear', function () {
-    // status fisik
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_194723_create_asesment_keperawatan_status_fisik_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230642_create_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230657_create_detail_asesment_nyeri_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224810_create_detail_psiko_sosio_spritual_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224722_create_detail_status_fisik_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155843_create_diagnosis_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_225840_create_ekonomi_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224752_create_psiko_sosio_spritual_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230434_create_riwayat_alergi_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_224706_create_status_fisik_diagnosa_keperawatan_patients_table.php');
-    //risiko jatuh
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_210330_create_asesment_keperawatan_skrining_resiko_jatuh_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230954_create_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231004_create_detail_asesment_status_fungsional_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230821_create_detail_resiko_rajal_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231218_create_detail_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_230812_create_resiko_rajal_diagnosa_keperawatan_patients_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_21_231156_create_risiko_nutrisional_diagnosa_keperawatan_patients_table.php');
-    //diagnosis keperawatan
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_210849_create_asesment_keperawatan_diagnosis_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155852_create_detail_diagnosis_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155917_create_detail_masalah_diagnosis_keperawatan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_11_144340_create_hubungan_diagnosa_awal_patients_table.php');
-    //rencana asuhan
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_211337_create_asesment_keperawatan_rencana_asuhan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_155938_create_detail_rencana_diagnosis_keperawatan_patients_table.php');
-
-    return back()->with('success', 'SUKSES RESET');
-    return 'success';
-})->name('clear/assesmen/awal/keperawatan/ranap.clear');
 
 //migrate refresh radiologi
 Route::get('/radiologi/clear/database', function () {
@@ -166,13 +123,6 @@ Route::get('/radiologi/clear/database', function () {
 Route::get('/labor/clear/database', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_08_26_172251_create_laboratorium_requests_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_08_26_173042_create_laboratorium_request_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_29_001222_create_laboratorium_patient_results_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_29_211407_create_laboratorium_patient_result_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_24_163714_create_laboratorium_request_category_masters_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_28_033954_create_laboratorium_request_master_variables_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_27_210949_create_laboratorium_request_master_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_13_105652_create_laboratorium_request_master_rates_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_06_034000_create_laboratorium_user_validators_table.php');
     return back()->with('success', 'SUKSES RESET');
 })->name('clear/labor/request/hasil');
 
@@ -199,14 +149,6 @@ Route::get('/farmasi/gudang/clear/database', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_06_14_150904_create_medicine_stoks_table.php');
     return back()->with('success', 'Berhasil Di Reset');
 })->name('clear/farmasi/medicine');
-
-//seeder master labor
-Route::get('/labor/seed/master/database', function () {
-    Artisan::call('db:seed --class=LaboratoriumRequestCategoryMasterSeeder');
-    Artisan::call('db:seed --class=LaboratoriumRequestMasterVariableSeeder');
-    Artisan::call('db:seed --class=LaboratoriumRequestMasterDetailSeeder');
-    return back()->with('success', 'SUKSES SEED');
-})->name('seed/labor/master.database');
 
 // Migrate tabel diagnosis_patients, medicine_categories, medicines, units
 Route::get('/db/lama/migrate/database', function () {
@@ -388,14 +330,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/tindakan/edit/{id}', [ActionController::class, 'edit'])->name('tindakan.edit');
     Route::put('/tindakan/update/{id}', [ActionController::class, 'update'])->name('tindakan.update');
     Route::delete('/tindakan/destroy/{id}', [ActionController::class, 'destroy'])->name('tindakan.destroy');
-
-    //Tindakan Member
-    Route::get('/tindakan/anggota', [ActionMembersController::class, 'index'])->name('action/members.index');
-    Route::get('/tindakan/anggota/create', [ActionMembersController::class, 'create'])->name('action/members.create');
-    Route::post('/tindakan/anggota/store', [ActionMembersController::class, 'store'])->name('action/members.store');
-    Route::get('/tindakan/anggota/edit/{id}', [ActionMembersController::class, 'edit'])->name('action/members.edit');
-    Route::put('/tindakan/anggota/update/{id}', [ActionMembersController::class, 'update'])->name('action/members.update');
-    Route::delete('/tindakan/anggota/destroy/{id}', [ActionMembersController::class, 'destroy'])->name('action/members.destroy');
 
     //tariftindakanmember
     Route::get('/tindakan/tarif/edit/{id}', [ActionRatesController::class, 'edit'])->name('action/rates.edit');
@@ -602,9 +536,6 @@ Route::group(['middleware' => ['permission:delete permintaan labor pk']], functi
 });
 Route::get('/laboratorium/request/getTemplate/{id}', [LaboratoriumFormRequestController::class, 'getTemplate'])->name('laboratorium/request.getTemplate');
 
-//Petugas Labor request labor Pk
-Route::get('laboratorium/PK/request/create/{id}', [LaboratoriumRequestRekamMedisController::class, 'create'])->name('laboratorium/PK/request.create');
-Route::post('laboratorium/PK/request/store/{id}', [LaboratoriumRequestRekamMedisController::class, 'store'])->name('laboratorium/PK/request.store');
 
 //rajal tindakan
 Route::group(['middleware' => ['permission:tambah laporan tindakan']], function () {
@@ -654,24 +585,6 @@ Route::post('/rajal/keterangan-sbpk/store/{id}/{surat_id}', [SuratBuktiPelayanan
 Route::get('/rajal/keterangan-sbpk/edit/{id}', [SuratBuktiPelayananPatientController::class, 'editSuratKeterangan'])->name('rajal/keterangan-sbpk.edit');
 Route::put('/rajal/keterangan-sbpk/update/{id}', [SuratBuktiPelayananPatientController::class, 'updateSuratKeterangan'])->name('rajal/keterangan-sbpk.update');
 // });
-
-//Asesment Perawat Status Fisik
-Route::get('/rajal/asesmen/status/fisik/index/{id}', [AsesmentKeperawatanStatusFisikController::class, 'index'])->name('rajal/asesmen/status/fisik.index');
-Route::post('/rajal/asesmen/status/fisik/store/{id}', [AsesmentKeperawatanStatusFisikController::class, 'store'])->name('rajal/asesmen/status/fisik.store');
-Route::post('/rajal/asesmen/status/fisik/save/{id}', [AsesmentKeperawatanStatusFisikController::class, 'save'])->name('rajal/asesmen/status/fisik.save');
-
-//Asesment Perawat Skrining Resiko Jatuh
-Route::get('/rajal/asesmen/skrining/resiko/jatuh/index/{id}', [AsesmentKeperawatanSkriningResikoJatuhController::class, 'index'])->name('rajal/asesmen/skrining/resiko/jatuh.index');
-Route::post('/rajal/asesmen/skrining/resiko/jatuh/store/{id}', [AsesmentKeperawatanSkriningResikoJatuhController::class, 'store'])->name('rajal/asesmen/skrining/resiko/jatuh.store');
-
-//Asesment Perawat Diagnosis Keperawatan
-Route::get('/rajal/asesmen/diagnosis/keperawatan/index/{id}', [AsesmentKeperawatanDiagnosisController::class, 'index'])->name('rajal/asesmen/diagnosis/keperawatan.index');
-Route::post('/rajal/asesmen/diagnosis/keperawatan/store/{id}', [AsesmentKeperawatanDiagnosisController::class, 'store'])->name('rajal/asesmen/diagnosis/keperawatan.store');
-
-//Asesment Perawat Diagnosis Keperawatan
-Route::get('/rajal/asesmen/rencana/asuhan/index/{id}', [AsesmentKeperawatanRencanaAsuhanController::class, 'index'])->name('rajal/asesmen/rencana/asuhan.index');
-Route::post('/rajal/asesmen/rencana/asuhan/store/{id}', [AsesmentKeperawatanRencanaAsuhanController::class, 'store'])->name('rajal/asesmen/rencana/asuhan.store');
-
 
 // Route::group(['middleware' => ['permission:tambah rme perawat']], function(){
 Route::get('/asesmen/awal/perawat/create_step_one/{id}', [AsesmentPerawatController::class, 'create_step_one'])->name('asesmen/awal/perawat.create_step_one');
