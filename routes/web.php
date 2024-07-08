@@ -125,16 +125,6 @@ Route::get('/labor/clear/database', function () {
     return back()->with('success', 'SUKSES RESET');
 })->name('clear/labor/request/hasil');
 
-//Clear Antrian Laboratorium Anatomik
-Route::get('/permintaan/laboratorium/patologi/anatomik/clear', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_12_004829_create_hasil_laboratorium_patologi_anatomik_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_12_013701_create_antrian_laboratorium_patologi_anatomi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_12_014146_create_detail_antrian_laboratorium_patologi_anatomi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_13_224523_create_hasil_histopatologi_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_13_224532_create_hasil_sitopatologi_patients_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('permintaan/laboratorium/patologi/anatomik/clear');
-
 //Clear SBPK
 Route::get('/sbpk/clear', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_10_29_130314_create_surat_bukti_pelayanan_patients_table.php');
