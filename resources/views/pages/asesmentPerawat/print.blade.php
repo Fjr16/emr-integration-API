@@ -398,32 +398,32 @@
                 <div class="row mb-1 px-2">
                     <div class="col-6">
                         <span class="small fw-bold">Subjective:</span>
-                        <p class="small multi-line-text">{!! $soapPerawat->subjective ?? '' !!}</p>
+                        <p class="small multi-line-text">{!! $itemAss->subjective ?? '' !!}</p>
                     </div>
                     <div class="col-6">
                         <span class="small fw-bold">Objective:</span>
-                        <p class="small multi-line-text">{!! $soapPerawat->objective ?? '' !!}</p>
+                        <p class="small multi-line-text">{!! $itemAss->objective ?? '' !!}</p>
                     </div>
                 </div>
                 <div class="row mb-1 px-2">
                     <div class="col-6">
                         <span class="small fw-bold">Assesment:</span>
-                        <p class="small multi-line-text">{!! $soapPerawat->asesment ?? '' !!}</p>
+                        <p class="small multi-line-text">{!! $itemAss->asesmen ?? '' !!}</p>
                     </div>
                     <div class="col-6">
                         <span class="small fw-bold">Planning:</span>
-                        <p class="small multi-line-text">{!! $soapPerawat->planning ?? '' !!}</p>
+                        <p class="small multi-line-text">{!! $itemAss->planning ?? '' !!}</p>
                     </div>
                 </div>
             </div>
             <div class="row mx-4 my-4">
                 <div class="text-end align-self-center">
                     <div class="">
-                        <p class="mb-0 mx-3 small">Padang, {{ $soapPerawat->created_at->format('d M Y') }}</p>
-                        <p class="mb-1 mx-4 px-4 small fw-bold">Perawat, </p>
+                        <p class="mb-0 small">Padang, {{ $itemAss->created_at->format('d M Y') }}</p>
+                        <p class="mb-1 small fw-bold">Perawat, </p>
                     </div>
-                    <img src="{{ asset('storage/' . $soapPerawat->ttd_user) }}" width="140" alt="">
-                    <h6 class="small fw-bold">{{ $soapPerawat->user->name ?? '' }}</h6>
+                    <img src="{{ asset('storage/' . $itemAss->ttd) }}" width="140" alt="">
+                    <h6 class="small fw-bold">{{ $itemAss->user->name ?? '' }}</h6>
                 </div>
             </div>
         </div>

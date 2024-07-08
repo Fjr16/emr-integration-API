@@ -62,14 +62,6 @@
                     </div>
                   </div>
             </div>
-            {{-- <div class="col col-6">
-                <div class="row mb-3">
-                    <label for="basic-default-name" class="col-sm-3 col-form-label">Nomor Kartu BPJS</label>
-                    <div class="col-sm-7">
-                      <input type="text" value="{{ $item->noka }}" class="form-control form-control-sm" id="basic-default-name" disabled />
-                    </div>
-                  </div>
-            </div> --}}
             <div class="col col-6">
                 <div class="row mb-3">
                     <label for="basic-default-name" class="col-sm-6 col-form-label">Tanggal Berobat </label>

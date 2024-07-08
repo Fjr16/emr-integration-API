@@ -101,10 +101,6 @@ class User extends Authenticatable
         return $this->hasMany(DoctorsSchedule::class);
     }
 
-    public function doctorPatients()
-    {
-        return $this->hasMany(DoctorPatient::class);
-    }
     public function laboratoriumUserValidator()
     {
         return $this->hasMany(LaboratoriumUserValidator::class);

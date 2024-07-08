@@ -15,8 +15,6 @@ class PerawatInitialAsesment extends Model
         'keluhan_utama',
         'riw_penyakit_pasien',
         'riw_penyakit_keluarga',
-        'alergi_makanan',
-        'alergi_obat',
         'skor_ass_gizi_1',
         'skor_ass_gizi_2',
         'kondisi_gizi',
@@ -36,6 +34,11 @@ class PerawatInitialAsesment extends Model
         'resiko_jatuh_a',
         'resiko_jatuh_b',
         'resiko_jatuh_result',
+        // soap
+        'subjective',
+        'objective',
+        'asesmen',
+        'planning',
         'ttd',
     ];
 

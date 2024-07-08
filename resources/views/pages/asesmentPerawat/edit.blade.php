@@ -23,7 +23,7 @@
                         {{ $item->patient->name }} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
                         <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
-                    <h6>{{ $item->queue->doctorPatient->user->name }} ({{ $item->queue->doctorPatient->user->staff_id }})</h6>
+                    <h6>{{ $item->queue->dpjp->name ?? '' }} ({{ $item->queue->dpjp->staff_id ?? '' }})</h6>
                 </div>
                 <div class="col-8 text-end">
                     <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->queue->no_antrian ?? '' }}</span></p>
@@ -108,11 +108,11 @@
                                     <div class="row mb-3">
                                         <div class="col-6">
                                             <label class="form-label fw-bold">Alergi Makanan</label>
-                                            <textarea id="editor5" class="form-control" id="alergi_makanan" name="alergi_makanan" rows="6">{{ session('dataToUpdate.alergi_makanan', $item->alergi_makanan ?? '') }}</textarea>
+                                            <textarea id="editor5" class="form-control" id="alergi_makanan" name="alergi_makanan" rows="6">{{ session('alergi.makanan', $item->patient->alergi_makanan ?? '') }}</textarea>
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fw-bold">Alergi Obat</label>
-                                            <textarea id="editor6" class="form-control" id="alergi_obat" name="alergi_obat" rows="6">{{ session('dataToUpdate.alergi_obat', $item->alergi_obat ?? '') }}</textarea>
+                                            <textarea id="editor6" class="form-control" id="alergi_obat" name="alergi_obat" rows="6">{{ session('alergi.obat', $item->patient->alergi_obat ?? '') }}</textarea>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -411,7 +411,7 @@
                                         <div class="row mb-4">
                                             <div class="col-sm-6 subSOAP">
                                                 <label for="subjective" class="form-label">Subjective</label>
-                                                <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">{!! $soapPerawat->subjective !!}</textarea>
+                                                <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">{!! $item->subjective !!}</textarea>
                                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group">
                                                     <input type="radio" class="btn-check" name="btnradio-sub" value="sub-old" id="sub_old" onchange="changeSO(this)" @checked(true)>
                                                     <label class="btn btn-outline-primary" for="sub_old">Subjective Sebelumnya</label>
@@ -422,7 +422,7 @@
                                             </div>
                                             <div class="col-sm-6 objSOAP">
                                                 <label for="objective" class="form-label">Objective</label>
-                                                <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{!! $soapPerawat->objective ?? '' !!}</textarea>
+                                                <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{!! $item->objective ?? '' !!}</textarea>
                                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group">
                                                     <input type="radio" class="btn-check" name="btnradio-obj" value="obj-old" id="obj_old" onchange="changeSO(this)" @checked(true)>
                                                     <label class="btn btn-outline-primary" for="obj_old">Objective Sebelumnya</label>
@@ -435,11 +435,11 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label for="asesmen" class="form-label">Assesment</label>
-                                                <textarea name="asesmen" id="asesmen" class="form-control" rows="10" placeholder="Assesment">{!! $soapPerawat->asesment ?? '' !!}</textarea>
+                                                <textarea name="asesmen" id="asesmen" class="form-control" rows="10" placeholder="Assesment">{!! $item->asesmen ?? '' !!}</textarea>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="planning" class="form-label">Planning</label>
-                                                <textarea name="planning" id="planning" class="form-control" rows="10" placeholder="Planning">{!! $soapPerawat->planning ?? '' !!}</textarea>
+                                                <textarea name="planning" id="planning" class="form-control" rows="10" placeholder="Planning">{!! $item->planning ?? '' !!}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -557,9 +557,9 @@
 
         function changeSO(element){
             var subCurrent = `{{ "Keluhan: " . session('dataToUpdate.keluhan_utama', $item->keluhan_utama ?? '') . "\r\n" . "Riwayat Penyakit: " . session('dataToUpdate.riw_penyakit_pasien', $item->riw_penyakit_pasien ?? '') }}`;
-            var subOld = `{!! $soapPerawat->subjective !!}`;
+            var subOld = `{!! $item->subjective ?? '' !!}`;
             var objCurrent = `{{ "Keadaan Umum: " . session('dataToUpdate.keadaan_umum', $item->keadaan_umum ?? '') . "\r\n" . "Nadi: " . session('dataToUpdate.nadi', $item->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . session('dataToUpdate.td_sistolik', $item->td_sistolik ?? '') . " / " . session('dataToUpdate.td_diastolik', $item->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . session('dataToUpdate.suhu', $item->suhu ?? '') . " °C\r\n" . "Nafas: " . session('dataToUpdate.nafas', $item->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . session('dataToUpdate.tb', $item->tb) . " cm\r\n" . "Berat Badan: " . session('dataToUpdate.bb', $item->bb) . " kg" }}`;
-            var objOld = `{!! $soapPerawat->objective !!}`;
+            var objOld = `{!! $item->objective ?? '' !!}`;
             var targetElement;
             var contentTarget;
             if (element.value == 'sub-old') {

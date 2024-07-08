@@ -10,6 +10,7 @@ use App\Models\RajalFarmasiPatient;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\MedicineReceipt;
+use App\Models\Patient;
 use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
 
@@ -75,6 +76,7 @@ class RawatJalanController extends Controller
 
         $today = new DateTime();
         $item = Queue::findOrFail($id);
+        $itemPatient = Patient::find($item->patient->id);
         $reportActions = PatientActionReport::where('patient_id', $item->patient->id)->latest()->get();
         $receipts = MedicineReceipt::where('patient_id', $item->patient->id)->latest()->get();
 
@@ -86,6 +88,7 @@ class RawatJalanController extends Controller
             "title" => $title,
             "menu" => "In Patient",
             "item" => $item,
+            "itemPatient" => $itemPatient,
             'today' => $today,
             'reportActions' => $reportActions,
             'receipts' => $receipts,

@@ -62,11 +62,6 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        if ($request->isKaryawan) {
-            $data['isKaryawan'] = true;
-        } else {
-            $data['isKaryawan'] = false;
-        }
         $patient = new Patient($data);
         $patient->save();
 
@@ -145,11 +140,6 @@ class PatientController extends Controller
     {
         $item = Patient::findOrFail($id);
         $data = $request->all();
-        if ($request->isKaryawan) {
-            $data['isKaryawan'] = true;
-        } else {
-            $data['isKaryawan'] = false;
-        }
         $item->update($data);
         return redirect()->route('pasien.index')->with('success', 'Berhasil Diperbarui');
     }

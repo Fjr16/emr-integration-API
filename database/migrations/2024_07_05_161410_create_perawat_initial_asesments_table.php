@@ -21,8 +21,6 @@ return new class extends Migration
             $table->text('keluhan_utama')->nullable();
             $table->text('riw_penyakit_pasien')->nullable();
             $table->text('riw_penyakit_keluarga')->nullable();
-            $table->text('alergi_makanan')->nullable();
-            $table->text('alergi_obat')->nullable();
             $table->integer('skor_ass_gizi_1')->nullable();
             $table->integer('skor_ass_gizi_2')->nullable();
             $table->string('kondisi_gizi', 20)->nullable();
@@ -41,6 +39,10 @@ return new class extends Migration
             $table->boolean('resiko_jatuh_a')->default(false);
             $table->boolean('resiko_jatuh_b')->nullable(false);
             $table->string('resiko_jatuh_result', 100)->nullable();
+            $table->text('subjective')->nullable();
+            $table->text('objective')->nullable();
+            $table->text('asesmen')->nullable();
+            $table->text('planning')->nullable();
             $table->string('ttd')->nullable();
             $table->timestamps();
         });

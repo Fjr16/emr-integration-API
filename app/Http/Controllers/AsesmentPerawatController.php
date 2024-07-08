@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Queue;
 use App\Models\PerawatInitialAsesment;
 use App\Models\PerawatInitialAsesmentPsychology;
-use App\Models\RmeCppt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -28,13 +27,11 @@ class AsesmentPerawatController extends Controller
         ];
         $item = Queue::find($id);
         $itemAss = $item->perawatInitialAssesment;
-        $soapPerawat = $item->rmeCppts->where('category_soap', 'PERAWAT')->first() ?? '';
         return view('pages.asesmentPerawat.print', [
             'title' => 'Print Assesment Perawat',
             'menu' => 'Rawat Jalan',
             'itemAss' => $itemAss,
             'komponenPenilaian1' => $komponenPenilaian1,
-            'soapPerawat' => $soapPerawat,
         ]);
     }
 
@@ -99,8 +96,6 @@ class AsesmentPerawatController extends Controller
             ],
         ];
 
-        $soapPerawat = $item->rmeCppts->where('category_soap', 'PERAWAT')->first() ?? '';
-
         return view('pages.asesmentPerawat.create', [
             'title' => 'Rawat Jalan',
             'menu' => 'Rawat Jalan',
@@ -108,7 +103,6 @@ class AsesmentPerawatController extends Controller
             'arrResikoJatuh' => $arrResikoJatuh,
             'arrAssGizi' => $arrAssGizi,
             'itemAss' => $itemAss,
-            'soapPerawat' => $soapPerawat,
         ]);
     }
     public function store_step_one(Request $request, $id){
@@ -116,13 +110,20 @@ class AsesmentPerawatController extends Controller
         if (!empty($detailPsikologis)) {
             Session::put('detail_psikologis', $detailPsikologis);
         }
+        $alergi_makanan = $request->input('alergi_makanan');
+        $alergi_obat = $request->input('alergi_obat');
+        if ($alergi_makanan || $alergi_obat) {
+            Session::put('alergi', [
+                'makanan' => $alergi_makanan,
+                'obat' => $alergi_obat
+            ]);
+        }
+
         $nextStep = $request->input('next-step', 'anamnesis');
         $reqData = [
             'keluhan_utama' => $request->input('keluhan', Session::get('data.keluhan_utama')),
             'riw_penyakit_pasien' => $request->input('riwayat_penyakit_sekarang', Session::get('data.riw_penyakit_pasien')),
             'riw_penyakit_keluarga' => $request->input('riwayat_penyakit_keluarga', Session::get('data.riw_penyakit_keluarga')),
-            'alergi_makanan' => $request->input('alergi_makanan', Session::get('data.alergi_makanan')),
-            'alergi_obat' => $request->input('alergi_obat', Session::get('data.alergi_obat')),
             'skor_ass_gizi_1' => $request->input('asesmen_gizi', Session::get('data.skor_ass_gizi_1')),
             'skor_ass_gizi_2' => $request->input('kurang_nafsu', Session::get('data.skor_ass_gizi_2')),
             'kondisi_gizi' => $request->input('kondisi_gizi', Session::get('data.kondisi_gizi')),
@@ -154,13 +155,20 @@ class AsesmentPerawatController extends Controller
     public function store_step_two(Request $request, $id){
         $item = Queue::find($id);
         $newPerawat = Session::get('data');
+        if (empty($newPerawat)) {
+            return back()->with('error', 'Mohon isi Data Step By Step mulai dari Anamnesa !!');
+        }
         $newPerawat->fill([
             'user_id' => Auth::user()->id,
             'queue_id' => $item->id,
             'patient_id' => $item->patient->id,
+            'subjective' => $request->input('subjective'),
+            'objective' => $request->input('objective'),
+            'asesment' => $request->input('asesmen'),
+            'planning' => $request->input('planning'),
+            'ttd' => $request->input('ttd_user')
         ]);
         if($newPerawat->save()){
-            Session::forget('data');
             $detailPsikologis = Session::get('detail_psikologis');
             if (!empty($detailPsikologis)) {
                 foreach ($detailPsikologis as $detail) {
@@ -169,26 +177,28 @@ class AsesmentPerawatController extends Controller
                         'name' => $detail,
                     ]);
                 }
-                Session::forget('detail_psikologis');
             }
+
+            // update alergi pada tabel pasien
+            $alergi_mkn = Session::get('alergi.makanan');
+            if ($alergi_mkn && $alergi_mkn != $item->patient->alergi_makanan) {
+                $item->patient()->update([
+                    'alergi_makanan' => $alergi_mkn,
+                ]);
+            }
+
+            $alergi_obt = Session::get('alergi.obat');
+            if ($alergi_obt && $alergi_obt != $item->patient->alergi_obat) {
+                $item->patient()->update([
+                    'alergi_obat' => $alergi_obt,
+                ]);
+            }
+            Session::forget(['alergi_makanan', 'alergi_obat', 'detail_psikologis', 'data']);
         }else{
             return back()->with([
                 'error' => 'Terjadi Kesalahan!! Mohon Submit Ulang !!'
             ]);
         }
-
-        $soap = [
-            'queue_id' => $item->id,
-            'patient_id' => $item->patient->id,
-            'user_id' => auth()->user()->id,
-            'subjective' => $request->input('subjective'),
-            'objective' => $request->input('objective'),
-            'asesment' => $request->input('asesmen'),
-            'planning' => $request->input('planning'),
-            'ttd_user' => $request->input('ttd_user'),
-            'category_soap' => 'PERAWAT',
-        ];
-        RmeCppt::create($soap);
 
         return back()->with([
             'success' => 'Data Asesmen Awal Berhasil Disimpan',
@@ -255,15 +265,12 @@ class AsesmentPerawatController extends Controller
             ],
         ];
 
-        $soapPerawat = $item->queue->rmeCppts->where('category_soap', 'PERAWAT')->first() ?? '';
-
         return view('pages.asesmentPerawat.edit', [
             'title' => 'Rawat Jalan',
             'menu' => 'Rawat Jalan',
             'item' => $item,
             'arrResikoJatuh' => $arrResikoJatuh,
             'arrAssGizi' => $arrAssGizi,
-            'soapPerawat' => $soapPerawat,
         ]);
     }
     public function update_step_one(Request $request, $id){
@@ -271,6 +278,15 @@ class AsesmentPerawatController extends Controller
         if (!empty($detailPsikologis)) {
             Session::put('detail_psikologis', $detailPsikologis);
         }
+        $alergi_makanan = $request->input('alergi_makanan');
+        $alergi_obat = $request->input('alergi_obat');
+        if ($alergi_makanan || $alergi_obat) {
+            Session::put('alergi', [
+                'makanan' => $alergi_makanan,
+                'obat' => $alergi_obat
+            ]);
+        }
+        
         $nextStep = $request->input('next-step', 'anamnesis');
         $reqData = [
             'keluhan_utama' => $request->input('keluhan', Session::get('data.keluhan_utama')),
@@ -308,7 +324,17 @@ class AsesmentPerawatController extends Controller
         ]);
     }
     public function update_step_two(Request $request, $id){
+        $item = PerawatInitialAsesment::find($id);
         $dataToUpdate = Session::get('dataToUpdate');
+        if (empty($dataToUpdate)) {
+            return back()->with('error', 'Mohon Isi Data Secara Bertahap !!');
+        }
+        $dataToUpdate->fill([
+            'subjective' => $request->input('subjective'),
+            'objective' => $request->input('objective'),
+            'asesmen' => $request->input('asesmen'),
+            'planning' => $request->input('planning'),
+        ]);
         if($dataToUpdate->update()){
             Session::forget('dataToUpdate');
             $detailPsikologis = Session::get('detail_psikologis');
@@ -321,22 +347,27 @@ class AsesmentPerawatController extends Controller
                     ]);
                 }
                 Session::forget('detail_psikologis');
+
+                // update alergi pada tabel pasien
+                $alergi_mkn = Session::get('alergi.makanan');
+                if ($alergi_mkn && $alergi_mkn != $item->patient->alergi_makanan) {
+                    $item->patient()->update([
+                        'alergi_makanan' => $alergi_mkn,
+                    ]);
+                }
+
+                $alergi_obt = Session::get('alergi.obat');
+                if ($alergi_obt && $alergi_obt != $item->patient->alergi_obat) {
+                    $item->patient()->update([
+                        'alergi_obat' => $alergi_obt,
+                    ]);
+                }
             }
         }else{
             return back()->with([
                 'error' => 'Terjadi Kesalahan!! Mohon Submit Ulang !!'
             ]);
         }
-
-        $soapPerawat = $dataToUpdate->queue->rmeCppts->where('category_soap', 'PERAWAT')->first();
-
-        $soap = [
-            'subjective' => $request->input('subjective'),
-            'objective' => $request->input('objective'),
-            'asesment' => $request->input('asesmen'),
-            'planning' => $request->input('planning'),
-        ];
-        $soapPerawat->update($soap);
 
         return back()->with([
             'success' => 'Data Asesmen Awal Berhasil Disimpan',

@@ -9,16 +9,7 @@
             <div class="col-sm-9">
                 <input type="text" value="{{ $item->no_antrian ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
-            {{-- <div class="col-sm-4">
-          <button class="btn btn-warning btn-sm" disabled>Pasien Belum Datang</button>
-        </div> --}}
         </div>
-        {{-- <div class="row mb-3">
-        <label for="basic-default-name" class="col-sm-3 col-form-label">Kode Booking</label>
-        <div class="col-sm-9">
-          <input type="number" name="name" class="form-control form-control-sm" id="basic-default-name" disabled />
-        </div>
-      </div> --}}
         <div class="row mb-3">
             <label for="basic-default-name" class="col-sm-3 col-form-label">No RM</label>
             <div class="col-sm-9">
@@ -34,7 +25,7 @@
         <div class="row mb-3">
             <label for="basic-default-name" class="col-sm-3 col-form-label">Poli</label>
             <div class="col-sm-9">
-                <input type="text" value="{{ $item->doctorPatient->user->roomDetail->name ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
+                <input type="text" value="{{ $item->dpjp->roomDetail->name ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>
         <div class="row mb-3">
@@ -78,9 +69,6 @@
                 <input type="text" value="{{ $item->last_diagnostic ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>
-        {{-- <div class="card bg-warning text-white p-3">
-        Hati-hati dalam membatalkan antrian ini, jika pasien datang, maka antrian harus diambil baru
-      </div> --}}
     </div>
     <div class="modal-footer">
         <a href="{{ route('antrian/konfirmasi.update', $item->id) }}" class="btn btn-warning btn-sm">Lanjutkan</a>

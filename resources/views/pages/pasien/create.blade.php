@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="col-5">
                                     <label for="exampleFormControlSelect1" class="form-label">Kab / Kota</label>
-                                    <select class="form-select form-select-sm" id="kota_id"
+                                    <select class="form-select form-select-sm select2" id="kota_id"
                                         aria-label="Default select example" name="city_id" onchange="getKecamatan()">
                                         <option selected disabled>Pilih Kota</option>
 
@@ -213,7 +213,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label for="exampleFormControlSelect1" class="form-label">Kecamatan</label>
-                                    <select class="form-select form-select-sm" id="kecamatan_id"
+                                    <select class="form-select form-select-sm select2" id="kecamatan_id"
                                         aria-label="Default select example" name="district_id" onchange="getDesa()">
                                         <option selected>Pilih Kecamatan</option>
 
@@ -221,7 +221,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="exampleFormControlSelect1" class="form-label">Kel / Desa</label>
-                                    <select class="form-select form-select-sm" id="desa_id"
+                                    <select class="form-select form-select-sm select2" id="desa_id"
                                         aria-label="Default select example" name="village_id">
                                         <option selected>Pilih Kelurahan</option>
                                     </select>
@@ -251,12 +251,18 @@
                             <input type="text" class="form-control form-control-sm" id="defaultFormControlInput"
                                 placeholder="" name="suku" aria-describedby="defaultFormControlHelp" />
                         </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Daftar Alergi Pasien</label>
-                            <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi" rows="3">{{ old('alergi') }}</textarea>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="exampleFormControlTextarea1" class="form-label">Alergi Makanan</label>
+                                <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi_makanan" rows="5">{{ old('alergi_makanan') }}</textarea>
+                            </div>
+                            <div class="col-6">
+                                <label for="exampleFormControlTextarea1" class="form-label">Alergi Obat</label>
+                                <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi_obat" rows="5">{{ old('alergi_obat') }}</textarea>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-sm btn-dark mb-3">Simpan</button>
-                        <a href="{{ url()->previous() }}" class="btn btn-sm btn-dark mb-3">Kembali</a>
+                        <a href="{{ url()->previous() }}" class="btn btn-sm btn-danger mb-3">Kembali</a>
                     </div>
                 </div>
             </div>

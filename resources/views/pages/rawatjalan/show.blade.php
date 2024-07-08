@@ -35,7 +35,7 @@
                         {{ $item->patient->name }} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
                         <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
-                    <h6>{{ $item->doctorPatient->user->name }} ({{ $item->doctorPatient->user->staff_id }})</h6>
+                    <h6>{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
                 </div>
                 <div class="col-8 text-end">
                     <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->no_antrian ?? '' }}</span></p>
@@ -61,7 +61,7 @@
                   <div id="accordionOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                       <div class="accordion-body">
                         <div class="row">
-                            <div class="col-md-4 col-12 mb-3 mb-md-0">
+                            <div class="col-md-2 col-12 mb-3 mb-md-0">
                               <div class="list-group">
                                 <a class="list-group-item list-group-item-action active" id="list-identitas-list" data-bs-toggle="list" href="#list-identitas">Identitas Pasien</a>
                                 <a class="list-group-item list-group-item-action" id="list-kunjungan-terakhir-list" data-bs-toggle="list" href="#list-kunjungan-terakhir">Kunjungan Terakhir</a>
@@ -70,16 +70,242 @@
                                 <a class="list-group-item list-group-item-action" id="list-radiologi-list" data-bs-toggle="list" href="#list-radiologi">Radiologi</a>
                               </div>
                             </div>
-                            <div class="col-md-8 col-12 border">
+                            <div class="col-md-10 col-12 border">
                               <div class="tab-content">
                                 <div class="tab-pane fade show active" id="list-identitas">
-                                  Donut sugar plum sweet roll biscuit. Cake oat cake gummi bears. Tart wafer wafer halvah gummi bears cheesecake. Topping croissant cake sweet roll. Dessert fruitcake gingerbread halvah marshmallow pudding bear claw cheesecake. Bonbon dragée cookie gummies. Pudding marzipan liquorice. Sugar plum dragée cupcake cupcake cake dessert chocolate bar. Pastry lollipop lemon drops lollipop halvah croissant. Pastry sweet gingerbread lemon drops topping ice cream.
+                                    <div class="row mt-0">
+                                        <div class="col col-12 col-lg-6">
+                                            <div class="card shadow-sm p-3">
+                                                <div class="row">
+                                                    {{-- no rm --}}
+                                                    <div class="col col-4">
+                                                        <label class="col-form-label" for="basic-default-name">No Rekam Medis</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        <p class="mt-2 mb-0"> :
+                                                            &nbsp;&nbsp;&nbsp;{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                                        </p>
+                                                    </div>
+                            
+                                                    {{-- noka --}}
+                                                    <div class="col col-4">
+                                                        <label class="col-form-label" for="basic-default-name">No Kartu</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        <p class="mt-2 mb-0">: &nbsp;&nbsp;&nbsp;{{ $item->patient->noka ?? '-' }}</p>
+                                                    </div>
+                            
+                                                    {{-- nama --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Nama Pasien</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        <p class="mt-2 mb-0">: &nbsp;&nbsp;&nbsp;{{ $item->patient->name ?? '-' }}</p>
+                                                    </div>
+                            
+                                                    {{-- nik --}}
+                                                    <div class="col col-4">
+                                                        <label class="col-form-label" for="basic-default-name">Nik</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        <p class="mt-2 mb-0">: &nbsp;&nbsp;&nbsp;{{ $item->patient->nik ?? '-' }}</p>
+                                                    </div>
+                            
+                            
+                                                    {{-- ttl --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Tempat / Tanggal Lahir</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        <p class="mt-2 mb-0"> : &nbsp;&nbsp;&nbsp;{{ $item->patient->tempat_lhr ?? '-' }} /
+                                                            {{ $item->patient->tanggal_lhr ?? '-' }}</p>
+                                                    </div>
+                            
+                                                    {{-- gender --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Jenis Kelamin</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->jenis_kelamin ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- status --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Status</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->status ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Agama --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Agama</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->agama ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Nama Ayah --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Nama Ayah</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->nm_ayah ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Nama Ibu --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Nama Ibu</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->nm_ibu ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Nama Wali --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Nama Wali</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->nm_wali ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- No telp --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">No Telp</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->telp ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Pendidikan --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Pendidikan</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->pendidikan ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Pekerjaan --}}
+                                                    <div class="col col-4">
+                                                        <label for="basic-default-name" class="col-form-label">Pekerjaan</label>
+                                                    </div>
+                                                    <div class="col col-8">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->job->name ?? '-' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-12 col-lg-6">
+                                            <div class="card shadow-sm p-3">
+                                                <div class="row px-5 container">
+                                                    {{-- Alamat --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Alamat</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->alamat ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- RT --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">RT</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->rt ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- RW --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">RW</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->rw ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Provinsi --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Provinsi</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->province->name ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Kabupaten --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Kabupaten</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->city->name ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Kecamatan --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Kecamatan</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->district->name ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Kelurahan / Desa --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Kelurahan / Desa</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->village->name ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- bangsa --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Kewarganegaraan</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->bangsa ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- Suku --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Suku Bangsa</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->suku ?? '-' }}
+                                                    </div>
+                            
+                                                    {{-- alergi --}}
+                                                    <div class="col col-5">
+                                                        <label for="basic-default-name" class="col-form-label">Daftar Alergi Pasien</label>
+                                                    </div>
+                                                    <div class="col col-7">
+                                                        : &nbsp;&nbsp;&nbsp;{{ $item->patient->alergi ?? '-' }}
+                                                    </div>
+                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="list-kunjungan-terakhir">
                                   Muffin lemon drops chocolate chupa chups jelly beans dessert jelly-o. Soufflé gummies gummies. Ice cream powder marshmallow cotton candy oat cake wafer. Marshmallow gingerbread tootsie roll. Chocolate cake bonbon jelly beans lollipop jelly beans halvah marzipan danish pie. Oat cake chocolate cake pudding bear claw liquorice gingerbread icing sugar plum brownie. Toffee cookie apple pie cheesecake bear claw sugar plum wafer gummi bears fruitcake. 
                                 </div>
                                 <div class="tab-pane fade" id="list-rawat-jalan">
-                                  Ice cream dessert candy sugar plum croissant cupcake tart pie apple pie. Pastry chocolate chupa chups tiramisu. Tiramisu cookie oat cake. Pudding brownie bonbon. Pie carrot cake chocolate macaroon. Halvah jelly jelly beans cake macaroon jelly-o. Danish pastry dessert gingerbread powder halvah. Muffin bonbon fruitcake dragée sweet sesame snaps oat cake marshmallow cheesecake. Cupcake donut sweet bonbon cheesecake soufflé chocolate bar.
+                                    @foreach ($itemPatient->queues as $kunj)
+                                        <div class="accordion accordion-header-primary" id="accordionStyle{{ $loop->iteration ?? '' }}">
+                                            <div class="accordion-item card border">
+                                                <h2 class="accordion-header">
+                                                    <button type="button" class="accordion-button collapsed text-uppercase" data-bs-toggle="collapse" data-bs-target="#accordionStyle{{ $loop->iteration }}-1" aria-expanded="false">
+                                                    {{ $kunj->dpjp->roomDetail->name ?? '' }} - {{ $kunj->dpjp->name ?? '' }}
+                                                    </button>
+                                                </h2>
+                                            
+                                                <div id="accordionStyle{{ $loop->iteration }}-1" class="accordion-collapse collapse" data-bs-parent="#accordionStyle1">
+                                                    <div class="accordion-body">
+                                                    Lemon drops chocolate cake gummies carrot cake chupa chups muffin topping. Sesame snaps icing marzipan gummi
+                                                    bears macaroon dragée danish caramels powder. Bear claw dragée pastry topping soufflé. Wafer gummi bears
+                                                    marshmallow pastry pie.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                                 <div class="tab-pane fade" id="list-laboratorium">
                                   Marzipan cake oat cake. Marshmallow pie chocolate. Liquorice oat cake donut halvah jelly-o. Jelly-o muffin macaroon cake gingerbread candy cupcake. Cake lollipop lollipop jelly brownie cake topping chocolate. Pie oat cake jelly. Lemon drops halvah jelly cookie bonbon cake cupcake ice cream. Donut tart bonbon sweet roll soufflé gummies biscuit. Wafer toffee topping jelly beans icing pie apple pie toffee pudding. Tiramisu powder macaroon tiramisu cake halvah. 
@@ -98,7 +324,6 @@
     </div>
     {{-- end data riwayat pemeriksaan pasien --}}
 
-    @role('Dokter Poli')
     {{-- Menu Rajal Dokter --}}
     <div class="card">
         <div class="card-body">
@@ -407,7 +632,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'perawat' ? 'show active' : '' }}"
+                    {{-- <div class="tab-pane fade {{ session('btn') == 'perawat' ? 'show active' : '' }}"
                         id="navs-justified-messages" role="tabpanel">
                         @can('tambah rme perawat')
                             <div class="text-end mb-3">
@@ -428,11 +653,7 @@
                                         Edit Asesmen Keperawatan
                                     </a>
                                 @endif
-
-
-
                             </div>
-                            {{-- @endif --}}
                         @endcan
                         <table class="table" id="example">
                             <thead>
@@ -447,7 +668,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($asesmentPatient as $asesment)
+                                @foreach ($asesmentPatient as $asesment)
                                     <tr class="{{ $asesment->queue_id == $item->id ? 'text-success' : '' }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $asesment->patient->name }}</td>
@@ -467,10 +688,10 @@
                                             </td>
                                         @endcanany
                                     </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
-                    </div>
+                    </div> --}}
                     <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}"
                         id="navs-justified-cppt" role="tabpanel">
                         <div class="text-end mb-3">
@@ -784,11 +1005,9 @@
         </div>
     </div>
     {{-- end Menu Rajal Dokter --}}
-    @endrole
 
-    @role('Perawat Rajal')     
     {{-- Menu Rajal Perawata --}}
-    <div class="card">
+    {{-- <div class="card">
         <div class="card-body">
             <div class="nav-align-top mb-2 shadow-sm">
                 <ul class="nav nav-tabs nav-sm nav-fill" role="tablist">
@@ -914,64 +1133,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="mb-3 mt-2 mx-3 parent row d-flex justify-content-between">
-                                    @php
-                                        $ttd_dokter = '';
-                                        $ttd_pasien = '';
-                                        $nama_dokter = '';
-                                        $nama_pasien = '';
-                                    @endphp
-                                    <div class="col-md-5 row d-flex justify-content-center">
-                                        <h6 class="fw-bold text-center mb-4">Tanda Tangan Dokter</h6>
-                                        <div class="text-center">
-                                            <img src="{{ asset('storage/' . $ttd_dokter) }}" alt="" id="ImgTtdDokter" style="max-width: 200px">
-                                            <textarea id="ttdDokter" name="ttd_dokter" style="display: none;">{{ $ttd_dokter }}</textarea>
-                                            <div class="col">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <button type="button" class="col-12 btn btn-sm btn-dark"
-                                                            onclick="openModal(this, 'ImgTtdDokter', 'ttdDokter', 'nm_dokter')">Tanda
-                                                            Tangan</button>
-                                                    </div>
-                                                    <div class="col">
-                                                        <button type="button" class="col-12 btn btn-sm btn-secondary"
-                                                            id="clearImgDokter">Clear</button>
-                                                    </div>
-                                                    <div class="col-12 mt-2">
-                                                        <input type="text" class="form-control form-control-sm text-center"
-                                                            name="nm_dokter" id="nm_dokter" value="{{ $nama_dokter }}"
-                                                            placeholder="Nama Lengkap" readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5 row d-flex justify-content-center">
-                                        <h6 class="fw-bold text-center mb-4">Tanda tangan Pasien/Wali</h6>
-                                        <div class="text-center">
-                                            <img src="{{ asset('storage/' . $ttd_pasien) }}" alt="" id="ImgTtdKeluargaPasien" style="max-width: 200px">
-                                            <textarea id="ttd" name="ttd" style="display: none;">{{ $item->patient->name }}</textarea>
-                                            <div class="col">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <button type="button" class="col-12 btn btn-sm btn-dark"
-                                                            onclick="openModalTtdBottom(this, 'ImgTtdKeluargaPasien', 'ttd')">Tanda
-                                                            Tangan</button>
-                                                    </div>
-                                                    <div class="col">
-                                                        <button type="button" class="col-12 btn btn-sm btn-secondary"
-                                                            id="clearImgPerawat">Clear</button>
-                                                    </div>
-                                                    <div class="col-12 mt-2">
-                                                        <input type="text" class="form-control form-control-sm text-center"
-                                                            name="nm_pasien" id="nm_pasien" value="{{ $item->patient->name }}"
-                                                            placeholder="Nama Lengkap" readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
                                 <div class="mb-3 text-end">
                                     <button type="submit" class="btn btn-success btn-sm mx-3">Simpan</button>
                                 </div>
@@ -980,7 +1141,7 @@
                     </div>
                     <div class="tab-pane fade {{ session('perawat') == 'pemeriksaan' ? 'show active' : '' }}"
                         id="navs-justified-pemeriksaan" role="tabpanel">
-                        <form action="{{ route('rajal/asesmen/status/fisik.store', $item->id) }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
@@ -1103,7 +1264,7 @@
                     </div>
                     <div class="tab-pane fade {{ session('perawat') == 'psikologis' ? 'show active' : '' }}"
                         id="navs-justified-psikologis" role="tabpanel">
-                        <form action="{{ route('rajal/asesmen/status/fisik.store', $item->id) }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
@@ -1140,7 +1301,7 @@
                         </form>
                     </div>
                     <div class="tab-pane fade {{ session('perawat') == 'soap' ? 'show active' : '' }}" id="navs-justified-soap" role="tabpanel">
-                        <form action="{{ route('rajal/asesmen/status/fisik.store', $item->id) }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
@@ -1177,31 +1338,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- end Menu Rajal Perawat --}}
-    @endrole
-
-
-    
-
-    {{-- Hasil Pemeriksaan --}}
-    {{-- <div class="card overflow-hidden mb-4 mt-3" style="height: 500px;">
-        <h5 class="card-title px-4 mt-3 m-0">
-            Hasil Pemeriksaan
-        </h5>
-        <hr class="mb-0">
-        <div class="card-body mt-0" id="vertical-example">
-          <p>Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
-          <p>Marzipan oat cake caramels chocolate. Lemon drops cheesecake jelly beans sweet icing pudding croissant. Donut candy canes carrot cake soufflé. Croissant candy wafer pie I love oat cake lemon drops caramels jujubes. I love macaroon halvah liquorice cake. Danish sweet roll pudding cookie sweet roll I love. Jelly cake I love bear claw jujubes dragée gingerbread. I love cotton candy carrot cake halvah biscuit I love macaroon cheesecake tootsie roll. Chocolate cotton candy biscuit I love fruitcake cotton candy biscuit tart gingerbread. Powder oat cake I love. Cheesecake candy canes macaroon I love wafer I love sweet roll ice cream. Toffee cookie macaroon lemon drops tart candy canes. Gummies gummies pie tiramisu I love bear claw cheesecake.</p>
-          <p>Marzipan oat cake caramels chocolate. Lemon drops cheesecake jelly beans sweet icing pudding croissant. Donut candy canes carrot cake soufflé. Croissant candy wafer pie I love oat cake lemon drops caramels jujubes. I love macaroon halvah liquorice cake. Danish sweet roll pudding cookie sweet roll I love. Jelly cake I love bear claw jujubes dragée gingerbread. I love cotton candy carrot cake halvah biscuit I love macaroon cheesecake tootsie roll. Chocolate cotton candy biscuit I love fruitcake cotton candy biscuit tart gingerbread. Powder oat cake I love. Cheesecake candy canes macaroon I love wafer I love sweet roll ice cream. Toffee cookie macaroon lemon drops tart candy canes. Gummies gummies pie tiramisu I love bear claw cheesecake.</p>
-          <p>Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
-          <p>Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
-          <p class="mb-0">Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé jelly gummi bears lemon drops. Chocolate bar I love macaroon danish candy pudding. Jelly carrot cake I love tart cake bear claw macaroon candy candy canes. Muffin gingerbread sweet jujubes croissant sweet roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love croissant. Donut carrot cake ice cream ice cream. Wafer I love pie danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate marzipan jelly ice cream cake.</p>
-        </div>
-      </div> --}}
-    {{-- end Hasil Pemeriksaan --}}
-
-    {{-- form input --}}
 
 
     {{-- modal --}}

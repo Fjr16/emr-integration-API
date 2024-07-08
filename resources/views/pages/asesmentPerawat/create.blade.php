@@ -24,7 +24,7 @@
                         {{ $item->patient->name }} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
                         <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
-                    <h6>{{ $item->doctorPatient->user->name }} ({{ $item->doctorPatient->user->staff_id }})</h6>
+                    <h6>{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
                 </div>
                 <div class="col-8 text-end">
                     <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->no_antrian ?? '' }}</span></p>
@@ -231,11 +231,11 @@
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Alergi Makanan</label>
-                        <p class="multi-line-text">{!! $itemAss->alergi_makanan ?? '' !!}</p>
+                        <p class="multi-line-text">{!! $item->patient->alergi_makanan ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Alergi Obat</label>
-                        <p class="multi-line-text">{!! $itemAss->alergi_obat ?? '' !!}</p>
+                        <p class="multi-line-text">{!! $item->patient->alergi_obat ?? '' !!}</p>
                     </div>
                 </div>
 
@@ -343,29 +343,29 @@
                 <div class="row mb-3">
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Subjective:</label>
-                        <p class="multi-line-text">{!! $soapPerawat->subjective ?? '' !!}</p>
+                        <p class="multi-line-text">{!! $itemAss->subjective ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Objective:</label>
-                        <p class="multi-line-text">{!! $soapPerawat->objective ?? '' !!}</p>
+                        <p class="multi-line-text">{!! $itemAss->objective ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Assesment:</label>
-                        <p class="multi-line-text">{!! $soapPerawat->asesment ?? '' !!}</p>
+                        <p class="multi-line-text">{!! $itemAss->asesmen ?? '' !!}</p>
                     </div>
                     <div class="col-3">
                         <label class="col-form-label fw-bold">Planning:</label>
-                        <p class="multi-line-text">{!! $soapPerawat->planning ?? '' !!}</p>
+                        <p class="multi-line-text">{!! $itemAss->planning ?? '' !!}</p>
                     </div>
                 </div>
                 
                 <hr>
                 <div class="row mx-4">
                     <div class="text-end align-self-center">
-                        <p class="mb-0 mx-4">Padang, {{ $soapPerawat->created_at->format('d M Y') }}</p>
-                        <p class="mb-0 mx-5 px-3 fw-bold">Perawat,</p>
-                        <img src="{{ asset('storage/' . $soapPerawat->ttd_user) }}" width="150" alt="">
-                        <p class="fw-bold">{{ $soapPerawat->user->name ?? '' }}</p>
+                        <p class="mb-0">Padang, {{ $itemAss->created_at->format('d M Y') ?? 'Unknown' }}</p>
+                        <p class="mb-1 fw-bold">Perawat,</p>
+                        <img src="{{ asset('storage/' . $itemAss->ttd ?? '') }}" width="150" alt="">
+                        <p class="fw-bold">{{ $itemAss->user->name ?? '' }}</p>
                     </div>
                 </div>
 
@@ -441,11 +441,11 @@
                                         <div class="row mb-3">
                                             <div class="col-6">
                                                 <label class="form-label fw-bold">Alergi Makanan</label>
-                                                <textarea id="editor4" class="form-control" id="alergi_makanan" name="alergi_makanan" rows="6">{{ session('data.alergi_makanan') }}</textarea>
+                                                <textarea id="editor4" class="form-control" id="alergi_makanan" name="alergi_makanan" rows="6">{{ session('alergi.makanan', $item->patient->alergi_makanan ?? '') }}</textarea>
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label fw-bold">Alergi Obat</label>
-                                                <textarea id="editor4" class="form-control" id="alergi_obat" name="alergi_obat" rows="6">{{ session('data.alergi_obat') }}</textarea>
+                                                <textarea id="editor4" class="form-control" id="alergi_obat" name="alergi_obat" rows="6">{{ session('alergi.obat', $item->patient->alergi_obat ?? '') }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -745,7 +745,7 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label for="objective" class="form-label">Objective</label>
-                                                    <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . session('data.keadaan_umum') . "\r\n" . "Nadi: " . session('data.nadi') . " bpm\r\n" . "Tekanan Darah: " . session('data.td_sistolik') . " / " . session('data.td_diastolik') . " mmHg\r\n" . "Suhu: " . session('data.suhu') . " °C\r\n" . "Nafas: " . session('data.nafas') . " x/menit\r\n" . "Tinggi Badan: " . session('data.tb') . "\r\n" . "Berat Badan: " . session('data.bb') }}</textarea>
+                                                    <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . session('data.keadaan_umum') . "\r\n" . "Nadi: " . session('data.nadi') . " bpm\r\n" . "Tekanan Darah: " . session('data.td_sistolik') . " / " . session('data.td_diastolik') . " mmHg\r\n" . "Suhu: " . session('data.suhu') . " °C\r\n" . "Nafas: " . session('data.nafas') . " x/menit\r\n" . "Tinggi Badan: " . session('data.tb') . " cm\r\n" . "Berat Badan: " . session('data.bb') . ' kg' }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="row">

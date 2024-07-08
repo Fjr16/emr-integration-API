@@ -36,9 +36,9 @@ class Patient extends Model
         'nm_ibu',
         'nm_wali',
         'nik',
-        'alergi',
+        'alergi_makanan',
+        'alergi_obat',
         'suku',
-        'isKaryawan',
         'bangsa',
     ];
 

@@ -275,9 +275,15 @@
                                 placeholder="" name="suku" aria-describedby="defaultFormControlHelp"
                                 value="{{ old('suku', $item->suku) }}" />
                         </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Daftar Alergi Pasien</label>
-                            <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi" rows="3">{{ old('alergi', $item->alergi) }}</textarea>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="exampleFormControlTextarea1" class="form-label">Alergi Makanan</label>
+                                <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi_makanan" rows="5">{{ old('alergi', $item->alergi_makanan ?? '') }}</textarea>
+                            </div>
+                            <div class="col-6">
+                                <label for="exampleFormControlTextarea1" class="form-label">Alergi Obat</label>
+                                <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="alergi_obat" rows="5">{{ old('alergi', $item->alergi_obat ?? '') }}</textarea>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-sm btn-dark mb-3">Simpan</button>
                     </div>

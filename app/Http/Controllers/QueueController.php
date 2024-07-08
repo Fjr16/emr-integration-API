@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
-use App\Models\DoctorPatient;
 use App\Models\DoctorsSchedule;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -12,8 +11,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-
-use function Pest\Laravel\json;
 
 class QueueController extends Controller
 {
@@ -101,10 +98,9 @@ class QueueController extends Controller
         $today = now();
         $doctors = User::find($request->doctor_id);
 
-        if ($doctors->roomDetail->kode_dokter_poli == 'A') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
+        $roomCode = $doctors->roomDetail->kode_dokter_poli ?? '';
+        if ($roomCode) {
             $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
                 ->where('no_antrian', 'like', $roomCode . '%')
                 ->orderBy('no_antrian', 'desc')
                 ->first();
@@ -112,162 +108,22 @@ class QueueController extends Controller
             $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
             // Format nomor antrian sesuai aturan
             $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-
-            // jika dia adalah poli Jantung
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'B') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-            // jika dia adalahh poli penyakit dalam
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'C') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-            // jika dia adalah poli Penyakit Dalam
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'D') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-            // jika dia adalah poli onkologi
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'E') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-            // jika dia poli PenyakitDalam
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'F') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-            // jika dia adalah poli Orthopedi
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'G') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-            // jika dia adalah poli beda umum
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'H') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-            // jika dia adalah poli Orthopedi
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'J') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-
-            // jika dia adalah poli Bedah Umum
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'K') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'NON UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
-        } elseif ($doctors->roomDetail->kode_dokter_poli == 'I') {
-            $roomCode = $doctors->roomDetail->kode_dokter_poli;
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('category', 'UROLOGI')
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-            $data['no_antrian'] = $queueNumber;
+        }else{
+            return back()->with('error', 'Mohon Lengkapi Data Master kode Dokter Anda !!');
         }
-        $category = 'NON UROLOGI';
-
+        
+        $data['no_antrian'] = $queueNumber;
         $data['patient_id'] = $request['patient_id'] ?? '';
         $data['patient_category_id'] = $request['patient_category_id'];
+        $data['dokter_id'] = $request->doctor_id;
         $data['tgl_antrian'] = $request['tgl_antrian'];
         $data['no_rujukan'] = $request['no_rujukan'];
         $data['last_diagnostic'] = $request['last_diagnostic'];
         $data['status_antrian'] = 'WAITING';
-        $data['category'] = $category;
         $data['user_id'] = Auth::user()->id;
         $data['kuota'] = $request['kuota'];
 
-        if ($new = Queue::create($data)) {
-            $dokterPasien['queue_id'] = $new->id;
-            $dokterPasien['user_id'] = $request->doctor_id;
-            DoctorPatient::create($dokterPasien);
-        }
+        $new = Queue::create($data);
 
         session()->flash('queue_id', $new->id);
         return redirect()->route('antrian.create')->with('success', 'Antrian Berhasil Ditambahkan');
@@ -370,7 +226,9 @@ class QueueController extends Controller
                         $currentDate->addDay();
     
     
-                        $totalAntrian = Queue::where('status_antrian', 'WAITING')->whereDate('tgl_antrian', $date)->whereHas('doctorPatient', function ($query) use ($dokterID) {
+                        $totalAntrian = Queue::where('status_antrian', 'WAITING')
+                        ->whereDate('tgl_antrian', $date)
+                        ->whereHas('dpjp', function ($query) use ($dokterID) {
                             $query->where('user_id', $dokterID);
                         })->count();
     

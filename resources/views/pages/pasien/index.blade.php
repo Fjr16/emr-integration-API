@@ -22,29 +22,11 @@
                         <th>No</th>
                         <th>No Rekam Medis</th>
                         <th>No Kartu</th>
-                        {{-- <th>NIK</th> --}}
+                        <th>NIK</th>
                         <th>Nama</th>
-                        {{-- <th>Tempat / Tanggal Lahir</th>
-                        <th>Jenis Kelamin</th> --}}
+                        <th>Tempat / Tanggal Lahir</th>
+                        <th>Jenis Kelamin</th>
                         <th>Telp</th>
-                        {{-- <th>Agama</th>
-                        <th>Bangsa</th>
-                        <th>Alamat</th>
-                        <th>RW</th>
-                        <th>RT</th>
-                        <th>Kelurahan / Desa</th>
-                        <th>Kecamatan</th>
-                        <th>Kabupaten / Kota</th>
-                        <th>Provinsi</th>
-                        <th>Suku Bangsa</th>
-                        <th>Pekerjaan</th>
-                        <th>Pendidikan</th>
-                        <th>Status</th>
-                        <th>Nama Ayah</th>
-                        <th>Nama Ibu</th>
-                        <th>Nama Wali</th> --}}
-                        <th>Alergi</th>
-                        {{-- <th>Karyawan</th> --}}
                         @canany(['edit pasien rumah sakit', 'delete pasien rumah sakit'])
                             <th>Action</th>
                         @endcanany
@@ -56,29 +38,11 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
                             <td>{{ $item->noka ?? '--' }}</td>
-                            {{-- <td>{{ $item->nik ?? '-' }}</td> --}}
+                            <td>{{ $item->nik ?? '-' }}</td>
                             <td>{{ $item->name ?? '-' }}</td>
-                            {{-- <td>{{ $item->tempat_lhr ?? '-' }} / {{ $item->tanggal_lhr ?? '-' }}</td>
-                            <td>{{ $item->jenis_kelamin ?? '-' }}</td> --}}
+                            <td>{{ $item->tempat_lhr ?? '-' }} / {{ $item->tanggal_lhr ?? '-' }}</td>
+                            <td>{{ $item->jenis_kelamin ?? '-' }}</td>
                             <td>{{ $item->telp ?? '-' }}</td>
-                            {{-- <td>{{ $item->agama ?? '-' }}</td>
-                            <td>{{ $item->bangsa ?? '-' }}</td>
-                            <td>{{ $item->alamat ?? '-' }}</td>
-                            <td>{{ $item->rw ?? '-' }}</td>
-                            <td>{{ $item->rt ?? '-' }}</td>
-                            <td>{{ $item->village->name ?? '-' }}</td>
-                            <td>{{ $item->district->name ?? '-' }}</td>
-                            <td>{{ $item->city->name ?? '-' }}</td>
-                            <td>{{ $item->province->name ?? '-' }}</td>
-                            <td>{{ $item->suku ?? '-' }}</td>
-                            <td>{{ $item->job->name ?? '-' }}</td>
-                            <td>{{ $item->pendidikan ?? '-' }}</td>
-                            <td>{{ $item->status ?? '-' }}</td>
-                            <td>{{ $item->nm_ayah ?? '-' }}</td>
-                            <td>{{ $item->nm_ibu ?? '-' }}</td>
-                            <td>{{ $item->nm_wali ?? '-' }}</td> --}}
-                            <td>{{ $item->alergi ?? '-' }}</td>
-                            {{-- <td>{{ $item->isKaryawan == true ? 'YA' : 'TIDAK' }}</td> --}}
                             @canany(['edit pasien rumah sakit', 'delete pasien rumah sakit'])
                                 <td>
                                     <div class="dropdown">

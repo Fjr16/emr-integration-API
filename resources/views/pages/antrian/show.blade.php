@@ -49,7 +49,7 @@
         <div class="row mb-3">
           <label for="basic-default-name" class="col-sm-3 col-form-label">Poli / Dokter</label>
           <div class="col-sm-9">
-            <input type="text" value="{{ $item->doctorPatient->user->roomDetail->name ?? '' }} / {{ $item->doctorPatient->user->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
+            <input type="text" value="{{ $item->dpjp->roomDetail->name ?? '' }} / {{ $item->dpjp->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
           </div>
         </div>
         <div class="row mb-3">
@@ -64,7 +64,7 @@
               Pasien Yth, {{ $item->patient->name }} sudah terdaftar di RSK Bedah Ropanasuri dengan:
 
               Nomor RM : {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2))}}
-              di Poli : {{ $item->doctorPatient->user->roomDetail->name ?? '' }}
+              di Poli : {{ $item->dpjp->roomDetail->name ?? '' }}
               Tanggal : {{ \Carbon\Carbon::parse($item->tgl_antrian)->format('d-m-Y') ?? ''}}
               Jadwal Dokter : {{ $jamAwal->format('H:i') ?? '' }}-{{ $jamAkhir->format('H:i') ?? '' }} WIB
 

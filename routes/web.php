@@ -398,7 +398,7 @@ Route::group(['middleware' => ['permission:registrasi ulang antrian']], function
     Route::get('/antrian/konfirmasi/update/{id}', [QueueConfirmController::class, 'update'])->name('antrian/konfirmasi.update');
 });
 
-//Pasien
+//Pasien (done)
 Route::group(['middleware' => ['permission:daftar pasien rumah sakit']], function () {
     Route::get('/pasien', [PatientController::class, 'index'])->name('pasien.index');
     Route::get('/pasien/detail/{id}', [PatientController::class, 'detail'])->name('pasien.detail');

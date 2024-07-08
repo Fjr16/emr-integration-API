@@ -37,9 +37,9 @@ return new class extends Migration
             $table->string('nm_ibu')->nullable();
             $table->string('nm_wali')->nullable();
             $table->string('nik')->nullable();
-            $table->text('alergi')->nullable();
+            $table->text('alergi_makanan')->nullable();
+            $table->text('alergi_obat')->nullable();
             $table->string('suku')->nullable();
-            $table->boolean('isKaryawan')->nullable();
             $table->string('bangsa')->nullable();
             $table->timestamps();
         });

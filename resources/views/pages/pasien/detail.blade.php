@@ -213,32 +213,21 @@
 
                         {{-- alergi --}}
                         <div class="col col-4">
-                            <label for="basic-default-name" class="col-form-label">Daftar Alergi Pasien</label>
+                            <label for="basic-default-name" class="col-form-label">Alergi Makanan</label>
                         </div>
                         <div class="col col-8">
-                            : &nbsp;&nbsp;&nbsp;{{ $item->alergi ?? '-' }}
+                            : &nbsp;&nbsp;&nbsp;{{ str_replace("\r\n", ", ", $item->alergi_makanan) ?? '-' }}
+                        </div>
+                        <div class="col col-4">
+                            <label for="basic-default-name" class="col-form-label">Alergi Obat</label>
+                        </div>
+                        <div class="col col-8">
+                            : &nbsp;&nbsp;&nbsp;{{ str_replace("\r\n", ", ", $item->alergi_obat) ?? '-' }}
                         </div>
 
                     </div>
                 </div>
             </div>
         </div>
-        {{-- <div class="card bg-warning p-1">
-            <div>
-                <textarea class="form-control" id="text-area1" rows="9">
-              Pasien Yth, {{ $item->name }} sudah terdaftar di RSK Bedah Ropanasuri dengan:
-
-              Nomor RM : {{ $item->no_rm }}
-              di Poli : {{ $item->doctor->poli->name ?? '' }}
-              Tanggal : {{ $item->tgl_antrian }}
-              Jadwal Dokter :
-
-              Mohon melakukan pendaftaran ulang kebagian PENDAFTARAN dimulai pukul 08:00 sampai minimal 15 menit sebelum poliklinik dimulai.
-              Dengan membawa KTP/KK, Kartu BPJS/Asuransi, dan Jaminan Lainnya.
-
-            </textarea>
-            </div>
-            <button type="button" class="btn btn-warning btn-sm mt-2" onclick="copyToClipboard()">Copy</button>
-        </div> --}}
     </div>
 @endsection

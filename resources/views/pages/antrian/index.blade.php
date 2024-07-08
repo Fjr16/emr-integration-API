@@ -52,8 +52,8 @@
                             @endphp
                             <td>{{ $tglAntrian->format('d-m-Y') ?? '' }}</td>
                             <td>{{ $item->patient->name }}</td>
-                            <td>{{ $item->doctorPatient->user->roomDetail->name ?? '' }} /
-                                {{ $item->doctorPatient->user->name ?? '' }}</td>
+                            <td>{{ $item->dpjp->roomDetail->name ?? '' }} /
+                                {{ $item->dpjp->name ?? '' }}</td>
                             <td>{{ $item->patient->noka ?? '' }}</td>
                             <td>{{ $item->last_diagnostic ?? '-' }}</td>
                         </tr>

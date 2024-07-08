@@ -15,13 +15,13 @@ class Queue extends Model
     protected $fillable = [
         'patient_id',
         'user_id',
+        'dokter_id',
         'status_antrian',
         'no_antrian',
         'tgl_antrian',
         'patient_category_id',
         'no_rujukan',
         'last_diagnostic',
-        'category',
         'created_at'
     ];
 
@@ -44,9 +44,9 @@ class Queue extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function doctorPatient()
+    public function dpjp()
     {
-        return $this->hasOne(DoctorPatient::class);
+        return $this->belongsTo(User::class, 'dokter_id');
     }
 
     public function rawatJalanPoliPatient()
@@ -63,25 +63,14 @@ class Queue extends Model
     {
         return $this->hasMany(LaboratoriumRequest::class);
     }
-    public function permintaanLaboratoriumPatologiAnatomikPatient()
-    {
-        return $this->hasMany(PermintaanLaboratoriumPatologiAnatomikPatient::class);
-    }
     public function suratBuktiPelayananPatients()
     {
         return $this->hasMany(SuratBuktiPelayananPatient::class);
-    }
-
-    public function diagnosisKeperawatanPatient()
-    {
-        return $this->hasMany(DiagnosisKeperawatanPatient::class);
     }
     public function suratKeteranganPatient()
     {
         return $this->hasOne(SuratKeteranganPatients::class);
     }
-
-
     public function perawatInitialAssesment()
     {
         return $this->hasOne(PerawatInitialAsesment::class);

@@ -41,14 +41,14 @@
         <div class="row mb-3">
             <label for="basic-default-name" class="col-sm-3 col-form-label">Poli</label>
             <div class="col-sm-9">
-                <input type="text" value="{{ $item->doctorPatient->user->roomDetail->name ?? '' }}"
+                <input type="text" value="{{ $item->dpjp->roomDetail->name ?? '' }}"
                     class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>
         <div class="row mb-3">
             <label for="basic-default-name" class="col-sm-3 col-form-label">Dokter</label>
             <div class="col-sm-9">
-                <input type="text" value="{{ $item->doctorPatient->user->name ?? '' }}"
+                <input type="text" value="{{ $item->dpjp->name ?? '' }}"
                     class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>

@@ -7,6 +7,11 @@
     {{ session('success') }}
 </div>
 @endif
+@if (session()->has('error'))
+<div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
+    {{ session('error') }}
+</div>
+@endif
 <div class="d-flex mb-3">
     @can('tambah antrian')
     <h5 class="align-self-center m-0">Entri Antrian Pasien
@@ -231,7 +236,7 @@
                         <td>{{ $antrian->patient->name ?? '' }}</td>
                         <td>{{ implode('-', str_split(str_pad($antrian->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                         </td>
-                        <td>{{ $antrian->doctorPatient->user->roomDetail->name ?? '' }}</td>
+                        <td>{{ $antrian->dpjp->roomDetail->name ?? '' }}</td>
                         <td>{{ $antrian->last_diagnostic ?? '--' }}</td>
                         <td>
                             <span class="badge {{ $antrian->status_antrian == 'ARRIVED' ?  'bg-primary' : ($antrian->status_antrian == 'FINISHED' ? 'bg-sucess' : ($antrian->status_antrian == 'CANCEL' ? 'bg-danger' : 'bg-warning') ) }}">
