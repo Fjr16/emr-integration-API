@@ -9,9 +9,7 @@ use App\Models\PatientActionReport;
 use App\Models\RajalFarmasiPatient;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
-use App\Models\DiagnosisKeperawatanPatient;
 use App\Models\MedicineReceipt;
-use App\Models\PermintaanLaboratoriumPatologiAnatomikPatient;
 use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
 
@@ -77,39 +75,22 @@ class RawatJalanController extends Controller
 
         $today = new DateTime();
         $item = Queue::findOrFail($id);
-        $asesmentPatientLatest = DiagnosisKeperawatanPatient::where('patient_id', $item->patient->id)->latest()->first();
         $reportActions = PatientActionReport::where('patient_id', $item->patient->id)->latest()->get();
         $receipts = MedicineReceipt::where('patient_id', $item->patient->id)->latest()->get();
-        $diagnosisPatient = DiagnosisKeperawatanPatient::where('queue_id', $item->id)->first();
-        // $asesmentPatient = DiagnosisKeperawatanPatient::where('patient_id', $item->patient->id)->get();
-        $asesmentPatient = DiagnosisKeperawatanPatient::where('patient_id', $item->patient->id)
-    ->orderBy('created_at', 'desc')
-    ->get();
 
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         //hasil pemeriksaan radiologi
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
         // hasil pemeriksaan labor pa
-        $laborPaResults = PermintaanLaboratoriumPatologiAnatomikPatient::where('patient_id', $item->patient->id)->whereHas('antrianLaboratoriumPatologiAnatomiPatient', function($query){
-            $query->whereHas('detailAntrianLaboratoriumPatologiAnatomiPatient', function ($detail){
-                $detail->where('status', 'Validated')->orWhere('status', 'Unvalidate');
-            });
-        })
-        ->with(['antrianLaboratoriumPatologiAnatomiPatient.detailAntrianLaboratoriumPatologiAnatomiPatient'])
-        ->get();
         return view('pages.rawatjalan.show', [
             "title" => $title,
             "menu" => "In Patient",
             "item" => $item,
             'today' => $today,
-            'asesmentPatient' => $asesmentPatient,
-            'asesmentPatientLatest' => $asesmentPatientLatest,
             'reportActions' => $reportActions,
             'receipts' => $receipts,
             'sbpks' => $sbpks,
             'radiologiResults' => $radiologiResults,
-            'laborPaResults' => $laborPaResults,
-            'diagnosisPatient' => $diagnosisPatient,
         ]);
     }
 

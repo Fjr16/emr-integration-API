@@ -58,7 +58,6 @@ use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\OtherController;
-use App\Http\Controllers\PermintaanLaboratoriumPatogologiAnatomikController;
 use App\Http\Controllers\RajalGeneralConsentController;
 
 /*
@@ -658,61 +657,6 @@ Route::put('/radiologi/patient/hasil/update/{id}', [RadiologiPatientController::
 //Radiologi Patient Queue
 Route::get('/radiologi/patient/queue', [RadiologiPatientQueueController::class, 'index'])->name('radiologi/patient/queue.index');
 Route::post('/radiologi/patient/queue/store/{id}', [RadiologiPatientQueueController::class, 'store'])->name('radiologi/patient/queue.store');
-
-//Permintaan Laboratorium Patologi Anatomik
-//list permintaan pemeriksaan labor pa
-Route::group(['middleware' => ['permission:list permintaan pemeriksaan laboratorium pa']], function () {
-    Route::get('/permintaan/laboratorium/patologi/anatomik/index', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'index'])->name('permintaan/laboratorium/patologi/anatomik.index');
-});
-
-// atur jadwal pemeriksaan laboratorium pa
-Route::group(['middleware' => ['permission:atur jadwal pemeriksaan laboratorium pa']], function () {
-    Route::get('/permintaan/laboratorium/patologi/anatomik/createAntrian/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'createAntrian'])->name('permintaan/laboratorium/patologi/anatomik.createAntrian');
-    Route::post('/permintaan/laboratorium/patologi/anatomik/storeAntrian/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'storeAntrian'])->name('permintaan/laboratorium/patologi/anatomik.storeAntrian');
-});
-
-//daftar jadwal pemeriksaan labor pa
-Route::group(['middleware' => ['permission:daftar jadwal pemeriksaan laboratorium pa']], function () {
-    Route::get('/permintaan/laboratorium/patologi/anatomik/indexAntrian', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'indexAntrian'])->name('permintaan/laboratorium/patologi/anatomik.indexAntrian');
-    Route::get('/permintaan/laboratorium/patologi/anatomik/show/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'show'])->name('permintaan/laboratorium/patologi/anatomik.show');
-});
-
-// input hasil pemeriksaan laboratorium pa
-Route::group(['middleware' => ['permission:input hasil pemeriksaan laboratorium pa']], function () {
-    Route::get('/permintaan/laboratorium/patologi/anatomik/createHistopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'createHistopatologi'])->name('permintaan/laboratorium/patologi/anatomik.createHistopatologi');
-    Route::post('/permintaan/laboratorium/patologi/anatomik/storeHasilHispatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'storeHasilHispatologi'])->name('permintaan/laboratorium/patologi/anatomik.storeHasilHispatologi');
-    Route::get('/permintaan/laboratorium/patologi/anatomik/createSitopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'createSitopatologi'])->name('permintaan/laboratorium/patologi/anatomik.createSitopatologi');
-    Route::post('/permintaan/laboratorium/patologi/anatomik/storeHasilSitopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'storeHasilSitopatologi'])->name('permintaan/laboratorium/patologi/anatomik.storeHasilSitopatologi');
-});
-
-//edit hasil pemeriksaan laboratorium pa
-Route::group(['middleware' => ['permission:edit hasil pemeriksaan laboratorium pa']], function () {
-    Route::get('/permintaan/laboratorium/patologi/anatomik/editHistopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'editHistopatologi'])->name('permintaan/laboratorium/patologi/anatomik.editHistopatologi');
-    Route::put('/permintaan/laboratorium/patologi/anatomik/updateHasilHispatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'updateHasilHispatologi'])->name('permintaan/laboratorium/patologi/anatomik.updateHasilHispatologi');
-    Route::get('/permintaan/laboratorium/patologi/anatomik/editSitopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'editSitopatologi'])->name('permintaan/laboratorium/patologi/anatomik.editSitopatologi');
-    Route::put('/permintaan/laboratorium/patologi/anatomik/updateHasilSitopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'updateHasilSitopatologi'])->name('permintaan/laboratorium/patologi/anatomik.updateHasilSitopatologi');
-});
-
-//print hasil pemeriksaan laboratorium pa
-Route::group(['middleware' => ['permission:print hasil pemeriksaan laboratorium pa']], function () {
-    Route::get('/permintaan/laboratorium/patologi/anatomik/showHistopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'showHistopatologi'])->name('permintaan/laboratorium/patologi/anatomik.showHistopatologi');
-    Route::get('/permintaan/laboratorium/patologi/anatomik/showSitopatologi/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'showSitopatologi'])->name('permintaan/laboratorium/patologi/anatomik.showSitopatologi');
-});
-
-//validasi status pemeriksaan laboratorium pa
-Route::group(['middleware' => ['permission:validasi status pemeriksaan laboratorium pa']], function () {
-    Route::put('/permintaan/laboratorium/patologi/anatomik/updateStatus/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'updateStatus'])->name('permintaan/laboratorium/patologi/anatomik.updateStatus');
-});
-
-//tambah permintaan labor pa
-// Route::group(['middleware' => ['permission:tambah permintaan labor pa']], function () {
-Route::get('/permintaan/laboratorium/patologi/anatomik/create/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'create'])->name('permintaan/laboratorium/patologi/anatomik.create');
-Route::post('/permintaan/laboratorium/patologi/anatomik/store/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'store'])->name('permintaan/laboratorium/patologi/anatomik.store');
-Route::get('/permintaan/laboratorium/patologi/anatomik/edit/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'edit'])->name('permintaan/laboratorium/patologi/anatomik.edit');
-Route::post('/permintaan/laboratorium/patologi/anatomik/update/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'update'])->name('permintaan/laboratorium/patologi/anatomik.update');
-Route::get('/permintaan/laboratorium/patologi/anatomik/print/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'print'])->name('permintaan/laboratorium/patologi/anatomik.print');
-Route::get('/permintaan/laboratorium/patologi/anatomik/delete/{id}', [PermintaanLaboratoriumPatogologiAnatomikController::class, 'delete'])->name('permintaan/laboratorium/patologi/anatomik.delete');
-// });
 
 
 // rme start

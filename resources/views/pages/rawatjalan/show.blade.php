@@ -448,7 +448,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($asesmentPatient as $asesment)
+                                {{-- @foreach ($asesmentPatient as $asesment)
                                     <tr class="{{ $asesment->queue_id == $item->id ? 'text-success' : '' }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $asesment->patient->name }}</td>
@@ -468,7 +468,7 @@
                                             </td>
                                         @endcanany
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
