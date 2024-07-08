@@ -49,7 +49,7 @@ class AsesmentPerawatController extends Controller
         $item = Queue::find($id);
         $itemAss = $item->perawatInitialAssesment;
         $soapPerawat = $item->rmeCppts->where('category_soap', 'PERAWAT')->first() ?? '';
-        return view('pages.asesmentPerawatRawatJalanPrint.print', [
+        return view('pages.asesmentPerawat.print', [
             'title' => 'Print Assesment Perawat',
             'menu' => 'Rawat Jalan',
             'itemAss' => $itemAss,
@@ -361,14 +361,6 @@ class AsesmentPerawatController extends Controller
         return back()->with([
             'success' => 'Data Asesmen Awal Berhasil Disimpan',
             'perawat' => 'anamnesis'
-        ]);
-    }
-
-    public function show($id){
-        $item = PerawatInitialAsesment::find($id);
-        return view('pages.asesmentPerawat.print', [
-            'title' => 'Rawat Jalan',
-            'menu' => 'Rawat Jalan',
         ]);
     }
 }

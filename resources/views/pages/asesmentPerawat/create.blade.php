@@ -92,7 +92,7 @@
             <div class="card-header pb-0">
                 <div class="row">
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('asesmen/awal/perawat.print', $item->id) }}" class="btn btn-sm btn-dark me-2"><i class="bx bx-printer"></i></a>
+                        <a href="{{ route('asesmen/awal/perawat.print', $item->id) }}" class="btn btn-sm btn-dark me-2" target="_blank"><i class="bx bx-printer"></i></a>
                         <a href="{{ route('asesmen/awal/perawat.edit', $itemAss->id) }}" class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
                     </div>
                     <div class="col-4 text-center align-self-center">
                         <h3 class="mb-2">SKOR MST</h3>
-                        <h1>0</h1>
+                        <h1>{{ $itemAss->skor_ass_gizi_1 ?? 0 + $itemAss->skor_ass_gizi_2 ?? 0  }}</h1>
                     </div>
                 </div>
 
@@ -362,9 +362,10 @@
                 <hr>
                 <div class="row mx-4">
                     <div class="text-end align-self-center">
-                        <p class="mb-0">Kota Padang, 06 Januari 2024</p>
-                        <img src="{{ asset('storage/' . $soapPerawat->ttd_user) }}" width="180" alt="">
-                        <p>{{ $soapPerawat->user->name ?? '' }}</p>
+                        <p class="mb-0 mx-4">Padang, {{ $soapPerawat->created_at->format('d M Y') }}</p>
+                        <p class="mb-0 mx-5 px-3 fw-bold">Perawat,</p>
+                        <img src="{{ asset('storage/' . $soapPerawat->ttd_user) }}" width="150" alt="">
+                        <p class="fw-bold">{{ $soapPerawat->user->name ?? '' }}</p>
                     </div>
                 </div>
 
