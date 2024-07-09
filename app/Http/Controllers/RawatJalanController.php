@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\MedicineReceipt;
 use App\Models\Patient;
+use App\Models\PerawatInitialAsesment;
 use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
 
@@ -32,8 +33,8 @@ class RawatJalanController extends Controller
         if ($user->hasRole('Dokter Poli')) {
             $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function ($query) use ($filterDate) {
                 $query->whereDate('created_at', $filterDate);
-            })->whereHas('doctorPatient', function ($query2) {
-                $query2->where('user_id', Auth::user()->id);
+            })->whereHas('dpjp', function ($query2) {
+                $query2->where('dokter_id', Auth::user()->id);
             })->get();
         } else {
             $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function ($query) use ($filterDate) {
@@ -63,32 +64,37 @@ class RawatJalanController extends Controller
     public function show($id, $title)
     {
         if (!session('btn')) {
-            session(['btn' => 'dokter']);
+            session(['btn' => 'riwayat']);
         } else {
             session(['btn' => session('btn')]);
         }
 
-        if (!session('dokter')) {
-            session(['dokter' => 'assesmen']);
+        if (!session('penunjang')) {
+            session(['penunjang' => 'radiologi']);
         } else {
-            session(['dokter' => session('dokter')]);
+            session(['penunjang' => session('penunjang')]);
+        }
+        if (!session('asesmen')) {
+            session(['asesmen' => 'dokter']);
+        } else {
+            session(['asesmen' => session('asesmen')]);
         }
 
         $today = new DateTime();
         $item = Queue::findOrFail($id);
-        $itemPatient = Patient::find($item->patient->id);
+        $riwKunjungans = Queue::where('patient_id', $item->patient->id)->where('status_antrian', 'ARRIVED')->orWhere('status_antrian', 'FINISHED')->latest()->get();
+
+        $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
         $reportActions = PatientActionReport::where('patient_id', $item->patient->id)->latest()->get();
         $receipts = MedicineReceipt::where('patient_id', $item->patient->id)->latest()->get();
-
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
-        //hasil pemeriksaan radiologi
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
-        // hasil pemeriksaan labor pa
         return view('pages.rawatjalan.show', [
             "title" => $title,
             "menu" => "In Patient",
             "item" => $item,
-            "itemPatient" => $itemPatient,
+            "itemAss" => $itemAss,
+            "riwKunjungans" => $riwKunjungans,
             'today' => $today,
             'reportActions' => $reportActions,
             'receipts' => $receipts,

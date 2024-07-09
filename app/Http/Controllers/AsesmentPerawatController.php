@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DoctorInitialAsessment;
 use App\Models\Queue;
 use App\Models\PerawatInitialAsesment;
 use App\Models\PerawatInitialAsesmentPsychology;
@@ -164,7 +165,7 @@ class AsesmentPerawatController extends Controller
             'patient_id' => $item->patient->id,
             'subjective' => $request->input('subjective'),
             'objective' => $request->input('objective'),
-            'asesment' => $request->input('asesmen'),
+            'asesmen' => $request->input('asesmen'),
             'planning' => $request->input('planning'),
             'ttd' => $request->input('ttd_user')
         ]);
@@ -194,6 +195,28 @@ class AsesmentPerawatController extends Controller
                 ]);
             }
             Session::forget(['alergi_makanan', 'alergi_obat', 'detail_psikologis', 'data']);
+            $newPerawat->queue->rawatJalanPoliPatient()->update([
+                'status' => 'ONGOING',
+            ]);
+            
+            // create otomatis dokter initial asesmen jika belum ada
+            if (!$newPerawat->queue->doctorInitialAssesment) {
+                DoctorInitialAsessment::create([
+                    'queue_id' => $item->id,
+                    'patient_id' => $item->patient->id,
+                    'user_id' => $item->dokter_id,
+                    'keluhan_utama' => $newPerawat->keluhan_utama ?? '',
+                    'keadaan_umum' => $newPerawat->keadaan_umum ?? '',
+                    'kesadaran' => $newPerawat->kesadaran ?? '',
+                    'tb' => $newPerawat->tb ?? null,
+                    'bb' => $newPerawat->bb ?? null,
+                    'nadi' => $newPerawat->nadi ?? null,
+                    'td_sistolik' => $newPerawat->td_sistolik ?? null,
+                    'td_diastolik' => $newPerawat->td_diastolik ?? null,
+                    'suhu' => $newPerawat->suhu ?? null,
+                    'nafas' => $newPerawat->nafas ?? null,
+                ]);
+            }
         }else{
             return back()->with([
                 'error' => 'Terjadi Kesalahan!! Mohon Submit Ulang !!'
@@ -334,6 +357,7 @@ class AsesmentPerawatController extends Controller
             'objective' => $request->input('objective'),
             'asesmen' => $request->input('asesmen'),
             'planning' => $request->input('planning'),
+            'ttd' => $request->input('ttd_user'),
         ]);
         if($dataToUpdate->update()){
             Session::forget('dataToUpdate');
@@ -360,6 +384,42 @@ class AsesmentPerawatController extends Controller
                 if ($alergi_obt && $alergi_obt != $item->patient->alergi_obat) {
                     $item->patient()->update([
                         'alergi_obat' => $alergi_obt,
+                    ]);
+                }
+
+                // update otomatis dokter initial asesmen jika ttd masih null
+                if ($item->queue->doctorInitialAssesment && !$item->queue->doctorInitialAssesment->ttd) {
+                    $item->queue->doctorInitialAssesment()->update([
+                        'queue_id' => $item->queue->id,
+                        'patient_id' => $item->queue->patient->id,
+                        'user_id' => $item->queue->dokter_id,
+                        'keluhan_utama' => $dataToUpdate->keluhan_utama ?? '',
+                        'keadaan_umum' => $dataToUpdate->keadaan_umum ?? '',
+                        'kesadaran' => $dataToUpdate->kesadaran ?? '',
+                        'tb' => $dataToUpdate->tb ?? null,
+                        'bb' => $dataToUpdate->bb ?? null,
+                        'nadi' => $dataToUpdate->nadi ?? null,
+                        'td_sistolik' => $dataToUpdate->td_sistolik ?? null,
+                        'td_diastolik' => $dataToUpdate->td_diastolik ?? null,
+                        'suhu' => $dataToUpdate->suhu ?? null,
+                        'nafas' => $dataToUpdate->nafas ?? null,
+                    ]);
+                }elseif (!$item->queue->doctorInitialAssesment){
+                    // create otomatis dokter initial asesmen
+                    DoctorInitialAsessment::create([
+                        'queue_id' => $item->queue->id,
+                        'patient_id' => $item->queue->patient->id,
+                        'user_id' => $item->queue->dokter_id,
+                        'keluhan_utama' => $dataToUpdate->keluhan_utama ?? '',
+                        'keadaan_umum' => $dataToUpdate->keadaan_umum ?? '',
+                        'kesadaran' => $dataToUpdate->kesadaran ?? '',
+                        'tb' => $dataToUpdate->tb ?? null,
+                        'bb' => $dataToUpdate->bb ?? null,
+                        'nadi' => $dataToUpdate->nadi ?? null,
+                        'td_sistolik' => $dataToUpdate->td_sistolik ?? null,
+                        'td_diastolik' => $dataToUpdate->td_diastolik ?? null,
+                        'suhu' => $dataToUpdate->suhu ?? null,
+                        'nafas' => $dataToUpdate->nafas ?? null,
                     ]);
                 }
             }

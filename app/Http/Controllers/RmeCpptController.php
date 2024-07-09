@@ -46,27 +46,11 @@ class RmeCpptController extends Controller
     public function create($id)
     {
         $item = Queue::find($id);
-        // handling verifikasi dpjp untuk cppt dari petugas lain
-        if(auth()->user()->id == $item->doctorPatient->user_id){
-            $needVerif = false;
-            foreach ($item->patient->rmeCppts as $cppt) {
-                if (($cppt->user_id != $item->doctorPatient->user_id) && ($cppt->ttd_dpjp == null)) {
-                    $needVerif = true;
-                    break;
-                }
-            }
-            if ($needVerif == true) {
-                return redirect()->route('rajal/cppt.show', $item->id)
-                                    ->with('notification', 'Untuk Melanjutkan Silahkan Verifikasi Dahulu !!');
-            }
-        }
-        $data = Medicine::all();
         $today = now()->format('Y-m-d H:i');
         return view('pages.cppt.create', [
             'title' => 'Rawat Jalan',
             'menu' => 'In Patient',
             'item' => $item,
-            'data' => $data,
             'today' => $today,
         ]);
     }

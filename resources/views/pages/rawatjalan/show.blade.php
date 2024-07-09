@@ -287,7 +287,7 @@
                                   Muffin lemon drops chocolate chupa chups jelly beans dessert jelly-o. Soufflé gummies gummies. Ice cream powder marshmallow cotton candy oat cake wafer. Marshmallow gingerbread tootsie roll. Chocolate cake bonbon jelly beans lollipop jelly beans halvah marzipan danish pie. Oat cake chocolate cake pudding bear claw liquorice gingerbread icing sugar plum brownie. Toffee cookie apple pie cheesecake bear claw sugar plum wafer gummi bears fruitcake. 
                                 </div>
                                 <div class="tab-pane fade" id="list-rawat-jalan">
-                                    @foreach ($itemPatient->queues as $kunj)
+                                    @foreach ($riwKunjungans as $kunj)
                                         <div class="accordion accordion-header-primary" id="accordionStyle{{ $loop->iteration ?? '' }}">
                                             <div class="accordion-item card border">
                                                 <h2 class="accordion-header">
@@ -298,9 +298,38 @@
                                             
                                                 <div id="accordionStyle{{ $loop->iteration }}-1" class="accordion-collapse collapse" data-bs-parent="#accordionStyle1">
                                                     <div class="accordion-body">
-                                                    Lemon drops chocolate cake gummies carrot cake chupa chups muffin topping. Sesame snaps icing marzipan gummi
-                                                    bears macaroon dragée danish caramels powder. Bear claw dragée pastry topping soufflé. Wafer gummi bears
-                                                    marshmallow pastry pie.
+                                                        <div class="table-responsive">
+                                                            <table class="table">
+                                                              <thead>
+                                                                <tr>
+                                                                  <th class="text-dark">Tanggal</th>
+                                                                  <th class="text-dark">Profesional Pemberi Asuhan</th>
+                                                                  <th class="text-dark">Subjective, Objective, Assesment, Planning</th>
+                                                                  <th class="text-dark">Nama & Ttd</th>
+                                                                </tr>
+                                                              </thead>
+                                                              <tbody class="table-border-bottom-0">
+                                                                @if ($item->soapDokter)     
+                                                                    <tr>
+                                                                        <td>{{ $item->soapDokter->created_at->format('d M Y') ?? '' }}</td>
+                                                                        <td>{{ $item->soapDokter->user->name ?? '' }}</td>
+                                                                        <td>
+                                                                            <p class="multi-line-text">{{ $item->soapDokter->subjective ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $item->soapDokter->objective ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $item->soapDokter->asesment ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $item->soapDokter->planning ?? '' }}</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="4" class="bg-info text-white">
+                                                                            Data Tidak Tersedia !!
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                              </tbody>
+                                                            </table>
+                                                          </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -340,20 +369,20 @@
                     </li>
                     <li class="nav-item">
                         <button id="btn-link" type="button"
-                            class="nav-link {{ session('btn') == 'dokter' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile"
-                            aria-controls="navs-justified-profile" aria-selected="false" onclick="showHasil()">
+                            class="nav-link {{ session('btn') == 'asesmen' ? 'active' : '' }} d-flex justify-content-center"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-asesmen"
+                            aria-controls="navs-justified-asesmen" aria-selected="false">
                             <i class="tf-icons bx bx-bookmark-alt-plus"></i>
-                            <p class="m-0">RME Dokter</p>
+                            <p class="m-0">Asesmen</p>
                         </button>
                     </li>
                     <li class="nav-item">
                         <button id="btn-link" type="button"
-                            class="nav-link {{ session('btn') == 'perawat' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages"
-                            aria-controls="navs-justified-messages" aria-selected="false">
-                            <i class="tf-icons bx bx-message-square-add"></i>
-                            <p class="m-0">Asesmen Keperawatan</p>
+                            class="nav-link {{ session('btn') == 'penunjang' ? 'active' : '' }} d-flex justify-content-center"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile"
+                            aria-controls="navs-justified-profile" aria-selected="false">
+                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
+                            <p class="m-0">Penunjang</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -424,7 +453,438 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'dokter' ? 'show active' : '' }}"
+                    <div class="tab-pane fade {{ session('btn') == 'asesmen' ? 'show active' : '' }}"
+                        id="navs-justified-asesmen" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="nav-align-top w-100 mb-4">
+                                    <ul class="nav nav-pills nav-sm mb-3 nav-fill" role="tablist">
+                                        <li class="nav-item">
+                                            <button type="button"
+                                                class="border nav-link {{ session('asesmen') == 'dokter' ? 'active' : '' }}"
+                                                role="tab" data-bs-toggle="tab"
+                                                data-bs-target="#navs-pills-justified-dokter"
+                                                aria-controls="navs-pills-justified-dokter" aria-selected="true">
+                                                Dokter
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button type="button"
+                                                class="border nav-link {{ session('asesmen') == 'perawat' ? 'active' : '' }}"
+                                                role="tab" data-bs-toggle="tab"
+                                                data-bs-target="#navs-pills-justified-perawat"
+                                                aria-controls="navs-pills-justified-perawat" aria-selected="true">
+                                                Perawat
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button type="button"
+                                                class="border nav-link {{ session('asesmen') == 'berkas' ? 'active' : '' }}"
+                                                role="tab" data-bs-toggle="tab"
+                                                data-bs-target="#navs-pills-justified-berkas"
+                                                aria-controls="navs-pills-justified-berkas" aria-selected="true">
+                                                Berkas
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade {{ session('asesmen') == 'dokter' ? 'show active' : '' }}" id="navs-pills-justified-dokter" role="tabpanel">
+                                            <form action="{{ route('assesmen/awal/dokter.update', $item->id) }}" method="POST">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="card-body pt-0">
+                                                    <div class="row mb-4">
+                                                        <div class="col-12">
+                                                            <label class="form-label fw-bold">Anamnesa / Keluhan Utama</label>
+                                                            <textarea id="editor5" class="form-control" id="keluhan_utama" name="keluhan_utama" rows="4" placeholder="Keluhan Utama Pasien">{{ $item->doctorInitialAssesment->keluhan_utama ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-sm-6">
+                                                            <label class="form-label fw-bold my-0">Keadaan Umum</label>
+                                                            <div class="col-sm">
+                                                                <div class="form-check form-check-inline mt-3">
+                                                                <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum1" value="Baik" {{ ($item->doctorInitialAssesment->keadaan_umum ?? '') == 'Baik' ? 'checked' : '' }}/>
+                                                                <label class="form-check-label" for="keadaan-umum1">Baik</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum2" value="Lemas" {{ ($item->doctorInitialAssesment->keadaan_umum ?? '') == 'Lemas' ? 'checked' : '' }}/>
+                                                                <label class="form-check-label" for="keadaan-umum2">Lemas</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum3" value="Sakit Ringan" {{ ($item->doctorInitialAssesment->keadaan_umum ?? '') == 'Sakit Ringan' ? 'checked' : '' }}/>
+                                                                <label class="form-check-label" for="keadaan-umum3">Sakit Ringan</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum4" value="Sakit Sedang" {{ ($item->doctorInitialAssesment->keadaan_umum ?? '') == 'Sakit Sedang' ? 'checked' : '' }}/>
+                                                                <label class="form-check-label" for="keadaan-umum4">Sakit Sedang</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum5" value="Sakit Berat" {{ ($item->doctorInitialAssesment->keadaan_umum ?? '') == 'Sakit Berat' ? 'checked' : '' }}/>
+                                                                <label class="form-check-label" for="keadaan-umum5">Sakit Berat</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="form-label fw-bold">Kesadaran</label>
+                                                            <input type="text" name="kesadaran" class="form-control form-control-md" placeholder="Tingkat Kesadaran" value="{{ $item->doctorInitialAssesment->kesadaran ?? '' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Tinggi Badan</label>
+                                                            <div class="input-group">
+                                                                <input class="form-control" id="tb" name="tb" value="{{ $item->doctorInitialAssesment->tb ?? '' }}" placeholder="Tinggi Badan"></input>
+                                                                <span class="input-group-text">cm</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Berat Badan</label>
+                                                            <div class="input-group">
+                                                                <input class="form-control" id="bb" name="bb" value="{{ $item->doctorInitialAssesment->bb ?? '' }}" placeholder="Berat Badan"></input>
+                                                                <span class="input-group-text">kg</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-12 mb-3">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <label class="form-label fw-bold ">Nadi</label>
+                                                                    <div class="input-group">
+                                                                        <input type="number" step="0.01" name="nadi" class="form-control" aria-describedby="nadi" placeholder="0.00" value="{{ $item->doctorInitialAssesment->nadi ?? '' }}">
+                                                                        <span class="input-group-text" id="nadi">bpm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <label class="form-label fw-bold">Tekanan Darah</label>
+                                                                    <div class="input-group">
+                                                                        <input type="number" step="0.01" name="td_sistolik" class="form-control" aria-describedby="td_sistolik" placeholder="0.00" value="{{ $item->doctorInitialAssesment->td_sistolik ?? '' }}">
+                                                                        <span class="input-group-text" id="td_sistolik">/</span>
+                                                                        <input type="number" step="0.01" name="td_diastolik" class="form-control" aria-describedby="td_diastolik" placeholder="0.00" value="{{ $item->doctorInitialAssesment->td_diastolik ?? '' }}">
+                                                                        <span class="input-group-text" id="td_diastolik">mmHg</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 mb-3">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <label class="form-label fw-bold">Suhu</label>
+                                                                    <div class="input-group">
+                                                                        <input type="number" step="0.01" name="suhu" class="form-control" aria-describedby="suhu" placeholder="0.00" value="{{ $item->doctorInitialAssesment->suhu ?? '' }}">
+                                                                        <span class="input-group-text" id="suhu">°C</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <label class="form-label fw-bold">Nafas</label>
+                                                                    <div class="input-group">
+                                                                        <input type="number" name="nafas" class="form-control" aria-describedby="nafas" placeholder="0" value="{{ $item->doctorInitialAssesment->nafas ?? '' }}">
+                                                                        <span class="input-group-text" id="nafas">x/menit</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Dokter Penanggung Jawab Pasien</label>
+                                                        <input type="text" class="form-control" value="{{ $item->dpjp->name ?? '' }}" @disabled(true)>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 text-end">
+                                                    <button type="submit" class="btn btn-primary btn-sm mx-3">{{ $item->doctorInitialAssesment ? 'Update' : 'Submit' }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane fade {{ session('asesmen') == 'perawat' ? 'show active' : '' }}" id="navs-pills-justified-perawat" role="tabpanel">
+                                            <div class="card">
+                                                <div class="card-header pb-0">
+                                                    <div class="row">
+                                                        <div class="col-8 align-self-center ps-4">
+                                                            <h5 class="mb-2">ASESMEN AWAL KEPERAWATAN</h5>
+                                                            <h6>RAWAT JALAN</h6>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <table class="small small-table">
+                                                                <tr>
+                                                                    <td>Nama</td>
+                                                                    <td class="px-2">:</td>
+                                                                    <td>{{ $item->patient->name }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Tanggal Lahir</td>
+                                                                    <td class="px-2">:</td>
+                                                                    @php
+                                                                        $tanggalLahir = new DateTime($item->patient->tanggal_lhr);
+                                                                        $now = new DateTime();
+                                                                        $ageDiff = $now->diff($tanggalLahir);
+                                                                        $ageString = $ageDiff->format('%y tahun %m bulan');
+                                                                    @endphp
+                                                                    <td>{{ $tanggalLahir->format('d-m-Y') ?? '....' }}
+                                                                        <span>({{ $ageString ?? '....' }})</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>No Rekam Medis</td>
+                                                                    <td class="px-2">:</td>
+                                                                    <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>NIK</td>
+                                                                    <td class="px-2">:</td>
+                                                                    <td>{{ $item->patient->nik }}</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="my-2">
+                                                <div class="card-body pt-0">
+                                                    <div class="mb-3">
+                                                        <label class="col-form-label fw-bold">Anamnesa / Keluhan Utama :</label>
+                                                        <div class="">
+                                                            {{ $itemAss->keluhan_utama }}
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">STATUS FISIK</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Kesadaran :</label>
+                                                            <div class="">
+                                                                {{ $itemAss->kesadaran ?? '' }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Keadaan Umum :</label>
+                                                            <div class="">{{ $itemAss->keadaan_umum ?? '' }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-4">
+                                                            <label class="col-form-label fw-bold">Tinggi Badan :</label>
+                                                            <div class="d-flex">
+                                                                <p>{{ $itemAss->tb ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">cm</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label class="col-form-label fw-bold">Berat Badan :</label>
+                                                             <div class="d-flex">
+                                                                <p>{{ $itemAss->bb ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">kg</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label class="col-form-label fw-bold">Lingkar Kepala :</label>
+                                                             <div class="d-flex">
+                                                                <p>{{ $itemAss->lk ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">cm</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">TANDA - TANDA VITAL</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Nadi</label>
+                                                            <div class="d-flex">
+                                                                <p>{{ $itemAss->nadi ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">bpm</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Tekanan Darah</label>
+                                                            <div class="d-flex">
+                                                                <p>{{ $itemAss->td_sistolik ?? '...' }} / {{ $itemAss->td_diastolik ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">mmHg</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Suhu Badan</label>
+                                                            <div class="d-flex">
+                                                                <p>{{ $itemAss->suhu ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">°C</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Nafas</label>
+                                                            <div class="d-flex">
+                                                                <p>{{ $itemAss->nafas ?? '...' }}</p>
+                                                                <span class="ms-2 fst-italic">x/menit</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">RIWAYAT PENYAKIT & ALERGI</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Riwayat Penyakit Pasien</label>
+                                                            <p class="multi-line-text">{!! $itemAss->riw_penyakit_pasien !!}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Riwayat Penyakit Keluarga</label>
+                                                             <p class="multi-line-text">{!! $itemAss->riw_penyakit_keluarga ?? '' !!}</p>   
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Alergi Makanan</label>
+                                                            <p class="multi-line-text">{!! $item->patient->alergi_makanan ?? '' !!}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Alergi Obat</label>
+                                                            <p class="multi-line-text">{!! $item->patient->alergi_obat ?? '' !!}</p>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">ASESMEN GIZI</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-8">
+                                                            <div class="row mb-3">
+                                                                <label class="col-form-label fw-bold">Apakah pasien mengalami penurunan berat badan dalam 6 bulan terakhir ?</label>
+                                                                <div class="">
+                                                                    Ya (skor: {{ $itemAss->skor_ass_gizi_1 ?? '' }})
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <label class="col-form-label fw-bold">Apakah memiliki keluhan kurang nafsu makan ?</label>
+                                                                <div class="">Tidak juga (skor: {{ $itemAss->skor_ass_gizi_2 ?? '' }})</div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <label class="col-form-label fw-bold">Kondisi Gizi Pasien</label>
+                                                                <div class="">{{ $itemAss->kondisi_gizi ?? '' }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4 text-center align-self-center">
+                                                            <h3 class="mb-2">SKOR MST</h3>
+                                                            <h1>{{ $itemAss->skor_ass_gizi_1 ?? 0 + $itemAss->skor_ass_gizi_2 ?? 0  }}</h1>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">ASESMEN NYERI</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-12 text-center">
+                                                            <img src="{{ asset('assets/img/aakprj2.jpg') }}" alt="" class="img-fluid" style="max-width: 780px">
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 text-center mx-3 ps-4">
+                                                                <div class="form-check form-check-inline mt-3 mx-5 ps-4">
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '0' ? 'checked' : '' }} />
+                                                                </div>
+                                                                <div class="form-check form-check-inline mx-5 ps-4">
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '2' ? 'checked' : '' }} />
+                                                                </div>
+                                                                <div class="form-check form-check-inline mx-5">
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '4' ? 'checked' : '' }}/>
+                                                                </div>
+                                                                <div class="form-check form-check-inline mx-5 ps-4">
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '6' ? 'checked' : '' }}/>
+                                                                </div>
+                                                                <div class="form-check form-check-inline mx-5 ps-4">
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '8' ? 'checked' : '' }}/>
+                                                                </div>
+                                                                <div class="form-check form-check-inline mx-5 ps-5">
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '10' ? 'checked' : '' }}/>
+                                                                </div>
+                                                            </div>
+                                    
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">ASESMEN RESIKO JATUH</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-8">
+                                                            <div class="row">
+                                                                <div class="col-9 mt-4">
+                                                                    <p class="mb-4">a. Saat akan duduk dikursi pasien tampak tidak seimbang (sempoyongan / linglung) ?</p>
+                                                                    <p>b. Saat akan duduk pasien memegang pinggiran kursi atau benda lain sebagai penopang ?</p>
+                                                                </div>
+                                                                <div class="col-3 mt-4">
+                                                                    <p class="mb-4">{{ ($itemAss->resiko_jatuh_a ? 'YA' : 'TIDAK') ?? '...' }}</p>
+                                                                    <p>{{ ($itemAss->resiko_jatuh_b ? 'YA' : 'TIDAK') ?? '...' }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4 align-self-center">
+                                                            <div class="card bg-transparent border border-primary">
+                                                                <div class="card-body text-center p-2 align-self-center">
+                                                                    <h2 class="text-uppercase mb-1 text-primary">
+                                                                        {{ $itemAss->resiko_jatuh_result ?? '' }}
+                                                                    </h2>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">PSIKOLOGIS & SOSIAL EKONOMI</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Status Psikologis</label>
+                                                            <div class="d-flex">
+                                                                @foreach ($itemAss->detailPsikologis as $detail)
+                                                                    <p class="me-1">{{ $detail->name ?? '' }},</p>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="col-form-label fw-bold">Status Ekonomi</label>
+                                                            <div>{{ $itemAss->stts_ekonomi ?? '' }}</div>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span class="text-dark fw-bold">SOAP KEPERAWATAN</span>
+                                                    <hr class="my-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Subjective:</label>
+                                                            <p class="multi-line-text">{!! $itemAss->subjective ?? '' !!}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Objective:</label>
+                                                            <p class="multi-line-text">{!! $itemAss->objective ?? '' !!}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Assesment:</label>
+                                                            <p class="multi-line-text">{!! $itemAss->asesmen ?? '' !!}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="col-form-label fw-bold">Planning:</label>
+                                                            <p class="multi-line-text">{!! $itemAss->planning ?? '' !!}</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <hr>
+                                                    <div class="row mx-4">
+                                                        <div class="text-end align-self-center">
+                                                            <p class="mb-0">Padang, {{ $itemAss->created_at->format('d M Y') ?? 'Unknown' }}</p>
+                                                            <p class="mb-1 fw-bold">Perawat,</p>
+                                                            <img src="{{ asset('storage/' . $itemAss->ttd ?? '') }}" width="150" alt="">
+                                                            <p class="fw-bold">{{ $itemAss->user->name ?? '' }}</p>
+                                                        </div>
+                                                    </div>
+                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade {{ session('asesmen') == 'berkas' ? 'show active' : '' }}"
+                                            id="navs-pills-justified-berkas" role="tabpanel">
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade {{ session('btn') == 'penunjang' ? 'show active' : '' }}"
                         id="navs-justified-profile" role="tabpanel">
                         <div class="row">
                             <div class="col-sm-12">
@@ -432,16 +892,7 @@
                                     <ul class="nav nav-pills nav-sm mb-3 nav-fill" role="tablist">
                                         <li class="nav-item">
                                             <button type="button"
-                                                class="border  nav-link {{ session('dokter') == 'assesmen' ? 'active' : '' }}"
-                                                role="tab" data-bs-toggle="tab"
-                                                data-bs-target="#navs-pills-justified-asesmen"
-                                                aria-controls="navs-pills-justified-asesmen" aria-selected="true">
-                                                Asesmen Awal
-                                            </button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button type="button"
-                                                class="border nav-link {{ session('dokter') == 'radiologi' ? 'active' : '' }}"
+                                                class="border nav-link {{ session('penunjang') == 'radiologi' ? 'active' : '' }}"
                                                 role="tab" data-bs-toggle="tab"
                                                 data-bs-target="#navs-pills-justified-radiologi"
                                                 aria-controls="navs-pills-justified-radiologi" aria-selected="true">
@@ -450,7 +901,7 @@
                                         </li>
                                         <li class="nav-item">
                                             <button type="button"
-                                                class="border nav-link {{ session('dokter') == 'laboratorium' ? 'active' : '' }}"
+                                                class="border nav-link {{ session('penunjang') == 'laboratorium' ? 'active' : '' }}"
                                                 role="tab" data-bs-toggle="tab"
                                                 data-bs-target="#navs-pills-justified-laboratorium"
                                                 aria-controls="navs-pills-justified-laboratorium" aria-selected="true">
@@ -459,65 +910,7 @@
                                         </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane fade {{ session('dokter') == 'assesmen' ? 'show active' : '' }}"
-                                            id="navs-pills-justified-asesmen" role="tabpanel">
-                                                <div class="text-end">
-                                                    <a href="{{ route('rajal/rmedokter/assesmenawal.create', $item->id) }}"
-                                                        class="btn btn-success btn-sm">+Tambah Assesmen</a>
-                                                </div>
-                                            <table class="table">
-                                                <thead>
-                                                    <tr class="text-nowrap">
-                                                        <th class="text-body">No</th>
-                                                        <th class="text-body">Dokter</th>
-                                                        <th class="text-body">Tanggal</th>
-                                                        <th class="text-body">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                @php
-                                                    $sortedAssessments = $item->patient->initialAssesments->sortByDesc(
-                                                        'created_at',
-                                                    );
-                                                @endphp
-                                                <tbody>
-                                                    @foreach ($sortedAssessments as $itemAssesment)
-                                                        <tr>
-                                                            <td>{{ $loop->iteration }}</td>
-                                                            <td>{{ $itemAssesment->user->name }}</td>
-                                                            <td>{{ $itemAssesment->created_at ?? '' }}</td>
-                                                            <td>
-                                                                <div class="dropdown">
-                                                                    <button type="button"
-                                                                        class="btn p-0 dropdown-toggle hide-arrow"
-                                                                        data-bs-toggle="dropdown">
-                                                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                                                    </button>
-                                                                    <div class="dropdown-menu">
-                                                                        <a href="{{ route('rajal/rmedokter/assesmenawal.print', $itemAssesment->id) }}"
-                                                                            target="blank" class="dropdown-item">
-                                                                            <i class='bx bx-printer'></i>
-                                                                            Print
-                                                                        </a>
-                                                                        <a class="dropdown-item"
-                                                                            href="{{ route('rajal/rmedokter/assesmenawal.edit', $itemAssesment->id) }}">
-                                                                            <i class="bx bx-edit-alt me-1"></i>
-                                                                            Edit
-                                                                        </a>
-                                                                        {{-- <a href="{{  route('rajal/rmedokter/assesmenawal.show', $itemAssesment->id) }}"
-                                                                            target="blank" class="dropdown-item">
-                                                                            <i class='bx bx-printer'></i>
-                                                                            Show
-                                                                        </a> --}}
-
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="tab-pane fade {{ session('dokter') == 'radiologi' ? 'show active' : '' }}"
+                                        <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}"
                                             id="navs-pills-justified-radiologi" role="tabpanel">
                                             <div class="text-end">
                                                 <a href="{{ route('rajal/permintaan/radiologi.create', $item->id) }}"
@@ -572,7 +965,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="tab-pane fade {{ session('dokter') == 'laboratorium' ? 'show active' : '' }}"
+                                        <div class="tab-pane fade {{ session('penunjang') == 'laboratorium' ? 'show active' : '' }}"
                                             id="navs-pills-justified-laboratorium" role="tabpanel">
                                             <div class="text-end">
                                                 <a href="{{ route('rajal/laboratorium/request.index', $item->id) }}"
@@ -632,66 +1025,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="tab-pane fade {{ session('btn') == 'perawat' ? 'show active' : '' }}"
-                        id="navs-justified-messages" role="tabpanel">
-                        @can('tambah rme perawat')
-                            <div class="text-end mb-3">
-                                @if (!$diagnosisPatient)
-                                    <form id="keperawatan-form-{{ $item->id }}"
-                                        action="{{ route('rajal/asesmen/status/fisik.save', $item->id) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="no_rm" value="{{ $item->id }}">
-                                        <input type="hidden" name="patient_id" value="{{ $item->patient->id }}">
-                                        <input type="hidden" name="queue_id" value="{{ $item->id }}">
-                                        <button type="submit" class="btn btn-success btn-sm">
-                                            Tambah Asesmen Keperawatan
-                                        </button>
-                                    </form>
-                                @else
-                                    <a href="{{ route('rajal/asesmen/status/fisik.index', $item->id) }}" type="button"
-                                        class="btn btn-warning btn-sm">
-                                        Edit Asesmen Keperawatan
-                                    </a>
-                                @endif
-                            </div>
-                        @endcan
-                        <table class="table" id="example">
-                            <thead>
-                                <tr class="text-nowrap">
-                                    <th class="text-body">No</th>
-                                    <th class="text-body">Nama Pasien</th>
-                                    <th class="text-body">Petugas</th>
-                                    <th class="text-body">Tanggal</th>
-                                    @canany(['lihat rme perawat'])
-                                        <th class="text-body">Action</th>
-                                    @endcanany
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($asesmentPatient as $asesment)
-                                    <tr class="{{ $asesment->queue_id == $item->id ? 'text-success' : '' }}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $asesment->patient->name }}</td>
-                                        <td>{{ $asesment->user->name }}</td>
-                                        <td>{{ date_format($asesment->created_at, 'd - m - Y') }}</td>
-                                        @canany(['lihat rme perawat'])
-                                            <td>
-                                                @can('lihat rme perawat')
-                                                    <div class="d-flex flex-row">
-                                                        <a href="{{ route('rajal/asesmen.print', $asesment->id) }}"
-                                                            class="btn btn-dark btn-sm" target="blank"><i
-                                                                class='bx bx-printer'></i></a>
-                                                        <a href="{{ route('rajal/asesmen/status/fisik.index', $asesment->queue) }}"
-                                                            class="btn btn-warning btn-sm ms-1"><i class='bx bx-edit-alt'></i></a>
-                                                    </div>
-                                                @endcan
-                                            </td>
-                                        @endcanany
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div> --}}
                     <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}"
                         id="navs-justified-cppt" role="tabpanel">
                         <div class="text-end mb-3">

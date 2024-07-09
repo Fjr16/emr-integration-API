@@ -45,52 +45,6 @@
                   </div>
               </div>
             </div>
-              {{-- <div id="soap">
-                <div class="soap">
-                  <div class="row mb-3">
-                    <label class="col-sm-2 col-form-label" for="subjective">Subjective (S):</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form form-control" id="subjective" name="subjective[]">
-                    </div>
-                    <div class="col-sm-1">
-                      <button type="button" class="btn btn-sm btn-dark" onclick="addForm(this)"><i class="bx bx-plus"></i></button>
-                    </div>
-                  </div>
-                </div>
-                <div class="soap">
-                  <div class="row mb-3">
-                    <label class="col-sm-2 col-form-label" for="objective">Objective (O):</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form form-control" id="objective" value="" name="objective[]">
-                    </div>
-                    <div class="col-sm-1">
-                      <button type="button" class="btn btn-sm btn-dark" onclick="addForm(this)"><i class="bx bx-plus"></i></button>
-                    </div>
-                  </div>
-                </div>
-                <div class="soap">
-                  <div class="row mb-3">
-                    <label class="col-sm-2 col-form-label" for="asesmen">Asesmen (A):</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form form-control" id="asesmen" name="asesmen[]">
-                    </div>
-                    <div class="col-sm-1">
-                      <button type="button" class="btn btn-sm btn-dark" onclick="addForm(this)"><i class="bx bx-plus"></i></button>
-                    </div>
-                  </div>
-                </div>
-                <div class="soap">
-                  <div class="row mb-3">
-                    <label class="col-sm-2 col-form-label" for="planning">Planning (P):</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form form-control" id="planning" name="planning[]">
-                    </div>
-                    <div class="col-sm-1">
-                      <button type="button" class="btn btn-sm btn-dark" onclick="addForm(this)"><i class="bx bx-plus"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>   --}}
           </div>
           {{-- form hidden ttd --}}
           <div class="row mx-4 text-end align-self-center" id="formParafUser">
@@ -194,7 +148,6 @@
     var inputPass = modal.querySelector('input[name="password_user"]');
     var inputUserId = modal.querySelector('input[name="user_id"]');
     
-    var tipeCppt = document.getElementById('tipe_cppt');
     var formParaf = document.getElementById('formParafUser');
 
     formSubmit.addEventListener('submit', function(formSub){

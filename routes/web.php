@@ -44,6 +44,7 @@ use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionRatesController;
+use App\Http\Controllers\DoctorInitialAssesmentController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\UnitCategoryPivotController;
@@ -451,18 +452,15 @@ Route::put('rajal/general/consent/update/{id}', [RajalGeneralConsentController::
 Route::delete('rajal/general/consent/destroy/{id}', [RajalGeneralConsentController::class, 'destroy'])->name('rajal/general/consent.destroy');
 
 
-//assesmen Awal
+//assesmen Awal baru
 Route::group(['middleware' => ['permission:tambah assesmen awal']], function () {
-    Route::get('/rajal/rmedokter/assesmenawal/create/{id}', [InitialAssesmentController::class, 'create'])->name('rajal/rmedokter/assesmenawal.create');
-    Route::post('/rajal/rmedokter/assesmenawal/store/{id}', [InitialAssesmentController::class, 'store'])->name('rajal/rmedokter/assesmenawal.store');
-    Route::get('/rajal/rmedokter/assesmenawal/edit/{id}', [InitialAssesmentController::class, 'edit'])->name('rajal/rmedokter/assesmenawal.edit');
-    Route::put('/rajal/rmedokter/assesmenawal/update/{id}', [InitialAssesmentController::class, 'update'])->name('rajal/rmedokter/assesmenawal.update');
-
+    Route::put('/assesmen/awal/dokter/update/{id}', [DoctorInitialAssesmentController::class, 'update'])->name('assesmen/awal/dokter.update');
 });
+// belum selesai
 Route::group(['middleware' => ['permission:print assesmen awal']], function () {
-    Route::get('/rajal/rmedokter/assesmenawal/show/{id}', [InitialAssesmentController::class, 'show'])->name('rajal/rmedokter/assesmenawal.show');
-    Route::get('/rajal/rmedokter/assesmenawal/print/{id}', [InitialAssesmentController::class, 'print'])->name('rajal/rmedokter/assesmenawal.print');
+    Route::get('/assesmen/awal/dokter/print/{id}', [DoctorInitialAssesmentController::class, 'print'])->name('assesmen/awal/dokter.print');
 });
+
 
 //rajal PRMRJ
 Route::group(['middleware' => ['permission:tambah prmrj']], function () {

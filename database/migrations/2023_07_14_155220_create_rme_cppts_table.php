@@ -22,10 +22,7 @@ return new class extends Migration
             $table->text('objective')->nullable();
             $table->text('asesment')->nullable();
             $table->text('planning')->nullable();
-            $table->string('ttd_user')->nullable();
-            $table->string('ttd_dpjp')->nullable();
-            $table->dateTime('tanggal_verif_dpjp')->nullable();
-            $table->enum('category_soap', ['PERAWAT', 'DPJP', 'OTHER'])->default('PERAWAT');
+            $table->string('ttd')->nullable();
             $table->timestamps();
         });
     }

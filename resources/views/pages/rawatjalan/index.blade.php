@@ -115,10 +115,6 @@
                             @endif
                             @can('show pasien poli')
                             <td class="text-center" style="width: 9%">
-                                {{-- <a class="btn btn-dark btn-sm {{ $item->rawatJalanPoliPatient->status != 'TIDAK HADIR' ? '' : 'disabled' }}"
-                                    href="{{ route('rajal/show', ['id' => $item->id, 'title' => $title]) }}">
-                                        <i class='bx bx-pulse me-2'></i>Periksa
-                                </a> --}}
                                 <div class="btn-group dropend">
                                     <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class='bx bx-pulse me-2'></i>Periksa
@@ -129,8 +125,7 @@
                                         <hr class="dropdown-divider">
                                       </li>
                                       <li> <a class="dropdown-item" href="{{ route('asesmen/awal/perawat.create_step_one', $item->id) }}">Perawat</a> </li>
-                                      <li> <a class="dropdown-item" href="javascript:void(0);">Dokter</a> </li>
-                                      {{-- <li> <a class="dropdown-item" href="javascript:void(0);">Separated link</a> </li> --}}
+                                      <li> <a class="dropdown-item" href="{{ route('rajal/show', ['id' => $item->id, 'title' => $title]) }}">Dokter</a> </li>
                                     </ul>
                                 </div>
                             </td>
