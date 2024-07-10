@@ -44,6 +44,8 @@ use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionRatesController;
+use App\Http\Controllers\DiagnosticPatientController;
+use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\DoctorInitialAssesmentController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
@@ -59,6 +61,7 @@ use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\OtherController;
+use App\Http\Controllers\ProcedurePatientController;
 use App\Http\Controllers\RajalGeneralConsentController;
 
 /*
@@ -461,6 +464,9 @@ Route::group(['middleware' => ['permission:print assesmen awal']], function () {
     Route::get('/assesmen/awal/dokter/print/{id}', [DoctorInitialAssesmentController::class, 'print'])->name('assesmen/awal/dokter.print');
 });
 
+// diagnosa dan prosedure
+Route::put('/diagnosa/patient/update/{id}', [DiagnosticProcedurePatientController::class, 'updateDiagnosis'])->name('diagnosa/patient.update');
+Route::put('/procedure/patient/update/{id}', [DiagnosticProcedurePatientController::class, 'updateProcedure'])->name('procedure/patient.update');
 
 //rajal PRMRJ
 Route::group(['middleware' => ['permission:tambah prmrj']], function () {

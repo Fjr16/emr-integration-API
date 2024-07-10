@@ -15,11 +15,8 @@ return new class extends Migration
     {
         Schema::create('diagnostics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('icd_id')->nullable();
-            $table->string('name')->nullable();
-            $table->string('dtd')->nullable();
-            $table->text('deskripsi')->nullable();
-            $table->boolean('is_active')->nullable();
+            $table->string('icd_x_code')->nullable();
+            $table->text('name')->nullable();
             $table->timestamps();
         });
     }

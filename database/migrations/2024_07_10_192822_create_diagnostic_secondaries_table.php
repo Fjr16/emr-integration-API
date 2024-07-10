@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tindakans', function (Blueprint $table) {
+        Schema::create('diagnostic_secondaries', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('diagnostic_procedure_patient_id');
+            $table->foreignId('diagnostic_id')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tindakans');
+        Schema::dropIfExists('diagnostic_secondaries');
     }
 };

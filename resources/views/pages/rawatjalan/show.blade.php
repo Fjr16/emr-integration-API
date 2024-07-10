@@ -387,11 +387,29 @@
                     </li>
                     <li class="nav-item">
                         <button id="btn-link" type="button"
+                            class="nav-link {{ session('btn') == 'diag-tind' ? 'active' : '' }} d-flex justify-content-center"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-diag-tind"
+                            aria-controls="navs-justified-diag-tind" aria-selected="false">
+                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
+                            <p class="m-0">Diagnosa & Prosedur</p>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button"
+                            class="nav-link d-flex justify-content-center {{ session('btn') == 'resep dokter' ? 'active' : '' }}"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-resep"
+                            aria-controls="navs-justified-resep" aria-selected="false">
+                            <i class="tf-icons bx bx-list-ul"></i>
+                            <p class="m-0">Resep Obat</p>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="btn-link" type="button"
                             class="nav-link {{ session('btn') == 'cppt' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-cppt"
                             aria-controls="navs-justified-cppt" aria-selected="false">
                             <i class="tf-icons bx bx-message-alt-add"></i>
-                            <p class="m-0">CPPT</p>
+                            <p class="m-0">SOAP</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -410,15 +428,6 @@
                             aria-controls="navs-justified-tindakan" aria-selected="false">
                             <i class="tf-icons bx bx-sitemap"></i>
                             <p class="m-0">Laporan Tindakan</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button"
-                            class="nav-link d-flex justify-content-center {{ session('btn') == 'resep dokter' ? 'active' : '' }}"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-resep"
-                            aria-controls="navs-justified-resep" aria-selected="false">
-                            <i class="tf-icons bx bx-list-ul"></i>
-                            <p class="m-0">Resep Obat</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -1025,66 +1034,238 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}"
-                        id="navs-justified-cppt" role="tabpanel">
-                        <div class="text-end mb-3">
-                            @can('print cppt')
-                                <a href="{{ route('rajal/cppt.print', $item->id) }}" target="blank"
-                                    class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
-                                <a href="{{ route('rajal/cppt.show', $item->id) }}" target="blank"
-                                    class="btn btn-dark btn-sm"><i class='bx bx-low-vision'></i></a>
-                            @endcan
-                            @can('tambah cppt')
-                                @if ($title == 'Rawat Jalan')
-                                    <a class="btn btn-success btn-sm"
-                                        href="{{ route('rajal/cppt.create', $item->id) }}">+Tambah
-                                        CPPT</a>
-                                @endif
-                            @endcan
+                    <div class="tab-pane fade {{ session('btn') == 'diag-tind' ? 'show active' : '' }}"
+                        id="navs-justified-diag-tind" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-2 col-12 mb-3 mb-md-0">
+                              <div class="list-group">
+                                <a class="list-group-item list-group-item-action {{ session('diag-tind') == 'diagnosa' ? 'active' : '' }}" id="diagnosa-list" data-bs-toggle="list" href="#diagnosa">Diagnosa</a>
+                                <a class="list-group-item list-group-item-action {{ session('diag-tind') == 'prosedur' ? 'active' : '' }}" id="prosedur-list" data-bs-toggle="list" href="#prosedur">Prosedur</a>
+                              </div>
+                            </div>
+                            <div class="col-md-10 col-12 border">
+                              <div class="tab-content">
+                                <div class="tab-pane fade {{ session('diag-tind') == 'diagnosa' ? 'show active' : '' }}" id="diagnosa">
+                                    <form action="{{ route('diagnosa/patient.update', $item->id) }}" method="POST">
+                                        @method('PUT')
+                                        @csrf
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <label for="diagnostic_primer_id" class="form-label">Diagnosa Primer</label>
+                                                <select class="form-select form-select-md select2-w-placeholder" name="diagnostic_primer_id" id="diagnostic_primer_id" style="width: 100%">
+                                                    <option selected disabled></option>
+                                                    @foreach ($diagnostics as $diagnosa)
+                                                        @if (($item->diagnosticProcedurePatient->diagnostic_id ?? null) == $diagnosa->id)
+                                                            <option value="{{ $diagnosa->id ?? '' }}" selected>{{ $diagnosa->icd_x_code ?? '...' }} - {{ $diagnosa->name ?? '...' }}</option>
+                                                        @else
+                                                            <option value="{{ $diagnosa->id ?? '' }}">{{ $diagnosa->icd_x_code ?? '...' }} - {{ $diagnosa->name ?? '...' }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                <div class="col-12 mt-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="customCheckSuccess" checked />
+                                                        <label class="form-check-label" for="customCheckSuccess">Gunakan Diagnosa Kasus Sebelumnya (nama diagnosa)</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="diagnosa_primer_text" class="form-label"></label>
+                                                <textarea name="diagnosa_primer_text" id="diagnosa_primer_text" class="form-control" cols="50" rows="4" placeholder="Gunakan kolom ini untuk input diagnosa primer secara bebas / tidak sesuai dengan kode ICD 10">{{ $item->diagnosticProcedurePatient->desc_diagnosa_primer ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                @if ($item->diagnosticProcedurePatient && $item->diagnosticProcedurePatient->diagnosticSecondary->isNotEmpty())
+                                                    @foreach ($item->diagnosticProcedurePatient->diagnosticSecondary as $index => $sekunder)     
+                                                    <div class="row dinamic-input {{ $loop->last ? '' : 'mb-2' }}">
+                                                        @if ($loop->first)
+                                                            <label class="form-label">Diagnosa Sekunder</label>
+                                                        @endif
+                                                        <div class="col-10">
+                                                            <select name="diagnostic_sekunder_id[]" class="select2-w-placeholder js-states form-control" id="diagnostic_sekunder_ids_{{ $index }}" style="width: 100%">
+                                                                <option selected disabled></option>
+                                                                @foreach ($diagnostics as $diagnosa)
+                                                                    @if (($sekunder->diagnostic_id ?? null) == $diagnosa->id)
+                                                                        <option value="{{ $diagnosa->id ?? '' }}" selected>{{ $diagnosa->icd_x_code ?? '...' }} - {{ $diagnosa->name ?? '...' }}</option>
+                                                                    @else
+                                                                        <option value="{{ $diagnosa->id ?? '' }}">{{ $diagnosa->icd_x_code ?? '...' }} - {{ $diagnosa->name ?? '...' }}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="" class="form-label"></label>
+                                                            @if ($loop->last)
+                                                                <button class="btn btn-dark btn-sm mt-1" onclick="setContentToDinamicInput(this)" type="button">+</button>
+                                                            @else
+                                                                <button class="btn btn-danger btn-sm mt-1" onclick="removeInputDinamic(this)" type="button">-</button>
+                                                            @endif
+                                                        </div>
+                                                    </div>         
+                                                    @endforeach
+                                                @else
+                                                    <div class="row dinamic-input">
+                                                        <label class="form-label">Diagnosa Sekunder</label>
+                                                        <div class="col-10">
+                                                            <select name="diagnostic_sekunder_id[]" class="select2-w-placeholder js-states form-control" id="diagnostic_sekunder_id" style="width: 100%">
+                                                                <option selected disabled></option>
+                                                                @foreach ($diagnostics as $diagnosa)
+                                                                    <option value="{{ $diagnosa->id ?? '' }}">{{ $diagnosa->icd_x_code ?? '...' }} - {{ $diagnosa->name ?? '...' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="" class="form-label"></label>
+                                                            <button class="btn btn-dark btn-sm mt-1" onclick="setContentToDinamicInput(this)" type="button">+</button>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="diagnosa_sekunder_text" class="form-label"></label>
+                                                <textarea name="diagnosa_sekunder_text" id="diagnosa_sekunder_text" class="form-control" cols="50" rows="4" placeholder="Gunakan kolom ini untuk input diagnosa sekunder secara bebas / tidak sesuai dengan kode ICD 10">{{ $item->diagnosticProcedurePatient->desc_diagnosa_sekunder ?? '' }}</textarea>
+                                            </div>
+                                            <div class="ms-auto mt-2">
+                                                <button type="submit" class="btn btn-md btn-primary">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade {{ session('diag-tind') == 'prosedur' ? 'show active' : '' }}" id="prosedur">
+                                    <form action="{{ route('procedure/patient.update', $item->id) }}" method="POST">
+                                        @method('PUT')
+                                        @csrf
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <label for="procedure_id" class="form-label">Prosedur</label>
+                                                <select class="form-select form-select-md select2-w-placeholder" name="procedure_id" id="procedure_id" style="width: 100%">
+                                                    <option selected disabled></option>
+                                                    @foreach ($procedures as $prosedur)
+                                                        @if (($item->diagnosticProcedurePatient->procedure_id ?? null) == $prosedur->id)
+                                                            <option value="{{ $prosedur->id ?? '' }}" selected>{{ $prosedur->icd_ix_code ?? '...' }} - {{ $prosedur->name ?? '...' }}</option>
+                                                        @else
+                                                            <option value="{{ $prosedur->id ?? '' }}">{{ $prosedur->icd_ix_code ?? '...' }} - {{ $prosedur->name ?? '...' }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                <div class="col-12 mt-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="customCheckSuccess" checked />
+                                                        <label class="form-check-label" for="customCheckSuccess">Gunakan Prosedur Kasus Sebelumnya (nama diagnosa)</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="procedure_text" class="form-label"></label>
+                                                <textarea name="procedure_text" id="procedure_text" class="form-control" cols="50" rows="4" placeholder="Gunakan kolom ini untuk input prosedur secara bebas / tidak sesuai dengan kode ICD 9">{{ $item->diagnosticProcedurePatient->desc_prosedure ?? '' }}</textarea>
+                                            </div>
+                                            <div class="ms-auto mt-2">
+                                                <button type="submit" class="btn btn-md btn-primary">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                              </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="tab-pane fade {{ session('btn') == 'resep dokter' ? 'show active' : '' }}" id="navs-justified-resep" role="tabpanel">
                         <table class="table" id="example">
                             <thead>
                                 <tr class="text-nowrap">
                                     <th class="text-body">No</th>
-                                    <th class="text-body">PPA (Profesional Pemberi Asuhan)</th>
                                     <th class="text-body">Tanggal / Jam</th>
-                                    @canany(['edit cppt', 'delete cppt'])
-                                        @if ($title == 'Rawat Jalan')
-                                            <th class="text-body">Action</th>
-                                        @endif
+                                    <th class="text-body">Dokter</th>
+                                    @canany(['edit resep dokter', 'hapus resep dokter', 'print resep dokter'])
+                                        <th class="text-body">Action</th>
                                     @endcanany
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($item->patient->rmeCppts->sortDesc() as $cppt)
-                                    <tr class="{{ $item->id == $cppt->queue_id ? 'text-success' : '' }}">
-                                        <td>{{ $loop->iteration ?? '' }}</td>
-                                        <td>{{ $cppt->user->name ?? '' }}</td>
-                                        <td>{{ $cppt->created_at->format('Y-m-d H:i') ?? '' }}</td>
-                                        @canany(['edit cppt', 'delete cppt'])
-                                            @if ($title == 'Rawat Jalan')
-                                                <td class="d-flex">
-                                                    @can('edit cppt')
-                                                        <a href="{{ route('rajal/cppt.edit', $cppt->id) }}"
-                                                            class="btn btn-warning btn-sm"><i class='bx bx-edit'></i></a>
+                                @foreach ($receipts as $receipt)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $receipt->created_at->format('Y-m-d H:i') }}</td>
+                                        <td>{{ $receipt->user->name ?? '' }}</td>
+                                        @canany(['edit resep dokter', 'print resep dokter', 'hapus resep dokter'])
+                                            <td>
+                                                <div class="d-flex">
+                                                    @can('print resep dokter')
+                                                        <a href="{{ route('rajal/resep/dokter.show', $receipt->id) }}"
+                                                            target="blank" class="btn btn-dark btn-sm"><i
+                                                                class='bx bx-printer'></i></a>
                                                     @endcan
-                                                    @can('delete cppt')
-                                                        <form action="{{ route('rajal/cppt.destroy', $cppt->id) }}"
-                                                            method="POST">
-                                                            @csrf
+                                                    @can('edit resep dokter')
+                                                        <a class="btn btn-warning btn-sm mx-2"
+                                                            href="{{ route('rajal/resep/dokter.edit', $receipt->id) }}"><i
+                                                                class='bx bx-edit'></i></a>
+                                                    @endcan
+                                                    @can('hapus resep dokter')
+                                                        <form action="{{ route('rajal/resep/dokter.destroy', $receipt->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm mx-2"
-                                                                onclick="return confirm('Yakin Ingin Menghapus Data ?')"><i
-                                                                    class='bx bx-trash'></i></button>
+                                                            @csrf
+                                                            <button type = "submit" class="btn btn-danger btn-sm">
+                                                                <i class='bx bx-trash'></i>
+                                                            </button>
                                                         </form>
                                                     @endcan
-                                                </td>
-                                            @endif
+                                                </div>
+                                            </td>
                                         @endcanany
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}" id="navs-justified-cppt" role="tabpanel">
+                        <form action="{{ route('rajal/cppt.store', $item->id) }}" method="POST" id="formSOAP">
+                            @csrf
+                            <div class="row mb-5">
+                                <div class="col-sm-3">
+                                    <label for="subjective" class="form-label">Subjective</label>
+                                    <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ $itemAss->keluhan_utama ?? '' }}</textarea>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="sub" onclick="autoFillSOAP(this)">
+                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Anamnesa
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="objective" class="form-label">Objective</label>
+                                    <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . ($itemAss->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($itemAss->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($itemAss->td_sistolik ?? '') . " / " . ($itemAss->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($itemAss->suhu ?? '') . " °C\r\n" . "Nafas: " . ($itemAss->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($itemAss->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($itemAss->bb ?? '') . ' kg' }}</textarea>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="obj" onclick="autoFillSOAP(this)">
+                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Asesmen
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="asesmen" class="form-label">Assesment</label>
+                                    <textarea name="asesmen" id="asesmen" class="form-control" rows="10" placeholder="Assesment"></textarea>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="ases" onclick="autoFillSOAP(this)">
+                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Diagnosa
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="planning" class="form-label">Planning</label>
+                                    <textarea name="planning" id="planning" class="form-control" rows="10" placeholder="Planning"></textarea>
+                                    <div class="btn-group dropdown me-3 mt-2 w-100">
+                                        <button class="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class='bx bx-up-arrow-alt'></i> Tarik Data
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                          <li><a class="dropdown-item" href="javascript:void(0);">Resep</a></li>
+                                          <li><a class="dropdown-item" href="javascript:void(0);">Radiologi</a></li>
+                                          <li><a class="dropdown-item" href="javascript:void(0);">Laboratorium</a></li>
+                                          <li><a class="dropdown-item" href="javascript:void(0);">Tindakan</a></li>
+                                          <li><a class="dropdown-item" href="javascript:void(0);">Perencanaan</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-end my-4">
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="openModal()">Submit</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'prmrj' ? 'show active' : '' }}"
                         id="navs-justified-prmrj" role="tabpanel">
@@ -1234,58 +1415,6 @@
                         </table>
 
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'resep dokter' ? 'show active' : '' }}"
-                        id="navs-justified-resep" role="tabpanel">
-                        <table class="table" id="example">
-                            <thead>
-                                <tr class="text-nowrap">
-                                    <th class="text-body">No</th>
-                                    <th class="text-body">Tanggal / Jam</th>
-                                    <th class="text-body">Dokter</th>
-                                    @canany(['edit resep dokter', 'hapus resep dokter', 'print resep dokter'])
-                                        <th class="text-body">Action</th>
-                                    @endcanany
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($receipts as $receipt)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $receipt->created_at->format('Y-m-d H:i') }}</td>
-                                        <td>{{ $receipt->user->name ?? '' }}</td>
-                                        @canany(['edit resep dokter', 'print resep dokter', 'hapus resep dokter'])
-                                            <td>
-                                                <div class="d-flex">
-                                                    @can('print resep dokter')
-                                                        <a href="{{ route('rajal/resep/dokter.show', $receipt->id) }}"
-                                                            target="blank" class="btn btn-dark btn-sm"><i
-                                                                class='bx bx-printer'></i></a>
-                                                    @endcan
-                                                    @can('edit resep dokter')
-                                                        <a class="btn btn-warning btn-sm mx-2"
-                                                            href="{{ route('rajal/resep/dokter.edit', $receipt->id) }}"><i
-                                                                class='bx bx-edit'></i></a>
-                                                    @endcan
-                                                    @can('hapus resep dokter')
-                                                        <form action="{{ route('rajal/resep/dokter.destroy', $receipt->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                                                            @method('DELETE')
-                                                            @csrf
-                                                            <button type = "submit" class="btn btn-danger btn-sm">
-                                                                <i class='bx bx-trash'></i>
-                                                            </button>
-                                                        </form>
-                                                    @endcan
-                                                </div>
-                                            </td>
-                                        @endcanany
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-
-                    </div>
                     <div class="tab-pane fade {{ session('btn') == 'sbpk' ? 'show active' : '' }}"
                         id="navs-justified-sbpk" role="tabpanel">
                         <div class="text-end mb-3">
@@ -1338,341 +1467,6 @@
         </div>
     </div>
     {{-- end Menu Rajal Dokter --}}
-
-    {{-- Menu Rajal Perawata --}}
-    {{-- <div class="card">
-        <div class="card-body">
-            <div class="nav-align-top mb-2 shadow-sm">
-                <ul class="nav nav-tabs nav-sm nav-fill" role="tablist">
-                    <li class="nav-item">
-                        <button id="btn-link" type="button"
-                            class="nav-link {{ session('perawat') == 'anamnesis' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-anamnesis"
-                            aria-controls="navs-justified-anamnesis" aria-selected="false">
-                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
-                            <p class="m-0">Anamnesis</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="btn-link" type="button"
-                            class="nav-link {{ session('perawat') == 'pemeriksaan' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-pemeriksaan"
-                            aria-controls="navs-justified-pemeriksaan" aria-selected="false">
-                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
-                            <p class="m-0">Pemeriksaan</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="btn-link" type="button"
-                            class="nav-link {{ session('perawat') == 'psikologis' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-psikologis"
-                            aria-controls="navs-justified-psikologis" aria-selected="false">
-                            <i class="tf-icons bx bx-message-square-add"></i>
-                            <p class="m-0">Psikologis & Sosial Ekonomi</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="btn-link" type="button"
-                            class="nav-link {{ session('perawat') == 'soap' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-soap"
-                            aria-controls="navs-justified-soap" aria-selected="false">
-                            <i class="tf-icons bx bx-message-alt-add"></i>
-                            <p class="m-0">SOAP</p>
-                        </button>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade {{ session('perawat') == 'anamnesis' ? 'show active' : '' }} show active"
-                        id="navs-justified-anamnesis" role="tabpanel">                    
-                        <form action="{{ route('rajal/rmedokter/assesmenawal.store', $item->id) }}" method="POST">
-                            @csrf
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-12">
-                                            <label class="form-label fw-bold">Anamnesa / Keluhan Utama</label>
-                                            <textarea id="editor5" class="form-control" id="keluhan" name="keluhan" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label class="form-label fw-bold">Riwayat Penyakit Pasien</label>
-                                            <textarea id="editor1" class="form-control" id="riwayat_penyakit_sekarang" name="riwayat_penyakit_sekarang" rows="3"></textarea>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label fw-bold">Riwayat Penyakit Keluarga</label>
-                                            <textarea id="editor4" class="form-control" id="riwayat_penyakit_keluarga" name="riwayat_penyakit_keluarga" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label class="form-label fw-bold">Alergi Makanan</label>
-                                            <textarea id="editor4" class="form-control" id="alergi_makanan" name="alergi_makanan" rows="6"></textarea>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label fw-bold">Alergi Obat</label>
-                                            <textarea id="editor4" class="form-control" id="alergi_obat" name="alergi_obat" rows="6"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="form-label fw-bold" id="label-kolom">Asesmen Gizi</label>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label for="asesmen_gizi" class="form-label">Apakah pasien mengalami penurunan berat badan dalam 6 bulan terakhir ?</label>
-                                                <div class="input-group">
-                                                    <select name="asesmen_gizi" id="asesmen_gizi" class="form-control" aria-describedby="basic-addon1">
-                                                        <option value="0">Tidak</option>
-                                                        <option value="2">Tidak yakin</option>
-                                                        <option value="1">Turun sebanyak 1-5 Kg</option>
-                                                        <option value="2">Turun sebanyak 6-10 Kg</option>
-                                                        <option value="3">Turun sebanyak 11-15 Kg</option>
-                                                        <option value="4">Turun lebih dari 15 Kg</option>
-                                                        <option value="2">Tidak tahu berapa kg penurunang</option>
-                                                    </select>
-                                                    <span class="input-group-text" id="basic-addon1">Skor: 0</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="kurang_nafsu">Apakah memiliki keluhan kurang nafsu makan ?</label>
-                                                <div class="input-group">
-                                                    <select name="kurang_nafsu" id="kurang_nafsu" class="form-control" aria-describedby="basic-addon2">
-                                                        <option value="0">Tidak</option>
-                                                        <option value="1">Ya</option>
-                                                    </select>
-                                                    <span class="input-group-text" id="basic-addon2">Skor: 0</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md">
-                                            <p class="m-0 fw-bold">Kondisi Gizi Pasien</p>
-                                            <div class="form-check form-check-inline mt-3">
-                                              <input class="form-check-input" type="radio" name="kondisi_gizi" id="inlineRadio1" value="Baik" @checked(true)/>
-                                              <label class="form-check-label" for="inlineRadio1">Baik</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="kondisi_gizi" id="inlineRadio2" value="Lebih" />
-                                              <label class="form-check-label" for="inlineRadio2">Lebih</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="kondisi_gizi" id="inlineRadio3" value="Kurang" />
-                                              <label class="form-check-label" for="inlineRadio3">Kurang</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="kondisi_gizi" id="inlineRadio4" value="Buruk" />
-                                              <label class="form-check-label" for="inlineRadio4">Buruk</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 text-end">
-                                    <button type="submit" class="btn btn-success btn-sm mx-3">Simpan</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade {{ session('perawat') == 'pemeriksaan' ? 'show active' : '' }}"
-                        id="navs-justified-pemeriksaan" role="tabpanel">
-                        <form action="" method="POST">
-                            @csrf
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <label class="form-label fw-bold" id="label-kolom">Tanda-tanda Vital</label>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Nadi</label>
-                                                <div class="input-group">
-                                                    <input type="text" name="ttv_nadi" class="form-control" aria-describedby="ttv_nadi">
-                                                    <span class="input-group-text" id="ttv_nadi">bpm</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Nafas</label>
-                                                <div class="input-group">
-                                                    <input type="text" name="ttv_td_sistolik" class="form-control" aria-describedby="ttv_td_sistolik">
-                                                    <span class="input-group-text" id="ttv_td_sistolik">/</span>
-                                                    <input type="text" name="ttv_td_diastolik" class="form-control" aria-describedby="ttv_td_diastolik">
-                                                    <span class="input-group-text" id="ttv_td_diastolik">mmHg</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="form-label fw-bold mt-2" id="label-kolom">Pemeriksaan Fisik</label>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label class="form-label my-0">Keadaan Umum</label>
-                                                <div class="col-sm">
-                                                    <div class="form-check form-check-inline mt-3">
-                                                      <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum1" value="Baik" @checked(true)/>
-                                                      <label class="form-check-label" for="keadaan-umum1">Baik</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum2" value="Lemas" />
-                                                      <label class="form-check-label" for="keadaan-umum2">Lemas</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum3" value="Sakit Ringan" />
-                                                      <label class="form-check-label" for="keadaan-umum3">Sakit Ringan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum4" value="Sakit Sedang" />
-                                                      <label class="form-check-label" for="keadaan-umum4">Sakit Sedang</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="keadaan_umum" id="keadaan-umum5" value="Sakit Berat" />
-                                                      <label class="form-check-label" for="keadaan-umum5">Sakit Berat</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Kesadaran</label>
-                                                <input type="text" name="kesadaran" class="form-control form-control-sm">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-4">
-                                            <label class="form-label fw-bold">Tinggi Badan</label>
-                                            <div class="input-group">
-                                                <input class="form-control" id="tb" name="tb"></input>
-                                                <span class="input-group-text">cm</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <label class="form-label fw-bold">Berat Badan</label>
-                                            <div class="input-group">
-                                                <input class="form-control" id="bb" name="bb"></input>
-                                                <span class="input-group-text">kg</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <label class="form-label fw-bold">Lingkar Kepala</label>
-                                            <div class="input-group">
-                                                <input class="form-control" id="lk" name="lk"></input>
-                                                <span class="input-group-text">cm</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="form-label fw-bold">Asesmen Nyeri</label>
-                                        <div class="col-6">
-                                            <img src="{{ asset('/assets/img/aakprj2.jpg') }}" alt="" class="img-fluid" style="max-width: 350px">
-                                            <div class="col-md">
-                                                <div class="form-check form-check-inline mt-3 ms-4">
-                                                  <input class="form-check-input" type="radio" name="ass_nyeri" id="nyeri-1" value="0" />
-                                                  <label class="form-check-label" for="nyeri-1">0</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="ass_nyeri" id="nyeri-2" value="2" />
-                                                  <label class="form-check-label" for="nyeri-2">2</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="ass_nyeri" id="nyeri-3" value="4"/>
-                                                  <label class="form-check-label" for="nyeri-3">4</label>
-                                                </div>
-                                                <div class="form-check form-check-inline mt-3">
-                                                  <input class="form-check-input" type="radio" name="ass_nyeri" id="nyeri-4" value="6" />
-                                                  <label class="form-check-label" for="nyeri-4">6</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="ass_nyeri" id="nyeri-5" value="8" />
-                                                  <label class="form-check-label" for="nyeri-5">8</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="ass_nyeri" id="nyeri-6" value="10"/>
-                                                  <label class="form-check-label" for="nyeri-6">10</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 text-end">
-                                    <button type="submit" class="btn btn-success btn-sm mx-3">Simpan</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade {{ session('perawat') == 'psikologis' ? 'show active' : '' }}"
-                        id="navs-justified-psikologis" role="tabpanel">
-                        <form action="" method="POST">
-                            @csrf
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <label class="form-label fw-bold" id="label-kolom">Asesmen Gizi</label>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label for="status_psikologis" class="form-label">Status Psikologis</label>
-                                                <select name="status_psikologis" id="status_psikologis" class="form-select form-select-md">
-                                                    <option value="Tenang">Tenang</option>
-                                                    <option value="Tegang">Tegang</option>
-                                                    <option value="Takut">Takut</option>
-                                                    <option value="Marah">Marah</option>
-                                                    <option value="Senang">Senang</option>
-                                                    <option value="Sedih">Sedih</option>
-                                                    <option value="Depresi">Depresi</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="status_ekonomi" class="form-label">Status Sosial & Ekonomi</label>
-                                                <select name="status_ekonomi" id="status_ekonomi" class="form-select form-select-md">
-                                                    <option value="Baik">Baik</option>
-                                                    <option value="Cukup">Cukup</option>
-                                                    <option value="Kurang">Kurang</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 text-end">
-                                    <button type="submit" class="btn btn-success btn-sm mx-3">Simpan</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade {{ session('perawat') == 'soap' ? 'show active' : '' }}" id="navs-justified-soap" role="tabpanel">
-                        <form action="" method="POST">
-                            @csrf
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="row mb-4">
-                                            <div class="col-sm-6">
-                                                <label for="subjective" class="form-label">Subjective</label>
-                                                <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective"></textarea>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="objective" class="form-label">Objective</label>
-                                                <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label for="asesmen" class="form-label">Assesment</label>
-                                                <textarea name="asesmen" id="asesmen" class="form-control" rows="10" placeholder="Assesment"></textarea>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="planning" class="form-label">Planning</label>
-                                                <textarea name="planning" id="planning" class="form-control" rows="10" placeholder="Planning"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 text-end">
-                                    <button type="submit" class="btn btn-success btn-sm mx-3">Simpan</button>
-                                </div>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- end Menu Rajal Perawat --}}
 
 
     {{-- modal --}}
@@ -1768,6 +1562,60 @@
                 this.classList.add('active');
             });
         });
+
+        function autoFillSOAP(element){
+            var keluhan = `{{ "Keluhan: " . ($item->doctorInitialAssesment->keluhan_utama ?? '') }}`;
+            var objective = `{{ "Keadaan Umum: " . ($item->doctorInitialAssesment->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($item->doctorInitialAssesment->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($item->doctorInitialAssesment->td_sistolik ?? '') . " / " . ($item->doctorInitialAssesment->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($item->doctorInitialAssesment->suhu ?? '') . " °C\r\n" . "Nafas: " . ($item->doctorInitialAssesment->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($item->doctorInitialAssesment->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($item->doctorInitialAssesment->bb ?? '') . " kg" }}`;
+            var diagnosaPrimer = `{{ "Diagnosa Primer: \r\n" . ($item->diagnosticProcedurePatient->diagnostic->name ?? '') }}\r\n\nDiagnosa Sekunder:`;
+            var diagnosaSekunder = '';
+
+            var dataJson = @json($item->diagnosticProcedurePatient->diagnosticSecondary);
+            if (dataJson.length > 0) {
+                dataJson.forEach(function(item){
+                    diagnosaSekunder += '\r\n-' + item.diagnostic.name;
+                });
+            }
+            var targetElement;
+            var contentTarget;
+            if (element.value == 'sub') {
+                targetElement = element.closest('.row').querySelector('#subjective');
+                contentTarget = keluhan;
+            } else if(element.value == 'obj') {
+                targetElement = element.closest('.row').querySelector('#objective');
+                contentTarget = objective;
+            } else if(element.value == 'ases'){
+                targetElement = element.closest('.row').querySelector('#asesmen');
+                contentTarget = diagnosaPrimer + "" + diagnosaSekunder;
+            } else if(element.value == 'plann'){
+                targetElement = element.closest('.row').querySelector('#planning');
+                contentTarget = objCurrent;
+            }
+            targetElement.textContent = contentTarget;
+        }
+    </script>
+
+    <script>
+        let countInput = 0;
+        function setContentToDinamicInput(element){
+            countInput = countInput+1;
+            var content = `
+                <label for="diagnostic_sekunder_id_${countInput}" class="form-label"></label>
+                <div class="col-10">
+                    <select name="diagnostic_sekunder_id[]" class="select2-w-placeholder js-states form-control" id="diagnostic_sekunder_id_${countInput}" style="width: 100%">
+                        <option selected disabled></option>
+                        @foreach ($diagnostics as $diagnosa)
+                            <option value="{{ $diagnosa->id ?? '' }}">{{ $diagnosa->icd_x_code ?? '...' }} - {{ $diagnosa->name ?? '...' }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label for="" class="form-label"></label>
+                    <button class="btn btn-danger btn-sm mt-1" type="button" onclick="removeInputDinamic(this)">-</button>
+                </div>
+            `;
+
+            dinamicInput(element, content, `diagnostic_sekunder_id_${countInput}`);
+        }
     </script>
     
     

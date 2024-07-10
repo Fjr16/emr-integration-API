@@ -254,34 +254,6 @@
         });
         
     </script>
-    <script type="text/javascript">
-        var anaks = document.querySelectorAll('.anak');
-        var dewasas = document.querySelectorAll('.dewasa');
-        var usia = document.getElementById('usia').value;
-
-        if (usia < 18) {
-            anaks.forEach(function(element) {
-                element.hidden = true;
-            });
-        } else {
-            dewasas.forEach(function(element) {
-                element.hidden = true;
-            });
-        }
-    </script>
-    <script type="text/javascript">
-        var inputHambatanSpiritual = document.getElementById('sehat-hambatan-spiritual');
-        var inputKet = document.getElementById('ket-sehat-hambatan-spiritual');
-        inputKet.addEventListener('blur', function() {
-            if (inputKet.value == '') {
-                inputHambatanSpiritual.value = '';
-                inputHambatanSpiritual.removeAttribute('name');
-            } else {
-                inputHambatanSpiritual.value = 'Sehat';
-                inputHambatanSpiritual.name = 'sehat';
-            }
-        });
-    </script>
 
     {{-- signature pad js --}}
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
@@ -326,7 +298,10 @@
     <script>
         // $(document).ready(function() {
         $('.select2').select2();
-        $('.select3').select2();
+        $('.select2-w-placeholder').select2({
+            placeholder : "Pilih Dignosa Sesuai kode ICD 10",
+            allowClear : true
+        });
         $(".select4").select2();
         // });
         for (var i = 0; i <= 20; i++) {
@@ -363,27 +338,6 @@
             getTotal(this);
         });
     </script>
-
-    {{-- <script>
-        // Daftar ID elemen editor
-        var editorIds = ['editor', 'editor1', 'editor2', 'editor3', 'editor4', 'editor5', 'editor6', 'editor7', 'editor8',
-            'editor9'
-        ];
-
-        // Loop melalui setiap ID editor
-        editorIds.forEach(function(editorId) {
-            ClassicEditor
-                .create(document.querySelector('#' + editorId), {
-                    toolbar: {
-                        items: ['|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList'],
-                    },
-                    language: 'en',
-                })
-                .catch(function(error) {
-                    console.error(error);
-                });
-        });
-    </script> --}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         flatpickr("#tanggal-lahir", {
@@ -421,6 +375,24 @@
         }
     </script>
 
+    <script>
+        function dinamicInput(element, content, idSelect2) {
+            const rowInputDinamic = element.closest('.dinamic-input');
+            const newRowInputDinamic = document.createElement('div');
+            newRowInputDinamic.className = rowInputDinamic.className;
+            newRowInputDinamic.innerHTML = content;
+
+            $(rowInputDinamic).after(newRowInputDinamic);
+            $('#' + idSelect2).select2({
+                placeholder : "Pilih Dignosa Sesuai kode ICD 10",
+                allowClear : true
+            });
+        }
+        function removeInputDinamic(element) {
+            const rowParent = element.closest('.dinamic-input');
+            rowParent.remove();
+        }
+    </script>
 
     {{-- start expand collapse table --}}
     <script>

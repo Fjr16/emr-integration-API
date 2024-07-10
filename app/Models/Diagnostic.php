@@ -10,14 +10,7 @@ class Diagnostic extends Model
     use HasFactory;
 
     protected $fillable = [
+        'icd_x_code',
         'name',
-        'dtd',
-        'icd_id',
-        'deskripsi',
-        'is_active',
     ];
-
-    public function icd(){
-        return $this->belongsTo(Icd::class);
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Diagnostic;
 use DateTime;
 use App\Models\Queue;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\Models\RawatJalanPoliPatient;
 use App\Models\MedicineReceipt;
 use App\Models\Patient;
 use App\Models\PerawatInitialAsesment;
+use App\Models\Procedure;
 use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
 
@@ -79,6 +81,11 @@ class RawatJalanController extends Controller
         } else {
             session(['asesmen' => session('asesmen')]);
         }
+        if (!session('diag-tind')) {
+            session(['diag-tind' => 'diagnosa']);
+        } else {
+            session(['diag-tind' => session('diag-tind')]);
+        }
 
         $today = new DateTime();
         $item = Queue::findOrFail($id);
@@ -89,6 +96,10 @@ class RawatJalanController extends Controller
         $receipts = MedicineReceipt::where('patient_id', $item->patient->id)->latest()->get();
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
+
+        // diagnostic dan procedure
+        $diagnostics = Diagnostic::orderBy('icd_x_code')->get();
+        $procedures = Procedure::get();
         return view('pages.rawatjalan.show', [
             "title" => $title,
             "menu" => "In Patient",
@@ -100,6 +111,8 @@ class RawatJalanController extends Controller
             'receipts' => $receipts,
             'sbpks' => $sbpks,
             'radiologiResults' => $radiologiResults,
+            'diagnostics' => $diagnostics,
+            'procedures' => $procedures,
         ]);
     }
 
