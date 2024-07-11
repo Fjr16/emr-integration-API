@@ -38,7 +38,6 @@ use App\Http\Controllers\MedicineReceiptController;
 use App\Http\Controllers\PatientCategoryController;
 use App\Http\Controllers\ReportDrugUsageController;
 use App\Http\Controllers\ReportPenunjangController;
-use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionRatesController;
@@ -339,12 +338,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/farmasi/obat/pembelian/store', [MedicineTransactionPembelianController::class, 'store'])->name('farmasi/obat/pembelian.store');
     Route::get('/farmasi/obat/pembelian/edit/{id}', [MedicineTransactionPembelianController::class, 'edit'])->name('farmasi/obat/pembelian.edit');
     Route::get('/farmasi/obat/pembelian/update/{id}', [MedicineTransactionPembelianController::class, 'update'])->name('farmasi/obat/pembelian.update');
-    Route::post('/farmasi/obat/pembelian/getJumlah', [MedicineTransactionPembelianController::class, 'getJumlah'])->name('farmasi/obat/pembelian.getJumlah');
     Route::delete('/farmasi/obat/pembelian/destroy/{id}', [MedicineTransactionPembelianController::class, 'destroy'])->name('farmasi/obat/pembelian.destroy');
-
-    //FakturPembelianObat
-    Route::get('/farmasi/obat/pembelian/faktur/edit/{id}', [InvoicePembelianController::class, 'edit'])->name('farmasi/obat/pembelian/faktur.edit');
-    Route::put('/farmasi/obat/pembelian/faktur/update/{id}', [InvoicePembelianController::class, 'update'])->name('farmasi/obat/pembelian/faktur.update');
 
     //Stock Obat
     Route::get('/farmasi/obat/stock', [MedicineStokController::class, 'index'])->name('farmasi/obat/stock.index');
