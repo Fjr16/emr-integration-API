@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdministrasiCacatanPerjalananRanapPatient;
-use App\Models\CatatanPerjalanRanapPatient;
-use App\Models\DetailAdministrasiCacatanPerjalananRanapPatient;
-use App\Models\Queue;
 use App\Models\Medicine;
 use App\Models\KasirPatient;
 use App\Models\MedicineStok;
 use App\Models\UnitCategory;
 use Illuminate\Http\Request;
 use App\Models\PatientCategory;
-use App\Models\RadiologiPatient;
-use App\Models\RajalRoadPatient;
-use App\Models\RawatInapPatient;
 use App\Models\RawatJalanPatient;
 use App\Models\DetailKasirPatient;
 use App\Models\PatientActionReport;
@@ -22,13 +15,9 @@ use App\Models\RajalFarmasiPatient;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RajalFarmasiObatDetail;
 use App\Models\RajalFarmasiObatInvoice;
-use App\Models\LaboratoriumPatientResult;
 use App\Models\LaboratoriumRequest;
-use App\Models\LaboratoriumRequestTypeMaster;
 use App\Models\PatientActionReportDetail;
 use App\Models\RadiologiFormRequest;
-use App\Models\RadiologiPatientRequestDetail;
-use App\Models\SuratPengantarRawatJalanPatient;
 use App\Models\Unit;
 
 class RawatJalanFarmasiController extends Controller

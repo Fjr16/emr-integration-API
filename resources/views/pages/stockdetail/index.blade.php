@@ -33,7 +33,7 @@
             <td>{{ $obt->medicine->name }}</td>
             <td>{{ $obt->no_batch }}</td>
             <td>{{ $obt->stok}}</td>
-            <td>{{ $obt->satuan}}</td>
+            <td>{{ $obt->medicine->small_unit ?? ''}}</td>
           </tr>
           @endforeach
       </tbody>

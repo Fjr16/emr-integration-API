@@ -20,7 +20,11 @@ return new class extends Migration
             $table->foreignId('medicine_form_id')->nullable();
             $table->string('kode')->nullable();
             $table->string('name')->nullable();
-            $table->foreignId('unit_conversion_master_id')->nullable();
+            $table->string('small_unit')->nullable();
+            $table->integer('small_to_medium')->nullable();
+            $table->string('medium_unit')->nullable();
+            $table->integer('medium_to_big')->nullable();
+            $table->string('big_unit')->nullable();
             $table->timestamps();
         });
     }

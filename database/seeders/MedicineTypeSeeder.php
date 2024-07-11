@@ -16,12 +16,10 @@ class MedicineTypeSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('medicine_types')->delete();
         $data = [
-            ['id' => 1, 'name' => 'GENERIK'],
-            ['id' => 2, 'name' => 'NON GENERIK'],
-            ['id' => 3, 'name' => 'NONE'],
-            ['id' => 4, 'name' => 'CHEMO'],
-            ['id' => 5, 'name' => 'CHRONIS'],
+            ['id' => 1, 'name' => 'OBAT GENERIK'],
+            ['id' => 2, 'name' => 'OBAT PATEN'],
         ];
         foreach ($data as $item) {
             DB::table('medicine_types')->insert([

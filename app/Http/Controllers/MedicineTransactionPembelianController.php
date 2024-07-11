@@ -8,7 +8,6 @@ use App\Models\Supplier;
 use Illuminate\Support\Str;
 use App\Models\MedicineStok;
 use Illuminate\Http\Request;
-use App\Models\UnitConversion;
 use App\Models\MedicineTransaction;
 use App\Models\Unit;
 
@@ -38,11 +37,13 @@ class MedicineTransactionPembelianController extends Controller
     {
         $suppliers = Supplier::all();
         $obats = Medicine::all();
+        $units = Unit::where('name', 'like', '%'.'Gudang'.'%')->get();
         return view('pages.pembelian.create', [
             "title" => "Pembelian",
             "menu" => "Farmasi",
             "obats" => $obats,
             "suppliers" => $suppliers,
+            "units" => $units,
         ]);
     }
 
@@ -54,6 +55,10 @@ class MedicineTransactionPembelianController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'unit_id' => 'required',
+        ]);
+
         $nextId = Invoice::latest()->pluck('id')->first() + 1;
         if(Str::length($nextId) == 1){
             $nofaktur = mt_rand(00000,99999).$nextId;
@@ -83,13 +88,13 @@ class MedicineTransactionPembelianController extends Controller
         ]);
 
         $data = $request->all();
-        $unit = Unit::where('name', 'gudang')->first();
+        $unitId = $request->unit_id;
         foreach ($data['medicine_id'] as $index => $medicineId) {
             $input['invoice_id'] = $item->id;
-            $input['unit_id'] = $unit->id;
+            $input['unit_id'] = $unitId;
             $input['medicine_id'] = $medicineId;
             $input['jumlah'] = $data['jumlah'][$index];
-            $input['satuan'] = $data['satuan'][$index];
+            $input['satuan'] = $data['satuan'][$index] ?? '';
             $input['harga'] = $data['harga'][$index];
             $input['total_harga'] = $data['total_harga'][$index];
             $input['no_batch'] = $data['no_batch'][$index];
@@ -98,7 +103,7 @@ class MedicineTransactionPembelianController extends Controller
             $input['pajak'] = $data['pajak'][$index];
             $input['diskon'] = $data['diskon'][$index];
             if($new = MedicineTransaction::create($input)){
-                $findStok = MedicineStok::where('medicine_id', $new['medicine_id'])->where('unit_id', $unit->id)
+                $findStok = MedicineStok::where('medicine_id', $new['medicine_id'])->where('unit_id', $unitId)
                             ->where('no_batch', $new['no_batch'])->where('satuan', $new['satuan'])->first();
                 if($findStok){
                     $stok = $findStok->stok;
@@ -113,10 +118,10 @@ class MedicineTransactionPembelianController extends Controller
                     $pajakSatuan = $new['pajak']/$new['jumlah'];
                     $totalStok = $new['jumlah'];
                     $medicineStok = [
-                        'unit_id' => $unit->id,
+                        'unit_id' => $unitId,
                         'medicine_id' => $new['medicine_id'],
                         'stok' => $totalStok,
-                        'satuan' => $new['satuan'],
+                        'satuan' => $new['satuan'] ?? '',
                         'base_harga' => $new['harga'],
                         'diskon_satuan' => $diskonSatuan,
                         'pajak_satuan' => $pajakSatuan,
@@ -271,13 +276,4 @@ class MedicineTransactionPembelianController extends Controller
 
         return back()->with('success', 'Berhasil Dihapus');
     }
-
-    // public function getJumlah(Request $request){
-    //     $data = UnitConversion::where('unit_from', $request->satuan_awal)->where('unit_to', $request->satuan)->first();
-    //     if($data){
-    //         $total = $request->jumlah_awal*$data->nilai;
-    //         return response()->json($total);
-    //     }
-
-    // }
 }

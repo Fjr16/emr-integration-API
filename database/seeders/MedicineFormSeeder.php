@@ -16,6 +16,7 @@ class MedicineFormSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('medicine_forms')->delete();
         $data = [
             ['id' => 1, 'name' => 'ALKES'],
             ['id' => 2, 'name' => 'BENANG PICIS'],
@@ -34,7 +35,7 @@ class MedicineFormSeeder extends Seeder
             ['id' => 15, 'name' => 'LARUTAN'],
             ['id' => 16, 'name' => 'NONE'],
             ['id' => 17, 'name' => 'PACTH'],
-            ['id' => 18, 'name' => 'serbuk'],
+            ['id' => 18, 'name' => 'SERBUK'],
             ['id' => 19, 'name' => 'SIRUP'],
             ['id' => 20, 'name' => 'SPRAY'],
             ['id' => 21, 'name' => 'SUPPOS'],

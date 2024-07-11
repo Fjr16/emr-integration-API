@@ -15,30 +15,39 @@ class MedicineCategorieSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('medicine_categories')->delete();
         $data = [
             [
                 'id' => 1,
-                'name' => 'PSIKOTROPIK',
+                'name' => 'PSIKOTROPIKA',
             ],
             [
                 'id' => 2,
-                'name' => 'NARKOTIK',
+                'name' => 'NARKOTIKA',
             ],
             [
                 'id' => 3,
-                'name' => 'BEBAS',
+                'name' => 'OBAT BEBAS',
             ],
             [
                 'id' => 4,
-                'name' => 'BEBAS TERBATAS',
+                'name' => 'OBAT BEBAS TERBATAS',
             ],
             [
                 'id' => 5,
-                'name' => 'KERAS',
+                'name' => 'OBAT KERAS',
             ],
             [
                 'id' => 6,
-                'name' => 'NONE',
+                'name' => 'JAMU',
+            ],
+            [
+                'id' => 7,
+                'name' => 'HERBAL',
+            ],
+            [
+                'id' => 8,
+                'name' => 'FITOFARMAKA',
             ],
         ];
         foreach ($data as $item) {

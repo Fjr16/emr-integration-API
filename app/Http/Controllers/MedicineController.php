@@ -8,8 +8,6 @@ use App\Models\MedicineCategory;
 use App\Models\MedicineForm;
 use App\Models\MedicineType;
 use App\Models\Supplier;
-use App\Models\UnitConversion;
-use App\Models\UnitConversionMaster;
 use Illuminate\Http\Request;
 
 class MedicineController extends Controller
@@ -26,11 +24,10 @@ class MedicineController extends Controller
         }else{
             session(['navOn' => 'listObat']);
         }
-        $data = Medicine::with(['medicineType', 'medicineForm', 'medicineCategory', 'unitConversionMaster'])->get();
+        $data = Medicine::with(['medicineType', 'medicineForm', 'medicineCategory'])->get();
         $dataJenis = MedicineType::all();
         $dataGol = MedicineCategory::all();
         $dataBentuk = MedicineForm::all();
-        $dataKonversi = UnitConversion::all();
         $dataPabrik = Factory::all();
         $dataSupplier = Supplier::all();
         return view('pages.masterobat.index', [
@@ -40,7 +37,6 @@ class MedicineController extends Controller
             "dataJenis" => $dataJenis,
             "dataGol" => $dataGol,
             "dataBentuk" => $dataBentuk,
-            "dataKonversi" => $dataKonversi,
             "dataPabrik" => $dataPabrik,
             "dataSupplier" => $dataSupplier,
         ]);
@@ -56,14 +52,12 @@ class MedicineController extends Controller
         $jenis = MedicineType::all();
         $golongan = MedicineCategory::all();
         $sediaan = MedicineForm::all();
-        $satuan = UnitConversionMaster::all();
         return view('pages.masterobat.create', [
             "title" => "Master Obat",
             "menu" => "Setting",
             "jenis" => $jenis,
             "golongan" => $golongan,
             "sediaan" => $sediaan,
-            "satuan" => $satuan,
         ]);
     }
 
@@ -75,6 +69,14 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'kode' => 'required',
+            'name' => 'required',
+            'medicine_type_id' => 'required',
+            'medicine_category_id' => 'required',
+            'small_unit' => 'required',
+        ]);
+
         $data = $request->all();
         Medicine::create($data);
 
@@ -107,7 +109,6 @@ class MedicineController extends Controller
         $jenis = MedicineType::all();
         $golongan = MedicineCategory::all();
         $sediaan = MedicineForm::all();
-        $satuan = UnitConversionMaster::all();
         return view('pages.masterobat.edit', [
             "title" => "Master Obat",
             "menu" => "Setting",
@@ -115,7 +116,6 @@ class MedicineController extends Controller
             "jenis" => $jenis,
             "golongan" => $golongan,
             "sediaan" => $sediaan,
-            "satuan" => $satuan,
         ]);
     }
 
@@ -128,6 +128,13 @@ class MedicineController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'kode' => 'required',
+            'name' => 'required',
+            'medicine_type_id' => 'required',
+            'medicine_category_id' => 'required',
+            'small_unit' => 'required',
+        ]);
         $item = Medicine::find($id);
         $data = $request->all();
         $item->update($data);

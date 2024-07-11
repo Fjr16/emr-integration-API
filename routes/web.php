@@ -33,18 +33,15 @@ use App\Http\Controllers\QueueConfirmController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\ActionCategoryController;
 use App\Http\Controllers\DoctorScheduleController;
-use App\Http\Controllers\UnitConversionController;
 use App\Http\Controllers\AsesmentPerawatController;
 use App\Http\Controllers\MedicineReceiptController;
 use App\Http\Controllers\PatientCategoryController;
 use App\Http\Controllers\ReportDrugUsageController;
 use App\Http\Controllers\ReportPenunjangController;
-use App\Http\Controllers\InitialAssesmentController;
 use App\Http\Controllers\InvoicePembelianController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionRatesController;
-use App\Http\Controllers\DiagnosticPatientController;
 use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\DoctorInitialAssesmentController;
 use App\Http\Controllers\RawatJalanFarmasiController;
@@ -54,14 +51,12 @@ use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
 use App\Http\Controllers\RadiologiFormRequestController;
 use App\Http\Controllers\RekamMedisElektronikController;
-use App\Http\Controllers\UnitConversionMasterController;
 use App\Http\Controllers\RadiologiPatientQueueController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\OtherController;
-use App\Http\Controllers\ProcedurePatientController;
 use App\Http\Controllers\RajalGeneralConsentController;
 
 /*
@@ -356,29 +351,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/farmasi/obat/stock/show/{id}', [MedicineStokController::class, 'show'])->name('farmasi/obat/stock.show');
     Route::get('/farmasi/obat/stock/all', [MedicineStokController::class, 'all'])->name('farmasi/obat/stock.all');
 
-    //Konversi
-    Route::get('/farmasi/obat/konversi/create', [UnitConversionController::class, 'create'])->name('farmasi/obat/konversi.create');
-    Route::post('/farmasi/obat/konversi/store', [UnitConversionController::class, 'store'])->name('farmasi/obat/konversi.store');
-    Route::get('/farmasi/obat/konversi/edit/{id}', [UnitConversionController::class, 'edit'])->name('farmasi/obat/konversi.edit');
-    Route::put('/farmasi/obat/konversi/update/{id}', [UnitConversionController::class, 'update'])->name('farmasi/obat/konversi.update');
-    Route::post('/farmasi/obat/konversi/show', [UnitConversionController::class, 'show'])->name('farmasi/obat/konversi.show');
-    Route::delete('/farmasi/obat/konversi/destroy/{id}', [UnitConversionController::class, 'destroy'])->name('farmasi/obat/konversi.destroy');
-
-    //KonversiMaster
-    Route::get('/farmasi/obat/master/konversi/create', [UnitConversionMasterController::class, 'create'])->name('farmasi/obat/master/konversi.create');
-    Route::post('/farmasi/obat/master/konversi/store', [UnitConversionMasterController::class, 'store'])->name('farmasi/obat/master/konversi.store');
-    Route::get('/farmasi/obat/master/konversi/edit/{id}', [UnitConversionMasterController::class, 'edit'])->name('farmasi/obat/master/konversi.edit');
-    Route::put('/farmasi/obat/master/konversi/update/{id}', [UnitConversionMasterController::class, 'update'])->name('farmasi/obat/master/konversi.update');
-    Route::delete('/farmasi/obat/master/konversi/destroy/{id}', [UnitConversionMasterController::class, 'destroy'])->name('farmasi/obat/master/konversi.destroy');
-
     //getStok
     Route::post('/farmasi/obat/get/stok', [GetStokController::class, 'index'])->name('farmasi/obat/get/stok.index');
     Route::post('/farmasi/obat/get/medicineStok/all', [GetStokController::class, 'create'])->name('farmasi/obat/get/medicineStok/all.create');
 
     //getConversion
-    Route::post('/konversi/obat/get/satuan', [GetConversion::class, 'index'])->name('konversi/obat/get/satuan.index');
     Route::post('/konversi/obat/get/satuan/awal', [GetConversion::class, 'create'])->name('konversi/obat/get/satuan/awal.create');
-    Route::post('/konversi/obat/get/jumlah', [GetConversion::class, 'getJumlah'])->name('konversi/obat/get.jumlah');
 });
 
 //Antrian

@@ -16,7 +16,8 @@ class MedicineSeeder extends Seeder
      */
     public function run()
     {
-        $json = file_get_contents(public_path('dbLama/MedicinesData.json'));
+        DB::table('medicines')->delete();
+        $json = file_get_contents(public_path('dbLama/medicines-bank.json'));
         $data = json_decode($json, true);
 
         foreach ($data as $item) {
@@ -27,7 +28,11 @@ class MedicineSeeder extends Seeder
                 'medicine_form_id' => $item['medicine_form_id'],
                 'kode' => $item['kode'],
                 'name' => $item['name'],
-                'unit_conversion_master_id' => NULL,
+                'small_unit' => $item['small_unit'],
+                'small_to_medium' => $item['medium_to_small'] ?? null,
+                'medium_unit' => $item['medium_unit'],
+                'medium_to_big' => $item['big_to_medium'] ?? null,
+                'big_unit' => $item['big_unit'],
                 'created_at' => Carbon::now(),
                 'updated_at' =>NULL,
             ]);

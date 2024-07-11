@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Medicine;
-use App\Models\MedicineStok;
 use App\Models\Unit;
-use App\Models\UnitCategory;
-use App\Models\UnitCategoryPivot;
 use Illuminate\Http\Request;
 
 class MedicineStokController extends Controller
@@ -66,11 +63,9 @@ class MedicineStokController extends Controller
     public function show($id)
     {
         $item = Unit::find($id);
-        // $data = UnitCategory::where('unit_id', $id)->get();
         return view('pages.stockdetail.index', [
             "title" => "Stock Obat",
             "menu" => "Farmasi",
-            // 'data' => $data,
             'item' => $item
         ]);
 

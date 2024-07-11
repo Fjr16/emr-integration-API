@@ -40,13 +40,6 @@
             </button>
           </li>
           <li class="nav-item">
-            <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'konversi' ? 'active' : '' }} d-flex justify-content-center"
-            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-konversi"
-            aria-controls="navs-justified-konversi" aria-selected="false">
-            <p class="m-0">Tabel Konversi</p>
-            </button>
-          </li>
-          <li class="nav-item">
             <button id="btn-link" type="button" class="nav-link {{ session('navOn') == 'pabrik' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-pabrik"
             aria-controls="navs-justified-pabrik" aria-selected="false">
@@ -76,7 +69,7 @@
                     <th>Jenis</th>
                     <th>Sediaan</th>
                     <th>Golongan</th>
-                    <th>Satuan Obat</th>
+                    <th>Satuan</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -87,9 +80,9 @@
                       <td>{{ $item->kode }}</td>
                       <td>{{ $item->name }}</td>
                       <td>{{ $item->medicineType->name }}</td>
-                      <td>{{ $item->medicineForm->name }}</td>
+                      <td>{{ $item->medicineForm->name ?? '-' }}</td>
                       <td>{{ $item->medicineCategory->name }}</td>
-                      <td>{{ $item->unitConversionMaster->name ?? '' }}</td>
+                      <td>{{ $item->small_unit ?? '-' }}</td>
                       <td>
                         <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -237,58 +230,6 @@
                                     Edit
                                 </a>
                                 <form action="{{ route('farmasi/obat/bentuk.destroy', $item->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="dropdown-item"
-                                        onclick="return confirm('Yakin ingin menghapus data?')"><i
-                                            class="bx bx-trash me-1"></i>Hapus</button>
-                                </form>
-                            </div>
-                        </div>
-                    </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="tab-pane fade {{ session('navOn') == 'konversi' ? 'show active' : '' }}" id="navs-justified-konversi" role="tabpanel">
-            <div class="text-end mb-3">
-              <a href="{{ route('farmasi/obat/konversi.create') }}" class="btn btn-success btn-sm m-0">+ Tambah Konversi</a>
-              <a href="{{ route('farmasi/obat/master/konversi.create') }}" class="btn btn-success btn-sm m-0 mx-2">+ Tambah Satuan</a>
-            </div>
-            <div class="table-responsive text-nowrap">
-              <table class="table">
-                <thead>
-                  <tr class="text-nowrap bg-dark">
-                    <th>No</th>
-                    <th>Kode / Nama Obat</th>
-                    <th>Dari Satuan</th>
-                    <th>Ke Satuan</th>
-                    <th>Nilai</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    @foreach ($dataKonversi as $item)
-                    <tr>
-                      <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
-                      <td>{{ $item->medicine->kode }}/{{ $item->medicine->name }}</td>
-                      <td>{{ $item->unit_from }}</td>
-                      <td>{{ $item->unit_to }}</td>
-                      <td>{{ $item->nilai }}</td>
-                      <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('farmasi/obat/konversi.edit', $item->id) }}">
-                                    <i class="bx bx-edit-alt me-1"></i>
-                                    Edit
-                                </a>
-                                <form action="{{ route('farmasi/obat/konversi.destroy', $item->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="dropdown-item"

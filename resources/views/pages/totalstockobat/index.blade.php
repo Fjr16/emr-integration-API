@@ -75,7 +75,7 @@
               <table class="mx-auto">
                 @foreach ($item->medicineStoks as $ms)
                   <tr>
-                    <td>{{ $ms->satuan }}</td>
+                    <td>{{ $ms->medicine->small_unit ?? '' }}</td>
                   </tr>
                 @endforeach
               </table>

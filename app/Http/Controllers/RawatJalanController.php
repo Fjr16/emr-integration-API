@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Diagnostic;
+use App\Models\Medicine;
 use DateTime;
 use App\Models\Queue;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use App\Models\RajalFarmasiPatient;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\MedicineReceipt;
+use App\Models\MedicineStok;
 use App\Models\Patient;
 use App\Models\PerawatInitialAsesment;
 use App\Models\Procedure;
@@ -93,13 +95,14 @@ class RawatJalanController extends Controller
 
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
         $reportActions = PatientActionReport::where('patient_id', $item->patient->id)->latest()->get();
-        $receipts = MedicineReceipt::where('patient_id', $item->patient->id)->latest()->get();
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
 
         // diagnostic dan procedure
         $diagnostics = Diagnostic::orderBy('icd_x_code')->get();
         $procedures = Procedure::get();
+        // obat
+        $medicines = MedicineStok::where('stok' ,'>', 0)->get();
         return view('pages.rawatjalan.show', [
             "title" => $title,
             "menu" => "In Patient",
@@ -108,11 +111,11 @@ class RawatJalanController extends Controller
             "riwKunjungans" => $riwKunjungans,
             'today' => $today,
             'reportActions' => $reportActions,
-            'receipts' => $receipts,
             'sbpks' => $sbpks,
             'radiologiResults' => $radiologiResults,
             'diagnostics' => $diagnostics,
             'procedures' => $procedures,
+            'medicines' => $medicines,
         ]);
     }
 

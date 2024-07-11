@@ -119,7 +119,6 @@
             margin: 15px;
             padding-bottom: 20px;
         }
-
         /* /table rme */
     </style>
     <!-- Layout wrapper -->
@@ -297,11 +296,53 @@
     <script src="{{ asset('/assets/vendor/libs/select2/select2.js') }}"></script>
     <script>
         // $(document).ready(function() {
-        $('.select2').select2();
+        $('.select2').select2({
+            placeholder : 'Pilih',
+        });
         $('.select2-w-placeholder').select2({
             placeholder : "Pilih Dignosa Sesuai kode ICD 10",
             allowClear : true
         });
+        $('.select2-w-placeholder-medicine').select2({
+            placeholder : "Pilih Obat",
+            allowClear : true,
+            matcher: matchCustom,
+            templateResult: formatCustom
+        });
+        
+        // select 2 subtext
+        function stringMatch(term, candidate) {
+            return candidate && candidate.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+        }
+        function matchCustom(params, data) {
+            // If there are no search terms, return all of the data
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+            // Do not display the item if there is no 'text' property
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+            // Match text of option
+            if (stringMatch(params.term, data.text)) {
+                return data;
+            }
+            // Match attribute "data-foo" of option
+            if (stringMatch(params.term, $(data.element).attr('data-foo'))) {
+                return data;
+            }
+            // Return `null` if the term should not be displayed
+            return null;
+        }
+
+        function formatCustom(state) {
+            return $(
+                '<div><div>' + state.text + '</div><div class="foo text-lowercase">'
+                    + $(state.element).attr('data-foo')
+                    + '</div></div>'
+            );
+        }
+
         $(".select4").select2();
         // });
         for (var i = 0; i <= 20; i++) {
@@ -313,7 +354,6 @@
             $("#ruang_tf2_" + i).select2();
             $("#ruang_tf3_" + i).select2();
         }
-        for (var i = 0; i <= 20; i++) {}
     </script>
 
     {{-- script disabled untuk view patient --}}
