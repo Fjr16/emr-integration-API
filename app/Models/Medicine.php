@@ -15,36 +15,27 @@ class Medicine extends Model
         'medicine_form_id',
         'kode',
         'name',
-        'unit_conversion_master_id',
+        'small_unit',
+        'small_to_medium',
+        'medium_unit',
+        'medium_to_big',
+        'big_unit'
     ];
-
-    protected $with = ['unitConversionMaster'];
 
     public function medicineType(){
         return $this->belongsTo(MedicineType::class);
     }
-
     public function medicineCategory(){
         return $this->belongsTo(MedicineCategory::class);
     }
-
     public function medicineForm(){
         return $this->belongsTo(MedicineForm::class);
     }
-
     public function medicineTransactions(){
         return $this->hasMany(MedicineTransaction::class);
     }
-
     public function medicineStoks(){
         return $this->hasMany(MedicineStok::class);
-    }
-
-    public function unitConversions(){
-        return $this->hasMany(UnitConversion::class);
-    }
-    public function unitConversionMaster(){
-        return $this->belongsTo(UnitConversionMaster::class);
     }
     public function medicineDistributionDetails(){
         return $this->belongsTo(MedicineDistributionDetail::class);
@@ -55,19 +46,5 @@ class Medicine extends Model
     }
     public function medicineReceiptDetails(){
         return $this->hasMany(MedicineReceiptDetail::class);
-    }
-
-    //ranap discharge summary
-    public function ranapDetailObatDirawatPatients(){
-        return $this->hasMany(RanapDetailObatDirawatPatient::class);
-    }
-    public function ranapDetailObatDirumahPatients(){
-        return $this->hasMany(RanapDetailObatDirumahPatient::class);
-    }
-    public function ranapMedicineReceiptDetail(){
-        return $this->hasMany(RanapMedicineReceiptDetail::class);
-    }
-    public function ranapDischargePlanningPharmacies(){
-        return $this->hasMany(RanapDischargePlanningPharmacy::class);
     }
 }

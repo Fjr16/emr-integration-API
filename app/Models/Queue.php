@@ -83,6 +83,10 @@ class Queue extends Model
     {
         return $this->hasOne(diagnosticProcedurePatient::class);
     }
+    public function medicineReceipt()
+    {
+        return $this->hasOne(MedicineReceipt::class);
+    }
     public function soapDokter()
     {
         return $this->hasOne(RmeCppt::class);

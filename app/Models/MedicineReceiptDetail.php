@@ -12,10 +12,10 @@ class MedicineReceiptDetail extends Model
     protected $fillable = [
         'medicine_receipt_id',
         'medicine_id',
+        'nama_obat_custom',
+        'satuan_obat_custom',
         'jumlah',
         'aturan_pakai',
-        'keterangan',
-        'other',
     ];
 
     public function medicine(){

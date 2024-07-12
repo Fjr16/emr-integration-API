@@ -1034,8 +1034,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'diag-tind' ? 'show active' : '' }}"
-                        id="navs-justified-diag-tind" role="tabpanel">
+                    <div class="tab-pane fade {{ session('btn') == 'diag-tind' ? 'show active' : '' }}" id="navs-justified-diag-tind" role="tabpanel">
                         <div class="row">
                             <div class="col-md-2 col-12 mb-3 mb-md-0">
                               <div class="list-group">
@@ -1171,51 +1170,150 @@
                         </div>
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'resep dokter' ? 'show active' : '' }}" id="navs-justified-resep" role="tabpanel">
-                        <table class="table" id="example">
+                        <form action="{{ route('rajal/resep/dokter.store', $item->id) }}" method="POST">
+                            @csrf
+                            <div class="row mb-1">
+                                <div class="col-12">
+                                    <label for="medicine_id" class="form-label">Nama Obat</label>
+                                    <select id="medicine_id" name="medicine_id" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%">
+                                        <option value="" selected disabled></option>
+                                        @foreach ($medicines as $obat)
+                                            @if (old('medicine_id') == $obat->medicine->id)
+                                                <option value="{{ $obat->medicine->id }}" selected >{{ $obat->medicine->kode ?? '' }}/{{ $obat->medicine->name ?? '' }}</option>
+                                            @else
+                                                <option value="{{ $obat->medicine->id }}" data-foo="Obat {{ $obat->medicine->medicineType->name ?? '...' }} | {{ $obat->medicine->medicineCategory->name ?? '...' }} | Stok : {{ $obat->stok ?? '...' }} {{ $obat->medicine->small_unit ?? '...' }}" data-satuan="{{ $obat->medicine->small_unit ?? '' }}">{{ $obat->medicine->kode ?? '...' }} / {{ $obat->medicine->name ?? '...' }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-10">
+                                    <input type="text" name="nama_obat_custom" id="medicine_name" class="form-control" placeholder="Input disini untuk obat yang stoknya tidak tersedia / atau obat yang harus dibeli diluar">
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" class="form-control" name="satuan_obat_custom" id="medicine_satuan" placeholder="Satuan Obat">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-sm-6">
+                                    <label class="form-label" for="basic-default-name">Jumlah</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="number" class="form-control" name="jumlah" aria-label="Amount" value="1" />
+                                        <span class="input-group-text bg-secondary text-white" id="satuan_jumlah_obat"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="row mb-1">
+                                        <label class="form-label" for="basic-default-name">Aturan Pakai</label>
+                                        <div class="col-4">
+                                            <select class="form-select form-select-md" data-allow-clear="true" id="interval_medicine">
+                                                <option selected disabled>Pilih</option>
+                                                <option value="1x1/2">1x1/2</option>
+                                                <option value="1x1">1x1</option>
+                                                <option value="2x1/2">2x1/2</option>
+                                                <option value="2x1">2x1</option>
+                                                <option value="3x1/2">3x1/2</option>
+                                                <option value="3x1">3x1</option>
+                                                <option value="4x1/2">4x1/2</option>
+                                                <option value="4x1">4x1</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <select class="form-select form-select-md" data-allow-clear="true" id="medium_makan">
+                                                <option selected disabled>Pilih</option>
+                                                <option value="Sendok Makan">Sendok Makan</option>
+                                                <option value="Sendok Teh">Sendok Teh</option>
+                                                <option value="Bungkus">Bungkus</option>
+                                                <option value="Kapsul">Kapsul</option>
+                                                <option value="Kaplet">Kaplet</option>
+                                                <option value="Tablet">Tablet</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <select class="form-select form-select-md" data-allow-clear="true" id="waktu_medicine">
+                                                <option selected disabled>Pilih</option>
+                                                <option value="Sebelum Makan">Sebelum Makan</option>
+                                                <option value="Sesudah Makan">Sesudah Makan</option>
+                                                <option value="Saat Makan">Saat Makan</option>
+                                                <option value="Dioleskan">Dioleskan</option>
+                                                <option value="Diteteskan">Diteteskan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="text" name="aturan_pakai" id="aturan_pakai" class="form-control" id="aturan_pakai" placeholder="Aturan Pakai"></input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 my-4 text-start">
+                                    <a href="{{ route('rajal/resep/dokter.show', $item->id) }}" target="blank" class="btn btn-info btn-sm">
+                                        <i class='bx bx-printer'></i>
+                                    </a>
+                                </div>
+                                <div class="col-6 my-4 text-end">
+                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <table class="table">
                             <thead>
-                                <tr class="text-nowrap">
-                                    <th class="text-body">No</th>
-                                    <th class="text-body">Tanggal / Jam</th>
-                                    <th class="text-body">Dokter</th>
-                                    @canany(['edit resep dokter', 'hapus resep dokter', 'print resep dokter'])
-                                        <th class="text-body">Action</th>
-                                    @endcanany
+                                <tr class="text-nowrap bg-dark text-white">
+                                    <th>Action</th>
+                                    <th>Nama Obat</th>
+                                    <th>Jumlah</th>
+                                    <th>Satuan</th>
+                                    <th>Aturan Pakai</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($receipts as $receipt)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $receipt->created_at->format('Y-m-d H:i') }}</td>
-                                        <td>{{ $receipt->user->name ?? '' }}</td>
-                                        @canany(['edit resep dokter', 'print resep dokter', 'hapus resep dokter'])
-                                            <td>
-                                                <div class="d-flex">
-                                                    @can('print resep dokter')
-                                                        <a href="{{ route('rajal/resep/dokter.show', $receipt->id) }}"
-                                                            target="blank" class="btn btn-dark btn-sm"><i
-                                                                class='bx bx-printer'></i></a>
-                                                    @endcan
-                                                    @can('edit resep dokter')
-                                                        <a class="btn btn-warning btn-sm mx-2"
-                                                            href="{{ route('rajal/resep/dokter.edit', $receipt->id) }}"><i
-                                                                class='bx bx-edit'></i></a>
-                                                    @endcan
-                                                    @can('hapus resep dokter')
-                                                        <form action="{{ route('rajal/resep/dokter.destroy', $receipt->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                                                            @method('DELETE')
-                                                            @csrf
-                                                            <button type = "submit" class="btn btn-danger btn-sm">
-                                                                <i class='bx bx-trash'></i>
-                                                            </button>
-                                                        </form>
-                                                    @endcan
-                                                </div>
+                                @foreach ($item->medicineReceipt->medicineReceiptDetails ?? [] as $detailResep)     
+                                        <tr>
+                                            <td class="d-flex">
+                                            <form action="{{ route('rajal/resep/dokter.destroy', $detailResep->id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type = "submit" class="btn btn-danger btn-sm">
+                                                    <i class='bx bx-trash'></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('rajal/resep/dokter.update', $detailResep->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT') 
+                                                <button class="btn btn-primary btn-sm ms-2" type="submit"><i class='bx bx-up-arrow-alt'></i></button>
                                             </td>
-                                        @endcanany
-                                    </tr>
+                                            @if ($detailResep->medicine_id)    
+                                                <td>
+                                                    {{-- <input type="text" class="form-control" value="{{ $detailResep->medicine->name ?? '' }}" disabled> --}}
+                                                    {{ $detailResep->medicine->name ?? '' }}
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
+                                                </td>
+                                                <td>{{ $detailResep->medicine->small_unit ?? '' }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" name="aturan_pakai" value="{{ $detailResep->aturan_pakai ?? '' }}">
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" name="nama_obat_custom" value="{{ $detailResep->nama_obat_custom ?? '' }}">
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="satuan_obat_custom" class="form-control form-control-sm" value="{{ $detailResep->satuan_obat_custom ?? '' }}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="aturan_pakai" class="form-control form-control-sm" value="{{ $detailResep->aturan_pakai ?? '' }}">
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    </form>
                                 @endforeach
                             </tbody>
                         </table>
@@ -1616,6 +1714,45 @@
 
             dinamicInput(element, content, `diagnostic_sekunder_id_${countInput}`);
         }
+    </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function(){
+            // {{-- aturan pakai --}}
+            var intMedicine = document.getElementById('interval_medicine');
+            var medium = document.getElementById('medium_makan');
+            var waktuMakan = document.getElementById('waktu_medicine');
+            var aturanPakai = document.getElementById('aturan_pakai');
+            
+            var intVal = '', medVal = '', waktuVal = '';
+            intMedicine.addEventListener('change', function(){
+                intVal = intMedicine.value;
+                aturanPakai.value = intVal + ' ' + medVal + ' ' + waktuVal;
+            });
+            medium.addEventListener('change', function(){
+                medVal = `(${medium.value})`;
+                aturanPakai.value = intVal + ' ' + medVal + ' ' + waktuVal;
+            });
+            waktuMakan.addEventListener('change', function(){
+                waktuVal = waktuMakan.value;
+                aturanPakai.value = intVal + ' ' + medVal + ' ' + waktuVal;
+            });
+
+            // satuan otomatis
+            var inputSatuan = document.getElementById('medicine_satuan');
+            var satuanJumlahObat = document.getElementById('satuan_jumlah_obat');
+            var selectMedicine = document.getElementById('medicine_id');
+            
+            inputSatuan.addEventListener('keyup', function(){
+                satuanJumlahObat.textContent = inputSatuan.value;
+            });
+            $(selectMedicine).on('change', function(){
+                const selectedOption = $(this).select2('data')[0];
+                const satuan = selectedOption.element.dataset.satuan;
+                satuanJumlahObat.textContent = satuan;
+            })
+
+        });
     </script>
     
     

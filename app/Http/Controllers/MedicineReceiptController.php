@@ -2,46 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DiagnosisKeperawatanPatient;
 use App\Models\Queue;
-use App\Models\Medicine;
 use Illuminate\Http\Request;
 use App\Models\MedicineReceipt;
 use App\Models\MedicineReceiptDetail;
 use App\Models\Patient;
-use App\Models\StatusFisikDiagnosaKeperawatanPatient;
-use Illuminate\Support\Facades\Auth;
 
 class MedicineReceiptController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($id)
-    {
-        //     $today = date('Y-m-d H:i');
-        //     $item = Queue::find($id);
-        //     $dataObat = Medicine::all();
-        //     return view('pages.resepDokter.create', [
-        //         'title' => 'Resep Dokter',
-        //         'menu' => 'In Patient',
-        //         'item' => $item,
-        //         'today' => $today,
-        //         'dataObat' => $dataObat,
-        //     ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -51,25 +19,28 @@ class MedicineReceiptController extends Controller
      */
     public function store(Request $request, $id)
     {
-        // $data = $request->all();
+        $item = Queue::find($id);
+        if ($item->medicineReceipt) {
+            $resep = $item->medicineReceipt;
+        }else{
+            $resep = MedicineReceipt::create([
+                'user_id' => auth()->user()->id,
+                'queue_id' => $item->id,
+                'no_resep' => '',
+                'ttd' => auth()->user()->paraf ?? '',
+            ]);
+        }
+        $data = $request->all();
+        if (isset($data['medicine_id'])) {
+            $data['nama_obat_custom'] = null;
+            $data['satuan_obat_custom'] = null;
+        }
+        $resep->medicineReceiptDetails()->create($data);
 
-        // $item = Queue::find($id);
-        // $data['user_id'] = Auth::user()->id;
-        // $data['patient_id'] = $item->patient->id;
-        // $data['rawat_jalan_poli_patient_id'] = $item->rawatJalanPatient->rawatJalanPoliPatient->id;
-        // if($itemResep = MedicineReceipt::create($data)){
-        //     foreach($data['medicine_id'] as $index => $medicine_id){
-        //         $resepDetail['medicine_receipt_id'] = $itemResep->id;
-        //         $resepDetail['medicine_id'] = $medicine_id;
-        //         $resepDetail['jumlah'] = $request['jumlah'][$index];
-        //         $resepDetail['aturan_pakai'] = $request['aturan_pakai'][$index];
-        //         MedicineReceiptDetail::create($resepDetail);
-        //     }
-        // }
-        // return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])->with([
-        //     'success' => 'Berhasil Ditambahkan',
-        //     'navOn' => 'resep dokter',
-        // ]);
+        return back()->with([
+            'success' => 'Berhasil Ditambahkan',
+            'btn' => 'resep dokter',
+        ]);
     }
 
     /**
@@ -80,39 +51,14 @@ class MedicineReceiptController extends Controller
      */
     public function show($id)
     {
-        $item = MedicineReceipt::find($id);
+        $item = Queue::find($id);
 
-        // return $item->user;
         $patient = Patient::find($item->patient_id);
-
-        $diagnosisKeperawatanPatient = DiagnosisKeperawatanPatient::where('patient_id', $item->patient_id)->first();
-        $statusFisikDiagnosaKeperawatanPatient = StatusFisikDiagnosaKeperawatanPatient::where('diagnosis_keperawatan_patient_id', $diagnosisKeperawatanPatient->id)->first();
         return view('pages.resepDokter.show', [
             'title' => 'Resep Dokter',
             'menu' => 'In Patient',
             'item' => $item,
             'patient' => $patient,
-            'statusFisikDiagnosaKeperawatanPatient' => $statusFisikDiagnosaKeperawatanPatient,
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $today = date('Y-m-d H:i');
-        $item = MedicineReceipt::find($id);
-        $dataObat = Medicine::all();
-        return view('pages.resepDokter.edit', [
-            'title' => 'Edit Resep Dokter',
-            'menu' => 'In Patient',
-            'item' => $item,
-            'today' => $today,
-            'dataObat' => $dataObat,
         ]);
     }
 
@@ -126,25 +72,12 @@ class MedicineReceiptController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $item = MedicineReceipt::find($id);
-        $queue = Queue::find($item->rawatJalanPoliPatient->rawatJalanPatient->queue_id);
+        $item = MedicineReceiptDetail::find($id);
+        $item->update($data);
 
-        foreach ($item->medicineReceiptDetails as $detail) {
-            $detail->delete();
-        }
-
-        foreach ($data['medicine_id'] as $index => $medicine_id) {
-            $resepDetail['medicine_receipt_id'] = $item->id;
-            $resepDetail['medicine_id'] = $medicine_id;
-            $resepDetail['jumlah'] = $request['jumlah'][$index];
-            $resepDetail['aturan_pakai'] = $request['aturan_pakai'][$index];
-            $resepDetail['keterangan'] = $request['keterangan'][$index];
-            MedicineReceiptDetail::create($resepDetail);
-        }
-
-        return redirect()->route('rajal/show', ['id' => $queue->id, 'title' => 'Rawat Jalan'])->with([
+        return back()->with([
             'success' => 'Berhasil Diperbarui',
-            'navOn' => 'resep dokter',
+            'btn' => 'resep dokter',
         ]);
     }
 
@@ -165,7 +98,7 @@ class MedicineReceiptController extends Controller
 
         return back()->with([
             'success' => 'Berhasil Dihapus',
-            'navOn' => 'resep dokter',
+            'btn' => 'resep dokter',
         ]);
     }
 }

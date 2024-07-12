@@ -11,18 +11,16 @@ class MedicineReceipt extends Model
 
     protected $fillable = [
         'user_id',
-        'patient_id',
-        'rawat_jalan_poli_patient_id',
+        'queue_id',
+        'no_resep',
+        'ttd',
     ];
 
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function patient(){
-        return $this->belongsTo(Patient::class);
-    }
-    public function rawatJalanPoliPatient(){
-        return $this->belongsTo(RawatJalanPoliPatient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
     public function medicineReceiptDetails(){
         return $this->hasMany(MedicineReceiptDetail::class);

@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('medicine_receipt_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medicine_receipt_id')->nullable();
+            $table->foreignId('medicine_receipt_id');
             $table->foreignId('medicine_id')->nullable();
+            $table->string('nama_obat_custom')->nullable();
+            $table->string('satuan_obat_custom')->nullable();
             $table->integer('jumlah')->nullable();
             $table->string('aturan_pakai')->nullable();
-            $table->string('keterangan')->nullable();
-            $table->text('other')->nullable();
             $table->timestamps();
         });
     }

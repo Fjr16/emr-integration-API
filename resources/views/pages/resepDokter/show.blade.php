@@ -39,6 +39,11 @@
             position: relative;
         }
 
+        .multi-line-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
         .subpage {
             padding: 1cm;
             border: 5px red solid;
@@ -134,18 +139,32 @@
             <div class="row justify-content-center">
                 <div class="col-8 text-center justify-content-center">
                     <div class="d-flex flex-column">
-                        <span class="fw-bold fs-5">{{ $item->user->name ?? '....' }}</span>
+                        <span class="fw-bold fs-5">{{ $item->dpjp->name ?? '....' }}</span>
                         <hr class="my-0 border border-dark border-1">
-                        <span class="fw-bold">SIP : {{ $item->user->sip ?? '....' }}</span>
+                        <span class="fw-bold">SIP : {{ $item->dpjp->sip ?? '....' }}</span>
                         {{-- <span>Spesialis {{ Auth::user()->specialists->name }}</span> --}}
                     </div>
                 </div>
-                <div class="col-12 mt-3">
+            </div>
+            <div class="row mt-3">
+                <div class="col-6">
                     <div class="d-flex flex-column">
-                        <span class="fw-bold">Praktek :</span>
-                        <span class="fw-bold">R.S. Khusus Bedah Ropanasuri</span>
-                        <span>Jl. Aur No. 8 Padang</span>
-                        <span>Telp. 31938 - 33854</span>
+                        <span class="fw-bold">{{ $item->patient->name ?? '....' }} / {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) ?? '....' }}</span>
+                        @php
+                            $tanggalLahir = new DateTime($item->patient->tanggal_lhr);
+                            $now = new DateTime();
+                            $ageDiff = $now->diff($tanggalLahir);
+                            $ageString = $ageDiff->format('%y tahun %m bulan');
+                        @endphp
+                        <span class="fw-bold">BB : {{ $item->perawatInitialAssesment->bb ?? '...' }} kg</span>
+                        <span class="fw-bold">Usia : {{ $ageString ?? '....' }}</span>
+                    </div>
+                </div>
+                <div class="col-6 text-end">
+                    <div class="d-flex flex-column">
+                        <span class="fw-bold">R.S **F**F* **F***F** XYZ</span>
+                        <span>Jl. Air Tawar Barat Padang</span>
+                        <span>Telp. ***** - *****</span>
                     </div>
                 </div>
             </div>
@@ -153,171 +172,46 @@
         </div>
 
         <div class="content mt-4">
-            {{-- <table class="table table-bordered text-center">
-                <thead>
-                    <tr class="bg-light">
-                        <td>Tanggal / Jam</td>
-                        <td>Nama Dokter</td>
-                        <td>Nama Obat</td>
-                        <td>Jumlah</td>
-                        <td>Aturan Penggunaan</td>
-                        <td>Keterangan Penggunaan</td>
-                        <td>Keterangan Lainnya</td>
-                        <td>Nama & Paraf</td>
-                    </tr>
-                </thead>
-                <tbody class="small">
-                    <tr>
-                        <td>{{ $item->created_at->format('Y-m-d / H:i') }}</td>
-                        <td>{{ $item->user->name ?? '' }}</td>
-                        <td>
-                            @foreach ($item->medicineReceiptDetails as $detail)
-                                <table>
-                                    <tr>
-                                        <td>{{ $detail->medicine->name ?? '' }}</td>
-                                    </tr>
-                                </table>
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($item->medicineReceiptDetails as $detail)
-                                <table>
-                                    <tr>
-                                        <td>{{ $detail->jumlah ?? '' }}</td>
-                                    </tr>
-                                </table>
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($item->medicineReceiptDetails as $detail)
-                                <table>
-                                    <tr>
-                                        <td>{{ $detail->aturan_pakai ?? '' }}</td>
-                                    </tr>
-                                </table>
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($item->medicineReceiptDetails as $detail)
-                                <table>
-                                    <tr>
-                                        <td>{{ $detail->keterangan ?? '' }}</td>
-                                    </tr>
-                                </table>
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($item->medicineReceiptDetails as $detail)
-                                <table>
-                                    <tr>
-                                        <td>{{ $detail->other ?? '' }}</td>
-                                    </tr>
-                                </table>
-                            @endforeach
-                        </td>
-                        <td>Nama & Paraf</td>
-                    </tr>
-                </tbody>
-            </table> --}}
-            {{-- <div class="row border">
-                <div class="col-sm-1 fw-bold border">
-                    Tanggal / Jam
-                </div>
-                <div class="col-sm-1 fw-bold border">
-                    Nama Dokter
-                </div>
-                <div class="col-sm-2 fw-bold border">
-                    Nama Obat
-                </div>
-                <div class="col-sm-1 fw-bold border">
-                    Jumlah
-                </div>
-                <div class="col-sm-2 fw-bold border">
-                    Aturan Penggunaan
-                </div>
-                <div class="col-sm-2 fw-bold border">
-                    Keterangan Penggunaan
-                </div>
-                <div class="col-sm-2 fw-bold border">
-                    Keterangan Lainnya
-                </div>
-                <div class="col-sm-1 fw-bold border">
-                    Nama & Paraf
-                </div>
-            </div>
-            <div class="row border">
-                <div class="col-sm-1">
-                    {{ $item->created_at->format('Y-m-d / H:i') }}
-                </div>
-                <div class="col-sm-1">
-                    {{ $item->user->name ?? '' }}
-                </div>
-                <div class="col border">
-                    @foreach ($item->medicineReceiptDetails as $detail)
-                        <div class="row">
-                            <div class="col border-bottom">
-                                {{ $detail->medicine->name ?? '' }}
-                            </div>
-                            <div class="col-2 text-center border-bottom border-start">
-                                {{ $detail->jumlah ?? '' }}
-                            </div>
-                            <div class="col border-bottom border-start">
-                                {{ $detail->aturan_pakai ?? '' }}
-                            </div>
-                            <div class="col border-bottom border-start">
-                                {{ $detail->keterangan ?? '' }}
-                            </div>
-                            <div class="col border-bottom border-start">
-                                {{ $detail->other ?? '' }}
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="col-sm-1">
-                    Nama & Paraf
-                </div>
-            </div> --}}
             <div class="row small">
                 <div class="col-6">
                     <span>Ruangan</span>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" @style('pointer-events : none;')>
+                        <label class="form-check-label">
                             UGD
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                        <label class="form-check-label" for="flexRadioDefault2">
+                        <input class="form-check-input" type="radio" name="poliklinik" id="poliklinik" checked @style('pointer-events : none;')>
+                        <label class="form-check-label">
                             Poliklinik
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                        <label class="form-check-label" for="flexRadioDefault2">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" @style('pointer-events : none;')>
+                        <label class="form-check-label">
                             Ranap
                         </label>
                     </div>
                 </div>
                 <div class="col-6">
-                    <span>Tanggal :</span>
-                    <p>Riwayat Alergi Obat</p>
+                    <span>Tanggal : {{ $item->created_at->format('d M Y') }}</span>
+                    <p class="mb-1">Riwayat Alergi Obat</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" {{ $item->patient->alergi_obat ? '' : 'checked' }} @style('pointer-events : none;')>
+                        <label class="form-check-label">
                             Tidak
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Ya, Nama Obat ........
-                        </label>
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" {{ $item->patient->alergi_obat ? 'checked' : '' }} @style('pointer-events : none;')>
+                        <label class="form-check-label">Ya, Nama Obat : </label>
+                        <span class="multi-line-text">{{ str_replace("\r\n", ", ", $item->patient->alergi_obat ?? '......') }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="row my-5">
+            <div class="row my-2">
                 @php
                     function toRoman($number)
                     {
@@ -347,28 +241,24 @@
                     }
                 @endphp
 
-                @foreach ($item->medicineReceiptDetails as $detail)
+                @foreach ($item->medicineReceipt->medicineReceiptDetails as $detail)
                     <div class="col-12">
                         <div class="d-flex flex-row">
                             <div class="d-flex align-items-center" style="min-width: 150px"><span class="fw-bold">R /
                                 </span>
-                                {{ $detail->medicine->name ?? '' }}</div>
+                                {{ $detail->medicine ? ($detail->medicine->name ?? '') : ($detail->nama_obat_custom ?? '') }}</div>
                             <div class="row" style="max-width: 300px">
                                 <div class="col-2">
                                     <span style="font-size:70px" class="fw-light">&int;</span>
                                 </div>
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="row">
-                                        {{-- <div class="col-12">{{ $detail->jumlah ?? '' }}</div> --}}
                                         <div class="col-12">{{ $detail->aturan_pakai ?? '' }}</div>
-                                        <div class="col-12">{{ $detail->keterangan ?? '' }}</div>
-                                        <div class="col-12">{{ $detail->other ?? '' }}</div>
                                     </div>
                                 </div>
                                 <div class="col-2 d-flex align-items-center">
                                     <div class="d-flex align-items-center">
                                         <span class="fw-bold">{{ toRoman($detail->jumlah ?? 0) }}</span>
-                                        {{-- <span class="fw-bold">{{ $detail->jumlah ?? 0 }}</span> --}}
                                     </div>
                                 </div>
                             </div>
@@ -376,63 +266,10 @@
                     </div>
                 @endforeach
             </div>
-
-            <div class="row mt-5">
-                <div class="col-12">
-                    <table>
-                        <tr>
-                            <td>Nama Pasien</td>
-                            <td>:</td>
-                            <td class="ps-2">{{ $item->patient->name ?? '....' }}</td>
-                        </tr>
-                        <tr>
-                            <td>No Rekam Medis</td>
-                            <td>:</td>
-                            <td class="ps-2">
-                                {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) ?? '....' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Tanggal Lahir Umur</td>
-                            <td>:</td>
-                            @php
-                                $tanggalLahir = new DateTime($item->patient->tanggal_lhr);
-                                $now = new DateTime();
-                                $ageDiff = $now->diff($tanggalLahir);
-                                $ageString = $ageDiff->format('%y tahun %m bulan');
-                            @endphp
-                            <td class="ps-2">{{ $tanggalLahir->format('d-m-Y') ?? '....' }}
-                                <span>({{ $ageString ?? '....' }})</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>NIK</td>
-                            <td>:</td>
-                            <td class="ps-2">{{ $item->patient->nik ?? '....' }}</td>
-                        </tr>
-                        <tr>
-                            <td>Berat Badan</td>
-                            <td>:</td>
-                            <td class="ps-2">{{ $statusFisikDiagnosaKeperawatanPatient->bb ?? '....' }} kg</td>
-                        </tr>
-                        <tr>
-                            <td>Nama Dokter</td>
-                            <td>:</td>
-                            <td class="ps-2">{{ $item->user->name ?? '....' }}</td>
-                        </tr>
-                        <tr>
-                            <td>No SIP</td>
-                            <td>:</td>
-                            <td class="ps-2">{{ $item->user->sip ?? '....' }}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
         </div>
 
     </div>
-    <div class="page">
-        {{-- VERIFIKASI RESEP --}}
+    {{-- <div class="page">
         <div class="header text-center small">
             VERIFIKASI RESEP
         </div>
@@ -626,7 +463,6 @@
             </table>
         </div>
 
-        {{-- VERIFIKASI OBAT --}}
         <div class="header text-center small">
             VERIFIKASI OBAT
         </div>
@@ -675,7 +511,6 @@
             </table>
         </div>
 
-        {{-- EDUKASI OBAT --}}
         <div class="content small border border-dark">
             <div class="header text-center">
                 EDUKASI OBAT
@@ -748,7 +583,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </body>
 
 </html>

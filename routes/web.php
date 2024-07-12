@@ -518,17 +518,11 @@ Route::group(['middleware' => ['permission:delete laporan tindakan']], function 
     Route::delete('/rajal/laporan/tindakan/destroy/{id}', [PatientActionReportController::class, 'destroy'])->name('rajal/laporan/tindakan.destroy');
 });
 
-//resep dokter
-Route::group(['middleware' => ['permission:edit resep dokter']], function () {
-    Route::get('/rajal/resep/dokter/edit/{id}', [MedicineReceiptController::class, 'edit'])->name('rajal/resep/dokter.edit');
-    Route::put('/rajal/resep/dokter/update/{id}', [MedicineReceiptController::class, 'update'])->name('rajal/resep/dokter.update');
-});
-Route::group(['middleware' => ['permission:print resep dokter']], function () {
-    Route::get('/rajal/resep/dokter/show/{id}', [MedicineReceiptController::class, 'show'])->name('rajal/resep/dokter.show');
-});
-Route::group(['middleware' => ['permission:hapus resep dokter']], function () {
-    Route::delete('/rajal/resep/dokter/destroy/{id}', [MedicineReceiptController::class, 'destroy'])->name('rajal/resep/dokter.destroy');
-});
+//resep dokter (done)
+Route::post('/rajal/resep/dokter/store/{id}', [MedicineReceiptController::class, 'store'])->name('rajal/resep/dokter.store');
+Route::put('/rajal/resep/dokter/update/{id}', [MedicineReceiptController::class, 'update'])->name('rajal/resep/dokter.update');
+Route::get('/rajal/resep/dokter/show/{id}', [MedicineReceiptController::class, 'show'])->name('rajal/resep/dokter.show');
+Route::delete('/rajal/resep/dokter/destroy/{id}', [MedicineReceiptController::class, 'destroy'])->name('rajal/resep/dokter.destroy');
 
 //sbpk
 // Route::group(['middleware' => ['permission:edit resep dokter']], function(){

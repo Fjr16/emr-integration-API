@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('medicine_receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('patient_id')->nullable();
-            $table->foreignId('rawat_jalan_poli_patient_id')->nullable();
+            $table->foreignId('queue_id')->nullable();
+            $table->string('no_resep')->nullable();
+            $table->string('ttd')->nullable();
             $table->timestamps();
         });
     }
