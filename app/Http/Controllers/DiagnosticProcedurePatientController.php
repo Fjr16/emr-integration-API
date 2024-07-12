@@ -39,8 +39,8 @@ class DiagnosticProcedurePatientController extends Controller
         }
 
         $diagnosaSekunderIds = $request->input('diagnostic_sekunder_id', []);
+        $itemDiag->diagnosticSecondary()->delete();
         if (!empty($diagnosaSekunderIds)) {
-            $itemDiag->diagnosticSecondary()->delete();
             foreach($diagnosaSekunderIds as $id){
                 DiagnosticSecondary::create([
                     'diagnostic_procedure_patient_id' => $itemDiag->id,

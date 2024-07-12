@@ -440,23 +440,6 @@ Route::group(['middleware' => ['permission:print assesmen awal']], function () {
 Route::put('/diagnosa/patient/update/{id}', [DiagnosticProcedurePatientController::class, 'updateDiagnosis'])->name('diagnosa/patient.update');
 Route::put('/procedure/patient/update/{id}', [DiagnosticProcedurePatientController::class, 'updateProcedure'])->name('procedure/patient.update');
 
-//rajal PRMRJ
-Route::group(['middleware' => ['permission:tambah prmrj']], function () {
-    Route::post('/rajal/prmrj/create', [PrmrjController::class, 'create'])->name('rajal/prmrj.create');
-    Route::post('/rajal/prmrj/store', [PrmrjController::class, 'store'])->name('rajal/prmrj.store');
-});
-Route::group(['middleware' => ['permission:edit prmrj']], function () {
-    Route::get('/rajal/prmrj/edit/{id}', [PrmrjController::class, 'edit'])->name('rajal/prmrj.edit');
-    Route::put('/rajal/prmrj/update/{id}', [PrmrjController::class, 'update'])->name('rajal/prmrj.update');
-});
-Route::group(['middleware' => ['permission:print prmrj']], function () {
-    Route::get('/rajal/prmrj/show/{id}', [PrmrjController::class, 'show'])->name('rajal/prmrj.show');
-});
-Route::group(['middleware' => ['permission:delete prmrj']], function () {
-    Route::delete('/rajal/prmrj/destroy/{id}', [PrmrjController::class, 'destroy'])->name('rajal/prmrj.destroy');
-});
-
-
 //rajal CPPT
 Route::group(['middleware' => ['permission:tambah cppt']], function () {
     Route::get('/rajal/cppt/create/{id}', [RmeCpptController::class, 'create'])->name('rajal/cppt.create');

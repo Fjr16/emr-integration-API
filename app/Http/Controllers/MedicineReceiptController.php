@@ -89,11 +89,7 @@ class MedicineReceiptController extends Controller
      */
     public function destroy($id)
     {
-        $item = MedicineReceipt::find($id);
-        foreach ($item->medicineReceiptDetails as $detail) {
-            $detail->delete();
-        }
-
+        $item = MedicineReceiptDetail::find($id);
         $item->delete();
 
         return back()->with([

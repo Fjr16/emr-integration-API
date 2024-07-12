@@ -1,20 +1,10 @@
 <form action="{{ route('rajal/laporan/tindakan.store') }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
     @csrf
-    <div class="modal-content" id="main-modal">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalScrollableTitle">Tindakan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          </button>
+    <div class="card">
+        <div class="card-header">
+          <h5>Tindakan</h5>
         </div>
-        <div class="modal-body">
-          <div class="row mb-3">
-            <label for="diagnosa" class="col-sm-3 col-form-label">diagnosa</label>
-            <div class="col-sm-9">
-              <input type="hidden" value="{{ $item->rawatJalanPoliPatient->id }}" name="rawat_jalan_poli_patient_id">
-              <input type="hidden" name="patient_id" value="{{ $item->patient->id }}"/>
-              <input type="text" name="diagnosa" class="form-control" id="diagnosa" required />
-            </div>
-          </div>   
+        <div class="card-body">
           <div class="row mb-3">
             <label for="defaultFormControlInput" class="form-label col-sm-3">Tindakan</label>
             <div class="col-sm-9">
@@ -58,12 +48,9 @@
               </div>
             </div>
           </div>
-          
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-dark btn-sm">Save changes</button>
+          <div class="mb-3 text-end">
+            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+          </div>
         </div>
     </div>
 </form>

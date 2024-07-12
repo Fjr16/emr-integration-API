@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diagnostic;
-use App\Models\Medicine;
 use DateTime;
 use App\Models\Queue;
+use App\Models\Action;
+use App\Models\Patient;
+use App\Models\Medicine;
+use App\Models\Procedure;
+use App\Models\Diagnostic;
+use App\Models\MedicineStok;
 use Illuminate\Http\Request;
+use App\Models\ActionCategory;
+use App\Models\MedicineReceipt;
 use App\Models\PatientActionReport;
 use App\Models\RajalFarmasiPatient;
+use App\Models\RadiologiFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
-use App\Models\MedicineReceipt;
-use App\Models\MedicineStok;
-use App\Models\Patient;
 use App\Models\PerawatInitialAsesment;
-use App\Models\Procedure;
-use App\Models\RadiologiFormRequest;
 use App\Models\SuratBuktiPelayananPatient;
 
 class RawatJalanController extends Controller
@@ -72,7 +74,6 @@ class RawatJalanController extends Controller
         } else {
             session(['btn' => session('btn')]);
         }
-
         if (!session('penunjang')) {
             session(['penunjang' => 'radiologi']);
         } else {
@@ -103,6 +104,11 @@ class RawatJalanController extends Controller
         $procedures = Procedure::get();
         // obat
         $medicines = MedicineStok::where('stok' ,'>', 0)->get();
+        // resep 
+        //tindakan
+        $actCategory = ActionCategory::where('name', 'Tindakan Parasat / Poli')->first();
+        $dataTindakan = Action::where('action_category_id', $actCategory->id)->get();
+
         return view('pages.rawatjalan.show', [
             "title" => $title,
             "menu" => "In Patient",
@@ -116,6 +122,7 @@ class RawatJalanController extends Controller
             'diagnostics' => $diagnostics,
             'procedures' => $procedures,
             'medicines' => $medicines,
+            'dataTindakan' => $dataTindakan,
         ]);
     }
 

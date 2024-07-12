@@ -54,7 +54,7 @@
                 <div class="card accordion-item">
                   <h2 class="accordion-header" id="headingOne">
                     <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne" role="tabpanel">
-                      Data & Riwayat Medis Pasien
+                        <i class='bx bx-history me-2'></i> Data & Riwayat Medis Pasien
                     </button>
                   </h2>
                   
@@ -363,7 +363,7 @@
                             class="nav-link {{ session('btn') == 'riwayat' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-riwayat"
                             aria-controls="navs-justified-riwayat" aria-selected="false">
-                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
+                            <i class='bx bxs-book-open me-1'></i>
                             <p class="m-0">Riwayat</p>
                         </button>
                     </li>
@@ -372,7 +372,7 @@
                             class="nav-link {{ session('btn') == 'asesmen' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-asesmen"
                             aria-controls="navs-justified-asesmen" aria-selected="false">
-                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
+                            <i class='bx bxs-notepad me-1'></i>
                             <p class="m-0">Asesmen</p>
                         </button>
                     </li>
@@ -381,7 +381,7 @@
                             class="nav-link {{ session('btn') == 'penunjang' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile"
                             aria-controls="navs-justified-profile" aria-selected="false">
-                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
+                            <i class='bx bxs-factory me-1'></i>
                             <p class="m-0">Penunjang</p>
                         </button>
                     </li>
@@ -390,7 +390,7 @@
                             class="nav-link {{ session('btn') == 'diag-tind' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-diag-tind"
                             aria-controls="navs-justified-diag-tind" aria-selected="false">
-                            <i class="tf-icons bx bx-bookmark-alt-plus"></i>
+                            <i class='bx bx-accessibility me-1'></i>
                             <p class="m-0">Diagnosa & Prosedur</p>
                         </button>
                     </li>
@@ -399,7 +399,7 @@
                             class="nav-link d-flex justify-content-center {{ session('btn') == 'resep dokter' ? 'active' : '' }}"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-resep"
                             aria-controls="navs-justified-resep" aria-selected="false">
-                            <i class="tf-icons bx bx-list-ul"></i>
+                            <i class='bx bxs-detail me-1'></i>
                             <p class="m-0">Resep Obat</p>
                         </button>
                     </li>
@@ -408,17 +408,8 @@
                             class="nav-link {{ session('btn') == 'cppt' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-cppt"
                             aria-controls="navs-justified-cppt" aria-selected="false">
-                            <i class="tf-icons bx bx-message-alt-add"></i>
+                            <i class='bx bxs-analyse me-1'></i>
                             <p class="m-0">SOAP</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="btn-link" type="button"
-                            class="nav-link {{ session('btn') == 'prmrj' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-prmrj"
-                            aria-controls="navs-justified-prmrj" aria-selected="false">
-                            <i class="tf-icons bx bx-message-alt-add"></i>
-                            <p class="m-0">PRMRJ</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -427,7 +418,7 @@
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-tindakan"
                             aria-controls="navs-justified-tindakan" aria-selected="false">
                             <i class="tf-icons bx bx-sitemap"></i>
-                            <p class="m-0">Laporan Tindakan</p>
+                            <p class="m-0">Tindakan</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -1061,12 +1052,6 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                <div class="col-12 mt-2">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="customCheckSuccess" checked />
-                                                        <label class="form-check-label" for="customCheckSuccess">Gunakan Diagnosa Kasus Sebelumnya (nama diagnosa)</label>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div class="col-6">
                                                 <label for="diagnosa_primer_text" class="form-label"></label>
@@ -1148,12 +1133,6 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                <div class="col-12 mt-2">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="customCheckSuccess" checked />
-                                                        <label class="form-check-label" for="customCheckSuccess">Gunakan Prosedur Kasus Sebelumnya (nama diagnosa)</label>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div class="col-6">
                                                 <label for="procedure_text" class="form-label"></label>
@@ -1263,9 +1242,9 @@
                                 <tr class="text-nowrap bg-dark text-white">
                                     <th>Action</th>
                                     <th>Nama Obat</th>
+                                    <th>Aturan Pakai</th>
                                     <th>Jumlah</th>
                                     <th>Satuan</th>
-                                    <th>Aturan Pakai</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1292,24 +1271,24 @@
                                                     {{ $detailResep->medicine->name ?? '' }}
                                                 </td>
                                                 <td>
+                                                    <input type="text" class="form-control form-control-sm" name="aturan_pakai" value="{{ $detailResep->aturan_pakai ?? '' }}">
+                                                </td>
+                                                <td>
                                                     <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
                                                 </td>
                                                 <td>{{ $detailResep->medicine->small_unit ?? '' }}</td>
-                                                <td>
-                                                    <input type="text" class="form-control form-control-sm" name="aturan_pakai" value="{{ $detailResep->aturan_pakai ?? '' }}">
-                                                </td>
                                             @else
                                                 <td>
                                                     <input type="text" class="form-control form-control-sm" name="nama_obat_custom" value="{{ $detailResep->nama_obat_custom ?? '' }}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="aturan_pakai" class="form-control form-control-sm" value="{{ $detailResep->aturan_pakai ?? '' }}">
                                                 </td>
                                                 <td>
                                                     <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
                                                 </td>
                                                 <td>
                                                     <input type="text" name="satuan_obat_custom" class="form-control form-control-sm" value="{{ $detailResep->satuan_obat_custom ?? '' }}">
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="aturan_pakai" class="form-control form-control-sm" value="{{ $detailResep->aturan_pakai ?? '' }}">
                                                 </td>
                                             @endif
                                         </tr>
@@ -1324,7 +1303,7 @@
                             <div class="row mb-5">
                                 <div class="col-sm-3">
                                     <label for="subjective" class="form-label">Subjective</label>
-                                    <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ $itemAss->keluhan_utama ?? '' }}</textarea>
+                                    <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ ($itemAss->keluhan_utama ?? '') . "\r\nRiw. " .($item->perawatInitialAssesment->riw_penyakit_pasien ?? '') }} </textarea>
                                     <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="sub" onclick="autoFillSOAP(this)">
                                         <i class='bx bx-up-arrow-alt'></i> Tarik Data Anamnesa
                                     </button>
@@ -1351,11 +1330,11 @@
                                             <i class='bx bx-up-arrow-alt'></i> Tarik Data
                                         </button>
                                         <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                          <li><a class="dropdown-item" href="javascript:void(0);">Resep</a></li>
-                                          <li><a class="dropdown-item" href="javascript:void(0);">Radiologi</a></li>
-                                          <li><a class="dropdown-item" href="javascript:void(0);">Laboratorium</a></li>
-                                          <li><a class="dropdown-item" href="javascript:void(0);">Tindakan</a></li>
-                                          <li><a class="dropdown-item" href="javascript:void(0);">Perencanaan</a></li>
+                                          <li><button class="dropdown-item" type="button" value="resep" onclick="autoFillSOAP(this)">Resep</button></li>
+                                          <li><button class="dropdown-item" type="button" value="radiologi" onclick="autoFillSOAP(this)">Radiologi</button></li>
+                                          <li><button class="dropdown-item" type="button" value="laboratorium" onclick="autoFillSOAP(this)">Laboratorium</button></li>
+                                          <li><button class="dropdown-item" type="button" value="tindakan" onclick="autoFillSOAP(this)">Tindakan</button></li>
+                                          <li><button class="dropdown-item" type="button" value="rencana" onclick="autoFillSOAP(this)">Perencanaan</button></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1365,80 +1344,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'prmrj' ? 'show active' : '' }}"
-                        id="navs-justified-prmrj" role="tabpanel">
-                        <div class="text-end mb-3">
-                            @can('print prmrj')
-                                <a href="{{ route('rajal/prmrj.show', $item->patient_id) }}" target="blank"
-                                    class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
-                            @endcan
-                        </div>
-                        <table class="table" id="example">
-                            <thead>
-                                <tr class="text-nowrap">
-                                    <th class="text-body">No</th>
-                                    <th class="text-body">Tanggal</th>
-                                    <th class="text-body">Jam</th>
-                                    <th class="text-body">DPJP</th>
-                                    <th class="text-body">Diagnosa Penting</th>
-                                    <th class="text-body">Uraian Klinis Penting</th>
-                                    <th class="text-body">Rencana Penting</th>
-                                    <th class="text-body">Paraf</th>
-                                    @canany(['edit prmrj', 'delete prmrj'])
-                                        @if ($title == 'Rawat Jalan')
-                                            <th class="text-body">Action</th>
-                                        @endif
-                                    @endcanany
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($item->patient->prmrjs as $prmrj)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ date('Y-m-d', strtotime($prmrj->tanggal ?? '')) }}</td>
-                                        <td>{{ date('H:i', strtotime($prmrj->tanggal ?? '')) }}</td>
-                                        <td>
-                                            {{ $prmrj->user->name ?? '' }} <br>
-                                        </td>
-                                        <td>{!! $prmrj->diagnosa_penting ?? '' !!}</td>
-                                        <td>{!! $prmrj->uraian_klinis ?? '' !!}</td>
-                                        <td>{!! $prmrj->rencana_penting ?? '' !!}</td>
-                                        <td>
-                                            <a href="{{ Storage::url($prmrj->paraf) }}"><img
-                                                    src="{{ Storage::url($prmrj->paraf) }}" alt=""></a>
-                                        </td>
-                                        @canany(['edit prmrj', 'delete prmrj'])
-                                            @if ($title == 'Rawat Jalan')
-                                                <td>
-                                                    <div class="d-flex align-self-center">
-                                                        @can('edit prmrj')
-                                                            <button class="btn btn-warning btn-sm mx-2"
-                                                                onclick="editPrmrj({{ $prmrj->id }})"><i
-                                                                    class='bx bx-edit'></i></button>
-                                                        @endcan
-                                                        @can('delete prmrj')
-                                                            <form action="{{ route('rajal/prmrj.destroy', $prmrj->id) }}"
-                                                                method="POST">
-                                                                @method('DELETE')
-                                                                @csrf
-                                                                <button class="btn btn-danger btn-sm" type="submit"
-                                                                    onclick="return confirm('Yakin Ingin Menghapus Data ?')"><i
-                                                                        class='bx bx-trash'></i></button>
-                                                            </form>
-                                                        @endcan
-                                                    </div>
-                                                </td>
-                                            @endif
-                                        @endcanany
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-
-                    </div>
-                    <div class="tab-pane fade {{ session('btn') == 'tindakan' ? 'show active' : '' }}"
-                        id="navs-justified-tindakan" role="tabpanel">
-                        @can('tambah laporan tindakan')
+                    <div class="tab-pane fade {{ session('btn') == 'tindakan' ? 'show active' : '' }}" id="navs-justified-tindakan" role="tabpanel">
+                        {{-- @can('tambah laporan tindakan')
                             @if ($title == 'Rawat Jalan')
                                 <div class="text-end mb-3">
                                     <button class="btn btn-success btn-sm"
@@ -1510,7 +1417,86 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>
+                        </table> --}}
+                        <form action="{{ route('rajal/laporan/tindakan.store') }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+                            @csrf
+                            <div class="row mb-4">
+                                <div class="col-4">
+                                    <div class="row mb-3">
+                                        <label class="form-label">Tanggal/Jam tindakan</label>
+                                        <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ date('Y-m-d H:i') ?? '' }}"/>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="form-label">LAPORAN TINDAKAN</label>
+                                        <textarea class="form-control" id="editor" name="laporan_tindakan" cols="30" rows="10"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="row dinamic-input mb-2">
+                                        <div class="col-5">
+                                            <label for="defaultFormControlInput" class="form-label">Tindakan</label>
+                                            <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%">
+                                            @foreach ($dataTindakan as $action)
+                                                <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
+                                            @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-1">
+                                            <label class="form-label">Jumlah</label>
+                                            <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
+                                        </div>
+                                        <div class="col-2">
+                                            <label class="form-label">Tarif</label>
+                                            <input type="number" class="form-control" name="tarif_tindakan[]" value="10000" placeholder="Tarif Tindakan" readonly/>
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label">Subtotal</label>
+                                            <input type="number" class="form-control" name="sub_total_tindakan[]" value="10000" placeholder="Subtotal" readonly/>
+                                        </div>
+                                        <div class="col-1 text-center align-self-center mt-4 pt-1">
+                                            <button class="btn btn-sm btn-dark " type="button">+</button>
+                                        </div>
+                                    </div> 
+
+                                    {{-- untuk dinamic input --}}
+                                    <div class="row dinamic-input mb-2">
+                                        <div class="col-5">
+                                            <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%">
+                                            @foreach ($dataTindakan as $action)
+                                                <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
+                                            @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-1">
+                                            <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="number" class="form-control" name="tarif_tindakan[]" value="10000" placeholder="Tarif Tindakan" readonly/>
+                                        </div>
+                                        <div class="col-3">
+                                            <input type="number" class="form-control" name="sub_total_tindakan[]" value="100000000000" placeholder="Subtotal" readonly/>
+                                        </div>
+                                        <div class="col-1 text-center align-self-center">
+                                            <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
+                                        </div>
+                                    </div> 
+
+                                    {{-- untuk hitungan total akhir --}}
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-5 fw-bold ms-2">TOTAL</div>
+                                        <div class="col-1"></div>
+                                        <div class="col-2"></div>
+                                        <div class="col-3 fw-bold">Rp. 100.000</div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                          
+                            <div class="mb-3 text-end">
+                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            </div>
+                        </form>
 
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'sbpk' ? 'show active' : '' }}"
@@ -1574,42 +1560,6 @@
     </div>
 
     <script>
-        function createPrmrj(id) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: 'post',
-                url: "{{ URL::route('rajal/prmrj.create') }}",
-                data: {
-                    queue_id: id,
-                },
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog modal-lg modal-dialog-scrollable';
-                    div.innerHTML = data;
-                    $('#modalScrollable').html(div);
-                    $('#modalScrollable').modal('show');
-                }
-            });
-        }
-
-        function editPrmrj(id) {
-            $.ajax({
-                type: 'get',
-                url: "{{ route('rajal/prmrj.edit', '') }}/" + id,
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog modal-lg modal-dialog-scrollable';
-                    div.innerHTML = data;
-                    $('#modalScrollable').html(div);
-                    $('#modalScrollable').modal('show');
-                }
-            });
-        }
-
         function createTindakan(id) {
             $.ajaxSetup({
                 headers: {
@@ -1646,10 +1596,6 @@
             });
         }
 
-        function showHasil() {
-            $('#hasilPemeriksaan').show('content');
-        }
-
         var buttons = document.querySelectorAll('#btn-link');
 
         buttons.forEach(function(button) {
@@ -1662,31 +1608,39 @@
         });
 
         function autoFillSOAP(element){
-            var keluhan = `{{ "Keluhan: " . ($item->doctorInitialAssesment->keluhan_utama ?? '') }}`;
-            var objective = `{{ "Keadaan Umum: " . ($item->doctorInitialAssesment->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($item->doctorInitialAssesment->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($item->doctorInitialAssesment->td_sistolik ?? '') . " / " . ($item->doctorInitialAssesment->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($item->doctorInitialAssesment->suhu ?? '') . " °C\r\n" . "Nafas: " . ($item->doctorInitialAssesment->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($item->doctorInitialAssesment->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($item->doctorInitialAssesment->bb ?? '') . " kg" }}`;
-            var diagnosaPrimer = `{{ "Diagnosa Primer: \r\n" . ($item->diagnosticProcedurePatient->diagnostic->name ?? '') }}\r\n\nDiagnosa Sekunder:`;
-            var diagnosaSekunder = '';
-
-            var dataJson = @json($item->diagnosticProcedurePatient->diagnosticSecondary);
-            if (dataJson.length > 0) {
-                dataJson.forEach(function(item){
-                    diagnosaSekunder += '\r\n-' + item.diagnostic.name;
-                });
-            }
-            var targetElement;
-            var contentTarget;
+            let targetElement, contentTarget;
             if (element.value == 'sub') {
+                const keluhan = `{{ "Keluhan: " . ($item->doctorInitialAssesment->keluhan_utama ?? '') }}`;
+                
                 targetElement = element.closest('.row').querySelector('#subjective');
                 contentTarget = keluhan;
             } else if(element.value == 'obj') {
+                const objective = `{{ "Keadaan Umum: " . ($item->doctorInitialAssesment->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($item->doctorInitialAssesment->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($item->doctorInitialAssesment->td_sistolik ?? '') . " / " . ($item->doctorInitialAssesment->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($item->doctorInitialAssesment->suhu ?? '') . " °C\r\n" . "Nafas: " . ($item->doctorInitialAssesment->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($item->doctorInitialAssesment->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($item->doctorInitialAssesment->bb ?? '') . " kg" }}`;
+                
                 targetElement = element.closest('.row').querySelector('#objective');
                 contentTarget = objective;
             } else if(element.value == 'ases'){
+                const diagnosaPrimer = `{{ "Diagnosa Primer: \r\n" . (($item->diagnosticProcedurePatient->diagnostic_id) ? "[" . ($item->diagnosticProcedurePatient->diagnostic->icd_x_code ?? '') . "] " . ($item->diagnosticProcedurePatient->diagnostic->name ?? '') : ($item->diagnosticProcedurePatient->desc_diagnosa_primer ?? '')) }}\r\n\nDiagnosa Sekunder:`;
+                let diagnosaSekunder = '';
+                const dataJson = @json($item->diagnosticProcedurePatient->diagnosticSecondary);
+                if (dataJson.length > 0) {
+                    dataJson.forEach(function(item){
+                        diagnosaSekunder += '\r\n-[' + (item.diagnostic.icd_x_code ?? '') + '] ' + (item.diagnostic.name ?? '');
+                    });
+                }
+                diagnosaSekunder += '\r\n' + '{{ $item->diagnosticProcedurePatient->desc_diagnosa_sekunder ?? '' }}' ;
+
                 targetElement = element.closest('.row').querySelector('#asesmen');
                 contentTarget = diagnosaPrimer + "" + diagnosaSekunder;
-            } else if(element.value == 'plann'){
+            } else if(element.value == 'resep'){
+                let dataResep = 'Pemberian Obat : ';
+                const dataResepAwal = @json($item->medicineReceipt->medicineReceiptDetails ?? '');
+                dataResepAwal.forEach(function(item){
+                    dataResep += '\r\n# ' + (item.medicine_id ? (item.medicine.name ?? '') : (item.nama_obat_custom ?? '')) + ' - ' + item.aturan_pakai ?? '';
+                });
+
                 targetElement = element.closest('.row').querySelector('#planning');
-                contentTarget = objCurrent;
+                contentTarget = dataResep;
             }
             targetElement.textContent = contentTarget;
         }
