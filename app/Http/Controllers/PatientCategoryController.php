@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActionMemberRates;
-use App\Models\ActionMembers;
-use App\Models\Bedroom;
-use App\Models\BedroomRate;
+use App\Models\Action;
+use App\Models\ActionRate;
 use App\Models\PatientCategory;
 use Illuminate\Http\Request;
 
@@ -49,17 +47,10 @@ class PatientCategoryController extends Controller
     {
         $data = $request->all();
         $item = PatientCategory::create($data);
-        $kamar = Bedroom::all();
-        $action = ActionMembers::all();
-        foreach($kamar as $kamar){
-            BedroomRate::create([
-                'bedroom_id' => $kamar->id,
-                'patient_category_id' => $item->id
-            ]);
-        }
+        $action = Action::all();
         foreach($action as $action){
-            ActionMemberRates::create([
-                'action_members_id' => $action->id,
+            ActionRate::create([
+                'action_id' => $action->id,
                 'patient_category_id' => $item->id
             ]);
         }
@@ -106,12 +97,8 @@ class PatientCategoryController extends Controller
     public function destroy($id)
     {
         $item = PatientCategory::find($id);
-        $bedroomRates = BedroomRate::where('patient_category_id', $item->id)->get();
-        foreach($bedroomRates as $rate){
+        foreach ($item->actionRates as $rate){
             $rate->delete();
-        }
-        foreach ($item->actionMemberRates as $actionRate){
-            $actionRate->delete();
         }
         $item->delete();
         return back()->with('success', 'SUKSES');

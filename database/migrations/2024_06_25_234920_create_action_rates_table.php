@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('action_id')->nullable();
             $table->foreignId('patient_category_id')->nullable();
-            $table->string('tarif', 20)->nullable();
+            $table->bigInteger('tarif')->default(0);
             $table->timestamps();
         });
     }

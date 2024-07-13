@@ -363,13 +363,6 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('master jenis tindakan')
-                            <li class="menu-item {{ $title == 'Jenis Tindakan' ? 'active' : '' }}">
-                                <a href="{{ route('tindakan/category') }}" class="menu-link">
-                                    <div>Jenis Tindakan</div>
-                                </a>
-                            </li>
-                        @endcan
                         @can('master tindakan')
                             <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
                                 <a href="{{ route('tindakan.index') }}" class="menu-link">

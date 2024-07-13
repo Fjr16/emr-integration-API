@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('action_category_id')->nullable();
-            $table->string('icd_code', 20)->nullable();
+            $table->string('action_code', 20)->nullable();
             $table->string('name', 50)->nullable();
+            $table->string('jenis_tindakan')->nullable();
             $table->timestamps();
         });
     }

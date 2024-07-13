@@ -5,43 +5,55 @@
   <div class="card-header d-flex align-items-center justify-content-between">
       <h5 class="mb-0">Edit Tindakan</h5>
   </div>
-  <div class="card-body">
-      <form method="POST" action="{{ route('tindakan.update', $item->id) }}">
-          @csrf
-          @method('PUT')
-          <div class="row mb-3">
-              <label class="col-sm-2 col-form-label" for="basic-default-name">Jenis Tindakan</label>
-              <div class="col-sm-10">
-                <select name="action_category_id" id="action_category_id" class="form-control form-select">
-                    @foreach ($data as $cat)
-                        @if (old('action_category_id', $cat->id) == $item->id)
-                            <option value="{{ $cat->id }}" selected>{{ $cat->name }}</option>
-                        @else
-                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                        @endif
-                    @endforeach
-                </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <label class="col-sm-2 col-form-label" for="basic-default-name">Kode ICD</label>
-              <div class="col-sm-10">
-                  <input type="text" name="icd_code" value="{{ old('icd_code', $item->icd_code) }}" class="form-control @error('icd_code') is-invalid @enderror" id="basic-default-name" required />
-              </div>
-          </div>
-          <div class="row mb-3">
-              <label class="col-sm-2 col-form-label" for="basic-default-name">Nama Tindakan</label>
-              <div class="col-sm-10">
-                  <input type="text" name="name" value="{{ old('name', $item->name) }}" class="form-control @error('name') is-invalid @enderror" id="basic-default-name" required />
-              </div>
-          </div>
-          
-          <div class="row justify-content-end">
-              <div class="col-sm-10">
-                  <button type="submit" class="btn btn-sm btn-dark">Simpan</button>
-              </div>
-          </div>
-      </form>
-  </div>
+    <form method="POST" action="{{ route('tindakan.update', $item->id) }}">
+        <div class="card-body">
+            @csrf
+            @method('PUT')
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Jenis Tindakan</label>
+                <div class="col-sm-10">
+                    <select name="jenis_tindakan" id="jenis_tindakan" class="form-control form-select">
+                        @foreach ($data as $cat)
+                            @if (old('jenis_tindakan', $cat) == $item->jenis_tindakan)
+                                <option value="{{ $cat }}" selected>{{ $cat }}</option>
+                            @else
+                                <option value="{{ $cat }}">{{ $cat }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Kode ICD</label>
+                <div class="col-sm-10">
+                    <input type="text" name="action_code" value="{{ old('action_code', $item->action_code) }}" class="form-control @error('icd_code') is-invalid @enderror" id="basic-default-name" required />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Nama Tindakan</label>
+                <div class="col-sm-10">
+                    <input type="text" name="name" value="{{ old('name', $item->name) }}" class="form-control @error('name') is-invalid @enderror" id="basic-default-name" required />
+                </div>
+            </div>
+        </div>
+          {{-- tarif tindakan --}}
+        <div class="card-body p-3 mt-3">
+            <div class="d-flex">
+                <h5 class="me-2">Tarif (Rupiah)</h5>
+            </div>
+            <div class="row">
+                @foreach ($item->actionRates as $rate)  
+                    <div class="col-3">
+                        <label for="" class="fw-bold form-label">{{ $rate->patientCategory->name ?? '' }}</label>
+                        <input type="hidden" name="action_rate_id[]" value="{{ $rate->id ?? '' }}"/>
+                        <input type="number" name="tarif[]" value="{{ $rate->tarif ?? 0 }}" class="form-control" id="basic-default-name" />
+                    </div>   
+                @endforeach
+            </div>
+            <div class="text-end mt-4 me-2">
+                <button type="submit" class="btn btn-md btn-primary">Update</button>
+            </div>
+        </div>
+    </form>
 </div>
 @endsection

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Action;
 use Illuminate\Http\Request;
-use App\Models\ActionCategory;
 use App\Models\ActionRate;
 use App\Models\PatientCategory;
 
@@ -33,11 +32,17 @@ class ActionController extends Controller
      */
     public function create()
     {
-        $data = ActionCategory::all();
+        $data = [
+            'Tindakan Pelayanan Medis',
+            'Radiologi',
+            'Laboratorium',
+        ];
+        $patientCategories = PatientCategory::all();
         return view('pages.tindakan.create', [
             "title" => "Jenis Tindakan",
             "menu" => "Tindakan",
-            "data" => $data
+            "data" => $data,
+            "patientCategories" => $patientCategories
         ]);
     }
 
@@ -50,12 +55,14 @@ class ActionController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $patientCategories = PatientCategory::all();
+        $patientCategoryIds = $request->input('patient_category_id');
+        $tarifs = $request->input('tarif');
         if($item = Action::create($data)){
-            foreach($patientCategories as $category){
+            foreach($patientCategoryIds as $index => $category){
                 ActionRate::create([
                     'action_id' => $item->id,
-                    'patient_category_id' => $category->id
+                    'patient_category_id' => $category,
+                    'tarif' => $tarifs[$index]
                 ]);
             }
         }
@@ -70,13 +77,19 @@ class ActionController extends Controller
      */
     public function edit($id)
     {
-        $data = ActionCategory::all();
+        $data = [
+            'Tindakan Pelayanan Medis',
+            'Radiologi',
+            'Laboratorium',
+        ];
         $item = Action::find($id);
+        $patientCategories = PatientCategory::all();
         return view('pages.tindakan.edit', [
             "title" => "Jenis Tindakan",
             "menu" => "Tindakan",
             "item" => $item,
-            "data" => $data
+            "data" => $data,
+            "patientCategories" => $patientCategories
         ]);
         
     }
@@ -93,6 +106,18 @@ class ActionController extends Controller
         $data = $request->all();
         $item = Action::find($id);
         $item->update($data);
+
+        $rateIds = $request->input('action_rate_id', []);
+        $tarifs = $request->input('tarif', []);
+
+        foreach ($rateIds as $key => $rateId) {
+            $itemRate = ActionRate::find($rateId);
+            if ($itemRate) {
+                $itemRate->update([
+                    'tarif' => $tarifs[$key],
+                ]);
+            }
+        }
         return redirect()->route('tindakan.index')->with('success', 'Tindakan berhasil Diperbarui');
     }
 

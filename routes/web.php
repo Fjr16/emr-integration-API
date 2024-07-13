@@ -310,17 +310,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/tindakan/category/update/{id}', [ActionCategoryController::class, 'update'])->name('tindakan/category.update');
     Route::delete('/category/tindakan/destroy/{id}', [ActionCategoryController::class, 'destroy'])->name('tindakan/category.destroy');
 
-    //tindakan
+    //tindakan dan tarif tindakan (done)
     Route::get('/tindakan/index', [ActionController::class, 'index'])->name('tindakan.index');
     Route::get('/tindakan/create', [ActionController::class, 'create'])->name('tindakan.create');
     Route::post('/tindakan/store', [ActionController::class, 'store'])->name('tindakan.store');
     Route::get('/tindakan/edit/{id}', [ActionController::class, 'edit'])->name('tindakan.edit');
     Route::put('/tindakan/update/{id}', [ActionController::class, 'update'])->name('tindakan.update');
     Route::delete('/tindakan/destroy/{id}', [ActionController::class, 'destroy'])->name('tindakan.destroy');
-
-    //tariftindakanmember
-    Route::get('/tindakan/tarif/edit/{id}', [ActionRatesController::class, 'edit'])->name('action/rates.edit');
-    Route::put('/tindakan/tarif/update/{id}', [ActionRatesController::class, 'update'])->name('action/rates.update');
 
     //Jadwal Dokter
     Route::get('/dokter/jadwal', [DoctorScheduleController::class, 'index'])->name('dokter/jadwal.index');

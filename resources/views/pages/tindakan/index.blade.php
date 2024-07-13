@@ -22,8 +22,8 @@
         <tr class="text-nowrap bg-dark">
           <th>No</th>
           <th>Nama Tindakan</th>
-          <th>Kode ICD 9</th>
-          <th>Tarif</th>
+          <th>Kode Tindakan</th>
+          <th>Jenis Tindakan</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -31,9 +31,9 @@
         @foreach ($data as $item)
         <tr>
           <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
-          <td>{{ $item->name }}</td>
-          <td>{{ $item->icd_code }}</td>
-          <td><a href="{{ route('action/rates.edit', $item->id) }}"><i class='bx bx-file'></a></td>
+          <td>{{ $item->name ?? '' }}</td>
+          <td>{{ $item->action_code ?? '' }}</td>
+          <td>{{ $item->jenis_tindakan ?? '' }}</td>
           <td>
             <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
