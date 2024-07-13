@@ -1418,68 +1418,90 @@
                                 @endforeach
                             </tbody>
                         </table> --}}
-                        <form action="{{ route('rajal/laporan/tindakan.store') }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+                        <form action="{{ route('rajal/laporan/tindakan.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+                            @method('PUT')
                             @csrf
                             <div class="row mb-4">
                                 <div class="col-4">
                                     <div class="row mb-3">
                                         <label class="form-label">Tanggal/Jam tindakan</label>
-                                        <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ date('Y-m-d H:i') ?? '' }}"/>
+                                        <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ $item->patientActionReport->tgl_tindakan, date('Y-m-d H:i') }}"/>
                                     </div>
                                     <div class="row mb-3">
                                         <label class="form-label">LAPORAN TINDAKAN</label>
-                                        <textarea class="form-control" id="editor" name="laporan_tindakan" cols="30" rows="10"></textarea>
+                                        <textarea class="form-control" id="editor" name="laporan_tindakan" cols="30" rows="10">{{ $item->patientActionReport->laporan_tindakan ?? '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-8">
-                                    <div class="row dinamic-input mb-2">
-                                        <div class="col-5">
-                                            <label for="defaultFormControlInput" class="form-label">Tindakan</label>
-                                            <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%">
-                                            @foreach ($dataTindakan as $action)
-                                                <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
-                                            @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-1">
-                                            <label class="form-label">Jumlah</label>
-                                            <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
-                                        </div>
-                                        <div class="col-2">
-                                            <label class="form-label">Tarif</label>
-                                            <input type="number" class="form-control" name="tarif_tindakan[]" value="10000" placeholder="Tarif Tindakan" readonly/>
-                                        </div>
-                                        <div class="col-3">
-                                            <label class="form-label">Subtotal</label>
-                                            <input type="number" class="form-control" name="sub_total_tindakan[]" value="10000" placeholder="Subtotal" readonly/>
-                                        </div>
-                                        <div class="col-1 text-center align-self-center mt-4 pt-1">
-                                            <button class="btn btn-sm btn-dark " type="button">+</button>
-                                        </div>
-                                    </div> 
-
-                                    {{-- untuk dinamic input --}}
-                                    <div class="row dinamic-input mb-2">
-                                        <div class="col-5">
-                                            <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%">
-                                            @foreach ($dataTindakan as $action)
-                                                <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
-                                            @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-1">
-                                            <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
-                                        </div>
-                                        <div class="col-2">
-                                            <input type="number" class="form-control" name="tarif_tindakan[]" value="10000" placeholder="Tarif Tindakan" readonly/>
-                                        </div>
-                                        <div class="col-3">
-                                            <input type="number" class="form-control" name="sub_total_tindakan[]" value="100000000000" placeholder="Subtotal" readonly/>
-                                        </div>
-                                        <div class="col-1 text-center align-self-center">
-                                            <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
-                                        </div>
-                                    </div> 
+                                    @if ($item->patientActionReport && $item->patientActionReport->patientActionReportDetails->isNotEmpty())
+                                        @foreach ($item->patientActionReport->patientActionReportDetails as $detailTindakan)    
+                                            <div class="row dinamic-input mb-2">
+                                                <div class="col-5">
+                                                    @if ($loop->first)
+                                                    <label for="defaultFormControlInput" class="form-label">Tindakan</label>
+                                                    @endif
+                                                    <select class="form-control select2" id="action_ids_{{ $loop->iteration }}" name="action_id[]" style="width: 100%">
+                                                    @foreach ($dataTindakan as $action)
+                                                        <option value="{{ $action->id }}" @selected(old('action_id', $detailTindakan->action->id) == $action->id)>{{ $action->name }}</option>
+                                                    @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-1">
+                                                    @if ($loop->first)
+                                                    <label class="form-label">Jumlah</label>
+                                                    @endif
+                                                    <input type="number" class="form-control" name="jumlah_tindakan[]" value="{{ $detailTindakan->jumlah ?? 1 }}"/>
+                                                </div>
+                                                <div class="col-2">
+                                                    @if ($loop->first)
+                                                    <label class="form-label">Tarif</label>
+                                                    @endif
+                                                    <input type="number" class="form-control" name="tarif_tindakan[]" value="{{ $detailTindakan->harga_satuan ?? 0 }}" placeholder="Tarif Tindakan" readonly/>
+                                                </div>
+                                                <div class="col-3">
+                                                    @if ($loop->first)                                                        
+                                                    <label class="form-label">Subtotal</label>
+                                                    @endif
+                                                    <input type="number" class="form-control" name="sub_total_tindakan[]" value="{{ $detailTindakan->sub_total ?? 0 }}" placeholder="Subtotal" readonly/>
+                                                </div>
+                                                @if ($loop->first)
+                                                <div class="col-1 text-center align-self-center mt-4 pt-1">
+                                                    <button class="btn btn-sm btn-dark" onclick="addDinamicTindakan(this)" type="button">+</button>
+                                                </div>
+                                                @else
+                                                <div class="col-1 text-center align-self-center">
+                                                    <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
+                                                </div>
+                                                @endif
+                                            </div> 
+                                        @endforeach
+                                    @else
+                                        <div class="row dinamic-input mb-2">
+                                            <div class="col-5">
+                                                <label for="defaultFormControlInput" class="form-label">Tindakan</label>
+                                                <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%">
+                                                @foreach ($dataTindakan as $action)
+                                                    <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
+                                                @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-1">
+                                                <label class="form-label">Jumlah</label>
+                                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
+                                            </div>
+                                            <div class="col-2">
+                                                <label class="form-label">Tarif</label>
+                                                <input type="number" class="form-control" name="tarif_tindakan[]" value="10000" placeholder="Tarif Tindakan" readonly/>
+                                            </div>
+                                            <div class="col-3">
+                                                <label class="form-label">Subtotal</label>
+                                                <input type="number" class="form-control" name="sub_total_tindakan[]" value="10000" placeholder="Subtotal" readonly/>
+                                            </div>
+                                            <div class="col-1 text-center align-self-center mt-4 pt-1">
+                                                <button class="btn btn-sm btn-dark " type="button">+</button>
+                                            </div>
+                                        </div> 
+                                    @endif
 
                                     {{-- untuk hitungan total akhir --}}
                                     <hr>
@@ -1487,14 +1509,19 @@
                                         <div class="col-5 fw-bold ms-2">TOTAL</div>
                                         <div class="col-1"></div>
                                         <div class="col-2"></div>
-                                        <div class="col-3 fw-bold">Rp. 100.000</div>
+                                        <div class="col-3 fw-bold">Rp. {{ ($item->patientActionReport ? ($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? '') : '') }}</div>
                                     </div>
                                     <hr>
                                 </div>
                             </div>
                           
                             <div class="mb-3 text-end">
-                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                @if ($item->patientActionReport)
+                                    <a href="{{ route('rajal/laporan/tindakan.show', $item->patientActionReport->id) }}" target="blank" class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
+                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                @else
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                @endif
                             </div>
                         </form>
 
@@ -1560,42 +1587,6 @@
     </div>
 
     <script>
-        function createTindakan(id) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: 'post',
-                url: "{{ URL::route('rajal/laporan/tindakan.create') }}",
-                data: {
-                    queue_id: id,
-                },
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog modal-lg modal-dialog-scrollable';
-                    div.innerHTML = data,
-                        $('#modalScrollable').html(div);
-                    $('#modalScrollable').modal('show');
-                }
-            });
-        }
-
-        function editTindakan(id) {
-            $.ajax({
-                type: 'get',
-                url: "{{ url('rajal/laporan/tindakan/edit') }}/" + id,
-                success: function(data) {
-                    var div = document.createElement('div');
-                    div.className = 'modal-dialog modal-lg modal-dialog-scrollable';
-                    div.innerHTML = data;
-                    $('#modalScrollable').html(div);
-                    $('#modalScrollable').modal('show');
-                }
-            });
-        }
-
         var buttons = document.querySelectorAll('#btn-link');
 
         buttons.forEach(function(button) {
@@ -1666,11 +1657,35 @@
                 </div>
             `;
 
-            dinamicInput(element, content, `diagnostic_sekunder_id_${countInput}`);
+            dinamicInput(element, content, `diagnostic_sekunder_id_${countInput}`, 'Pilih Dignosa Sesuai kode ICD 10', true);
+        }
+
+        function addDinamicTindakan(element) {
+            countInput = countInput+1;
+            const content = `<div class="col-5">
+                                <select class="form-control select2" id="action_id_${countInput}" name="action_id[]" style="width: 100%">
+                                @foreach ($dataTindakan as $action)
+                                    <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="col-1">
+                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
+                            </div>
+                            <div class="col-2">
+                                <input type="number" class="form-control" name="tarif_tindakan[]" value="0" placeholder="Tarif Tindakan" readonly/>
+                            </div>
+                            <div class="col-3">
+                                <input type="number" class="form-control" name="sub_total_tindakan[]" value="0" placeholder="Subtotal" readonly/>
+                            </div>
+                            <div class="col-1 text-center align-self-center">
+                                <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
+                            </div>`;
+            dinamicInput(element, content, `action_id_${countInput}`, 'Pilih Tindakan', false);
         }
     </script>
 
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', function(){
             // {{-- aturan pakai --}}
             var intMedicine = document.getElementById('interval_medicine');
