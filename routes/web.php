@@ -483,11 +483,9 @@ Route::get('/laboratorium/request/getTemplate/{id}', [LaboratoriumFormRequestCon
 
 //rajal tindakan
 Route::group(['middleware' => ['permission:tambah laporan tindakan']], function () {
-    Route::post('/rajal/laporan/tindakan/create', [PatientActionReportController::class, 'create'])->name('rajal/laporan/tindakan.create');
     Route::post('/rajal/laporan/tindakan/store', [PatientActionReportController::class, 'store'])->name('rajal/laporan/tindakan.store');
 });
 Route::group(['middleware' => ['permission:edit laporan tindakan']], function () {
-    Route::get('/rajal/laporan/tindakan/edit/{id}', [PatientActionReportController::class, 'edit'])->name('rajal/laporan/tindakan.edit');
     Route::put('/rajal/laporan/tindakan/update/{id}', [PatientActionReportController::class, 'update'])->name('rajal/laporan/tindakan.update');
 });
 Route::group(['middleware' => ['permission:print laporan tindakan']], function () {

@@ -11,29 +11,21 @@ class PatientActionReport extends Model
 
     protected $fillable = [
         'user_id',
-        'patient_id',
-        'laporan_tindakan',
-        'intruksi',
-        'diagnosa',
+        'queue_id',
         'tgl_tindakan',
-        'lokasi',
-        'rawat_jalan_poli_patient_id',
-        'jenis_tindakan',
-        'paraf'
+        'laporan_tindakan',
+        'ttd',  //ttd dokter
     ];
 
+    // dokter
     public function user(){
         return $this->belongsTo(User::class);
     }
-
-    public function patient(){
-        return $this->belongsTo(Patient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
 
-    public function action_members(){
-        return $this->belongsToMany(ActionMembers::class, 'patient_action_report_details');
-    }
-    public function rawatJalanPoliPatient(){
-        return $this->belongsTo(RawatJalanPoliPatient::class);
+    public function patientActionReportDetails(){
+        return $this->hasMany(PatientActionReportDetail::class);
     }
 }

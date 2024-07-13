@@ -71,6 +71,8 @@ class Queue extends Model
     {
         return $this->hasOne(SuratKeteranganPatients::class);
     }
+
+    // new data
     public function perawatInitialAssesment()
     {
         return $this->hasOne(PerawatInitialAsesment::class);
@@ -90,5 +92,9 @@ class Queue extends Model
     public function soapDokter()
     {
         return $this->hasOne(RmeCppt::class);
+    }
+    public function patientActionReport()
+    {
+        return $this->hasOne(PatientActionReport::class);
     }
 }

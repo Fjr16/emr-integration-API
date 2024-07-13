@@ -416,7 +416,7 @@
     </script>
 
     <script>
-        function dinamicInput(element, content, idSelect2) {
+        function dinamicInput(element, content, idSelect2, placeholder, isClear) {
             const rowInputDinamic = element.closest('.dinamic-input');
             const newRowInputDinamic = document.createElement('div');
             newRowInputDinamic.className = rowInputDinamic.className;
@@ -424,8 +424,8 @@
 
             $(rowInputDinamic).after(newRowInputDinamic);
             $('#' + idSelect2).select2({
-                placeholder : "Pilih Dignosa Sesuai kode ICD 10",
-                allowClear : true
+                placeholder : placeholder,
+                allowClear : isClear
             });
         }
         function removeInputDinamic(element) {

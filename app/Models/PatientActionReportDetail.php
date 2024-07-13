@@ -11,11 +11,14 @@ class PatientActionReportDetail extends Model
 
     protected $fillable = [
         'patient_action_report_id',
-        'action_members_id',        
+        'action_id',        
+        'jumlah',        
+        'harga_satuan',        
+        'sub_total',        
     ];
 
-    public function actionMembers(){
-        return $this->belongsTo(ActionMembers::class);
+    public function action(){
+        return $this->belongsTo(Action::class);
     }
 
 }

@@ -116,13 +116,13 @@
                             <tr>
                                 <td class="fs-8">Nama</td>
                                 <td class="px-2 fs-8">:</td>
-                                <td class="fs-8">{{ $item->patient->name }}</td>
+                                <td class="fs-8">{{ $item->queue->patient->name }}</td>
                             </tr>
                             <tr>
                                 <td class="fs-8">Tanggal Lahir</td>
                                 <td class="px-2 fs-8">:</td>
                                 @php
-                                    $tanggalLahir = new DateTime($item->patient->tanggal_lhr);
+                                    $tanggalLahir = new DateTime($item->queue->patient->tanggal_lhr);
                                     $now = new DateTime();
                                     $ageDiff = $now->diff($tanggalLahir);
                                     $ageString = $ageDiff->format('%y tahun %m bulan');
@@ -135,13 +135,13 @@
                                 <td class="fs-8">No Rekam Medis</td>
                                 <td class="px-2 fs-8">:</td>
                                 <td class="fs-8">
-                                    {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                    {{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fs-8">NIK</td>
                                 <td class="px-2 fs-8">:</td>
-                                <td class="fs-8">{{ $item->patient->nik }}</td>
+                                <td class="fs-8">{{ $item->queue->patient->nik }}</td>
                             </tr>
                         </table>
                     </div>
@@ -150,49 +150,15 @@
         </div>
 
         <div class="content">
-            <table class="table-bordered w-100 mt-4 small">
+            <table class="table-border w-100 mt-4 small">
                 <tbody>
-                    <tr>
-                        <td class="py-2 px-2">
-                            <span class="fw-bold">Dokter Penanggung Jawab Pasien</span> : {{ $item->user->name ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-2">
-                            <div class="row">
-                                <div class="col-3 fw-bold">Diagnosa</div>
-                                <div class="col-1 text-center">:</div>
-                                <div class="col-8">{{ $item->diagnosa ?? '' }}</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-2">
-                            <div class="row">
-                                <div class="col-3 fw-bold">Jenis Tindakan</div>
-                                <div class="col-1 text-center">:</div>
-                                <div class="col-8">
-                                    {{ $item->jenis_tindakan ?? '' }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-2">
-                            <div class="row">
-                                <div class="col-3 fw-bold">Lokasi</div>
-                                <div class="col-1 text-center">:</div>
-                                <div class="col-8">{{ $item->lokasi ?? '' }}</div>
-                            </div>
-                        </td>
-                    </tr>
                     <tr>
                         <td class="p-2">
                             <div class="row">
                                 <div class="col-3 fw-bold">Tanggal Tindakan</div>
                                 <div class="col-1 text-center">:</div>
-                                <div class="col-2">{{ date('Y-m-d', strtotime($item->tgl_tindakan ?? '')) }}</div>
-                                <div class="col-6">
+                                <div class="col-5">{{ date('Y-m-d', strtotime($item->tgl_tindakan ?? '')) }}</div>
+                                <div class="col-3">
                                     <div class="d-flex flex-row">
                                         <div class="fw-bold">Jam Tindakan</div>
                                         <div class="px-2">:</div>
@@ -213,22 +179,40 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="px-2 pb-5 pt-2">
-                            <div class="d-flex flex-row">
-                                <div class="fw-bold">
-                                    Intruksi Pasca Tindakan
-                                </div>
-                                <div class="col-1 text-center ms-2">:</div>
-                                <div class="col-8 ps-3">{!! $item->intruksi ?? '' !!}</div>
-                            </div>
+                        <td class="ps-2 pb-5 pt-4">
+                            <table class="table-bordered w-100 mt-0 small">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center p-1">Nama Tindakan</th>
+                                        <th class="text-center p-1">Jumlah</th>
+                                        <th class="text-center p-1">Tarif</th>
+                                        <th class="text-center p-1">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($item->patientActionReportDetails as $detail)
+                                        <tr>
+                                            <td class="text-center p-1">{{ $detail->action->name ?? '' }}</td>
+                                            <td class="text-center p-1">{{ $detail->jumlah ?? '' }}</td>
+                                            <td class="text-center p-1">{{ number_format($detail->harga_satuan ?? '') }}</td>
+                                            <td class="text-center p-1">{{ number_format($detail->sub_total ?? '') }}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr class="fw-bold">
+                                        <td colspan="3" class="text-center">Total Akhir</td>
+                                        <td class="text-center">{{ number_format($item->patientActionReportDetails->sum('sub_total')) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                             <div class="row justify-content-end mt-5">
-                                <div class="col-5">
+                                <div class="col-4">
                                     <p class="mt-5 text-center fw-bold mb-0">
                                         Dokter Penanggung Jawab Pasien
                                     </p>
-                                    @if ($item->paraf)
+                                    @if ($item->ttd)
                                         <p class="text-center">
-                                            <img src="{{ Storage::url($item->paraf ?? '') }}" alt=""
+                                            <img src="{{ Storage::url($item->ttd ?? '') }}" alt=""
                                                 class="img-fluid mb-0" style="max-width: 150px">
                                         </p>
                                     @else
@@ -244,37 +228,7 @@
                 </tbody>
             </table>
         </div>
-        {{-- Footer --}}
-        <div class="d-flex flex-row justify-content-between PT-5">
-            <div class="d-flex flex-row text-center" style="font-size: 5pt">
-                <div class="col col-3 text-center">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
-                </div>
-                <div class="col col-3 text-center">
-                    <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
-                </div>
-                <div class="col col-3 text-center">
-                    <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
-                </div>
-            </div>
-            <p class="small"><span class="border border-dark px-5">RM 04.RJ.DR</span></p>
-        </div>
     </div>
-
-    <script>
-        // Mendapatkan tanggal saat ini
-        var today = new Date();
-        var options = {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        };
-        document.getElementById("tanggal").innerText =
-            today.toLocaleDateString("id-ID", options);
-    </script>
 </body>
 
 </html>

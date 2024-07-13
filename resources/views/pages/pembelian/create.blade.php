@@ -337,7 +337,7 @@
         <button type="button" class="btn btn-sm btn-danger" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
       </div>
     `;
-    dinamicInput(element, contentToAdd, `medicine_id_${count}`);
+    dinamicInput(element, contentToAdd, `medicine_id_${count}`, 'Pilih Obat', true);
   }
 </script>
 @endsection

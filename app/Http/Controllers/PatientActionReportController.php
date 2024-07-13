@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Action;
-use App\Models\ActionCategory;
 use App\Models\Queue;
 use App\Models\KasirPatient;
 use Illuminate\Http\Request;
@@ -12,37 +11,9 @@ use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PatientActionReportDetail;
 
+
 class PatientActionReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $today = date('Y-m-d H:i');
-        $actCategory = ActionCategory::where('name', 'Tindakan Parasat / Poli')->first();
-        $data = Action::where('action_category_id', $actCategory->id)->get();
-        $item = Queue::findOrFail($request->queue_id);
-        return view('pages.laporanTindakan.create', [
-            'title' => 'Laporan Tindakan',
-            'menu' => 'Rawat Jalan',
-            'item' => $item,
-            'data' => $data,
-            'today' => $today
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -125,24 +96,6 @@ class PatientActionReportController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $today = date('Y-m-d H:i');
-        $item = PatientActionReport::findOrFail($id);
-        return view('pages.laporanTindakan.edit', [
-            'title' => 'Laporan Tindakan',
-            'menu' => 'Rawat Jalan',
-            'item' => $item,
-            'today' => $today,
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -151,10 +104,41 @@ class PatientActionReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $item = PatientActionReport::findOrFail($id);
-        // $item->action_members()->sync($request->action_member_id);
-        $item->update($data);
+        $item = Queue::find($id);
+        if ($item->patientActionReport) {
+            $itemTindakan = $item->patientActionReport;
+            $itemTindakan->update([
+                'tgl_tindakan' => $request->input('tgl_tindakan', date('Y-m-d H:i:s')),
+                'laporan_tindakan' => $request->input('laporan_tindakan'),
+            ]);
+        }else{
+            $ttd = null;
+            if ($item->dpjp->id == auth()->user()->id) {
+                $ttd = $item->dpjp->paraf;
+            }
+            $itemTindakan = PatientActionReport::create([
+                'user_id' => $item->dpjp->id,
+                'queue_id' => $item->id,
+                'tgl_tindakan' => $request->input('tgl_tindakan', date('Y-m-d H:i:s')),
+                'laporan_tindakan' => $request->input('laporan_tindakan'),
+                'ttd' => $ttd,
+            ]);
+        }
+        $itemTindakan->patientActionReportDetails()->delete();
+        $actionIds = $request->input('action_id', []);
+        $jumlah = $request->input('jumlah_tindakan', []);
+        $harga = $request->input('tarif_tindakan', []);
+        $subTotal = $request->input('sub_total_tindakan', []);
+        
+        foreach ($actionIds as $key => $actionId) {
+            PatientActionReportDetail::create([
+                'patient_action_report_id' => $itemTindakan->id,
+                'action_id' => $actionId,
+                'jumlah' => $jumlah[$key],
+                'harga_satuan' => $harga[$key],
+                'sub_total' => $subTotal[$key],
+            ]);
+        }
 
         return back()->with([
             'success' => 'Berhasil Diperbarui',
@@ -171,7 +155,7 @@ class PatientActionReportController extends Controller
     public function destroy($id)
     {
         $item = PatientActionReport::findOrFail($id);
-        $item->action_members()->detach();
+        $item->patientActionReportDetails()->delete();
         $item->delete();
         return back()->with([
             'success' => 'Berhasil Dihapus',

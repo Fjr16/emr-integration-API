@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Queue;
 use App\Models\Action;
-use App\Models\Patient;
 use App\Models\Medicine;
 use App\Models\Procedure;
 use App\Models\Diagnostic;
 use App\Models\MedicineStok;
 use Illuminate\Http\Request;
-use App\Models\ActionCategory;
 use App\Models\MedicineReceipt;
 use App\Models\PatientActionReport;
 use App\Models\RajalFarmasiPatient;
@@ -95,7 +93,7 @@ class RawatJalanController extends Controller
         $riwKunjungans = Queue::where('patient_id', $item->patient->id)->where('status_antrian', 'ARRIVED')->orWhere('status_antrian', 'FINISHED')->latest()->get();
 
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
-        $reportActions = PatientActionReport::where('patient_id', $item->patient->id)->latest()->get();
+        $reportActions = PatientActionReport::where('queue_id', $item->id)->first();
         $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
 
@@ -106,8 +104,7 @@ class RawatJalanController extends Controller
         $medicines = MedicineStok::where('stok' ,'>', 0)->get();
         // resep 
         //tindakan
-        $actCategory = ActionCategory::where('name', 'Tindakan Parasat / Poli')->first();
-        $dataTindakan = Action::where('action_category_id', $actCategory->id)->get();
+        $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->get();
 
         return view('pages.rawatjalan.show', [
             "title" => $title,
