@@ -17,7 +17,6 @@ use App\Models\RadiologiFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\PerawatInitialAsesment;
-use App\Models\SuratBuktiPelayananPatient;
 
 class RawatJalanController extends Controller
 {
@@ -94,7 +93,6 @@ class RawatJalanController extends Controller
 
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
         $reportActions = PatientActionReport::where('queue_id', $item->id)->first();
-        $sbpks = SuratBuktiPelayananPatient::where('patient_id', $item->patient->id)->latest()->get();
         $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
 
         // diagnostic dan procedure
@@ -114,7 +112,6 @@ class RawatJalanController extends Controller
             "riwKunjungans" => $riwKunjungans,
             'today' => $today,
             'reportActions' => $reportActions,
-            'sbpks' => $sbpks,
             'radiologiResults' => $radiologiResults,
             'diagnostics' => $diagnostics,
             'procedures' => $procedures,

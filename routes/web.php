@@ -43,6 +43,7 @@ use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionRatesController;
 use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\DoctorInitialAssesmentController;
+use App\Http\Controllers\KontrolUlangController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\UnitCategoryPivotController;
@@ -501,26 +502,9 @@ Route::put('/rajal/resep/dokter/update/{id}', [MedicineReceiptController::class,
 Route::get('/rajal/resep/dokter/show/{id}', [MedicineReceiptController::class, 'show'])->name('rajal/resep/dokter.show');
 Route::delete('/rajal/resep/dokter/destroy/{id}', [MedicineReceiptController::class, 'destroy'])->name('rajal/resep/dokter.destroy');
 
-//sbpk
-// Route::group(['middleware' => ['permission:edit resep dokter']], function(){
-Route::get('/rajal/sbpk/create/{id}', [SuratBuktiPelayananPatientController::class, 'create'])->name('rajal/sbpk.create');
-Route::post('/rajal/sbpk/store/{id}', [SuratBuktiPelayananPatientController::class, 'store'])->name('rajal/sbpk.store');
-Route::get('/rajal/sbpk/edit/{id}', [SuratBuktiPelayananPatientController::class, 'edit'])->name('rajal/sbpk.edit');
-Route::put('/rajal/sbpk/update/{id}', [SuratBuktiPelayananPatientController::class, 'update'])->name('rajal/sbpk.update');
-Route::get('/rajal/sbpk/update/ttd', [SuratBuktiPelayananPatientController::class, 'getTtd'])->name('rajal/sbpk.ttd');
-// });
-// Route::group(['middleware' => ['permission:print resep dokter']], function(){
-Route::get('/rajal/sbpk/show/{id}', [SuratBuktiPelayananPatientController::class, 'show'])->name('rajal/sbpk.show');
-// });
-// Route::group(['middleware' => ['permission:hapus resep dokter']], function(){
-Route::delete('/rajal/sbpk/destroy/{id}', [SuratBuktiPelayananPatientController::class, 'destroy'])->name('rajal/sbpk.destroy');
-
-// suratKeterangan
-Route::get('/rajal/keterangan-sbpk/create/{id}/{surat_id}', [SuratBuktiPelayananPatientController::class, 'createSuratKeterangan'])->name('rajal/keterangan-sbpk.create');
-Route::post('/rajal/keterangan-sbpk/store/{id}/{surat_id}', [SuratBuktiPelayananPatientController::class, 'storeSuratKeterangan'])->name('rajal/keterangan-sbpk.store');
-Route::get('/rajal/keterangan-sbpk/edit/{id}', [SuratBuktiPelayananPatientController::class, 'editSuratKeterangan'])->name('rajal/keterangan-sbpk.edit');
-Route::put('/rajal/keterangan-sbpk/update/{id}', [SuratBuktiPelayananPatientController::class, 'updateSuratKeterangan'])->name('rajal/keterangan-sbpk.update');
-// });
+//kontrol ulang
+Route::get('/rajal/sbpk/update/ttd', [KontrolUlangController::class, 'getTtd'])->name('rajal/sbpk.ttd');
+Route::get('/rajal/sbpk/show/{id}', [KontrolUlangController::class, 'show'])->name('rajal/sbpk.show');
 
 // Route::group(['middleware' => ['permission:tambah rme perawat']], function(){
 Route::get('/asesmen/awal/perawat/create_step_one/{id}', [AsesmentPerawatController::class, 'create_step_one'])->name('asesmen/awal/perawat.create_step_one');

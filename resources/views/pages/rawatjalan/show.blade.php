@@ -420,6 +420,15 @@
                         </button>
                     </li>
                     <li class="nav-item">
+                        <button type="button"
+                            class="nav-link d-flex justify-content-center {{ session('btn') == 'tindakan' ? 'active' : '' }}"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-tindakan"
+                            aria-controls="navs-justified-tindakan" aria-selected="false">
+                            <i class="tf-icons bx bx-sitemap"></i>
+                            <p class="m-0">Tindakan</p>
+                        </button>
+                    </li>
+                    <li class="nav-item">
                         <button id="btn-link" type="button"
                             class="nav-link {{ session('btn') == 'cppt' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-cppt"
@@ -430,11 +439,11 @@
                     </li>
                     <li class="nav-item">
                         <button type="button"
-                            class="nav-link d-flex justify-content-center {{ session('btn') == 'sbpk' ? 'active' : '' }}"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-sbpk"
-                            aria-controls="navs-justified-sbpk" aria-selected="false">
-                            <i class="tf-icons bx bx-mail-send"></i>
-                            <p class="m-0">SBPK</p>
+                            class="nav-link d-flex justify-content-center {{ session('btn') == 'finished' ? 'active' : '' }}"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-finished"
+                            aria-controls="navs-justified-finished" aria-selected="false">
+                            <i class='bx bx-check-double me-2'></i>
+                            <p class="m-0">Selesai</p>
                         </button>
                     </li>
                 </ul>
@@ -1468,12 +1477,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'sbpk' ? 'show active' : '' }}"
-                        id="navs-justified-sbpk" role="tabpanel">
-                        <div class="text-end mb-3">
-                            <a href="{{ route('rajal/sbpk.create', $item->id) }}" class="btn btn-success btn-sm">+Tambah
-                                SBPK</a>
-                        </div>
+                    <div class="tab-pane fade {{ session('btn') == 'finished' ? 'show active' : '' }}"
+                        id="navs-justified-finished" role="tabpanel">
                         <table class="table">
                             <thead>
                                 <tr class="text-nowrap">
@@ -1486,32 +1491,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sbpks as $sbpk)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $sbpk->patient->name ?? '' }}</td>
-                                        <td>{{ $sbpk->tanggal_masuk ?? '' }}</td>
-                                        <td>{{ $sbpk->jam_keluar ?? '' }}</td>
-                                        <td>{{ $sbpk->keterangan ?? '' }}</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="{{ route('rajal/sbpk.show', $sbpk->id) }}" target="blank"
-                                                    class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
-                                                <a href="{{ route('rajal/sbpk.edit', $sbpk->id) }}"
-                                                    class="btn btn-warning btn-sm mx-2"><i class='bx bx-edit'></i></a>
-                                                <form action="{{ route('rajal/sbpk.destroy', $sbpk->id) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button type = "submit" class="btn btn-danger btn-sm">
-                                                        <i class='bx bx-trash'></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
