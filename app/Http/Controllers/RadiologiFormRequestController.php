@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Action;
-use App\Models\ActionCategory;
 use App\Models\Queue;
 use Illuminate\Http\Request;
 use App\Models\InitialAssesment;
-use App\Models\NewRadiologiRequest;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\URL;
 use App\Models\RadiologiFormRequest;
@@ -35,8 +33,7 @@ class RadiologiFormRequestController extends Controller
     {
         $urlParent = URL::previous();
 
-        $categoryActionRadiologi = ActionCategory::where('name', 'Radiologi')->first(); 
-        $data = Action::where('action_category_id', $categoryActionRadiologi->id)->get();
+        $data = Action::where('jenis_tindakan', 'Radiologi')->get();
         $item = Queue::findOrFail($id);
 
         $diagnosa = null;
@@ -153,8 +150,7 @@ class RadiologiFormRequestController extends Controller
                 'dokter' => 'radiologi',
             ]);
         }
-        $categoryActionRadiologi = ActionCategory::where('name', 'Radiologi')->first(); 
-        $data = Action::where('action_category_id', $categoryActionRadiologi->id)->get();
+        $data = Action::where('jenis_tindakan', 'Radiologi')->get();
 
         return view('pages.permintaanRadiologi.edit', [
             'title' => $title,

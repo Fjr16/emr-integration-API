@@ -37,7 +37,7 @@
                         <div class="row mb-3">
                             <label for="diagnosa" class="col-form-label col-3">Diagnosa</label>
                             <div class="col-9">
-                                <input class="form-control" type="text" name="diagnosa" required>{{ $diagnosa }}</input>
+                                <input class="form-control" type="text" name="diagnosa" value="{{ $item->doctorInitialAssesment ? ($item->doctorInitialAssesment->keluhan_utama ?? '') : '' }}" required @disabled(true)></input>
                             </div>
                         </div>
                         <div class="row mb-3">

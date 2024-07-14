@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Queue;
 use App\Models\Action;
 use Illuminate\Http\Request;
-use App\Models\ActionCategory;
-use App\Models\InitialAssesment;
 use App\Models\LaboratoriumMasterTemplate;
 use App\Models\LaboratoriumMasterTemplateDetail;
 use App\Models\LaboratoriumRequest;
-use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;
 use App\Models\LaboratoriumRequestDetail;
 
@@ -24,37 +21,15 @@ class LaboratoriumFormRequestController extends Controller
     public function index($id)
     {
         $item = Queue::find($id);
-        $categoryActionPk = ActionCategory::where('name', 'Laboratorium Patologi Klinik')->first(); 
-        $data = Action::where('action_category_id', $categoryActionPk->id)->get();
+        $data = Action::where('jenis_tindakan', 'Laboratorium')->get();
         $templates = LaboratoriumMasterTemplate::all();
-
-        $rawat_jalan_poli_patient_id = $item->rawatJalanPatient->rawatJalanPoliPatient->id ?? '';
-        $diagnosa = null;
-        if($rawat_jalan_poli_patient_id){
-            $assesmenAwalMedis = InitialAssesment::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
-            $patientActionReport = PatientActionReport::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
-
-            if($assesmenAwalMedis && $patientActionReport){
-                if($assesmenAwalMedis->created_at->isBefore($patientActionReport->created_at)){
-                    $diagnosa = $patientActionReport->diagnosa;
-                }else{
-                    $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-                }
-            }elseif($assesmenAwalMedis && !$patientActionReport){
-                $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-            }elseif(!$assesmenAwalMedis && $patientActionReport){
-                $diagnosa = $patientActionReport->diagnosa;
-            }
-        }
         $routeStore = 'rajal/laboratorium/request.store';
-
         return view('pages.permintaanLaboratorium.create', [
             "title" => "Rawat Jalan",
             "menu" => "In Patient",
             'item' => $item,
             'data' => $data,
             'templates' => $templates,
-            'diagnosa' => $diagnosa,
             'routeStore' => $routeStore,
         ]);
         
@@ -67,8 +42,7 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function getTemplate($id)
     {
-        $categoryActionPk = ActionCategory::where('name', 'Laboratorium Patologi Klinik')->first(); 
-        $data = Action::where('action_category_id', $categoryActionPk->id)->get();
+        $data = Action::where('action_category_id', 'Laboratorium')->get();
         $item = LaboratoriumMasterTemplate::find($id);
         return response()->json([
             'details' => $item->laboratoriumMasterTemplateDetails,
@@ -158,29 +132,6 @@ class LaboratoriumFormRequestController extends Controller
             'queue' => $queue,
             'item' => $item,
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**

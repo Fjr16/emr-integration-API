@@ -303,14 +303,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dokter/poli', [DoctorPoliController::class, 'index'])->name('dokter/poli.index');
     Route::put('/dokter/poli/update/{id}', [DoctorPoliController::class, 'update'])->name('dokter/poli.update');
 
-    //kategori tindakan
-    Route::get('/tindakan/category', [ActionCategoryController::class, 'index'])->name('tindakan/category');
-    Route::get('/tindakan/category/create', [ActionCategoryController::class, 'create'])->name('tindakan/category.create');
-    Route::post('/tindakan/category/store', [ActionCategoryController::class, 'store'])->name('tindakan/category.store');
-    Route::get('/tindakan/category/edit/{id}', [ActionCategoryController::class, 'edit'])->name('tindakan/category.edit');
-    Route::put('/tindakan/category/update/{id}', [ActionCategoryController::class, 'update'])->name('tindakan/category.update');
-    Route::delete('/category/tindakan/destroy/{id}', [ActionCategoryController::class, 'destroy'])->name('tindakan/category.destroy');
-
     //tindakan dan tarif tindakan (done)
     Route::get('/tindakan/index', [ActionController::class, 'index'])->name('tindakan.index');
     Route::get('/tindakan/create', [ActionController::class, 'create'])->name('tindakan.create');
@@ -461,7 +453,6 @@ Route::delete('/rajal/permintaan/radiologi/destroy/{id}', [RadiologiFormRequestC
 Route::group(['middleware' => ['permission:tambah permintaan labor pk']], function () {
     Route::get('/rajal/laboratorium/request/create/{id}', [LaboratoriumFormRequestController::class, 'index'])->name('rajal/laboratorium/request.index');
     Route::post('rajal/laboratorium/request/store/{id}', [LaboratoriumFormRequestController::class, 'store'])->name('rajal/laboratorium/request.store');
-    Route::get('/rajal/laboratorium/request/edit/{id}', [LaboratoriumFormRequestController::class, 'edit'])->name('rajal/laboratorium/request.edit');
 });
 Route::group(['middleware' => ['permission:print permintaan labor pk']], function () {
     Route::get('/rajal/laboratorium/request/show/{queue_id}/{labor_id}', [LaboratoriumFormRequestController::class, 'show'])->name('rajal/laboratorium/request.show');

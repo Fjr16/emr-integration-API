@@ -377,7 +377,7 @@
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-riwayat"
                             aria-controls="navs-justified-riwayat" aria-selected="false">
                             <i class='bx bxs-book-open me-1'></i>
-                            <p class="m-0">Riwayat</p>
+                            <p class="m-0">Riwayat Poli</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -460,6 +460,7 @@
                               <div class="list-group">
                                 <a class="list-group-item list-group-item-action active" id="list-kunj-terakhir-list" data-bs-toggle="list" href="#list-kunj-terakhir">Kunjungan Terakhir</a>
                                 <a class="list-group-item list-group-item-action" id="list-rencana-kontrol-list" data-bs-toggle="list" href="#list-rencana-kontrol">Rencana Kontrol</a>
+                                <a class="list-group-item list-group-item-action" id="list-rencana-kontrol-list" data-bs-toggle="list" href="#list-rencana-kontrol">Berkas</a>
                               </div>
                             </div>
                             <div class="col-md-10 col-12 border">
@@ -1467,10 +1468,10 @@
                                 </div>
                                 <div class="col-12 mt-4">
                                     @if ($item->planControlPatient)
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                    <a href="{{ route('rajal/kontrol/ulang.destroy', $item->planControlPatient->id) }}" class="btn btn-danger">Batal / Hapus</a>
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                    <a href="{{ route('rajal/kontrol/ulang.destroy', $item->planControlPatient->id) }}" class="btn btn-sm btn-danger">Batal / Hapus</a>
                                     @else
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-sm btn-primary">Submit</button>
                                     @endif
                                 </div>
                             </div>
@@ -1527,17 +1528,130 @@
                         <div class="row">
                             <div class="col-md-2 col-12 mb-3 mb-md-0">
                               <div class="list-group">
-                                <a class="list-group-item list-group-item-action" id="status-pelayanan-tab" data-bs-toggle="list" href="#list-rencana-kontrol">Status Pelayanan</a>
-                                <a class="list-group-item list-group-item-action" id="konsul-poli-lain-tab" data-bs-toggle="list" href="#list-rencana-kontrol">Konsul Poli Lain</a>
+                                <a class="list-group-item list-group-item-action {{ session('finished' == 'status-pelayanan' ? 'active' : '') }}" id="status-pelayanan-tab" data-bs-toggle="list" href="#list-status-pelayanan">Status Pelayanan</a>
+                                <a class="list-group-item list-group-item-action {{ session('finished' == 'konsul-internal' ? 'active' : '') }}" id="konsul-poli-lain-tab" data-bs-toggle="list" href="#list-konsul-internal">Konsul Poli Lain</a>
                               </div>
                             </div>
                             <div class="col-md-10 col-12 border">
                               <div class="tab-content">
-                                <div class="tab-pane fade show active" id="list-kunj-terakhir">
-                                  Donut sugar plum sweet roll biscuit. Cake oat cake gummi bears. Tart wafer wafer halvah gummi bears cheesecake. Topping croissant cake sweet roll. Dessert fruitcake gingerbread halvah marshmallow pudding bear claw cheesecake. Bonbon dragée cookie gummies. Pudding marzipan liquorice. Sugar plum dragée cupcake cupcake cake dessert chocolate bar. Pastry lollipop lemon drops lollipop halvah croissant. Pastry sweet gingerbread lemon drops topping ice cream.
+                                <div class="tab-pane fade {{ session('finished' == 'status-pelayanan' ? 'show active' : '') }}" id="list-status-pelayanan">
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <div class="row mb-3">
+                                                <Label class="form-label">Diet Pasien</Label>
+                                                <select class="form-control select2" name="diet_pasien" id="diet_pasien" style="width: 100%;" multiple>
+                                                    <option value="Diet Diabetes Melitus">Diet Diabetes Melitus</option>
+                                                    <option value="Diet Lainnya">Diet Lainnya</option>
+                                                </select>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <Label class="form-label">Status Pelayanan</Label>
+                                                <div class="col-md">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" checked/>
+                                                        <label class="form-check-label" for="belum_dilayani">Belum Dilayani</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_pelayanan" id="dalam_perawatan" value="ONGOING" />
+                                                        <label class="form-check-label" for="dalam_perawatan">Dalam Perawatan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_pelayanan" id="sudah_dilayani" value="FINISHED"/>
+                                                        <label class="form-check-label" for="sudah_dilayani">Sudah Dilayani</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <Label class="form-label">Intruksi Pulang / Kontrol Ulang</Label>
+                                            <textarea name="intruksi_pulang" id="intruksi_pulang" class="form-control" rows="4"></textarea>
+                                        </div>
+                                    </div>
+                                     <div class="row mb-3">
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <Label class="form-label d-block">Cara Keluar</Label>
+                                                <div class="col-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="pulang" value="Pulang" checked/>
+                                                        <label class="form-check-label" for="pulang">Pulang</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="rawat_inap" value="Rawat Inap" />
+                                                        <label class="form-check-label" for="rawat_inap">Rawat Inap</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="rujuk_balik" value="Rujuk Balik"/>
+                                                        <label class="form-check-label" for="rujuk_balik">Rujuk Balik</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="rujuk_eksternal" value="Dirujuk Ke Rumah Sakit Lain"/>
+                                                        <label class="form-check-label" for="rujuk_eksternal">Dirujuk Ke Rumah Sakit Lain</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <Label class="form-label d-block">Keadaan Keluar</Label>
+                                                <div class="col-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="belum_sembuh" value="Belum Sembuh" checked/>
+                                                        <label class="form-check-label" for="belum_sembuh">Belum Sembuh</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="mulai_sembuh" value="Mulai Sembuh" />
+                                                        <label class="form-check-label" for="mulai_sembuh">Mulai Sembuh</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="membaik" value="Membaik"/>
+                                                        <label class="form-check-label" for="membaik">Membaik</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="sembuh" value="Sembuh"/>
+                                                        <label class="form-check-label" for="sembuh">Sembuh</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-5 ms-auto">
+                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                        </div>
+                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="list-rencana-kontrol">
-                                    survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                                <div class="tab-pane fade {{ session('finished' == 'konsul-internal' ? 'show active' : '') }}" id="list-konsul-internal">
+                                    <div class="row">
+                                        <h5 class="mb-3">Konsul Poli Lain (Konsul Internal)</h5>
+                                        <div class="col-12 mb-1">
+                                            <div class="form-check form-check-inline">
+                                              <input class="form-check-input" type="checkbox" name="isKontrol" id="isKontrol" value="1" {{ $item->planControlPatient ? 'checked' : '' }}/>
+                                              <label class="form-check-label" for="inlineRadio1">Ceklis jika pasien diminta konsul ke poli lain</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <select name="dokter_id" id="dokter_id" class="form-control select2" style="width: 100%;" @disabled(true)>
+                                                <option value="dokter 1">dokter 1</option>
+                                                <option value="dokter 2">dokter 2</option>
+                                                <option value="dokter 3">dokter 3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="" class="form-label d-block">Mohon Bantuan Sejawat Untuk:</label>
+                                            <select name="permintaan_konsul" id="permintaan_konsul" class="form-control select2" style="width: 100%;" @disabled(true)>
+                                                <option value="Konsultasikan tindakan masalah medik saat ini">Konsultasikan tindakan masalah medik saat ini</option>
+                                            </select>
+                                            <textarea name="keterangan_konsul" id="keterangan_konsul" class="form-control" rows="4" @disabled(true)>Atas pasien ini yang kami rawat dengan</textarea>
+                                        </div>
+                                        <div class="col-12 mt-4 ms-auto">
+                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                        </div>
+                                    </div>
                                 </div>
                               </div>
                             </div>
