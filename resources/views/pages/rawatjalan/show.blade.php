@@ -1513,7 +1513,7 @@
                                           <li><button class="dropdown-item" type="button" value="radiologi" onclick="autoFillSOAP(this)">Radiologi</button></li>
                                           <li><button class="dropdown-item" type="button" value="laboratorium" onclick="autoFillSOAP(this)">Laboratorium</button></li>
                                           <li><button class="dropdown-item" type="button" value="tindakan" onclick="autoFillSOAP(this)">Tindakan</button></li>
-                                          <li><button class="dropdown-item" type="button" value="rencana" onclick="autoFillSOAP(this)">Perencanaan</button></li>
+                                          <li><button class="dropdown-item" type="button" value="kontrolUlang" onclick="autoFillSOAP(this)">Rencana Kontrol</button></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1601,7 +1601,7 @@
                     dataResep += '\r\n# ' + (item.medicine_id ? (item.medicine.name ?? '') : (item.nama_obat_custom ?? '')) + ' - ' + item.aturan_pakai ?? '';
                 });
 
-                var plann = element.closest('.row').querySelector('#planning');
+                let plann = element.closest('.row').querySelector('#planning');
                 plann.value += dataResep;
             } else if(element.value == 'tindakan'){
                 let dataTindakan = '\r\n\nTindakan Medis : ';
@@ -1609,8 +1609,13 @@
                     dataTindakan += '\r\n- ' + item.name ?? '';
                 });
 
-                var plann = element.closest('.row').querySelector('#planning');
+                let plann = element.closest('.row').querySelector('#planning');
                 plann.value += dataTindakan;
+            } else if(element.value == 'kontrolUlang'){
+                const dataKontrol = `{{ "\r\n\nPasien Diminta Kontrol Pada " . ($item->planControlPatient->tgl_kontrol ?? '') }}`;
+
+                let plann = element.closest('.row').querySelector('#planning');
+                plann.value += dataKontrol;
             }
             $(targetElement).val(contentTarget);
 
