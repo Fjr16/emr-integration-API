@@ -14,6 +14,9 @@
             {{ session('error') }}
         </div>
     @endif
+    <div id="show-alert">
+    
+    </div>
     <div class="d-flex justify-content-end mb-3 mt-0">
         @can(['finish pasien poli', 'show pasien poli'])
             <form action="{{ route('rajal/update', $item->rawatJalanPoliPatient->id) }}" method="POST"
@@ -314,9 +317,13 @@
                                                                         <td>{{ $item->soapDokter->created_at->format('d M Y') ?? '' }}</td>
                                                                         <td>{{ $item->soapDokter->user->name ?? '' }}</td>
                                                                         <td>
+                                                                            <p class="fw-bold mb-0">SUBJECTIVE:</p>
                                                                             <p class="multi-line-text">{{ $item->soapDokter->subjective ?? '' }}</p>
+                                                                            <p class="fw-bold mb-0">OBJECTIVE:</p>
                                                                             <p class="multi-line-text">{{ $item->soapDokter->objective ?? '' }}</p>
+                                                                            <p class="fw-bold mb-0">ASSESMENT:</p>
                                                                             <p class="multi-line-text">{{ $item->soapDokter->asesment ?? '' }}</p>
+                                                                            <p class="fw-bold mb-0">PLANNING:</p>
                                                                             <p class="multi-line-text">{{ $item->soapDokter->planning ?? '' }}</p>
                                                                         </td>
                                                                     </tr>
@@ -404,21 +411,21 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button id="btn-link" type="button"
-                            class="nav-link {{ session('btn') == 'cppt' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-cppt"
-                            aria-controls="navs-justified-cppt" aria-selected="false">
-                            <i class='bx bxs-analyse me-1'></i>
-                            <p class="m-0">SOAP</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
                         <button type="button"
                             class="nav-link d-flex justify-content-center {{ session('btn') == 'tindakan' ? 'active' : '' }}"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-tindakan"
                             aria-controls="navs-justified-tindakan" aria-selected="false">
                             <i class="tf-icons bx bx-sitemap"></i>
                             <p class="m-0">Tindakan</p>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="btn-link" type="button"
+                            class="nav-link {{ session('btn') == 'cppt' ? 'active' : '' }} d-flex justify-content-center"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-cppt"
+                            aria-controls="navs-justified-cppt" aria-selected="false">
+                            <i class='bx bxs-analyse me-1'></i>
+                            <p class="m-0">SOAP</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -1297,127 +1304,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}" id="navs-justified-cppt" role="tabpanel">
-                        <form action="{{ route('rajal/cppt.store', $item->id) }}" method="POST" id="formSOAP">
-                            @csrf
-                            <div class="row mb-5">
-                                <div class="col-sm-3">
-                                    <label for="subjective" class="form-label">Subjective</label>
-                                    <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ ($itemAss->keluhan_utama ?? '') . "\r\nRiw. " .($item->perawatInitialAssesment->riw_penyakit_pasien ?? '') }} </textarea>
-                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="sub" onclick="autoFillSOAP(this)">
-                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Anamnesa
-                                    </button>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label for="objective" class="form-label">Objective</label>
-                                    <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . ($itemAss->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($itemAss->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($itemAss->td_sistolik ?? '') . " / " . ($itemAss->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($itemAss->suhu ?? '') . " °C\r\n" . "Nafas: " . ($itemAss->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($itemAss->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($itemAss->bb ?? '') . ' kg' }}</textarea>
-                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="obj" onclick="autoFillSOAP(this)">
-                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Asesmen
-                                    </button>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label for="asesmen" class="form-label">Assesment</label>
-                                    <textarea name="asesmen" id="asesmen" class="form-control" rows="10" placeholder="Assesment"></textarea>
-                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="ases" onclick="autoFillSOAP(this)">
-                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Diagnosa
-                                    </button>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label for="planning" class="form-label">Planning</label>
-                                    <textarea name="planning" id="planning" class="form-control" rows="10" placeholder="Planning"></textarea>
-                                    <div class="btn-group dropdown me-3 mt-2 w-100">
-                                        <button class="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class='bx bx-up-arrow-alt'></i> Tarik Data
-                                        </button>
-                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                          <li><button class="dropdown-item" type="button" value="resep" onclick="autoFillSOAP(this)">Resep</button></li>
-                                          <li><button class="dropdown-item" type="button" value="radiologi" onclick="autoFillSOAP(this)">Radiologi</button></li>
-                                          <li><button class="dropdown-item" type="button" value="laboratorium" onclick="autoFillSOAP(this)">Laboratorium</button></li>
-                                          <li><button class="dropdown-item" type="button" value="tindakan" onclick="autoFillSOAP(this)">Tindakan</button></li>
-                                          <li><button class="dropdown-item" type="button" value="rencana" onclick="autoFillSOAP(this)">Perencanaan</button></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-end my-4">
-                                <button type="submit" class="btn btn-primary btn-sm" onclick="openModal()">Submit</button>
-                            </div>
-                        </form>
-                    </div>
                     <div class="tab-pane fade {{ session('btn') == 'tindakan' ? 'show active' : '' }}" id="navs-justified-tindakan" role="tabpanel">
-                        {{-- @can('tambah laporan tindakan')
-                            @if ($title == 'Rawat Jalan')
-                                <div class="text-end mb-3">
-                                    <button class="btn btn-success btn-sm"
-                                        onclick="createTindakan({{ $item->id }})">+Tambah
-                                        Tindakan</button>
-                                </div>
-                            @endif
-                        @endcan
-                        <table class="table" id="example">
-                            <thead>
-                                <tr class="">
-                                    <th class="text-body">Tanggal / Jam</th>
-                                    <th class="text-body">Dokter</th>
-                                    <th class="text-body">Diagnosa</th>
-                                    <th class="text-body">Tindakan</th>
-                                    <th class="text-body">Lokasi</th>
-                                    <th class="text-body">Laporan</th>
-                                    <th class="text-body">Intruksi</th>
-                                    <th class="text-body">Paraf</th>
-                                    @canany(['edit laporan tindakan', 'delete laporan tindakan'])
-                                        <th class="text-body">Action</th>
-                                    @endcanany
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($reportActions as $action)
-                                    <tr>
-                                        <td>{{ date('Y-m-d H:i', strtotime($action->tgl_tindakan ?? '')) }}</td>
-                                        <td>{{ $action->user->name ?? '' }}</td>
-                                        <td>{{ $action->diagnosa ?? '' }}</td>
-                                        <td>{{ $action->jenis_tindakan ?? '' }}</td>
-                                        <td>{{ $action->lokasi ?? '' }}</td>
-                                        <td>{{ $action->laporan_tindakan ?? '' }}</td>
-                                        <td>{{ $action->intruksi ?? '' }}</td>
-                                        <td>
-                                            <a href="{{ Storage::url($item->paraf) }}"><img src="{{ Storage::url($item->paraf) }}" alt=""></a>
-                                            
-                                        </td>
-                                        @canany(['edit laporan tindakan', 'delete laporan tindakan'])
-                                            <td>
-                                                <div class="d-flex">
-                                                    @can('print laporan tindakan')
-                                                        <a href="{{ route('rajal/laporan/tindakan.show', $action->id) }}"
-                                                            target="blank" class="btn btn-dark btn-sm"><i
-                                                                class='bx bx-printer'></i></a>
-                                                    @endcan
-                                                    @if ($title == 'Rawat Jalan')
-                                                        @can('edit laporan tindakan')
-                                                            <button class="btn btn-warning btn-sm mx-2"
-                                                                onclick="editTindakan({{ $action->id }})"><i
-                                                                    class='bx bx-edit'></i></button>
-                                                        @endcan
-                                                        @can('delete laporan tindakan')
-                                                            <form
-                                                                action="{{ route('rajal/laporan/tindakan.destroy', $action->id) }}"
-                                                                method="POST"
-                                                                onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                                                                @method('DELETE')
-                                                                @csrf
-                                                                <button type = "submit" class="btn btn-danger btn-sm">
-                                                                    <i class='bx bx-trash'></i>
-                                                                </button>
-                                                            </form>
-                                                        @endcan
-                                                    @endif
-                                                </div>
-                                            </td>
-                                        @endcanany
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table> --}}
                         <form action="{{ route('rajal/laporan/tindakan.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
                             @method('PUT')
                             @csrf
@@ -1425,7 +1312,7 @@
                                 <div class="col-4">
                                     <div class="row mb-3">
                                         <label class="form-label">Tanggal/Jam tindakan</label>
-                                        <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ $item->patientActionReport->tgl_tindakan, date('Y-m-d H:i') }}"/>
+                                        <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ $item->patientActionReport->tgl_tindakan ?? date('Y-m-d H:i') }}"/>
                                     </div>
                                     <div class="row mb-3">
                                         <label class="form-label">LAPORAN TINDAKAN</label>
@@ -1440,7 +1327,7 @@
                                                     @if ($loop->first)
                                                     <label for="defaultFormControlInput" class="form-label">Tindakan</label>
                                                     @endif
-                                                    <select class="form-control select2" id="action_ids_{{ $loop->iteration }}" name="action_id[]" style="width: 100%">
+                                                    <select class="form-control select2" id="action_ids_{{ $loop->iteration }}" data-allow-clear="true" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
                                                     @foreach ($dataTindakan as $action)
                                                         <option value="{{ $action->id }}" @selected(old('action_id', $detailTindakan->action->id) == $action->id)>{{ $action->name }}</option>
                                                     @endforeach
@@ -1450,7 +1337,7 @@
                                                     @if ($loop->first)
                                                     <label class="form-label">Jumlah</label>
                                                     @endif
-                                                    <input type="number" class="form-control" name="jumlah_tindakan[]" value="{{ $detailTindakan->jumlah ?? 1 }}"/>
+                                                    <input type="number" class="form-control" name="jumlah_tindakan[]" value="{{ $detailTindakan->jumlah ?? 1 }}" onchange="countSubTotal(this)"/>
                                                 </div>
                                                 <div class="col-2">
                                                     @if ($loop->first)
@@ -1479,7 +1366,8 @@
                                         <div class="row dinamic-input mb-2">
                                             <div class="col-5">
                                                 <label for="defaultFormControlInput" class="form-label">Tindakan</label>
-                                                <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%">
+                                                <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
+                                                    <option selected disabled>Pilih Tindakan</option>
                                                 @foreach ($dataTindakan as $action)
                                                     <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
                                                 @endforeach
@@ -1487,44 +1375,98 @@
                                             </div>
                                             <div class="col-1">
                                                 <label class="form-label">Jumlah</label>
-                                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
+                                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1" onchange="countSubTotal(this)"/>
                                             </div>
                                             <div class="col-2">
                                                 <label class="form-label">Tarif</label>
-                                                <input type="number" class="form-control" name="tarif_tindakan[]" value="10000" placeholder="Tarif Tindakan" readonly/>
+                                                <input type="number" class="form-control" name="tarif_tindakan[]" value="0" placeholder="Tarif Tindakan" readonly/>
                                             </div>
                                             <div class="col-3">
                                                 <label class="form-label">Subtotal</label>
-                                                <input type="number" class="form-control" name="sub_total_tindakan[]" value="10000" placeholder="Subtotal" readonly/>
+                                                <input type="number" class="form-control" name="sub_total_tindakan[]" value="0" placeholder="Subtotal" readonly/>
                                             </div>
                                             <div class="col-1 text-center align-self-center mt-4 pt-1">
-                                                <button class="btn btn-sm btn-dark " type="button">+</button>
+                                                <button class="btn btn-sm btn-dark" onclick="addDinamicTindakan(this)" type="button">+</button>
                                             </div>
                                         </div> 
                                     @endif
-
-                                    {{-- untuk hitungan total akhir --}}
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-5 fw-bold ms-2">TOTAL</div>
-                                        <div class="col-1"></div>
-                                        <div class="col-2"></div>
-                                        <div class="col-3 fw-bold">Rp. {{ ($item->patientActionReport ? ($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? '') : '') }}</div>
-                                    </div>
-                                    <hr>
                                 </div>
                             </div>
                           
-                            <div class="mb-3 text-end">
-                                @if ($item->patientActionReport)
-                                    <a href="{{ route('rajal/laporan/tindakan.show', $item->patientActionReport->id) }}" target="blank" class="btn btn-dark btn-sm"><i class='bx bx-printer'></i></a>
-                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                @else
-                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                                @endif
+                            @if (!$item->patientActionReport)
+                                <div class="row mb-3">
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                            @else
+                            <div class="row">
+                                <div class="col-12 text-end">
+                                    <a href="{{ route('rajal/laporan/tindakan.show', $item->patientActionReport->id) }}" target="blank" class="btn btn-info btn-sm"><i class='bx bx-printer'></i></a>
+                                    <button type="submit" class="btn btn-dark btn-sm">Update</button>
+                                </div>
+                            </div>
+                            @endif
+                        </form>
+                        @if ($item->patientActionReport)
+                        <div class="row">
+                            <div class="col-12 text-start">
+                                <form action="{{ route('rajal/laporan/tindakan.destroy', $item->patientActionReport->id) }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm" onsubmit=""><i class="bx bx-trash me-2"></i>Reset Tindakan</button>
+                                </form>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}" id="navs-justified-cppt" role="tabpanel">
+                        <form action="{{ route('rajal/cppt.store', $item->id) }}" method="POST" id="formSOAP">
+                            @csrf
+                            <div class="row mb-5">
+                                <div class="col-sm-3">
+                                    <label for="subjective" class="form-label">Subjective</label>
+                                    <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ ($itemAss->keluhan_utama ?? '') . "\r\nRiw. " .($item->perawatInitialAssesment->riw_penyakit_pasien ?? '') }} </textarea>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="sub" onclick="autoFillSOAP(this)">
+                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Anamnesa
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="objective" class="form-label">Objective</label>
+                                    <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . ($itemAss->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($itemAss->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($itemAss->td_sistolik ?? '') . " / " . ($itemAss->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($itemAss->suhu ?? '') . " °C\r\n" . "Nafas: " . ($itemAss->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($itemAss->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($itemAss->bb ?? '') . ' kg' }}</textarea>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="obj" onclick="autoFillSOAP(this)">
+                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Asesmen
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="asesmen" class="form-label">Assesment</label>
+                                    <textarea name="asesmen" id="asesmen" class="form-control" rows="10" placeholder="Assesment">{{ $item->soapDokter->asesment ?? '' }}</textarea>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="ases" onclick="autoFillSOAP(this)">
+                                        <i class='bx bx-up-arrow-alt'></i> Tarik Data Diagnosa
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="planning" class="form-label">Planning</label>
+                                    <textarea name="planning" id="planning" class="form-control" rows="10" placeholder="Planning">{{ $item->soapDokter->planning ?? '' }}</textarea>
+                                    <div class="btn-group dropdown me-3 mt-2 w-100">
+                                        <button class="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class='bx bx-up-arrow-alt'></i> Tarik Data
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                          <li><button class="dropdown-item" type="button" value="resep" onclick="autoFillSOAP(this)">Resep</button></li>
+                                          <li><button class="dropdown-item" type="button" value="radiologi" onclick="autoFillSOAP(this)">Radiologi</button></li>
+                                          <li><button class="dropdown-item" type="button" value="laboratorium" onclick="autoFillSOAP(this)">Laboratorium</button></li>
+                                          <li><button class="dropdown-item" type="button" value="tindakan" onclick="autoFillSOAP(this)">Tindakan</button></li>
+                                          <li><button class="dropdown-item" type="button" value="rencana" onclick="autoFillSOAP(this)">Perencanaan</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-end my-4">
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="openModal()">Submit</button>
                             </div>
                         </form>
-
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'sbpk' ? 'show active' : '' }}"
                         id="navs-justified-sbpk" role="tabpanel">
@@ -1587,6 +1529,7 @@
     </div>
 
     <script>
+        var actions =  @json($dataTindakan);
         var buttons = document.querySelectorAll('#btn-link');
 
         buttons.forEach(function(button) {
@@ -1624,16 +1567,25 @@
                 targetElement = element.closest('.row').querySelector('#asesmen');
                 contentTarget = diagnosaPrimer + "" + diagnosaSekunder;
             } else if(element.value == 'resep'){
-                let dataResep = 'Pemberian Obat : ';
+                let dataResep = '\r\n\nPemberian Obat : ';
                 const dataResepAwal = @json($item->medicineReceipt->medicineReceiptDetails ?? '');
                 dataResepAwal.forEach(function(item){
                     dataResep += '\r\n# ' + (item.medicine_id ? (item.medicine.name ?? '') : (item.nama_obat_custom ?? '')) + ' - ' + item.aturan_pakai ?? '';
                 });
 
-                targetElement = element.closest('.row').querySelector('#planning');
-                contentTarget = dataResep;
+                var plann = element.closest('.row').querySelector('#planning');
+                plann.value += dataResep;
+            } else if(element.value == 'tindakan'){
+                let dataTindakan = '\r\n\nTindakan Medis : ';
+                actions.forEach(function(item){
+                    dataTindakan += '\r\n- ' + item.name ?? '';
+                });
+
+                var plann = element.closest('.row').querySelector('#planning');
+                plann.value += dataTindakan;
             }
-            targetElement.textContent = contentTarget;
+            $(targetElement).val(contentTarget);
+
         }
     </script>
 
@@ -1663,14 +1615,15 @@
         function addDinamicTindakan(element) {
             countInput = countInput+1;
             const content = `<div class="col-5">
-                                <select class="form-control select2" id="action_id_${countInput}" name="action_id[]" style="width: 100%">
+                                <select class="form-control" id="action_id_${countInput}" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
+                                <option value="" selected disabled></option>
                                 @foreach ($dataTindakan as $action)
-                                    <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
+                                    <option value="{{ $action->id }}">{{ $action->name }}</option>
                                 @endforeach
                                 </select>
                             </div>
                             <div class="col-1">
-                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1"/>
+                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1" onchange="countSubTotal(this)"/>
                             </div>
                             <div class="col-2">
                                 <input type="number" class="form-control" name="tarif_tindakan[]" value="0" placeholder="Tarif Tindakan" readonly/>
@@ -1681,7 +1634,7 @@
                             <div class="col-1 text-center align-self-center">
                                 <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
                             </div>`;
-            dinamicInput(element, content, `action_id_${countInput}`, 'Pilih Tindakan', false);
+            dinamicInput(element, content, `action_id_${countInput}`, 'Pilih Tindakan', true);
         }
     </script>
 
@@ -1722,6 +1675,44 @@
             })
 
         });
+    </script>
+    <script>
+        function getDetailTindakan(element){
+            const elementAlert = document.getElementById('show-alert');     //untuk show alert
+
+            let elementJumlah = element.closest('.dinamic-input').querySelector('input[name="jumlah_tindakan[]"]');
+            let elementTarif = element.closest('.dinamic-input').querySelector('input[name="tarif_tindakan[]"]');
+            let elementSubTotal = element.closest('.dinamic-input').querySelector('input[name="sub_total_tindakan[]"]');
+            
+            let filteredAction = actions.find(function(item){
+                return item.id == element.value;
+            });
+            if (filteredAction) {
+                const rate = filteredAction.action_rates.find(function(rt){
+                    return rt.patient_category_id === 1;
+                });
+                if (rate) {
+                    elementTarif.value = rate.tarif ?? 0;
+                    elementSubTotal.value = rate.tarif * elementJumlah.value;   
+                } else {
+                    elementJumlah.value = 0;
+                    elementTarif.value = 0;
+                    elementSubTotal.value = 0;
+                    alertShow('Not Found !!', 'Tarif Untuk Tindakan ini belum diinputkan', elementAlert);
+                }
+            }else{
+                elementJumlah.value = 1;
+                elementTarif.value = 0;
+                elementSubTotal.value = 0;
+                alertShow('Not Found !!', 'Tindakan yang dipilih tidak ditemukan', elementAlert);
+            }
+        }
+        function countSubTotal(element){
+            let elementSubTotal = element.closest('.dinamic-input').querySelector('input[name="sub_total_tindakan[]"]');
+            let elementTarif = element.closest('.dinamic-input').querySelector('input[name="tarif_tindakan[]"]');
+
+            elementSubTotal.value = element.value * elementTarif.value;
+        }
     </script>
     
     

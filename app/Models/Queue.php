@@ -43,7 +43,6 @@ class Queue extends Model
     {
         return $this->belongsTo(User::class);
     }
-
     public function dpjp()
     {
         return $this->belongsTo(User::class, 'dokter_id');

@@ -465,6 +465,27 @@
         });
     </script>
 
+    {{-- new alert --}}
+    <script>
+        function alertShow(status, message, elementID){
+            const contentAlert = `
+            <div class="alert alert-danger d-flex" role="alert">
+                <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+                <div class="d-flex flex-column ps-1">
+                    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">${status}</h6>
+                    <span>${message}</span>
+                </div>
+            </div>`;
+
+            $(elementID).html(contentAlert);
+
+            $(".alert").fadeTo(2000, 0).slideUp(1000, function() {
+                $(this).remove();
+            });
+        }
+
+    </script>
+
     @yield('script')
 
 </body>
