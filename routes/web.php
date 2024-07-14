@@ -438,20 +438,10 @@ Route::put('/diagnosa/patient/update/{id}', [DiagnosticProcedurePatientControlle
 Route::put('/procedure/patient/update/{id}', [DiagnosticProcedurePatientController::class, 'updateProcedure'])->name('procedure/patient.update');
 
 //rajal CPPT
-Route::group(['middleware' => ['permission:tambah cppt']], function () {
-    Route::get('/rajal/cppt/create/{id}', [RmeCpptController::class, 'create'])->name('rajal/cppt.create');
-    Route::post('/rajal/cppt/store/{id}', [RmeCpptController::class, 'store'])->name('rajal/cppt.store');
-});
-Route::group(['middleware' => ['permission:edit cppt']], function () {
-    Route::get('/rajal/cppt/edit/{id}', [RmeCpptController::class, 'edit'])->name('rajal/cppt.edit');
-    Route::put('/rajal/cppt/update/{id}', [RmeCpptController::class, 'update'])->name('rajal/cppt.update');
-});
+Route::post('/rajal/cppt/store/{id}', [RmeCpptController::class, 'store'])->name('rajal/cppt.store');
 Route::group(['middleware' => ['permission:print cppt']], function () {
     Route::get('/rajal/cppt/show/{id}', [RmeCpptController::class, 'show'])->name('rajal/cppt.show');
     Route::get('/rajal/cppt/print/{id}', [RmeCpptController::class, 'print'])->name('rajal/cppt.print');
-});
-Route::group(['middleware' => ['permission:delete cppt']], function () {
-    Route::delete('/rajal/cppt/destroy/{id}', [RmeCpptController::class, 'destroy'])->name('rajal/cppt.destroy');
 });
 Route::get('/rajal/cppt/update/ttd', [RmeCpptController::class, 'updateTtd'])->name('rajal/cppt/update.ttd');
 
