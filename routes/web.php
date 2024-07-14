@@ -503,6 +503,8 @@ Route::get('/rajal/resep/dokter/show/{id}', [MedicineReceiptController::class, '
 Route::delete('/rajal/resep/dokter/destroy/{id}', [MedicineReceiptController::class, 'destroy'])->name('rajal/resep/dokter.destroy');
 
 //kontrol ulang
+Route::put('/rajal/kontrol/ulang/update/{id}', [KontrolUlangController::class, 'update'])->name('rajal/kontrol/ulang.update');
+Route::get('/rajal/kontrol/ulang/destroy/{id}', [KontrolUlangController::class, 'destroy'])->name('rajal/kontrol/ulang.destroy');
 Route::get('/rajal/sbpk/update/ttd', [KontrolUlangController::class, 'getTtd'])->name('rajal/sbpk.ttd');
 Route::get('/rajal/sbpk/show/{id}', [KontrolUlangController::class, 'show'])->name('rajal/sbpk.show');
 

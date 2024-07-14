@@ -3,15 +3,21 @@
 @section('content')
 
     @if (session()->has('success'))
-        <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('success') }}
+        <div class="alert alert-success d-flex" role="alert">
+            <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+            <div class="d-flex flex-column ps-1">
+                <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+                <span>{{ session('success') }}</span>
+            </div>
         </div>
     @endif
     @if (session()->has('error'))
-        <div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('error') }}
+        <div class="alert alert-danger d-flex" role="alert">
+            <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+            <div class="d-flex flex-column ps-1">
+                <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+                <span>{{ session('error') }}</span>
+            </div>
         </div>
     @endif
     <div id="show-alert">
@@ -420,12 +426,12 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button"
-                            class="nav-link d-flex justify-content-center {{ session('btn') == 'tindakan' ? 'active' : '' }}"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-tindakan"
-                            aria-controls="navs-justified-tindakan" aria-selected="false">
-                            <i class="tf-icons bx bx-sitemap"></i>
-                            <p class="m-0">Tindakan</p>
+                        <button id="btn-link" type="button"
+                            class="nav-link {{ session('btn') == 'kontrol-ulang' ? 'active' : '' }} d-flex justify-content-center"
+                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-kontrol-ulang"
+                            aria-controls="navs-justified-kontrol-ulang" aria-selected="false">
+                            <i class='bx bx-calendar me-1'></i>
+                            <p class="m-0">Kontrol Ulang</p>
                         </button>
                     </li>
                     <li class="nav-item">
@@ -442,14 +448,13 @@
                             class="nav-link d-flex justify-content-center {{ session('btn') == 'finished' ? 'active' : '' }}"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-finished"
                             aria-controls="navs-justified-finished" aria-selected="false">
-                            <i class='bx bx-check-double me-2'></i>
+                            <i class='bx bx-check-double me-1'></i>
                             <p class="m-0">Selesai</p>
                         </button>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade {{ session('btn') == 'riwayat' ? 'show active' : '' }}"
-                        id="navs-justified-riwayat" role="tabpanel">
+                    <div class="tab-pane fade {{ session('btn') == 'riwayat' ? 'show active' : '' }}" id="navs-justified-riwayat" role="tabpanel">
                         <div class="row">
                             <div class="col-md-2 col-12 mb-3 mb-md-0">
                               <div class="list-group">
@@ -1430,6 +1435,47 @@
                         </div>
                         @endif
                     </div>
+                    <div class="tab-pane fade {{ session('btn') == 'kontrol-ulang' ? 'show active' : '' }}" id="navs-justified-kontrol-ulang" role="tabpanel">
+                        <form action="{{ route('rajal/kontrol/ulang.update', $item->id) }}" method="POST">
+                            @method('PUT')
+                            @csrf
+                            <div class="row mb-3 p-4 w-50 border">
+                                <h5 class="text-uppercase text-center">Lembar Kontrol Ulang Pasien</h5>
+                                <hr>
+                                <div class="row mb-2 mt-2">
+                                    <label class="col-form-label col-sm-5">Nama Pasien  </label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" value="{{ $item->patient->name ?? '' }}" disabled></input>                                    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-form-label col-sm-5">Nomor Rekam Medis  </label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" value="{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}" disabled></input>                                    
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm">
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="checkbox" name="isKontrol" id="isKontrol" value="1" {{ $item->planControlPatient ? 'checked' : '' }}/>
+                                          <label class="form-check-label" for="inlineRadio1">Pasien Diminta Kontrol Ulang</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="date" name="tgl_kontrol" id="html5-date-input" value="{{ $item->planControlPatient ? $item->planControlPatient->tgl_kontrol : '' }}" disabled/>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    @if ($item->planControlPatient)
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <a href="{{ route('rajal/kontrol/ulang.destroy', $item->planControlPatient->id) }}" class="btn btn-danger">Batal / Hapus</a>
+                                    @else
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    @endif
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="tab-pane fade {{ session('btn') == 'cppt' ? 'show active' : '' }}" id="navs-justified-cppt" role="tabpanel">
                         <form action="{{ route('rajal/cppt.store', $item->id) }}" method="POST" id="formSOAP">
                             @csrf
@@ -1477,22 +1523,25 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'finished' ? 'show active' : '' }}"
-                        id="navs-justified-finished" role="tabpanel">
-                        <table class="table">
-                            <thead>
-                                <tr class="text-nowrap">
-                                    <th class="text-body">No</th>
-                                    <th class="text-body">Nama Pasien</th>
-                                    <th class="text-body">Tanggal Masuk</th>
-                                    <th class="text-body">Jam Keluar</th>
-                                    <th class="text-body">Keterangan</th>
-                                    <th class="text-body">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                    <div class="tab-pane fade {{ session('btn') == 'finished' ? 'show active' : '' }}" id="navs-justified-finished" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-2 col-12 mb-3 mb-md-0">
+                              <div class="list-group">
+                                <a class="list-group-item list-group-item-action" id="status-pelayanan-tab" data-bs-toggle="list" href="#list-rencana-kontrol">Status Pelayanan</a>
+                                <a class="list-group-item list-group-item-action" id="konsul-poli-lain-tab" data-bs-toggle="list" href="#list-rencana-kontrol">Konsul Poli Lain</a>
+                              </div>
+                            </div>
+                            <div class="col-md-10 col-12 border">
+                              <div class="tab-content">
+                                <div class="tab-pane fade show active" id="list-kunj-terakhir">
+                                  Donut sugar plum sweet roll biscuit. Cake oat cake gummi bears. Tart wafer wafer halvah gummi bears cheesecake. Topping croissant cake sweet roll. Dessert fruitcake gingerbread halvah marshmallow pudding bear claw cheesecake. Bonbon dragée cookie gummies. Pudding marzipan liquorice. Sugar plum dragée cupcake cupcake cake dessert chocolate bar. Pastry lollipop lemon drops lollipop halvah croissant. Pastry sweet gingerbread lemon drops topping ice cream.
+                                </div>
+                                <div class="tab-pane fade" id="list-rencana-kontrol">
+                                    survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                                </div>
+                              </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1651,8 +1700,19 @@
                 const selectedOption = $(this).select2('data')[0];
                 const satuan = selectedOption.element.dataset.satuan;
                 satuanJumlahObat.textContent = satuan;
-            })
+            });
 
+            // enable input tanggal kontrol
+            const checkBoxIsKontrol = document.getElementById('isKontrol');
+            const tglKontrolInput = document.querySelector('input[name="tgl_kontrol"]');
+            checkBoxIsKontrol.addEventListener('click', function(){
+                if(checkBoxIsKontrol.checked){
+                    tglKontrolInput.disabled = false;
+                }else{
+                    tglKontrolInput.value = '';
+                    tglKontrolInput.disabled = true;
+                }
+            });
         });
     </script>
     <script>

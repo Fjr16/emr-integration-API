@@ -96,4 +96,8 @@ class Queue extends Model
     {
         return $this->hasOne(PatientActionReport::class);
     }
+    public function planControlPatient()
+    {
+        return $this->hasOne(PlanControlPatient::class);
+    }
 }
