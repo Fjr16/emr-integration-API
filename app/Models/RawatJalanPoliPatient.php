@@ -11,26 +11,14 @@ class RawatJalanPoliPatient extends Model
 
     protected $fillable = [
         'queue_id',
+        'diet',
+        'intruksi',
+        'cara_keluar',
+        'keadaan_keluar',
         'status',
     ];
     
     public function queue(){
         return $this->belongsTo(Queue::class);
-    }
-
-    public function initialAssesments(){
-        return $this->hasMany(InitialAssesment::class);
-    }
-    public function rmeCppts(){
-        return $this->hasMany(RmeCppt::class);
-    }
-    public function prmrjs(){
-        return $this->hasMany(Prmrj::class);
-    }
-    public function patientActionReports(){
-        return $this->hasMany(PatientActionReport::class);
-    }
-    public function medicineReceipts(){
-        return $this->hasMany(MedicineReceipt::class);
     }
 }

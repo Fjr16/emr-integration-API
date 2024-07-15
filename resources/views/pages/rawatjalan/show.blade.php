@@ -20,19 +20,10 @@
             </div>
         </div>
     @endif
-    <div id="show-alert">
-    
-    </div>
     <div class="d-flex justify-content-end mb-3 mt-0">
-        @can(['finish pasien poli', 'show pasien poli'])
-            <form action="{{ route('rajal/update', $item->rawatJalanPoliPatient->id) }}" method="POST"
-                onsubmit="return confirm('Sebelum melanjutkan, Pastikan data telah diisi dengan benar dan lengkap !!!. Apakah anda yakin untuk melanjutkan ? ')">
-                @method('PUT')
-                @csrf
-                <input type="hidden" name="title" value="{{ $title }}">
-                <button type="submit" class="btn btn-success btn-sm" name="status" value="SELESAI">Selesai</button>
-            </form>
-        @endcan
+        <div id="show-alert">
+        
+        </div>
     </div>
 
     {{-- Informasi Pasien --}}
@@ -1528,130 +1519,139 @@
                         <div class="row">
                             <div class="col-md-2 col-12 mb-3 mb-md-0">
                               <div class="list-group">
-                                <a class="list-group-item list-group-item-action {{ session('finished' == 'status-pelayanan' ? 'active' : '') }}" id="status-pelayanan-tab" data-bs-toggle="list" href="#list-status-pelayanan">Status Pelayanan</a>
-                                <a class="list-group-item list-group-item-action {{ session('finished' == 'konsul-internal' ? 'active' : '') }}" id="konsul-poli-lain-tab" data-bs-toggle="list" href="#list-konsul-internal">Konsul Poli Lain</a>
+                                <a class="list-group-item list-group-item-action {{ session('finished') == 'status-pelayanan' ? 'active' : '' }}" id="status-pelayanan-tab" data-bs-toggle="list" href="#list-status-pelayanan">Status Pelayanan</a>
+                                <a class="list-group-item list-group-item-action {{ session('finished') == 'konsul-internal' ? 'active' : '' }}" id="konsul-poli-lain-tab" data-bs-toggle="list" href="#list-konsul-internal">Konsul Poli Lain</a>
                               </div>
                             </div>
                             <div class="col-md-10 col-12 border">
                               <div class="tab-content">
-                                <div class="tab-pane fade {{ session('finished' == 'status-pelayanan' ? 'show active' : '') }}" id="list-status-pelayanan">
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <div class="row mb-3">
-                                                <Label class="form-label">Diet Pasien</Label>
-                                                <select class="form-control select2" name="diet_pasien" id="diet_pasien" style="width: 100%;" multiple>
-                                                    <option value="Diet Diabetes Melitus">Diet Diabetes Melitus</option>
-                                                    <option value="Diet Lainnya">Diet Lainnya</option>
+                                <div class="tab-pane fade {{ session('finished') == 'status-pelayanan' ? 'show active' : '' }}" id="list-status-pelayanan">
+                                    <form action="{{ route('rajal/status/pelayanan.update', $item->rawatJalanPoliPatient->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="row mb-3">
+                                                    <div class="col-12">
+                                                        <Label class="form-label">Diet Pasien</Label>
+                                                        <select class="form-control select2" id="select_diet" style="width: 100%;" onchange="transferDietPasien(this.value)">
+                                                            <option value="" selected disabled></option>
+                                                            <option value="Diet Diabetes Melitus">Diet Diabetes Melitus</option>
+                                                            <option value="Diet Lainnya">Diet Lainnya</option>
+                                                        </select>
+                                                        <textarea name="diet_pasien" id="diet_pasien" class="form-control" rows="3">{{ $item->rawatJalanPoliPatient->diet ?? '' }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <Label class="form-label">Status Pelayanan</Label>
+                                                    <div class="col-md">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" {{ $item->rawatJalanPoliPatient->status == 'WAITING' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="belum_dilayani">Belum Dilayani</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="dalam_perawatan" value="ONGOING" {{ $item->rawatJalanPoliPatient->status == 'ONGOING' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="dalam_perawatan">Dalam Perawatan</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="sudah_dilayani" value="FINISHED" {{ $item->rawatJalanPoliPatient->status == 'FINISHED' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="sudah_dilayani">Sudah Dilayani</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <Label class="form-label">Intruksi Pulang / Kontrol Ulang</Label>
+                                                <textarea name="intruksi_pulang" id="intruksi_pulang" class="form-control" rows="5">{{ $item->rawatJalanPoliPatient->intruksi ? $item->rawatJalanPoliPatient->intruksi : ($item->planControlPatient ? 'Pasien Diminta Kontrol Ulang Pada Tanggal ' . date('d-m-Y', strtotime($item->planControlPatient->tgl_kontrol)) : '') }}</textarea>
+                                            </div>
+                                        </div>
+                                         <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <Label class="form-label d-block">Cara Keluar</Label>
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="cara_keluar" id="pulang" value="Pulang" {{ $item->rawatJalanPoliPatient->cara_keluar == 'Pulang' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="pulang">Pulang</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="cara_keluar" id="rawat_inap" value="Rawat Inap" {{ $item->rawatJalanPoliPatient->cara_keluar == 'Rawat Inap' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="rawat_inap">Rawat Inap</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="cara_keluar" id="rujuk_balik" value="Rujuk Balik" {{ $item->rawatJalanPoliPatient->cara_keluar == 'Rujuk Balik' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="rujuk_balik">Rujuk Balik</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="cara_keluar" id="rujuk_eksternal" value="Dirujuk Ke Rumah Sakit Lain" {{ $item->rawatJalanPoliPatient->cara_keluar == 'Dirujuk Ke Rumah Sakit Lain' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="rujuk_eksternal">Dirujuk Ke Rumah Sakit Lain</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <Label class="form-label d-block">Keadaan Keluar</Label>
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="keadaan_keluar" id="belum_sembuh" value="Belum Sembuh" {{ $item->rawatJalanPoliPatient->keadaan_keluar == 'Belum Sembuh' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="belum_sembuh">Belum Sembuh</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="keadaan_keluar" id="mulai_sembuh" value="Mulai Sembuh" {{ $item->rawatJalanPoliPatient->keadaan_keluar == 'Mulai Sembuh' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="mulai_sembuh">Mulai Sembuh</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="keadaan_keluar" id="membaik" value="Membaik" {{ $item->rawatJalanPoliPatient->keadaan_keluar == 'Membaik' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="membaik">Membaik</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="keadaan_keluar" id="sembuh" value="Sembuh" {{ $item->rawatJalanPoliPatient->keadaan_keluar == 'Sembuh' ? 'checked' : '' }}/>
+                                                            <label class="form-check-label" for="sembuh">Sembuh</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-5 ms-auto">
+                                                <button type="submit" id="btn-finish-pelayanan" class="btn btn-sm btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                            </div>
+                                         </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade {{ session('finished') == 'konsul-internal' ? 'show active' : '' }}" id="list-konsul-internal">
+                                    <form action="{{ route('rajal/konsul/internal.update', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="row">
+                                            <h5 class="mb-3">Konsul Poli Lain (Konsul Internal)</h5>
+                                            <div class="col-12 mb-1">
+                                                <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="checkbox" name="isKonsul" id="isKonsul" value="1" {{ $item->konsulInternal ? 'checked' : '' }}/>
+                                                  <label class="form-check-label" for="isKonsul">Ceklis jika pasien diminta konsul ke poli lain</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <select name="dokter_id" id="dokter_id" class="form-control select2" style="width: 100%;" @disabled(true)>
+                                                    <option value="" selected disabled></option>
+                                                    <option value="1">dokter 2</option>
+                                                    <option value="2">dokter 3</option>
                                                 </select>
                                             </div>
-                                            <div class="row mb-3">
-                                                <Label class="form-label">Status Pelayanan</Label>
-                                                <div class="col-md">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" checked/>
-                                                        <label class="form-check-label" for="belum_dilayani">Belum Dilayani</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_pelayanan" id="dalam_perawatan" value="ONGOING" />
-                                                        <label class="form-check-label" for="dalam_perawatan">Dalam Perawatan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_pelayanan" id="sudah_dilayani" value="FINISHED"/>
-                                                        <label class="form-check-label" for="sudah_dilayani">Sudah Dilayani</label>
-                                                    </div>
-                                                </div>
+                                            <div class="col-12">
+                                                <label for="" class="form-label d-block">Mohon Bantuan Sejawat Untuk:</label>
+                                                <textarea name="keterangan_konsul" id="keterangan_konsul" class="form-control" rows="4" @disabled(true)>{{ $item->konsulInternal ? $item->konsulInternal->permintaan_konsul : "Konsultasikan tindakan masalah medik saat ini \r\n" . "Atas pasien ini yang kami rawat dengan\r\n" }}</textarea>
+                                            </div>
+                                            <div class="col-12 mt-4 ms-auto">
+                                                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <Label class="form-label">Intruksi Pulang / Kontrol Ulang</Label>
-                                            <textarea name="intruksi_pulang" id="intruksi_pulang" class="form-control" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                     <div class="row mb-3">
-                                        <div class="col-6">
-                                            <div class="row">
-                                                <Label class="form-label d-block">Cara Keluar</Label>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="pulang" value="Pulang" checked/>
-                                                        <label class="form-check-label" for="pulang">Pulang</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="rawat_inap" value="Rawat Inap" />
-                                                        <label class="form-check-label" for="rawat_inap">Rawat Inap</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="rujuk_balik" value="Rujuk Balik"/>
-                                                        <label class="form-check-label" for="rujuk_balik">Rujuk Balik</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="cara_keluar" id="rujuk_eksternal" value="Dirujuk Ke Rumah Sakit Lain"/>
-                                                        <label class="form-check-label" for="rujuk_eksternal">Dirujuk Ke Rumah Sakit Lain</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="row">
-                                                <Label class="form-label d-block">Keadaan Keluar</Label>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="belum_sembuh" value="Belum Sembuh" checked/>
-                                                        <label class="form-check-label" for="belum_sembuh">Belum Sembuh</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="mulai_sembuh" value="Mulai Sembuh" />
-                                                        <label class="form-check-label" for="mulai_sembuh">Mulai Sembuh</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="membaik" value="Membaik"/>
-                                                        <label class="form-check-label" for="membaik">Membaik</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="keadaan_keluar" id="sembuh" value="Sembuh"/>
-                                                        <label class="form-check-label" for="sembuh">Sembuh</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 mt-5 ms-auto">
-                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
-                                            <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
-                                        </div>
-                                     </div>
-                                </div>
-                                <div class="tab-pane fade {{ session('finished' == 'konsul-internal' ? 'show active' : '') }}" id="list-konsul-internal">
-                                    <div class="row">
-                                        <h5 class="mb-3">Konsul Poli Lain (Konsul Internal)</h5>
-                                        <div class="col-12 mb-1">
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="checkbox" name="isKontrol" id="isKontrol" value="1" {{ $item->planControlPatient ? 'checked' : '' }}/>
-                                              <label class="form-check-label" for="inlineRadio1">Ceklis jika pasien diminta konsul ke poli lain</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 mb-3">
-                                            <select name="dokter_id" id="dokter_id" class="form-control select2" style="width: 100%;" @disabled(true)>
-                                                <option value="dokter 1">dokter 1</option>
-                                                <option value="dokter 2">dokter 2</option>
-                                                <option value="dokter 3">dokter 3</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label for="" class="form-label d-block">Mohon Bantuan Sejawat Untuk:</label>
-                                            <select name="permintaan_konsul" id="permintaan_konsul" class="form-control select2" style="width: 100%;" @disabled(true)>
-                                                <option value="Konsultasikan tindakan masalah medik saat ini">Konsultasikan tindakan masalah medik saat ini</option>
-                                            </select>
-                                            <textarea name="keterangan_konsul" id="keterangan_konsul" class="form-control" rows="4" @disabled(true)>Atas pasien ini yang kami rawat dengan</textarea>
-                                        </div>
-                                        <div class="col-12 mt-4 ms-auto">
-                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
-                                            <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                               </div>
                             </div>
@@ -1671,9 +1671,10 @@
     </div>
 
     <script>
+        var elementAlert = document.getElementById('show-alert');     //untuk show alert
         var actions =  @json($dataTindakan);
+        // untuk event trigger nav tab
         var buttons = document.querySelectorAll('#btn-link');
-
         buttons.forEach(function(button) {
             button.addEventListener('click', function() {
                 buttons.forEach(function(btn) {
@@ -1681,6 +1682,24 @@
                 });
                 this.classList.add('active');
             });
+        });
+
+        //untuk event Update status pelayanan poli
+        const btnFinish = document.getElementById('btn-finish-pelayanan');
+        btnFinish.addEventListener('click', function(e){
+            const checkAssesmentDokter = @json($item->doctorInitialAssesment);
+            const checkIcd = @json($item->diagnosticProcedurePatient);
+            const checkSoap = @json($item->soapDokter);
+            if (!checkAssesmentDokter) {
+                alertShow('Error !!', 'Harap Isi Assesmen Dokter', elementAlert);
+                e.preventDefault();
+            }else if(!checkIcd){
+                alertShow('Error !!', 'Harap Isi Diagnosa dan Prosedur Utama', elementAlert);
+                e.preventDefault();
+            }else if(!checkSoap){
+                alertShow('Error !!', 'Harap Isi SOAP Pasien', elementAlert);
+                e.preventDefault();
+            }
         });
 
         function autoFillSOAP(element){
@@ -1832,12 +1851,28 @@
                     tglKontrolInput.disabled = true;
                 }
             });
+
+            //untuk enable form konsul poli lain
+            const kontrol = document.getElementById('isKonsul');
+            const selectDokter = document.getElementById('dokter_id');
+            const ketKonsul = document.getElementById('keterangan_konsul');
+            if (kontrol.checked) {
+                selectDokter.disabled = false;
+                ketKonsul.disabled = false;
+            }
+            kontrol.addEventListener('click', function(){
+                if (kontrol.checked) {
+                    selectDokter.disabled = false;
+                    ketKonsul.disabled = false;
+                }else{
+                    selectDokter.disabled = true;
+                    ketKonsul.disabled = true;
+                }
+            });
         });
     </script>
     <script>
         function getDetailTindakan(element){
-            const elementAlert = document.getElementById('show-alert');     //untuk show alert
-
             let elementJumlah = element.closest('.dinamic-input').querySelector('input[name="jumlah_tindakan[]"]');
             let elementTarif = element.closest('.dinamic-input').querySelector('input[name="tarif_tindakan[]"]');
             let elementSubTotal = element.closest('.dinamic-input').querySelector('input[name="sub_total_tindakan[]"]');
@@ -1870,6 +1905,12 @@
             let elementTarif = element.closest('.dinamic-input').querySelector('input[name="tarif_tindakan[]"]');
 
             elementSubTotal.value = element.value * elementTarif.value;
+        }
+    </script>
+    <script>
+        function transferDietPasien(value){
+            const dietPasien = document.getElementById('diet_pasien');
+            dietPasien.value += value + "\r\n";
         }
     </script>
     

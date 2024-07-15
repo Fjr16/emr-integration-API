@@ -9,7 +9,6 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KasirController;
-use App\Http\Controllers\PrmrjController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ActionController;
@@ -31,7 +30,6 @@ use App\Http\Controllers\MedicineStokController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\QueueConfirmController;
 use App\Http\Controllers\ReportCashierController;
-use App\Http\Controllers\ActionCategoryController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\AsesmentPerawatController;
 use App\Http\Controllers\MedicineReceiptController;
@@ -43,6 +41,7 @@ use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\ActionRatesController;
 use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\DoctorInitialAssesmentController;
+use App\Http\Controllers\KonsulInternalController;
 use App\Http\Controllers\KontrolUlangController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
@@ -58,6 +57,7 @@ use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\OtherController;
 use App\Http\Controllers\RajalGeneralConsentController;
+use App\Http\Controllers\StatusPelayananController;
 
 /*
 |--------------------------------------------------------------------------
@@ -394,9 +394,6 @@ Route::group(['middleware' => ['permission:master tanggungan pasien']], function
 Route::group(['middleware' => ['permission:daftar pasien poli']], function () {
     Route::get('/rajal', [RawatJalanController::class, 'index'])->name('rajal/index');  //index rajal poli
 });
-Route::group(['middleware' => ['permission:finish pasien poli', 'permission:show pasien poli']], function () {
-    Route::put('/rajal/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/update');
-});
 Route::group(['middleware' => ['permission:show pasien poli']], function () {
     Route::get('/rajal/show/{id}/{title}', [RawatJalanController::class, 'show'])->name('rajal/show');
 });
@@ -404,6 +401,8 @@ Route::group(['middleware' => ['permission:show pasien poli']], function () {
 Route::group(['middleware' => ['permission:daftar pasien rekam medis']], function () {
     Route::get('/rajal/rekammedis/index', [RekamMedisPatientController::class, 'index'])->name('rajal/rekammedis.index'); //index rajal rekam medis
 });
+//status Pelayanan Poli
+Route::put('/rajal/status/pelayanan/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/status/pelayanan.update');
 
 //Rajal General Consent
 Route::get('rajal/general/consent/create/{id}', [RajalGeneralConsentController::class, 'create'])->name('rajal/general/consent.create');
@@ -486,8 +485,8 @@ Route::delete('/rajal/resep/dokter/destroy/{id}', [MedicineReceiptController::cl
 //kontrol ulang
 Route::put('/rajal/kontrol/ulang/update/{id}', [KontrolUlangController::class, 'update'])->name('rajal/kontrol/ulang.update');
 Route::get('/rajal/kontrol/ulang/destroy/{id}', [KontrolUlangController::class, 'destroy'])->name('rajal/kontrol/ulang.destroy');
-Route::get('/rajal/sbpk/update/ttd', [KontrolUlangController::class, 'getTtd'])->name('rajal/sbpk.ttd');
-Route::get('/rajal/sbpk/show/{id}', [KontrolUlangController::class, 'show'])->name('rajal/sbpk.show');
+Route::get('/rajal/kontrol/ulang/show/{id}', [KontrolUlangController::class, 'show'])->name('rajal/kontrol/ulang.show');
+// Route::get('/rajal/sbpk/update/ttd', [KontrolUlangController::class, 'getTtd'])->name('rajal/sbpk.ttd');
 
 // Route::group(['middleware' => ['permission:tambah rme perawat']], function(){
 Route::get('/asesmen/awal/perawat/create_step_one/{id}', [AsesmentPerawatController::class, 'create_step_one'])->name('asesmen/awal/perawat.create_step_one');
@@ -498,6 +497,11 @@ Route::get('/asesmen/awal/perawat/edit/{id}', [AsesmentPerawatController::class,
 Route::put('/asesmen/awal/perawat/update_step_one/{id}', [AsesmentPerawatController::class, 'update_step_one'])->name('asesmen/awal/perawat.update_step_one');
 Route::put('/asesmen/awal/perawat/update_step_two/{id}', [AsesmentPerawatController::class, 'update_step_two'])->name('asesmen/awal/perawat.update_step_two');
 Route::get('/asesmen/awal/perawat/print/{id}', [AsesmentPerawatController::class, 'print'])->name('asesmen/awal/perawat.print');
+
+//Konsul internal
+Route::put('/rajal/konsul/internal/update/{id}', [KonsulInternalController::class, 'update'])->name('rajal/konsul/internal.update');
+Route::delete('/rajal/konsul/internal/destroy/{id}', [KonsulInternalController::class, 'destroy'])->name('rajal/konsul/internal.destroy');
+// Route::get('/rajal/konsul/internal/show/{id}', [KonsulInternalController::class, 'show'])->name('rajal/konsul/internal.show');
 
 //rajal farmasi
 Route::group(['middleware' => ['permission:daftar pasien farmasi rajal']], function () {

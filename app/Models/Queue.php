@@ -100,4 +100,8 @@ class Queue extends Model
     {
         return $this->hasOne(PlanControlPatient::class);
     }
+    public function konsulInternal()
+    {
+        return $this->hasOne(KonsulInternal::class);
+    }
 }

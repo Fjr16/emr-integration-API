@@ -17,6 +17,7 @@ use App\Models\RadiologiFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\PerawatInitialAsesment;
+use Illuminate\Validation\ValidationException;
 
 class RawatJalanController extends Controller
 {
@@ -86,6 +87,11 @@ class RawatJalanController extends Controller
         } else {
             session(['diag-tind' => session('diag-tind')]);
         }
+        if (!session('finished')) {
+            session(['finished' => 'status-pelayanan']);
+        } else {
+            session(['finished' => session('finished')]);
+        }
 
         $today = new DateTime();
         $item = Queue::findOrFail($id);
@@ -129,61 +135,44 @@ class RawatJalanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = RawatJalanPoliPatient::find($id);
-        $status = $request->input('status');
+        try {
+            $this->validate($request, [
+                'status_pelayanan' => 'required',
+                'cara_keluar' => 'required',
+                'keadaan_keluar' => 'required',
+            ]);
+            $data = $request->all();
+            $data['intruksi'] = $request->input('intruksi_pulang');
+            $data['diet'] = $request->input('diet_pasien');
+            $data['status'] = $request->status_pelayanan;
+            $item = RawatJalanPoliPatient::find($id);
+            $item->update($data);
 
-        $item->update([
-            'status' => $status,
-        ]);
-
-        if ($item->status == 'FINISHED') {
-            $queue = Queue::find($item->queue_id);
-            if ($queue) {
-                if ($queue->rajalFarmasiPatient) {
-                    $itemFarmasi = RajalFarmasiPatient::find($queue->rajalFarmasiPatient->id);
-                    $itemFarmasi->update([
-                        'status' => 'WAITING',
-                    ]);
-                } else {
-                    RajalFarmasiPatient::create([
-                        'queue_id' => $queue->id,
-                        'status' => 'WAITING',
-                    ]);
-                }
-            }
-            //create radiologi
-            // foreach ($queue->radiologiFormRequests as $reqRadiologi) {
-            //     $checkList = RadiologiPatient::where('queue_id', $queue->id)->where('radiologi_form_request_id', $reqRadiologi->id)->first();
-            //     if ($checkList) {
-            //         continue;
-            //     }
-            //     $itemRadiologi = RadiologiPatient::create([
-            //         'queue_id' => $queue->id,
-            //         'patient_id' => $queue->patient_id,
-            //         'radiologi_form_request_id' => $reqRadiologi->id,
-            //         'status' => 'WAITING',
-            //     ]);
-            //     $details = $itemRadiologi->radiologiFormRequest->radiologiFormRequestDetails;
-            //     foreach ($details as $detail) {
-            //         RadiologiPatientRequestDetail::create([
-            //             'radiologi_patient_id' => $itemRadiologi->id,
-            //             'action_id' => $detail->action_id,
-            //             'status' => 'WAITING',
-            //         ]);
-            //     }
+            // if ($item->status == 'FINISHED') {
+                // $queue = Queue::find($item->queue_id);
+                // if ($queue) {
+                //     if ($queue->rajalFarmasiPatient) {
+                //         $itemFarmasi = RajalFarmasiPatient::find($queue->rajalFarmasiPatient->id);
+                //         $itemFarmasi->update([
+                //             'status' => 'WAITING',
+                //         ]);
+                //     } else {
+                //         RajalFarmasiPatient::create([
+                //             'queue_id' => $queue->id,
+                //             'status' => 'WAITING',
+                //         ]);
+                //     }
+                // }
             // }
-            //create labor
-            // if ($queue) {
-            //     foreach ($queue->laboratoriumRequests as $laborReq) {
-            //         LaboratoriumPatientResult::create([
-            //             'queue_id' => $queue->id,
-            //             'patient_id' => $queue->patient_id,
-            //             'laboratorium_request_id' => $laborReq->id,
-            //             'status' => 'WAITING',
-            //         ]);
-            //     }
-            // }
+            return back()->with([
+                'success' => 'Status Pelayanan Berhasil Disimpan',
+                'btn' => 'finished',
+            ]);
+        } catch (ValidationException $th) {
+            return back()->with([
+                'error' => 'Terjadi Kesalahan pada data yang anda kirimkan. Error Message: ' . $th->getMessage(),
+                'btn' => 'finished',
+            ]);
         }
-        return redirect()->route('rajal/index')->with('success', 'Status Berhasil Diperbarui');
     }
 }

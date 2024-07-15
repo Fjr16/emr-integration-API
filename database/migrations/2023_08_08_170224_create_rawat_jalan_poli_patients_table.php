@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('rawat_jalan_poli_patients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('queue_id')->nullable();
+            $table->text('diet')->nullable();
+            $table->text('intruksi')->nullable();
+            $table->string('cara_keluar', 50)->nullable();
+            $table->string('keadaan_keluar', 50)->nullable();
             $table->enum('status', ['WAITING', 'ONGOING', 'FINISHED'])->default('WAITING');
             $table->timestamps();
         });

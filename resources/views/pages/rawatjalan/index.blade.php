@@ -137,7 +137,17 @@
                             <td>{{ $item->patientCategory->name ?? '-' }}</td>
                             <td>{{ $item->patient->jenis_kelamin ?? '-' }}</td>
                             <td>{{ $item->patient->telp ?? '-' }}</td>
-                            <td>{{ $item->rawatJalanPoliPatient->status ?? '-' }}</td>
+                            <td>
+                                @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
+                                    <span class="badge bg-danger">BELUM DILAYANI</span>
+                                @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
+                                    <span class="badge bg-warning">DALAM PERAWATAN</span>
+                                @elseif ($item->rawatJalanPoliPatient->status == 'FINISHED')
+                                    <span class="badge bg-success">SUDAH DILAYANI</span>
+                                @else
+                                    <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                                @endif
+                            </td>
                             @if ($user->hasRole('Perawat Rajal|Rekam Medis Rajal'))
                                 <td>{{ $item->doctorPatient->user->roomDetail->name ?? '' }} / {{ $item->doctorPatient->user->name ?? '' }}</td>
                             @endif
