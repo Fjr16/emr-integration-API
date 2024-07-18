@@ -41,12 +41,14 @@ class User extends Authenticatable
         'no_rekening',
         'catatan',
         'staff_id',
-        'unit_category_id',
+        'unit_id',
         'room_detail_id',
         'password',
         'status',
         'isDokter',
         'paraf',
+        'sip',
+        'kode_dokter_bpjs',
     ];
 
     protected $with = [
@@ -77,13 +79,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Queue::class);
     }
-    public function igdPatients()
+    public function unit()
     {
-        return $this->hasMany(IgdPatient::class);
-    }
-    public function unitCategory()
-    {
-        return $this->belongsTo(UnitCategory::class);
+        return $this->belongsTo(Unit::class);
     }
 
     public function roomDetail()
@@ -100,45 +98,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(DoctorsSchedule::class);
     }
-
-    public function laboratoriumUserValidator()
-    {
-        return $this->hasMany(LaboratoriumUserValidator::class);
-    }
-
-    public function initialAssesments()
-    {
-        return $this->hasMany(InitialAssesment::class);
-    }
-
     public function rmeCppts()
     {
         return $this->hasMany(RmeCppt::class);
-    }
-    public function prmrjs()
-    {
-        return $this->hasOne(Prmrj::class);
     }
     public function medicineReceipts()
     {
         return $this->hasMany(MedicineReceipt::class);
     }
-
-    public function changeLogs()
-    {
-        return $this->hasMany(ChangeLog::class);
-    }
     public function radiologiFormRequests()
     {
         return $this->hasMany(RadiologiFormRequest::class);
-    }
-    public function radiologiPatients()
-    {
-        return $this->hasMany(RadiologiPatient::class);
-    }
-    public function radiologiPatientRequestDetails()
-    {
-        return $this->hasMany(RadiologiPatientRequestDetail::class);
     }
     public function laboratoriumRequests()
     {
@@ -149,19 +119,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(RajalFarmasiObatInvoice::class);
     }
-
-    public function igdRmeCppts()
-    {
-        return $this->hasMany(IgdRmeCppt::class);
-    }
-    public function igdTriages()
-    {
-        return $this->hasMany(IgdTriage::class);
-    }
-    public function cpptRanaps()
-    {
-        return $this->hasMany(CpptRanap::class);
-    }
     public function kasirPatients()
     {
         return $this->hasMany(KasirPatient::class);
@@ -170,51 +127,5 @@ class User extends Authenticatable
     public function consultingRates()
     {
         return $this->hasMany(ConsultingRates::class);
-    }
-    public function ranapDpjpPatientDetails()
-    {
-        return $this->hasMany(ranapDpjpPatientDetails::class);
-    }
-    public function ranapDischargeSummaries()
-    {
-        return $this->hasMany(RanapDischargeSummary::class);
-    }
-    public function ranapInitialAssesments()
-    {
-        return $this->hasMany(RanapInitialAssesment::class);
-    }
-    public function ranapMedicineReceipts()
-    {
-        return $this->hasMany(RanapMedicineReceipt::class);
-    }
-    public function ranapPersetujuanTindakanAnestesiPatients()
-    {
-        return $this->hasMany(RanapPersetujuanTindakanAnestesiPatient::class);
-    }
-    public function ranapPersetujuanTindakanBedahPatients()
-    {
-        return $this->hasMany(RanapPersetujuanTindakanBedahPatient::class);
-    }
-    public function ranapDischargePlanningGiziPharmacies()
-    {
-        return $this->hasMany(RanapDischargePlanningGiziPharmacy::class);
-    }
-    public function ranapMonitoringCairanInfusPatients()
-    {
-        return $this->hasMany(RanapMonitoringCairanInfusPatient::class);
-    }
-    public function ranapHaisPatients()
-    {
-        return $this->hasMany(KasirPatient::class);
-    }
-    public function ranapMppPatient()
-    {
-        return $this->hasMany(RanapMppPatient::class);
-    }
-
-    // kemoterapi
-    public function kemoterapiPatient()
-    {
-        return $this->hasOne(KemoterapiPatient::class);
     }
 }

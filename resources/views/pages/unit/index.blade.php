@@ -20,7 +20,6 @@
         <tr class="text-nowrap bg-dark">
           <th>No</th>
           <th>Unit</th>
-          <th>Sub Unit</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -29,15 +28,6 @@
           <tr>
             <th scope="row">{{ $loop->iteration }}</th>
             <td>{{ $item->name }}</td>
-              <td>
-                <table class="table" style="max-width: max-content">
-                  @foreach ($item->unitCategories as $category)
-                  <tr>
-                    <td>{{ $category->unitCategoryPivot->name }}</td>
-                  </tr>
-                  @endforeach
-                </table>
-              </td>
             <td>
               <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

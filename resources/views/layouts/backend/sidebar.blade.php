@@ -25,8 +25,8 @@
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
-        @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Petugas Informasi', 'Rekam Medis Rajal',
-            'Perawat Rajal', 'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA'])
+        {{-- @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Petugas Informasi', 'Rekam Medis Rajal',
+            'Perawat Rajal', 'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA']) --}}
             {{-- RME --}}
             <li class="menu-item {{ $title == 'RME' ? 'active' : '' }}">
                 <a href="{{ route('rekam/medis/elektronik.index') }}" class="menu-link">
@@ -34,12 +34,12 @@
                     <div>RME Pasien</div>
                 </a>
             </li>
-        @endhasanyrole
+        {{-- @endhasanyrole --}}
         {{-- end Main --}}
 
 
         {{-- Registrasi --}}
-        @hasanyrole(['Admin', 'Petugas Informasi', 'Rekam Medis Rajal'])
+        {{-- @hasanyrole(['Admin', 'Petugas Informasi', 'Rekam Medis Rajal']) --}}
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Registrasi</span>
             </li>
@@ -63,7 +63,7 @@
                 </a>
                 <ul class="menu-sub">
                     {{-- @can('tambah antrian') --}}
-                    @hasanyrole(['Admin', 'Petugas Informasi'])
+                    {{-- @hasanyrole(['Admin', 'Petugas Informasi']) --}}
                         <li class="menu-item {{ $title == 'Entri Antrian' ? 'active' : '' }}">
                             <a href="{{ route('antrian.create') }}" class="menu-link">
                                 <div>Antrian</div>
@@ -74,27 +74,27 @@
                                         <div>Antrian Urologi</div>
                                     </a>
                                 </li> --}}
-                    @endhasanyrole
+                    {{-- @endhasanyrole --}}
                     {{-- @endcan --}}
                     {{-- @can('registrasi ulang antrian') --}}
-                    @hasanyrole(['Admin', 'Rekam Medis Rajal'])
+                    {{-- @hasanyrole(['Admin', 'Rekam Medis Rajal']) --}}
                         <li class="menu-item {{ $title == 'Daftar Antrian' ? 'active' : '' }}">
                             <a href="{{ route('antrian.index') }}" class="menu-link">
                                 <div>Daftar Antrian (Registrasi Ulang)</div>
                             </a>
                         </li>
-                    @endhasanyrole
+                    {{-- @endhasanyrole --}}
                     {{-- @endcan --}}
                 </ul>
             </li>
             {{-- @endcanany --}}
             {{-- end Antrian --}}
-        @endhasanyrole
+        {{-- @endhasanyrole --}}
         {{-- end Registrasi --}}
 
 
         {{-- Rawatan --}}
-        @hasanyrole([
+        {{-- @hasanyrole([
             'Admin',
             'Dokter Poli',
             'Dokter Ranap',
@@ -107,12 +107,12 @@
             'Perawat Rajal',
             'Apoteker',
             'Kasir',
-            ])
+            ]) --}}
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Rawatan</span>
             </li>
 
-            @hasanyrole([
+            {{-- @hasanyrole([
                 'Admin',
                 'DPJP Radiologi',
                 'DPJP Labor PK',
@@ -122,10 +122,10 @@
                 'Dokter
                 Jaga',
                 ])
-            @endhasanyrole
+            @endhasanyrole --}}
 
-            @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Rekam Medis Rajal', 'Perawat Rajal',
-                'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA'])
+            {{-- @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Rekam Medis Rajal', 'Perawat Rajal',
+                'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA']) --}}
                 {{-- Rawat Jalan --}}
                 <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
                     <a href="{{ route('rajal/index') }}" class="menu-link">
@@ -152,9 +152,9 @@
                     </a>
                 </li>
                 {{-- end Rawat Jalan --}}
-            @endhasanyrole
+            {{-- @endhasanyrole --}}
 
-        @endhasanyrole
+        {{-- @endhasanyrole --}}
         {{-- end Rawatan --}}
 
         {{-- Additional --}}
@@ -187,17 +187,17 @@
 
 
         {{-- Penunjang --}}
-        @hasanyrole([
+        {{-- @hasanyrole([
             'Admin',
             'Petugas Radiologi',
             'Petugas Labor PK',
             'DPJP Radiologi',
             'DPJP Labor PK',
-            ])
+            ]) --}}
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Penunjang</span>
             </li>
-            @hasanyrole(['Admin', 'Petugas Radiologi', 'DPJP Radiologi'])
+            {{-- @hasanyrole(['Admin', 'Petugas Radiologi', 'DPJP Radiologi']) --}}
                 {{-- Radiologi --}}
                 {{-- @canany(['list permintaan pemeriksaan radiologi', 'daftar jadwal pemeriksaan radiologi']) --}}
                 <li class="menu-item {{ $menu == 'Radiologi' ? 'open' : '' }}">
@@ -225,9 +225,9 @@
                 </li>
                 {{-- @endcanany --}}
                 {{-- end Radiologi --}}
-            @endhasanyrole
+            {{-- @endhasanyrole --}}
 
-            @hasanyrole(['Admin', 'Petugas Labor PK', 'DPJP Labor PK'])
+            {{-- @hasanyrole(['Admin', 'Petugas Labor PK', 'DPJP Labor PK']) --}}
                 {{-- Laboratorium PK --}}
                 {{-- @canany(['daftar jadwal pemeriksaan laboratorium pk', 'list permintaan pemeriksaan laboratorium pk']) --}}
                 <li class="menu-item {{ $menu == 'Laboratorium PK' ? 'open' : '' }}">
@@ -255,20 +255,17 @@
                 </li>
                 {{-- @endcanany --}}
                 {{-- end Laboratorium PK --}}
-            @endhasanyrole
-        @endhasanyrole
+            {{-- @endhasanyrole --}}
+        {{-- @endhasanyrole --}}
         {{-- end Penunjang --}}
 
-        @role('Admin')
+        {{-- @role('Admin') --}}
             {{-- Instalasi --}}
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Instalasi</span>
             </li>
 
             {{-- Farmasi --}}
-            <?php $permisGudang = ['menu pembelian obat gudang farmasi', 'menu daftar stok obat di rumah sakit', 'menu daftar total stok obat di rumah sakit'];
-            ?>
-            @canany($permisGudang)
                 {{-- farmasi --}}
                 <li class="menu-item {{ $menu == 'Farmasi' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -277,30 +274,23 @@
                     </a>
                     <ul class="menu-sub">
                         {{-- Transaksi --}}
-                        @can('menu pembelian obat gudang farmasi')
                             <li class="menu-item {{ $title == 'Pembelian' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat/pembelian.index') }}" class="menu-link">
                                     <div>Pembelian</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('menu daftar stok obat di rumah sakit')
                             <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat/stock.index') }}" class="menu-link">
                                     <div>Stock</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('menu daftar total stok obat di rumah sakit')
                             <li class="menu-item {{ $title == 'Total Stock Obat' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat/stock.all') }}" class="menu-link">
                                     <div>Total Stock Obat</div>
                                 </a>
                             </li>
-                        @endcan
                     </ul>
                 </li>
-            @endcanany
             {{-- end Farmasi --}}
             {{-- end Instalasi --}}
 
@@ -311,30 +301,6 @@
                 <span class="menu-header-text text-white">Master Data</span>
             </li>
             {{-- Settings --}}
-            @php
-                $arrPermissions = [
-                    'master user simrs',
-                    'master tanggungan pasien',
-                    'master konsultasi',
-                    'master jenis tindakan',
-                    'master tindakan',
-                    'master ruangan',
-                    'master unit',
-                    'master spesialis',
-                    'master role',
-                    'master pekerjaan',
-                    'master diagnosa',
-                    'master daftar icd',
-                    'master supplier',
-                    'master pabrik',
-                    'master obat',
-                    'master jenis obat',
-                    'master golongan obat',
-                    'master bentuk sediaan obat',
-                    'master tabel konversi',
-                ];
-            @endphp
-            @canany($arrPermissions)
                 <li class="menu-item {{ $menu == 'Setting' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bxs-cog"></i>
@@ -342,98 +308,67 @@
                     </a>
 
                     <ul class="menu-sub">
-                        @can('master user simrs')
                             <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
                                 <a href="{{ route('user.index') }}" class="menu-link">
                                     <div>Daftar Staff</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master tanggungan pasien')
                             <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
                                 <a href="{{ route('pasien/category') }}" class="menu-link">
                                     <div>Kategori Pasien</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master konsultasi')
                             <li class="menu-item {{ $title == 'Konsultasi' ? 'active' : '' }}">
                                 <a href="{{ route('konsultasi') }}" class="menu-link">
                                     <div>Konsultasi</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master tindakan')
                             <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
                                 <a href="{{ route('tindakan.index') }}" class="menu-link">
                                     <div>Tindakan</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master ruangan')
                             <li class="menu-item {{ $title == 'Ruang' ? 'active' : '' }}">
                                 <a href="{{ route('ruang.index') }}" class="menu-link">
                                     <div>Ruangan</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master unit')
                             <li class="menu-item {{ $title == 'Unit' ? 'active' : '' }}">
                                 <a href="{{ route('unit.index') }}" class="menu-link">
                                     <div>Unit / Departemen</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master spesialis')
                             <li class="menu-item {{ $title == 'Specialist' ? 'active' : '' }}">
                                 <a href="{{ route('user/specialist.index') }}" class="menu-link">
                                     <div>Spesialis</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master role')
                             <li class="menu-item {{ $title == 'Role' ? 'active' : '' }}">
                                 <a href="{{ route('user/role.index') }}" class="menu-link">
                                     <div>Role</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master pekerjaan')
                             <li class="menu-item {{ $title == 'Pekerjaan' ? 'active' : '' }}">
                                 <a href="{{ route('job.index') }}" class="menu-link">
                                     <div>List Pekerjaan</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master diagnosa')
                             <li class="menu-item {{ $title == 'Diagnosa' ? 'active' : '' }}">
                                 <a href="{{ route('diagnosa.index') }}" class="menu-link">
                                     <div>Diagnosa</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('master daftar icd')
-                            <li class="menu-item {{ $title == 'ICD' ? 'active' : '' }}">
-                                <a href="{{ route('icd.index') }}" class="menu-link">
-                                    <div>Daftar ICD</div>
-                                </a>
-                            </li>
-                        @endcan
                         {{-- Konfigurasi Farmasi --}}
-                        @can('master obat')
                             <li class="menu-item {{ $title == 'Master Obat' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat.index') }}" class="menu-link">
                                     <div>Manajemen Obat</div>
                                 </a>
                             </li>
-                        @endcan
                     </ul>
                 </li>
-            @endcanany
             {{-- end Settings --}}
 
             {{-- Poliklinik --}}
-            @canany(['edit jadwal dokter poli', 'jadwal poli'])
                 {{-- Poli --}}
                 <li class="menu-item {{ $menu == 'Poliklinik' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -441,23 +376,18 @@
                         <div>Poliklinik</div>
                     </a>
                     <ul class="menu-sub">
-                        @can('edit jadwal dokter poli')
                             <li class="menu-item {{ $title == 'Jadwal Dokter' ? 'active' : '' }}">
                                 <a href="{{ route('dokter/jadwal.index') }}" class="menu-link">
                                     <div>Edit Jadwal Dokter Poli</div>
                                 </a>
                             </li>
-                        @endcan
-                        @can('jadwal poli')
                             <li class="menu-item {{ $title == 'Informasi Jadwal Dokter' ? 'active' : '' }}">
                                 <a href="{{ route('dokter/jadwal.all') }}" class="menu-link">
                                     <div>Info Jadwal Poli</div>
                                 </a>
                             </li>
-                        @endcan
                     </ul>
                 </li>
-            @endcanany
             {{-- end Poliklinik --}}
             {{-- end Master Data --}}
 
@@ -507,6 +437,6 @@
             {{-- @endcanany --}}
             {{-- end Laporan --}}
             {{-- end Report --}}
-        @endrole
+        {{-- @endrole --}}
     </ul>
 </aside>

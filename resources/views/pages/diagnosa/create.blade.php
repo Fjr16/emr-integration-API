@@ -15,30 +15,9 @@
               </div>
             </div>
             <div class="row mb-3">
-              <label class="col-sm-2 col-form-label" for="basic-default-name">DTD</label>
-                <div class="col-sm-10">
-                <input type="text" name="dtd" class="form-control" id="basic-default-name" value="{{ old('dtd') }}" required />
-                </div>
-            </div>
-            <div class="row mb-3">
               <label class="col-sm-2 col-form-label" for="basic-default-name">Kode ICD</label>
               <div class="col-sm-10">
-                <select name="icd_id" class="form-select" aria-label="Default select example">
-                  <option selected disabled> Pilih</option>
-                  @foreach ($icds as $icd)                      
-                    @if (old('icd_id') == $icd->id)
-                      <option value="{{ $icd->id }}" selected>{{ $icd->kode }} - {{ $icd->name }}</option>
-                    @else
-                      <option value="{{ $icd->id }}">{{ $icd->kode }} - {{ $icd->name }}</option>
-                    @endif
-                  @endforeach
-                </select>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label" for="basic-default-name">DTD+</label>
-              <div class="col-sm-10">
-                  <input type="text" name="deskripsi" class="form-control" id="basic-default-name" value="{{ old('deskripsi') }}" required/>
+                <input type="text" name="icd_x_code" class="form-control" id="basic-default-name" value="{{ old('icd_x_code') }}" required />
               </div>
             </div>
           <div class="row justify-content-end">

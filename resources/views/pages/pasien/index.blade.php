@@ -10,9 +10,7 @@
     <div class="card p-3 mt-5">
         <div class="d-flex">
             <h4 class="align-self-center m-0">Daftar Pasien</h4>
-            @can('tambah pasien rumah sakit')
-                <a href="{{ route('pasien.create', $route) }}" class="btn btn-success ms-auto btn-sm m-0 mx-3">+ Tambah Pasien</a>
-            @endcan
+            <a href="{{ route('pasien.create', $route) }}" class="btn btn-success ms-auto btn-sm m-0 mx-3">+ Tambah Pasien</a>
         </div>
         <hr class="m-0 mt-2 mb-3">
         <div class="table-responsive text-nowrap">
@@ -27,9 +25,7 @@
                         <th>Tempat / Tanggal Lahir</th>
                         <th>Jenis Kelamin</th>
                         <th>Telp</th>
-                        @canany(['edit pasien rumah sakit', 'delete pasien rumah sakit'])
-                            <th>Action</th>
-                        @endcanany
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,37 +39,35 @@
                             <td>{{ $item->tempat_lhr ?? '-' }} / {{ $item->tanggal_lhr ?? '-' }}</td>
                             <td>{{ $item->jenis_kelamin ?? '-' }}</td>
                             <td>{{ $item->telp ?? '-' }}</td>
-                            @canany(['edit pasien rumah sakit', 'delete pasien rumah sakit'])
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                            data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('pasien.detail', $item->id) }}">
-                                                <i class='bx bx-show-alt me-1'></i>
-                                                Show
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="{{ route('pasien.detail', $item->id) }}">
+                                            <i class='bx bx-show-alt me-1'></i>
+                                            Show
+                                        </a>
+                                        @can('edit pasien rumah sakit')
+                                            <a class="dropdown-item" href="{{ route('pasien.edit', $item->id) }}">
+                                                <i class='bx bx-edit-alt me-1'></i>
+                                                Edit
                                             </a>
-                                            @can('edit pasien rumah sakit')
-                                                <a class="dropdown-item" href="{{ route('pasien.edit', $item->id) }}">
-                                                    <i class='bx bx-edit-alt me-1'></i>
-                                                    Edit
-                                                </a>
-                                            @endcan
-                                            @can('delete pasien rumah sakit')
-                                                <form action="{{ route('pasien.destroy', $item->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item"
-                                                        onclick="return confirm('Yakin ingin menghapus data?')"><i
-                                                            class="bx bx-trash me-1"></i>Hapus</button>
-                                                </form>
-                                            @endcan
-                                        </div>
+                                        @endcan
+                                        @can('delete pasien rumah sakit')
+                                            <form action="{{ route('pasien.destroy', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item"
+                                                    onclick="return confirm('Yakin ingin menghapus data?')"><i
+                                                        class="bx bx-trash me-1"></i>Hapus</button>
+                                            </form>
+                                        @endcan
                                     </div>
-                                </td>
-                            @endcanany
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

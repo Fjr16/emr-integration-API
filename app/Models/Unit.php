@@ -13,14 +13,6 @@ class Unit extends Model
         'name',
     ];
 
-    public function unitCategoryPivots(){
-        return $this->hasMany(UnitCategoryPivot::class);
-    }
-
-    public function unitCategories(){
-        return $this->hasMany(UnitCategory::class);
-    }
-
     public function medicineTransactions(){
         return $this->hasMany(MedicineTransaction::class);
     }

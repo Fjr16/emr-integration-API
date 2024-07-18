@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Diagnostic;
-use App\Models\Icd;
 use Illuminate\Http\Request;
 
 class DiagnosticController extends Controller
@@ -30,11 +29,9 @@ class DiagnosticController extends Controller
      */
     public function create()
     {
-        $icds = Icd::all(); 
         return view('pages.diagnosa.create', [
             "title" => "Diagnosa",
             "menu" => "Setting",
-            'icds' => $icds
         ]);
     }
 
@@ -53,17 +50,6 @@ class DiagnosticController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -71,13 +57,11 @@ class DiagnosticController extends Controller
      */
     public function edit($id)
     {
-        $icds = Icd::all(); 
         $item = Diagnostic::find($id);
         return view('pages.diagnosa.edit', [
             "title" => "Diagnosa",
             "menu" => "Setting",
             "item" => $item,
-            'icds' => $icds
         ]);
     }
 

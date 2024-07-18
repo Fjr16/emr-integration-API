@@ -20,14 +20,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            PermissionSeeder::class,
-            RolePermissionSeeder::class,
+            // PermissionSeeder::class,
             RoleSeeder::class,
             RoomDetailSeeder::class,
             RoomSeeder::class,
             UserSeeder::class,
-            UserHasPermissionSeeder::class,
-            DiagnosisPatientSeeder::class,
+            // UserHasPermissionSeeder::class,
             MedicineCategorieSeeder::class,
             MedicineTypeSeeder::class,
             MedicineFormSeeder::class,
@@ -35,14 +33,19 @@ class DatabaseSeeder extends Seeder
             PatientCategorySeeder::class,
             SpecialistSeeder::class,
             UserSpecialistSeeder::class,
-            TarifLayananSeeder::class,
+            // TarifLayananSeeder::class,
             DoctorScheduleSeeder::class,
             // seeder untuk daftar wilayah dari package laravolt
             ProvincesSeeder::class,
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
+            // 
             JobSeeder::class,
+            UnitSeeder::class,
+            ActionSeeder::class,
+            ProcedureSeeder::class,
+            DiagnosticSeeder::class,
             // RadiologiSeeder::class, buat seeder untuk request master radiologi terlebih dahulu
         ]);
     }

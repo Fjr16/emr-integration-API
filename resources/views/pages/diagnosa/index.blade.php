@@ -20,10 +20,7 @@
         <tr class="text-nowrap bg-dark">
           <th>No</th>
           <th>Diagnosis</th>
-          <th>DTD</th>
           <th>Kode ICD</th>
-          <th>Arti ICD</th>
-          <th>DTD+</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -32,10 +29,7 @@
           <tr>
             <th scope="row">{{ $loop->iteration }}</th>
             <td>{{ $item->name }}</td>
-            <td>{{ $item->dtd }}</td>
-            <td>{{ $item->icd->kode ?? '' }}</td>
-            <td>{{ $item->icd->name ?? '' }}</td>
-            <td>{{ $item->deskripsi }}</td>
+            <td>{{ $item->icd_x_code ?? '' }}</td>
             <td>
               <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

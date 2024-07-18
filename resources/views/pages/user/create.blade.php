@@ -210,13 +210,13 @@
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label" for="basic-default-name">Unit / Departemen</label>
         <div class="col-sm-10">
-          <select class="form-select select2 @error('unit_category_id') is-invalid @enderror" name="unit_category_id" aria-label="Default select example">
+          <select class="form-select select2 @error('unit_id') is-invalid @enderror" name="unit_id" aria-label="Default select example">
               <option value="kosong" selected>Tidak Dalam Unit</option>
-              @foreach ($unitCategories as $category)
-                  @if (old('unit_category_id') == $category->id)
-                      <option selected value="{{ $category->id }}">{{ $category->unit->name }} - {{ $category->unitCategoryPivot->name }}</option>
+              @foreach ($units as $unit)
+                  @if (old('unit_id') == $unit->id)
+                      <option selected value="{{ $unit->id }}">{{ $unit->name }}</option>
                   @else
-                      <option value="{{ $category->id }}">{{ $category->unit->name }} - {{ $category->unitCategoryPivot->name }}</option>
+                      <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                   @endif
               @endforeach
           </select>

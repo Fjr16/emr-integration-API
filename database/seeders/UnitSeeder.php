@@ -16,22 +16,13 @@ class UnitSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['name' => 'Komisaris'],
-            ['name' => 'Direksi'],
-            ['name' => 'Keuangan'],
-            ['name' => 'Gizi'],
-            ['name' => 'UPSRS'],
-            ['name' => 'Logistik Umum'],
-            ['name' => 'Pengadaan'],
-            ['name' => 'SDM'],
-            ['name' => 'Farmasi'],
+            ['name' => 'Pelayanan'],
+            ['name' => 'Poliklinik'],
+            ['name' => 'Depo Farmasi Rawat Jalan'],
+            ['name' => 'Gudang Farmasi'],
+            ['name' => 'Administrasi'],
             ['name' => 'Radiologi'],
-            ['name' => 'Labor'],
-            ['name' => 'Perawat'],
-            ['name' => 'IBA dan Pacu'],
-            ['name' => 'Rekam Medis dan casemix'],
-            ['name' => 'Akreditasi'],
-            ['name' => 'Dokter Jaga'],
+            ['name' => 'Laboratorium'],
         ];
         DB::table('units')->insert($data);
     }

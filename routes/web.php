@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GetConversion;
-use App\Http\Controllers\IcdController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoomController;
@@ -38,14 +37,12 @@ use App\Http\Controllers\ReportDrugUsageController;
 use App\Http\Controllers\ReportPenunjangController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
-use App\Http\Controllers\ActionRatesController;
 use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\DoctorInitialAssesmentController;
 use App\Http\Controllers\KonsulInternalController;
 use App\Http\Controllers\KontrolUlangController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
-use App\Http\Controllers\UnitCategoryPivotController;
 use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
 use App\Http\Controllers\RadiologiFormRequestController;
@@ -53,11 +50,9 @@ use App\Http\Controllers\RekamMedisElektronikController;
 use App\Http\Controllers\RadiologiPatientQueueController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
-use App\Http\Controllers\SuratBuktiPelayananPatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\OtherController;
 use App\Http\Controllers\RajalGeneralConsentController;
-use App\Http\Controllers\StatusPelayananController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,17 +68,15 @@ use App\Http\Controllers\StatusPelayananController;
 
 Route::get('clear/user/tabel', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2014_10_12_000000_create_users_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_05_19_215901_add__s_i_p_and_kode_dokter_bpjs_to_users.php');
     Artisan::call('db:seed --class=UserSeeder');
     return back()->with('success', 'SUKSES RESET');
-    return 'success';
 })->name('clear/tabel.user');
 
 Route::get('clear/permission', function () {
     Artisan::call('migrate:refresh --path=/database/migrations/2023_07_08_185341_create_permission_tables.php');
     Artisan::call('db:seed --class=PermissionSeeder');
     Artisan::call('db:seed --class=RoleSeeder');
-    Artisan::call('db:seed --class=UserHasPermissionSeeder');
+    // Artisan::call('db:seed --class=UserHasPermissionSeeder');
     // Artisan::call('db:seed --class=PatientCategorySeeder'); //patient category
     return back()->with('success', 'SUKSES RESET');
 })->name('clear.permission');
@@ -219,14 +212,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/ruang/detail/update/{id}', [RoomDetailController::class, 'update'])->name('ruang/detail.update');
     Route::delete('/ruang/detail/destroy/{id}', [RoomDetailController::class, 'destroy'])->name('ruang/detail.destroy');
 
-    //Icd
-    Route::get('/icd', [IcdController::class, 'index'])->name('icd.index');
-    Route::get('/icd/create', [IcdController::class, 'create'])->name('icd.create');
-    Route::post('/icd/store', [IcdController::class, 'store'])->name('icd.store');
-    Route::get('/icd/edit/{id}', [IcdController::class, 'edit'])->name('icd.edit');
-    Route::put('/icd/update/{id}', [IcdController::class, 'update'])->name('icd.update');
-    Route::delete('/icd/destroy/{id}', [IcdController::class, 'destroy'])->name('icd.destroy');
-
     //Unit
     Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
     Route::get('/unit/create', [UnitController::class, 'create'])->name('unit.create');
@@ -234,13 +219,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/unit/edit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
     Route::put('/unit/update/{id}', [UnitController::class, 'update'])->name('unit.update');
     Route::delete('/unit/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
-
-    //SubUnit
-    Route::get('/sub-unit/create', [UnitCategoryPivotController::class, 'create'])->name('sub-unit.create');
-    Route::post('/sub-unit/store', [UnitCategoryPivotController::class, 'store'])->name('sub-unit.store');
-    Route::get('/sub-unit/edit/{id}', [UnitCategoryPivotController::class, 'edit'])->name('sub-unit.edit');
-    Route::put('/sub-unit/update/{id}', [UnitCategoryPivotController::class, 'update'])->name('sub-unit.update');
-    Route::delete('/sub-unit/destroy/{id}', [UnitCategoryPivotController::class, 'destroy'])->name('sub-unit.destroy');
 
     //Supplier
     Route::get('/farmasi/supplier', [SupplierController::class, 'index'])->name('farmasi/supplier.index');
@@ -313,9 +291,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Jadwal Dokter
     Route::get('/dokter/jadwal', [DoctorScheduleController::class, 'index'])->name('dokter/jadwal.index');
-    Route::group(['middleware' => ['permission:jadwal poli']], function () {
-        Route::get('/dokter/jadwal/all', [DoctorScheduleController::class, 'all'])->name('dokter/jadwal.all');
-    });
+    Route::get('/dokter/jadwal/all', [DoctorScheduleController::class, 'all'])->name('dokter/jadwal.all');
     Route::get('/dokter/jadwal/edit/{id}', [DoctorScheduleController::class, 'edit'])->name('dokter/jadwal.edit');
     Route::post('/dokter/jadwal/update/{id}', [DoctorScheduleController::class, 'update'])->name('dokter/jadwal.update');
     Route::get('/dokter/jadwal/show/{id}', [DoctorScheduleController::class, 'show'])->name('dokter/jadwal.show');
@@ -343,7 +319,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 //Antrian
-Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registrasi ulang antrian']], function () {
     //Antrian
     Route::get('/antrian/create', [QueueController::class, 'create'])->name('antrian.create');
     Route::post('/antrian/store', [QueueController::class, 'store'])->name('antrian.store');
@@ -355,52 +330,33 @@ Route::group(['middleware' => ['permission:daftar antrian|tambah antrian|registr
     //konfirmasi antrian
     Route::get('/antrian/konfirmasi/create/{id}', [QueueConfirmController::class, 'create'])->name('antrian/konfirmasi.create');
     Route::post('/antrian/konfirmasi/store/{id}', [QueueConfirmController::class, 'store'])->name('antrian/konfirmasi.store');
-});
-Route::group(['middleware' => ['permission:registrasi ulang antrian']], function () {
     //list antrian untuk registrasi ulang
     Route::get('/antrian', [QueueController::class, 'index'])->name('antrian.index');
     Route::get('/antrian/konfirmasi/edit/{id}', [QueueConfirmController::class, 'edit'])->name('antrian/konfirmasi.edit');
     Route::get('/antrian/konfirmasi/update/{id}', [QueueConfirmController::class, 'update'])->name('antrian/konfirmasi.update');
-});
 
 //Pasien (done)
-Route::group(['middleware' => ['permission:daftar pasien rumah sakit']], function () {
     Route::get('/pasien', [PatientController::class, 'index'])->name('pasien.index');
     Route::get('/pasien/detail/{id}', [PatientController::class, 'detail'])->name('pasien.detail');
-});
-Route::group(['middleware' => ['permission:tambah pasien rumah sakit']], function () {
     Route::get('/pasien/create', [PatientController::class, 'create'])->name('pasien.create');
     Route::post('/pasien/store', [PatientController::class, 'store'])->name('pasien.store');
-});
-Route::group(['middleware' => ['permission:edit pasien rumah sakit']], function () {
     Route::get('/pasien/edit/{id}', [PatientController::class, 'edit'])->name('pasien.edit');
     Route::put('/pasien/update/{id}', [PatientController::class, 'update'])->name('pasien.update');
-});
-Route::group(['middleware' => ['permission:delete pasien rumah sakit']], function () {
     Route::delete('/pasien/destroy/{id}', [PatientController::class, 'destroy'])->name('pasien.destroy');
-});
 
 //Kategori Pasien
-Route::group(['middleware' => ['permission:master tanggungan pasien']], function () {
     Route::get('/pasien/category', [PatientCategoryController::class, 'index'])->name('pasien/category');
     Route::get('/pasien/category/create', [PatientCategoryController::class, 'create'])->name('pasien/category.create');
     Route::post('/pasien/category/store', [PatientCategoryController::class, 'store'])->name('pasien/category.store');
     Route::get('/pasien/category/edit/{id}', [PatientCategoryController::class, 'edit'])->name('pasien/category.edit');
     Route::put('/pasien/category/update/{id}', [PatientCategoryController::class, 'update'])->name('pasien/category.update');
     Route::delete('/pasien/category/destroy/{id}', [PatientCategoryController::class, 'destroy'])->name('pasien/category.destroy');
-});
 
 //rajal
-Route::group(['middleware' => ['permission:daftar pasien poli']], function () {
     Route::get('/rajal', [RawatJalanController::class, 'index'])->name('rajal/index');  //index rajal poli
-});
-Route::group(['middleware' => ['permission:show pasien poli']], function () {
     Route::get('/rajal/show/{id}/{title}', [RawatJalanController::class, 'show'])->name('rajal/show');
-});
 //rekam medis
-Route::group(['middleware' => ['permission:daftar pasien rekam medis']], function () {
     Route::get('/rajal/rekammedis/index', [RekamMedisPatientController::class, 'index'])->name('rajal/rekammedis.index'); //index rajal rekam medis
-});
 //status Pelayanan Poli
 Route::put('/rajal/status/pelayanan/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/status/pelayanan.update');
 
@@ -416,13 +372,9 @@ Route::delete('rajal/general/consent/destroy/{id}', [RajalGeneralConsentControll
 
 
 //assesmen Awal baru
-Route::group(['middleware' => ['permission:tambah assesmen awal']], function () {
     Route::put('/assesmen/awal/dokter/update/{id}', [DoctorInitialAssesmentController::class, 'update'])->name('assesmen/awal/dokter.update');
-});
 // belum selesai
-Route::group(['middleware' => ['permission:print assesmen awal']], function () {
     Route::get('/assesmen/awal/dokter/print/{id}', [DoctorInitialAssesmentController::class, 'print'])->name('assesmen/awal/dokter.print');
-});
 
 // diagnosa dan prosedure
 Route::put('/diagnosa/patient/update/{id}', [DiagnosticProcedurePatientController::class, 'updateDiagnosis'])->name('diagnosa/patient.update');
@@ -430,51 +382,31 @@ Route::put('/procedure/patient/update/{id}', [DiagnosticProcedurePatientControll
 
 //rajal CPPT
 Route::post('/rajal/cppt/store/{id}', [RmeCpptController::class, 'store'])->name('rajal/cppt.store');
-Route::group(['middleware' => ['permission:print cppt']], function () {
     Route::get('/rajal/cppt/show/{id}', [RmeCpptController::class, 'show'])->name('rajal/cppt.show');
     Route::get('/rajal/cppt/print/{id}', [RmeCpptController::class, 'print'])->name('rajal/cppt.print');
-});
 Route::get('/rajal/cppt/update/ttd', [RmeCpptController::class, 'updateTtd'])->name('rajal/cppt/update.ttd');
 
 //rajal request Radiologi
-Route::group(['middleware' => ['permission:tambah permintaan radiologi']], function () {
     Route::get('/rajal/permintaan/radiologi/create/{id}', [RadiologiFormRequestController::class, 'create'])->name('rajal/permintaan/radiologi.create');
     Route::post('/rajal/permintaan/radiologi/store/{id}', [RadiologiFormRequestController::class, 'store'])->name('rajal/permintaan/radiologi.store');
-});
-Route::group(['middleware' => ['permission:print permintaan radiologi']], function () {
     Route::get('/rajal/permintaan/radiologi/show/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'show'])->name('rajal/permintaan/radiologi.show');
-});
 Route::get('/rajal/permintaan/radiologi/edit/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'edit'])->name('rajal/permintaan/radiologi.edit');
 Route::post('/rajal/permintaan/radiologi/update/{id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
 Route::delete('/rajal/permintaan/radiologi/destroy/{id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
 
 //rajal request labor PK
-Route::group(['middleware' => ['permission:tambah permintaan labor pk']], function () {
     Route::get('/rajal/laboratorium/request/create/{id}', [LaboratoriumFormRequestController::class, 'index'])->name('rajal/laboratorium/request.index');
     Route::post('rajal/laboratorium/request/store/{id}', [LaboratoriumFormRequestController::class, 'store'])->name('rajal/laboratorium/request.store');
-});
-Route::group(['middleware' => ['permission:print permintaan labor pk']], function () {
     Route::get('/rajal/laboratorium/request/show/{queue_id}/{labor_id}', [LaboratoriumFormRequestController::class, 'show'])->name('rajal/laboratorium/request.show');
-});
-Route::group(['middleware' => ['permission:delete permintaan labor pk']], function () {
     Route::delete('/rajal/laboratorium/request/destroy/{id}', [LaboratoriumFormRequestController::class, 'destroy'])->name('rajal/laboratorium/request.destroy');
-});
 Route::get('/laboratorium/request/getTemplate/{id}', [LaboratoriumFormRequestController::class, 'getTemplate'])->name('laboratorium/request.getTemplate');
 
 
 //rajal tindakan
-Route::group(['middleware' => ['permission:tambah laporan tindakan']], function () {
     Route::post('/rajal/laporan/tindakan/store', [PatientActionReportController::class, 'store'])->name('rajal/laporan/tindakan.store');
-});
-Route::group(['middleware' => ['permission:edit laporan tindakan']], function () {
     Route::put('/rajal/laporan/tindakan/update/{id}', [PatientActionReportController::class, 'update'])->name('rajal/laporan/tindakan.update');
-});
-Route::group(['middleware' => ['permission:print laporan tindakan']], function () {
     Route::get('/rajal/laporan/tindakan/show/{id}', [PatientActionReportController::class, 'show'])->name('rajal/laporan/tindakan.show');
-});
-Route::group(['middleware' => ['permission:delete laporan tindakan']], function () {
     Route::delete('/rajal/laporan/tindakan/destroy/{id}', [PatientActionReportController::class, 'destroy'])->name('rajal/laporan/tindakan.destroy');
-});
 
 //resep dokter (done)
 Route::post('/rajal/resep/dokter/store/{id}', [MedicineReceiptController::class, 'store'])->name('rajal/resep/dokter.store');
@@ -504,57 +436,34 @@ Route::delete('/rajal/konsul/internal/destroy/{id}', [KonsulInternalController::
 // Route::get('/rajal/konsul/internal/show/{id}', [KonsulInternalController::class, 'show'])->name('rajal/konsul/internal.show');
 
 //rajal farmasi
-Route::group(['middleware' => ['permission:daftar pasien farmasi rajal']], function () {
     Route::get('/rajal/farmasi/index', [RawatJalanFarmasiController::class, 'index'])->name('rajal/farmasi/index');
-});
-Route::group(['middleware' => ['permission:show pasien farmasi rajal']], function () {
     Route::get('/rajal/farmasi/create/{id}', [RawatJalanFarmasiController::class, 'create'])->name('rajal/farmasi/create');
-});
-Route::group(['middleware' => ['permission:perbarui status farmasi rajal']], function () {
     Route::put('/rajal/farmasi/update/status/{id}', [RawatJalanFarmasiController::class, 'updateStatus'])->name('rajal/farmasi/update/status.updateStatus');
-});
-Route::group(['middleware' => ['permission:input resep obat|permission:edit resep obat|permission:print resep obat']], function () {
-    Route::post('/rajal/farmasi/store', [RawatJalanFarmasiController::class, 'store'])->name('rajal/farmasi/store');
+    Route::post('/rajal/farmasi/store/{id}', [RawatJalanFarmasiController::class, 'store'])->name('rajal/farmasi/store');
     Route::get('/rajal/farmasi/edit/{id}', [RawatJalanFarmasiController::class, 'edit'])->name('rajal/farmasi/edit');
     Route::put('/rajal/farmasi/update/{id}', [RawatJalanFarmasiController::class, 'update'])->name('rajal/farmasi/update');
+    Route::delete('/rajal/farmasi/delete/{id}', [RawatJalanFarmasiController::class, 'destroy'])->name('rajal/farmasi/delete');
     Route::get('/rajal/farmasi/show/{id}', [RawatJalanFarmasiController::class, 'show'])->name('rajal/farmasi/show');
-});
+    Route::get('/rajal/farmasi/serahkan/obat/{id}', [RawatJalanFarmasiController::class, 'serahkanObat'])->name('rajal/farmasi/serahkan.obat');
+    Route::put('/rajal/farmasi/update/status/{id}', [RawatJalanFarmasiController::class, 'updateStatus'])->name('rajal/farmasi/update.status');
 
 //rajal Kasir
-Route::group(['middleware' => ['permission:daftar pembayaran']], function () {
     Route::get('/rajal/kasir/pembayaran', [KasirController::class, 'index'])->name('rajal/kasir/pembayaran/index');
-});
-Route::group(['middleware' => ['permission:show pembayaran']], function () {
     Route::get('/rajal/kasir/pembayaran/edit/{id}', [KasirController::class, 'edit'])->name('rajal/kasir/pembayaran/edit');
-});
 Route::get('/rajal/kasir/pembayaran/show/{id}', [KasirController::class, 'show'])->name('rajal/kasir/pembayaran/show');
-Route::group(['middleware' => ['permission:perbarui status pembayaran']], function () {
     Route::put('/rajal/kasir/pembayaran/update/{id}', [KasirController::class, 'update'])->name('rajal/kasir/pembayaran/update');
-});
 
 //Laboratorium Patient
-Route::group(['middleware' => ['permission:list permintaan pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient', [LaboratoriumPatientController::class, 'index'])->name('laboratorium/patient.index');
-});
-Route::group(['middleware' => ['permission:input hasil pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient/hasil/create/{id}', [LaboratoriumPatientController::class, 'create'])->name('laboratorium/patient/hasil.create');
     Route::post('/laboratorium/patient/hasil/store/{id}', [LaboratoriumPatientController::class, 'store'])->name('laboratorium/patient/hasil.store');
-});
-Route::group(['middleware' => ['permission:print hasil pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient/hasil/show/{id}', [LaboratoriumPatientController::class, 'show'])->name('laboratorium/patient/hasil.show');
-});
 
 //Laboratorium Patient Queue
-Route::group(['middleware' => ['permission:daftar jadwal pemeriksaan laboratorium pk']], function () {
     Route::get('/laboratorium/patient/queue', [LaboratoriumPatientQueueController::class, 'index'])->name('laboratorium/patient/queue.index');
-});
-Route::group(['middleware' => ['permission:atur jadwal pemeriksaan laboratorium pk|permission:edit jadwal pemeriksaan laboratorium pk']], function () {
     Route::post('/laboratorium/patient/queue/store/{id}', [LaboratoriumPatientQueueController::class, 'store'])->name('laboratorium/patient/queue.store');
-});
 // update status pada sidebar permintaan labor pk
-Route::group(['middleware' => ['permission:validasi status pemeriksaan laboratorium pk']], function () {
     Route::put('/laboratorium/patient/queue/update/{id}', [LaboratoriumPatientQueueController::class, 'update'])->name('laboratorium/patient/queue.update');
-});
 
 //Radiologi Patient
 Route::get('/radiologi/patient', [RadiologiPatientController::class, 'index'])->name('radiologi/patient.index');
