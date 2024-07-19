@@ -28,9 +28,7 @@ use Illuminate\Validation\ValidationException;
 class RawatJalanFarmasiController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function index()
     {
@@ -47,9 +45,7 @@ class RawatJalanFarmasiController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * DONE
      */
     public function create($id)
     {
@@ -87,7 +83,8 @@ class RawatJalanFarmasiController extends Controller
         }
         return $stts;
     }
-        /**
+
+    /**
      * DONE
      */
     private function generateReceiptNumber($current_no)
@@ -112,7 +109,7 @@ class RawatJalanFarmasiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * DONE
      */
     public function store(Request $request, $id)
     {
@@ -127,10 +124,6 @@ class RawatJalanFarmasiController extends Controller
                 'aturan_pakai*' => 'required',
                 'jumlah' => 'required|array',
                 'jumlah.*' => 'required|integer',
-                // 'harga_satuan' => 'required|array',
-                // 'harga_satuan.*' => 'required|integer',
-                // 'sub_total' => 'required|array',
-                // 'sub_total.*' => 'required|integer',
             ], [
                 'medicine_id.required' => 'Nama Obat Tidak Boleh Kosong',
                 'medicine_id.*.required' => 'Tidak Boleh satu pun Nama Obat Yang Kosong',
@@ -250,9 +243,6 @@ class RawatJalanFarmasiController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
