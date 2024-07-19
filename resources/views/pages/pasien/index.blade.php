@@ -50,21 +50,17 @@
                                             <i class='bx bx-show-alt me-1'></i>
                                             Show
                                         </a>
-                                        @can('edit pasien rumah sakit')
-                                            <a class="dropdown-item" href="{{ route('pasien.edit', $item->id) }}">
-                                                <i class='bx bx-edit-alt me-1'></i>
-                                                Edit
-                                            </a>
-                                        @endcan
-                                        @can('delete pasien rumah sakit')
-                                            <form action="{{ route('pasien.destroy', $item->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item"
-                                                    onclick="return confirm('Yakin ingin menghapus data?')"><i
-                                                        class="bx bx-trash me-1"></i>Hapus</button>
-                                            </form>
-                                        @endcan
+                                        <a class="dropdown-item" href="{{ route('pasien.edit', $item->id) }}">
+                                            <i class='bx bx-edit-alt me-1'></i>
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('pasien.destroy', $item->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item"
+                                                onclick="return confirm('Yakin ingin menghapus data?')"><i
+                                                    class="bx bx-trash me-1"></i>Hapus</button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>

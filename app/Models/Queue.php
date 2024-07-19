@@ -104,4 +104,8 @@ class Queue extends Model
     {
         return $this->hasOne(KonsulInternal::class);
     }
+    // farmasi patient
+    public function rajalFarmasiPatient() {
+        return $this->hasOne(RajalFarmasiPatient::class);
+    }
 }

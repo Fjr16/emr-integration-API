@@ -2,7 +2,6 @@
     <div class="app-brand demo">
         <a href="/" class="app-brand-link">
             <span class="app-brand-logo demo">
-                {{-- <img src="{{ asset('/assets/img/logo.png') }}" alt=""> --}}
             </span>
             <span class="app-brand-text menu-text fw-bolder text-white fs-4 ms-2 mt-1">E Medical Record</span>
         </a>
@@ -62,129 +61,47 @@
                     <div>Antrian</div>
                 </a>
                 <ul class="menu-sub">
-                    {{-- @can('tambah antrian') --}}
-                    {{-- @hasanyrole(['Admin', 'Petugas Informasi']) --}}
-                        <li class="menu-item {{ $title == 'Entri Antrian' ? 'active' : '' }}">
-                            <a href="{{ route('antrian.create') }}" class="menu-link">
-                                <div>Antrian</div>
-                            </a>
-                        </li>
-                        {{-- <li class="menu-item {{ $title == 'Entri Antrian Urologi' ? 'active' : '' }}">
-                                    <a href="{{ route('antrian-urologi.create') }}" class="menu-link">
-                                        <div>Antrian Urologi</div>
-                                    </a>
-                                </li> --}}
-                    {{-- @endhasanyrole --}}
-                    {{-- @endcan --}}
-                    {{-- @can('registrasi ulang antrian') --}}
-                    {{-- @hasanyrole(['Admin', 'Rekam Medis Rajal']) --}}
-                        <li class="menu-item {{ $title == 'Daftar Antrian' ? 'active' : '' }}">
-                            <a href="{{ route('antrian.index') }}" class="menu-link">
-                                <div>Daftar Antrian (Registrasi Ulang)</div>
-                            </a>
-                        </li>
-                    {{-- @endhasanyrole --}}
-                    {{-- @endcan --}}
+                    <li class="menu-item {{ $title == 'Entri Antrian' ? 'active' : '' }}">
+                        <a href="{{ route('antrian.create') }}" class="menu-link">
+                            <div>Antrian</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == 'Daftar Antrian' ? 'active' : '' }}">
+                        <a href="{{ route('antrian.index') }}" class="menu-link">
+                            <div>Daftar Antrian (Registrasi Ulang)</div>
+                        </a>
+                    </li>
                 </ul>
             </li>
-            {{-- @endcanany --}}
-            {{-- end Antrian --}}
-        {{-- @endhasanyrole --}}
-        {{-- end Registrasi --}}
 
-
-        {{-- Rawatan --}}
-        {{-- @hasanyrole([
-            'Admin',
-            'Dokter Poli',
-            'Dokter Ranap',
-            'Dokter Jaga',
-            'DPJP Radiologi',
-            'DPJP Labor PK',
-            'DPJP
-            Labor PA',
-            'Rekam Medis Rajal',
-            'Perawat Rajal',
-            'Apoteker',
-            'Kasir',
-            ]) --}}
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Rawatan</span>
             </li>
 
-            {{-- @hasanyrole([
-                'Admin',
-                'DPJP Radiologi',
-                'DPJP Labor PK',
-                'DPJP Labor PA',
-                'Dokter Poli',
-                'Dokter Ranap',
-                'Dokter
-                Jaga',
-                ])
-            @endhasanyrole --}}
-
-            {{-- @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Rekam Medis Rajal', 'Perawat Rajal',
-                'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA']) --}}
-                {{-- Rawat Jalan --}}
-                <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
-                    <a href="{{ route('rajal/index') }}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-accessibility"></i>
-                        <div>Poliklinik</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
-                    <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
-                        <i class='menu-icon tf-icons bx bxs-user-voice'></i>
-                        <div>Rekam Medis</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
-                    <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
-                        <i class='menu-icon tf-icons bx bxs-capsule'></i>
-                        <div>Apotek</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title == 'Pembayaran' ? 'active' : '' }}">
-                    <a href="{{ route('rajal/kasir/pembayaran/index') }}" class="menu-link">
-                        <i class='menu-icon tf-icons bx bxs-credit-card'></i>
-                        <div>Pembayaran</div>
-                    </a>
-                </li>
-                {{-- end Rawat Jalan --}}
-            {{-- @endhasanyrole --}}
-
-        {{-- @endhasanyrole --}}
-        {{-- end Rawatan --}}
-
-        {{-- Additional --}}
-        {{-- @hasanyrole(['Admin', 'Perawat Rajal', 'Rekam Medis Rajal', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga'])
-            <li class="menu-header small text-uppercase">
-                <span class="menu-header-text text-white">Additional</span>
-            </li> --}}
-            {{-- start kontrol  --}}
-            {{-- <li class="menu-item {{ $menu == 'Kontrol' ? 'open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-file"></i>
-                    <div>Surat Kontrol</div>
+            <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
+                <a href="{{ route('rajal/index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-accessibility"></i>
+                    <div>Poliklinik</div>
                 </a>
-                <ul class="menu-sub">
-                    <li class="menu-item {{ $title == 'Kontrol Rawat Jalan' ? 'active' : '' }}">
-                        <a href="{{ route('kontrol.rawatJalan') }}" class="menu-link">
-                            <div>Rawat Jalan</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ $title == 'SPRI' ? 'active' : '' }}">
-                        <a href="{{ route('kontrol.spri') }}" class="menu-link">
-                            <div>SPRI</div>
-                        </a>
-                    </li>
-                </ul>
-            </li> --}}
-            {{-- end kontrol  --}}
-        {{-- @endhasanyrole --}}
-        {{-- end Additional --}}
-
+            </li>
+            <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
+                <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
+                    <i class='menu-icon tf-icons bx bxs-user-voice'></i>
+                    <div>Rekam Medis</div>
+                </a>
+            </li>
+            <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
+                <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
+                    <i class='menu-icon tf-icons bx bxs-capsule'></i>
+                    <div>Apotek</div>
+                </a>
+            </li>
+            <li class="menu-item {{ $title == 'Pembayaran' ? 'active' : '' }}">
+                <a href="{{ route('rajal/kasir/pembayaran/index') }}" class="menu-link">
+                    <i class='menu-icon tf-icons bx bxs-credit-card'></i>
+                    <div>Pembayaran</div>
+                </a>
+            </li>
 
         {{-- Penunjang --}}
         {{-- @hasanyrole([
@@ -277,6 +194,11 @@
                             <li class="menu-item {{ $title == 'Pembelian' ? 'active' : '' }}">
                                 <a href="{{ route('farmasi/obat/pembelian.index') }}" class="menu-link">
                                     <div>Pembelian</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $title == 'Amprahan' ? 'active' : '' }}">
+                                <a href="{{ route('farmasi/obat/amprahan.index') }}" class="menu-link">
+                                    <div>Amprahan</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">

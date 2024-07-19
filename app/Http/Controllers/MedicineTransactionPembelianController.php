@@ -10,6 +10,7 @@ use App\Models\MedicineStok;
 use Illuminate\Http\Request;
 use App\Models\MedicineTransaction;
 use App\Models\Unit;
+use Illuminate\Support\Facades\Auth;
 
 class MedicineTransactionPembelianController extends Controller
 {
@@ -37,13 +38,16 @@ class MedicineTransactionPembelianController extends Controller
     {
         $suppliers = Supplier::all();
         $obats = Medicine::all();
-        $units = Unit::where('name', 'like', '%'.'Gudang'.'%')->get();
+        // $units = Unit::where('name', 'like', '%'.'Gudang'.'%')->get();
+        $unitSelectedId = Auth::user()->unit->id;
+        $units = Unit::all();
         return view('pages.pembelian.create', [
             "title" => "Pembelian",
             "menu" => "Farmasi",
             "obats" => $obats,
             "suppliers" => $suppliers,
             "units" => $units,
+            "unitSelectedId" => $unitSelectedId,
         ]);
     }
 

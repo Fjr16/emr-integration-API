@@ -35,7 +35,16 @@
                         {{ $item->patient->name }} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
                         <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
-                    <h6>{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
+                    <h6 class="mb-1">{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
+                    @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
+                        <span class="badge bg-danger">BELUM DILAYANI</span>
+                    @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
+                        <span class="badge bg-warning">DALAM PERAWATAN</span>
+                    @elseif ($item->rawatJalanPoliPatient->status == 'FINISHED')
+                        <span class="badge bg-success">SUDAH DILAYANI</span>
+                    @else
+                        <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                    @endif
                 </div>
                 <div class="col-8 text-end">
                     <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->no_antrian ?? '' }}</span></p>
@@ -657,7 +666,7 @@
                                                     <div class="mb-3">
                                                         <label class="col-form-label fw-bold">Anamnesa / Keluhan Utama :</label>
                                                         <div class="">
-                                                            {{ $itemAss->keluhan_utama }}
+                                                            {{ $itemAss->keluhan_utama ?? '' }}
                                                         </div>
                                                     </div>
                                     
@@ -739,7 +748,7 @@
                                                     <div class="row mb-3">
                                                         <div class="col-3">
                                                             <label class="col-form-label fw-bold">Riwayat Penyakit Pasien</label>
-                                                            <p class="multi-line-text">{!! $itemAss->riw_penyakit_pasien !!}</p>
+                                                            <p class="multi-line-text">{!! $itemAss->riw_penyakit_pasien ?? '' !!}</p>
                                                         </div>
                                                         <div class="col-3">
                                                             <label class="col-form-label fw-bold">Riwayat Penyakit Keluarga</label>
@@ -776,7 +785,7 @@
                                                         </div>
                                                         <div class="col-4 text-center align-self-center">
                                                             <h3 class="mb-2">SKOR MST</h3>
-                                                            <h1>{{ $itemAss->skor_ass_gizi_1 ?? 0 + $itemAss->skor_ass_gizi_2 ?? 0  }}</h1>
+                                                            <h1>{{ $itemAss ? ($itemAss->skor_ass_gizi_1 ?? 0 + $itemAss->skor_ass_gizi_2 ?? 0) : ''  }}</h1>
                                                         </div>
                                                     </div>
                                     
@@ -789,22 +798,22 @@
                                                         <div class="row">
                                                             <div class="col-12 text-center mx-3 ps-4">
                                                                 <div class="form-check form-check-inline mt-3 mx-5 ps-4">
-                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '0' ? 'checked' : '' }} />
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" style="pointer-events: none;" {{ $itemAss ? ($itemAss->skor_nyeri == '0' ? 'checked' : '') : '' }} />
                                                                 </div>
                                                                 <div class="form-check form-check-inline mx-5 ps-4">
-                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '2' ? 'checked' : '' }} />
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" style="pointer-events: none;" {{ $itemAss ? ($itemAss->skor_nyeri == '2' ? 'checked' : '') : '' }} />
                                                                 </div>
                                                                 <div class="form-check form-check-inline mx-5">
-                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '4' ? 'checked' : '' }}/>
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss ? ($itemAss->skor_nyeri == '4' ? 'checked' : '') : '' }}/>
                                                                 </div>
                                                                 <div class="form-check form-check-inline mx-5 ps-4">
-                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '6' ? 'checked' : '' }}/>
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss ? ($itemAss->skor_nyeri == '6' ? 'checked' : '') : '' }}/>
                                                                 </div>
                                                                 <div class="form-check form-check-inline mx-5 ps-4">
-                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '8' ? 'checked' : '' }}/>
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss ? ($itemAss->skor_nyeri == '8' ? 'checked' : '') : '' }}/>
                                                                 </div>
                                                                 <div class="form-check form-check-inline mx-5 ps-5">
-                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss->skor_nyeri == '10' ? 'checked' : '' }}/>
+                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" style="pointer-events: none;" {{ $itemAss ? ($itemAss->skor_nyeri == '10' ? 'checked' : '') : '' }}/>
                                                                 </div>
                                                             </div>
                                     
@@ -821,8 +830,8 @@
                                                                     <p>b. Saat akan duduk pasien memegang pinggiran kursi atau benda lain sebagai penopang ?</p>
                                                                 </div>
                                                                 <div class="col-3 mt-4">
-                                                                    <p class="mb-4">{{ ($itemAss->resiko_jatuh_a ? 'YA' : 'TIDAK') ?? '...' }}</p>
-                                                                    <p>{{ ($itemAss->resiko_jatuh_b ? 'YA' : 'TIDAK') ?? '...' }}</p>
+                                                                    <p class="mb-4">{{ $itemAss ? ($itemAss->resiko_jatuh_a ? 'YA' : 'TIDAK') : '...' }}</p>
+                                                                    <p>{{ $itemAss ? ($itemAss->resiko_jatuh_b ? 'YA' : 'TIDAK') : '...' }}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -830,7 +839,7 @@
                                                             <div class="card bg-transparent border border-primary">
                                                                 <div class="card-body text-center p-2 align-self-center">
                                                                     <h2 class="text-uppercase mb-1 text-primary">
-                                                                        {{ $itemAss->resiko_jatuh_result ?? '' }}
+                                                                        {{ $itemAss->resiko_jatuh_result ?? 'TIDAK ADA DATA' }}
                                                                     </h2>
                                                                 </div>
                                                             </div>
@@ -843,7 +852,7 @@
                                                         <div class="col-6">
                                                             <label class="col-form-label fw-bold">Status Psikologis</label>
                                                             <div class="d-flex">
-                                                                @foreach ($itemAss->detailPsikologis as $detail)
+                                                                @foreach ($itemAss->detailPsikologis ?? [] as $detail)
                                                                     <p class="me-1">{{ $detail->name ?? '' }},</p>
                                                                 @endforeach
                                                             </div>
@@ -878,10 +887,10 @@
                                                     <hr>
                                                     <div class="row mx-4">
                                                         <div class="text-end align-self-center">
-                                                            <p class="mb-0">Padang, {{ $itemAss->created_at->format('d M Y') ?? 'Unknown' }}</p>
+                                                            <p class="mb-0">Padang, {{ $itemAss ? ($itemAss->created_at->format('d M Y') ?? 'Unknown') : '' }}</p>
                                                             <p class="mb-1 fw-bold">Perawat,</p>
-                                                            <img src="{{ asset('storage/' . $itemAss->ttd ?? '') }}" width="150" alt="">
-                                                            <p class="fw-bold">{{ $itemAss->user->name ?? '' }}</p>
+                                                            <img src="{{ $itemAss ? (asset('storage/' . $itemAss->ttd ?? '')) : '' }}" width="150" alt="">
+                                                            <p class="fw-bold">{{ $itemAss ? ($itemAss->user->name ?? '') : '' }}</p>
                                                         </div>
                                                     </div>
                                     
@@ -1240,9 +1249,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 my-4 text-start">
+                                    @if ($item->medicineReceipt)    
                                     <a href="{{ route('rajal/resep/dokter.show', $item->id) }}" target="blank" class="btn btn-info btn-sm">
                                         <i class='bx bx-printer'></i>
                                     </a>
+                                    @endif
                                 </div>
                                 <div class="col-6 my-4 text-end">
                                         <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
@@ -1511,7 +1522,7 @@
                                 </div>
                             </div>
                             <div class="text-end my-4">
-                                <button type="submit" class="btn btn-primary btn-sm" onclick="openModal()">Submit</button>
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="openModal()"> {{ $item->soapDokter ? 'Update' : 'Submit' }}</button>
                             </div>
                         </form>
                     </div>
@@ -1546,15 +1557,15 @@
                                                     <Label class="form-label">Status Pelayanan</Label>
                                                     <div class="col-md">
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" {{ $item->rawatJalanPoliPatient->status == 'WAITING' ? 'checked' : '' }}/>
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" {{ $item->rawatJalanPoliPatient->status == 'WAITING' ? 'checked' : '' }} onclick="dalamPerawatan(this)"/>
                                                             <label class="form-check-label" for="belum_dilayani">Belum Dilayani</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="dalam_perawatan" value="ONGOING" {{ $item->rawatJalanPoliPatient->status == 'ONGOING' ? 'checked' : '' }}/>
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="dalam_perawatan" value="ONGOING" {{ $item->rawatJalanPoliPatient->status == 'ONGOING' ? 'checked' : '' }}  onclick="dalamPerawatan(this)"/>
                                                             <label class="form-check-label" for="dalam_perawatan">Dalam Perawatan</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="sudah_dilayani" value="FINISHED" {{ $item->rawatJalanPoliPatient->status == 'FINISHED' ? 'checked' : '' }}/>
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="sudah_dilayani" value="FINISHED" {{ $item->rawatJalanPoliPatient->status == 'FINISHED' ? 'checked' : '' }} onclick="sudahDilayani(this)"/>
                                                             <label class="form-check-label" for="sudah_dilayani">Sudah Dilayani</label>
                                                         </div>
                                                     </div>
@@ -1618,7 +1629,9 @@
                                             </div>
                                             <div class="col-12 mt-5 ms-auto">
                                                 <button type="submit" id="btn-finish-pelayanan" class="btn btn-sm btn-primary">Submit</button>
-                                                <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                                @if ($item->rawatJalanPoliPatient->status == 'ONGOING' || $item->rawatJalanPoliPatient->status == 'FINISHED')
+                                                    <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                                @endif
                                             </div>
                                          </div>
                                     </form>
@@ -1648,7 +1661,9 @@
                                             </div>
                                             <div class="col-12 mt-4 ms-auto">
                                                 <button type="submit" class="btn btn-sm btn-primary">Submit</button>
-                                                <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                                @if ($item->konsulInternal)
+                                                    <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                                @endif
                                             </div>
                                         </div>
                                     </form>
@@ -1702,6 +1717,32 @@
             }
         });
 
+        // untuk event enable dan disable cara keluar dan keadaan keluar
+        let caraKeluars = document.querySelectorAll('input[name="cara_keluar"]');
+        let keadaanKeluars = document.querySelectorAll('input[name="keadaan_keluar"]');
+        function dalamPerawatan(element){
+            if (element.checked) {
+                caraKeluars.forEach(function(caraKeluar){
+                    caraKeluar.checked = false;
+                    caraKeluar.disabled = true;
+                });
+                keadaanKeluars.forEach(function(keadaanKeluar){
+                    keadaanKeluar.checked = false;
+                    keadaanKeluar.disabled = true;
+                });
+            }
+        }
+        function sudahDilayani(element){
+            if (element.checked) {
+                caraKeluars.forEach(function(caraKeluar){
+                    caraKeluar.disabled = false;
+                });
+                keadaanKeluars.forEach(function(keadaanKeluar){
+                    keadaanKeluar.disabled = false;
+                });
+            }
+        }
+
         function autoFillSOAP(element){
             let targetElement, contentTarget;
             if (element.value == 'sub') {
@@ -1715,10 +1756,11 @@
                 targetElement = element.closest('.row').querySelector('#objective');
                 contentTarget = objective;
             } else if(element.value == 'ases'){
-                const diagnosaPrimer = `{{ "Diagnosa Primer: \r\n" . (($item->diagnosticProcedurePatient->diagnostic_id) ? "[" . ($item->diagnosticProcedurePatient->diagnostic->icd_x_code ?? '') . "] " . ($item->diagnosticProcedurePatient->diagnostic->name ?? '') : ($item->diagnosticProcedurePatient->desc_diagnosa_primer ?? '')) }}\r\n\nDiagnosa Sekunder:`;
+                const diagnosaPrimer = `{{ "Diagnosa Primer: \r\n" . (($item->diagnosticProcedurePatient->diagnostic_id ?? '') ? "[" . ($item->diagnosticProcedurePatient->diagnostic->icd_x_code ?? '') . "] " . ($item->diagnosticProcedurePatient->diagnostic->name ?? '') : ($item->diagnosticProcedurePatient->desc_diagnosa_primer ?? '')) }}`;
                 let diagnosaSekunder = '';
-                const dataJson = @json($item->diagnosticProcedurePatient->diagnosticSecondary);
+                const dataJson = @json($item->diagnosticProcedurePatient->diagnosticSecondary ?? '');
                 if (dataJson.length > 0) {
+                    diagnosaSekunder = '\r\n\nDiagnosa Sekunder:';
                     dataJson.forEach(function(item){
                         diagnosaSekunder += '\r\n-[' + (item.diagnostic.icd_x_code ?? '') + '] ' + (item.diagnostic.name ?? '');
                     });
@@ -1738,17 +1780,22 @@
                 plann.value += dataResep;
             } else if(element.value == 'tindakan'){
                 let dataTindakan = '\r\n\nTindakan Medis : ';
-                actions.forEach(function(item){
-                    dataTindakan += '\r\n- ' + item.name ?? '';
+                const dataTindakanAwal = @json($item->patientActionReport->patientActionReportDetails ?? '');
+                dataTindakanAwal.forEach(function(item){
+                    dataTindakan += '\r\n- ' + item.action.name ?? '';
                 });
 
                 let plann = element.closest('.row').querySelector('#planning');
                 plann.value += dataTindakan;
             } else if(element.value == 'kontrolUlang'){
-                const dataKontrol = `{{ "\r\n\nPasien Diminta Kontrol Pada " . ($item->planControlPatient->tgl_kontrol ?? '') }}`;
-
-                let plann = element.closest('.row').querySelector('#planning');
-                plann.value += dataKontrol;
+                const checkDataKontrol = @json($item->planControlPatient ?? '');
+                if (checkDataKontrol) {                    
+                    const dataKontrol = `{{ "\r\n\nPasien Diminta Kontrol Pada " . ($item->planControlPatient->tgl_kontrol ?? '') }}`;
+                    let plann = element.closest('.row').querySelector('#planning');
+                    plann.value += dataKontrol;
+                }else{
+                    alertShow('Not Found !!', 'Data kontrol tidak ditemukan', elementAlert);
+                }
             }
             $(targetElement).val(contentTarget);
 
@@ -1869,6 +1916,28 @@
                     ketKonsul.disabled = true;
                 }
             });
+
+            //set awal atribut disabled untuk status pelayanan
+            const checkBelumDilayani = document.querySelector('#belum_dilayani');
+            const checkDalamPerawatan = document.querySelector('#dalam_perawatan');
+            const checkSudahDilayani = document.querySelector('#sudah_dilayani');
+            if (checkBelumDilayani.checked || checkDalamPerawatan.checked) {
+                caraKeluars.forEach(function(caraKeluar){
+                    caraKeluar.checked = false;
+                    caraKeluar.disabled = true;
+                });
+                keadaanKeluars.forEach(function(keadaanKeluar){
+                    keadaanKeluar.checked = false;
+                    keadaanKeluar.disabled = true;
+                });
+            } else if(checkSudahDilayani.checked){
+                caraKeluars.forEach(function(caraKeluar){
+                    caraKeluar.disabled = false;
+                });
+                keadaanKeluars.forEach(function(keadaanKeluar){
+                    keadaanKeluar.disabled = false;
+                });
+            }
         });
     </script>
     <script>

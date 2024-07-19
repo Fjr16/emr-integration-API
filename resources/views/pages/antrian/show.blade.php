@@ -55,13 +55,15 @@
         <div class="row mb-3">
           <label for="basic-default-name" class="col-sm-3 col-form-label">Status</label>
           <div class="col-sm-9">
-            <input type="text" value="{{ $item->status_antrian ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
+            <span class="badge {{ $item->status_antrian == 'ARRIVED' ?  'bg-primary' : ($item->status_antrian == 'FINISHED' ? 'bg-sucess' : ($item->status_antrian == 'CANCEL' ? 'bg-danger' : 'bg-warning') ) }}">
+              {{ $item->status_antrian == 'ARRIVED' ?  'SEDANG DILAYANI' : ($item->status_antrian == 'FINISHED' ? 'SELESAI' : ($item->status_antrian == 'CANCEL' ? 'ANTRIAN BATAL' : 'BELUM DILAYANI') ) }}
+            </span>
           </div>
         </div>
         <div class="card bg-warning p-1">
           <div>
             <textarea class="form-control" id="text-area1" rows="9">
-              Pasien Yth, {{ $item->patient->name }} sudah terdaftar di RSK Bedah Ropanasuri dengan:
+              Pasien Yth, {{ $item->patient->name }} sudah terdaftar di RS ***** ***** dengan:
 
               Nomor RM : {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2))}}
               di Poli : {{ $item->dpjp->roomDetail->name ?? '' }}

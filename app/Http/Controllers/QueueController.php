@@ -139,7 +139,7 @@ class QueueController extends Controller
     {
         $item = Queue::find($id);
         $tgl_berobat = Carbon::parse($item->tgl_antrian);
-        $jadwalDokterPilih = $item->doctorPatient->user->doctorSchedules->where('day', $tgl_berobat->locale('id')->dayName)->first();
+        $jadwalDokterPilih = $item->dpjp->doctorSchedules->where('day', $tgl_berobat->locale('id')->dayName)->first();
         $jamKedatangan = Carbon::createFromTimeString($jadwalDokterPilih->start_at)->subHour();
         $jamAwal = Carbon::createFromTimeString($jadwalDokterPilih->start_at);
         $jamAkhir = Carbon::createFromTimeString($jadwalDokterPilih->ends_at);

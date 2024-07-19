@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Job;
 use App\Models\Patient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class PatientController extends Controller
 {
@@ -61,6 +60,9 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'noka' => 'required|unique:patients'
+        ]);
         $data = $request->all();
         $patient = new Patient($data);
         $patient->save();

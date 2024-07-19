@@ -8,6 +8,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\OtherController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ActionController;
@@ -24,12 +25,14 @@ use App\Http\Controllers\RawatJalanController;
 use App\Http\Controllers\RoomDetailController;
 use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\KontrolUlangController;
 use App\Http\Controllers\MedicineFormController;
 use App\Http\Controllers\MedicineStokController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\QueueConfirmController;
 use App\Http\Controllers\ReportCashierController;
 use App\Http\Controllers\DoctorScheduleController;
+use App\Http\Controllers\KonsulInternalController;
 use App\Http\Controllers\AsesmentPerawatController;
 use App\Http\Controllers\MedicineReceiptController;
 use App\Http\Controllers\PatientCategoryController;
@@ -37,22 +40,20 @@ use App\Http\Controllers\ReportDrugUsageController;
 use App\Http\Controllers\ReportPenunjangController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
-use App\Http\Controllers\DiagnosticProcedurePatientController;
-use App\Http\Controllers\DoctorInitialAssesmentController;
-use App\Http\Controllers\KonsulInternalController;
-use App\Http\Controllers\KontrolUlangController;
 use App\Http\Controllers\RawatJalanFarmasiController;
 use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
+use App\Http\Controllers\RajalGeneralConsentController;
+use App\Http\Controllers\MedicineDistributionController;
 use App\Http\Controllers\RadiologiFormRequestController;
 use App\Http\Controllers\RekamMedisElektronikController;
 use App\Http\Controllers\RadiologiPatientQueueController;
+use App\Http\Controllers\DoctorInitialAssesmentController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
+use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
-use App\Http\Controllers\OtherController;
-use App\Http\Controllers\RajalGeneralConsentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -304,6 +305,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/farmasi/obat/pembelian/edit/{id}', [MedicineTransactionPembelianController::class, 'edit'])->name('farmasi/obat/pembelian.edit');
     Route::get('/farmasi/obat/pembelian/update/{id}', [MedicineTransactionPembelianController::class, 'update'])->name('farmasi/obat/pembelian.update');
     Route::delete('/farmasi/obat/pembelian/destroy/{id}', [MedicineTransactionPembelianController::class, 'destroy'])->name('farmasi/obat/pembelian.destroy');
+
+    // amprahan atau distribusi Obat 
+    Route::get('/farmasi/obat/amprahan', [MedicineDistributionController::class, 'index'])->name('farmasi/obat/amprahan.index');
+    Route::post('/farmasi/obat/amprahan/store', [MedicineDistributionController::class, 'store'])->name('farmasi/obat/amprahan.store');
+    Route::get('/farmasi/obat/amprahan/show/{id}', [MedicineDistributionController::class, 'show'])->name('farmasi/obat/amprahan.show');
+    Route::delete('/farmasi/obat/amprahan/destroy/{id}', [MedicineDistributionController::class, 'destroy'])->name('farmasi/obat/amprahan.destroy');
 
     //Stock Obat
     Route::get('/farmasi/obat/stock', [MedicineStokController::class, 'index'])->name('farmasi/obat/stock.index');

@@ -309,6 +309,16 @@
             matcher: matchCustom,
             templateResult: formatCustom
         });
+
+        // select2 ketika function di panggil
+        function regenerateSelect(selectType1){
+            $('.' + selectType1).select2({
+                placeholder : "Pilih Obat",
+                allowClear : true,
+                matcher: matchCustom,
+                templateResult: formatCustom
+            });
+        }
         
         // select 2 subtext
         function stringMatch(term, candidate) {

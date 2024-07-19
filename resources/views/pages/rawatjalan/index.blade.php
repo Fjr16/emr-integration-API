@@ -49,28 +49,28 @@
             <table id="Field1NoOrder" class="table">
                 <thead>
                     <tr class="text-nowrap bg-dark">
-                        @if ($user->hasRole('Rekam Medis Rajal'))
+                        @if ($user->hasRole('Rekam Medis dan Casemix'))
                         <th>General Consent</th>
                         @endif
-                        @can('show pasien poli')
+                        @if ($user->hasRole(['Dokter Spesialis', 'Dokter Umum', 'Perawat']))
                             <th class="text-center">Action</th>
-                        @endcan
+                        @endif
                         <th>No Antrian</th>
                         <th>No Rekam Medis</th>
                         <th>Nama</th>
                         <th>Tanggungan</th>
                         <th>Jenis Kelamin</th>
                         <th>Telp</th>
-                        <th>Status Poli</th>
-                        @if ($user->hasRole(['Perawat Rajal','Rekam Medis Rajal'] ))
+                        @if ($user->hasRole(['Perawat','Rekam Medis dan Casemix'] ))
                             <th>Poli / Dokter</th>
                         @endif
+                        <th>Status Poli</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $item)
                         <tr>
-                            @if ($user->hasRole('Rekam Medis Rajal'))
+                            @if ($user->hasRole('Rekam Medis dan Casemix'))
                                 <td class="">
                                     @if ($item->rajalGeneralConsent)
                                       <div class="d-flex flex-row">
@@ -113,7 +113,7 @@
                                     @endif
                                 </td>
                             @endif
-                            @can('show pasien poli')
+                            @if ($user->hasRole(['Dokter Spesialis', 'Dokter Umum', 'Perawat']))
                             <td class="text-center" style="width: 9%">
                                 <div class="btn-group dropend">
                                     <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,7 +129,7 @@
                                     </ul>
                                 </div>
                             </td>
-                            @endcan
+                            @endif
                             <td>{{ $item->no_antrian ?? '-' }}</td>
                             <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                             </td>
@@ -137,6 +137,9 @@
                             <td>{{ $item->patientCategory->name ?? '-' }}</td>
                             <td>{{ $item->patient->jenis_kelamin ?? '-' }}</td>
                             <td>{{ $item->patient->telp ?? '-' }}</td>
+                            @if ($user->hasRole('Perawat|Rekam Medis dan Casemix'))
+                                <td>{{ $item->dpjp->roomDetail->name ?? '' }} / {{ $item->dpjp->name ?? '' }}</td>
+                            @endif
                             <td>
                                 @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
                                     <span class="badge bg-danger">BELUM DILAYANI</span>
@@ -148,9 +151,7 @@
                                     <span class="badge bg-success">TIDAK DIKETAHUI</span>
                                 @endif
                             </td>
-                            @if ($user->hasRole('Perawat Rajal|Rekam Medis Rajal'))
-                                <td>{{ $item->doctorPatient->user->roomDetail->name ?? '' }} / {{ $item->doctorPatient->user->name ?? '' }}</td>
-                            @endif
+                           
                         </tr>
                     @endforeach
                 </tbody>

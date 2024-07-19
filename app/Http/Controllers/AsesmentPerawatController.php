@@ -195,9 +195,6 @@ class AsesmentPerawatController extends Controller
                 ]);
             }
             Session::forget(['alergi_makanan', 'alergi_obat', 'detail_psikologis', 'data']);
-            $newPerawat->queue->rawatJalanPoliPatient()->update([
-                'status' => 'ONGOING',
-            ]);
             
             // create otomatis dokter initial asesmen jika belum ada
             if (!$newPerawat->queue->doctorInitialAssesment) {

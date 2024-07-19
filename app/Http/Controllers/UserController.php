@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Poli;
 use App\Models\User;
 use App\Models\RoomDetail;
 use App\Models\Specialist;
-use App\Models\UnitCategory;
 use Illuminate\Http\Request;
 use App\Models\ConsultingRates;
 use App\Models\DoctorsSchedule;
 use App\Models\PatientCategory;
+use App\Models\Unit;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
@@ -40,7 +38,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $unitCategories = UnitCategory::all();
+        $units = Unit::all();
         $role = Role::all();
         $polis = RoomDetail::where('room_id', 1)->get();
         $jk = ['Pria', 'Wanita'];
@@ -52,7 +50,7 @@ class UserController extends Controller
             "menu" => "Setting",
             "role" => $role,
             "polis" => $polis,
-            "unitCategories" => $unitCategories,
+            "units" => $units,
             "jk" => $jk,
             "stts" => $stts,
             "specialists" => $specialists,
@@ -78,8 +76,8 @@ class UserController extends Controller
         Storage::put('public/' . $file_name, $ttdImage);
         $data['paraf'] = $file_name;
 
-        if ($data['unit_category_id'] == 'kosong') {
-            $data['unit_category_id'] = null;
+        if ($data['unit_id'] == 'kosong') {
+            $data['unit_id'] = null;
         }
         $data['password'] = Hash::make($request->password);
         if ($data['room_detail_id'] == 'kosong') {
@@ -122,7 +120,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $unitCategories = UnitCategory::all();
+        $units = Unit::all();
         $item = User::find($id);
         $role = Role::all();
         $jk = ['Pria', 'Wanita'];
@@ -137,7 +135,7 @@ class UserController extends Controller
             "item" => $item,
             "role" => $role,
             "status" => $status,
-            "unitCategories" => $unitCategories,
+            "units" => $units,
             "specialists" => $specialists,
             "jk" => $jk,
             "stts" => $stts,
@@ -162,8 +160,8 @@ class UserController extends Controller
         } else {
             $data['password'] = Hash::make($request->password);
         }
-        if ($data['unit_category_id'] == 'kosong') {
-            $data['unit_category_id'] = null;
+        if ($data['unit_id'] == 'kosong') {
+            $data['unit_id'] = null;
         }
         if ($data['room_detail_id'] == 'kosong') {
             $data['room_detail_id'] = null;

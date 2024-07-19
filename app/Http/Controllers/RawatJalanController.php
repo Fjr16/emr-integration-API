@@ -138,32 +138,26 @@ class RawatJalanController extends Controller
         try {
             $this->validate($request, [
                 'status_pelayanan' => 'required',
-                'cara_keluar' => 'required',
-                'keadaan_keluar' => 'required',
             ]);
             $data = $request->all();
+            $data['cara_keluar'] = $request->input('cara_keluar');
+            $data['keadaan_keluar'] = $request->input('keadaan_keluar');
             $data['intruksi'] = $request->input('intruksi_pulang');
             $data['diet'] = $request->input('diet_pasien');
             $data['status'] = $request->status_pelayanan;
             $item = RawatJalanPoliPatient::find($id);
             $item->update($data);
-
-            // if ($item->status == 'FINISHED') {
-                // $queue = Queue::find($item->queue_id);
-                // if ($queue) {
-                //     if ($queue->rajalFarmasiPatient) {
-                //         $itemFarmasi = RajalFarmasiPatient::find($queue->rajalFarmasiPatient->id);
-                //         $itemFarmasi->update([
-                //             'status' => 'WAITING',
-                //         ]);
-                //     } else {
-                //         RajalFarmasiPatient::create([
-                //             'queue_id' => $queue->id,
-                //             'status' => 'WAITING',
-                //         ]);
-                //     }
-                // }
-            // }
+            if ($item->status == 'FINISHED' || $item->status == 'ONGOING') {
+                // melempar data ke farmasi pasien
+                if ($item->queue->medicineReceipt) {
+                    if (!$item->queue->rajalFarmasiPatient) {
+                        RajalFarmasiPatient::create([
+                            'queue_id' => $item->queue->id,
+                            'status' => 'WAITING',
+                        ]);
+                    }
+                }
+            }
             return back()->with([
                 'success' => 'Status Pelayanan Berhasil Disimpan',
                 'btn' => 'finished',

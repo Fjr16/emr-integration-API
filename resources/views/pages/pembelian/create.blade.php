@@ -25,7 +25,11 @@
             <select class="form-select form-select-sm select2" name="unit_id" aria-label="Default select example" required>
               <option selected disabled>Pilih</option>
               @foreach ($units as $unt)
+              @if (old('unit_id', $unitSelectedId) == $unt->id)
+                <option value="{{ $unt->id }}" selected>{{ $unt->name ?? '' }}</option>
+              @else
                 <option value="{{ $unt->id }}">{{ $unt->name ?? '' }}</option>
+              @endif
               @endforeach
             </select>
           </div>

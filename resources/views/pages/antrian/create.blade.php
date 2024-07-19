@@ -13,16 +13,11 @@
 </div>
 @endif
 <div class="d-flex mb-3">
-    @can('tambah antrian')
     <h5 class="align-self-center m-0">Entri Antrian Pasien
         {{-- <span class="text text-primary text-uppercase fw-bold fs-5">Umum</span> --}}
     </h5>
-    @endcan
-    @can('tambah pasien rumah sakit')
     <a href="{{ route('pasien.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Pasien Baru</a>
-    @endcan
 </div>
-@can('tambah antrian')
 <div class="row">
     <div class="col-6">
         <div class="card mb-4">
@@ -184,9 +179,7 @@
         </div>
     </div>
 </div>
-@endcan
 
-@can('daftar antrian')
 <div class="card p-3 mt-5">
     <div class="row">
         <div class="col-md-9">
@@ -208,9 +201,7 @@
         <table class="table">
             <thead>
                 <tr class="text-nowrap bg-dark">
-                    @canany(['perbarui status antrian', 'lihat antrian'])
                     <th class="text-center">Action</th>
-                    @endcanany
                     <th>No Antrian</th>
                     <th>Tgl Berobat</th>
                     <th>Nama</th>
@@ -223,14 +214,10 @@
             <tbody>
                 @foreach ($antrians as $antrian)
                     <tr>
-                        @canany(['perbarui status antrian', 'lihat antrian'])
                         <td class="d-flex">
-                            @can('lihat antrian')
                                 <a class="btn btn-dark btn-sm text-white"
                                     onclick="showAntrian({{ $antrian->id }})">Lihat</a>
-                            @endcan
                         </td>
-                        @endcanany
                         <td>{{ $antrian->no_antrian ?? '' }}</td>
                         <td>{{ \Carbon\Carbon::parse($antrian->tgl_antrian)->format('d-m-Y') ?? '' }}</td>
                         <td>{{ $antrian->patient->name ?? '' }}</td>
@@ -249,7 +236,6 @@
         </table>
     </div>
 </div>
-@endcan
 
 {{-- Store modal --}}
 <div class="modal fade" id="openStoreModal" data-bs-backdrop="static" tabindex="-1">

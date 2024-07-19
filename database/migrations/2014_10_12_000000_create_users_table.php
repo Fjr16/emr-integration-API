@@ -37,13 +37,15 @@ return new class extends Migration
             $table->text('no_rekening')->nullable(); 
             $table->text('catatan')->nullable(); 
             $table->string('staff_id')->nullable();
-            $table->foreignId('unit_category_id')->nullable();
+            $table->foreignId('unit_id')->nullable();
             $table->foreignId('room_detail_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('status')->default('AKTIF');
             $table->boolean('isDokter')->default(false);
             $table->string('paraf')->nullable();
+            $table->string('sip')->nullable();
+            $table->string('kode_dokter_bpjs')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
