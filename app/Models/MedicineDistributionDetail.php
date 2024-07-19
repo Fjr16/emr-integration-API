@@ -12,7 +12,7 @@ class MedicineDistributionDetail extends Model
     protected $fillable = [
         'medicine_distribution_id',
         'medicine_id',
-        'medicine_stok_id',
+        'medicine_stok_id',     //medicine_stok_asal distribusi
         'satuan',
         'jumlah',
     ];

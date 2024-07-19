@@ -306,7 +306,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/farmasi/obat/pembelian/update/{id}', [MedicineTransactionPembelianController::class, 'update'])->name('farmasi/obat/pembelian.update');
     Route::delete('/farmasi/obat/pembelian/destroy/{id}', [MedicineTransactionPembelianController::class, 'destroy'])->name('farmasi/obat/pembelian.destroy');
 
-    // amprahan atau distribusi Obat 
+    // amprahan atau distribusi Obat (DONE, create, store, retur, show, fitur update tidak ada)
     Route::get('/farmasi/obat/amprahan', [MedicineDistributionController::class, 'index'])->name('farmasi/obat/amprahan.index');
     Route::post('/farmasi/obat/amprahan/store', [MedicineDistributionController::class, 'store'])->name('farmasi/obat/amprahan.store');
     Route::get('/farmasi/obat/amprahan/show/{id}', [MedicineDistributionController::class, 'show'])->name('farmasi/obat/amprahan.show');

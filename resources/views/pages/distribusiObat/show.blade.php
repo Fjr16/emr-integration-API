@@ -12,124 +12,77 @@
         {{ session('danger') }}
       </div>
   @endif
-<div class="card p-3 mt-5">
-  
-  <div class="d-flex">
-    <h4 class="align-self-center m-0">DATA DISTRIBUSI OBAT KE UNIT {{ $unit->name ?? '' }}</h4>
-    <a href="{{ route('farmasi/obat/amprahan.create', $unit->id) }}" class="btn btn-dark btn-sm m-0 mx-3">+</a>
+  <div class="card p-3 mt-4 pb-0">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6">
+          <h4>Detail Amprahan Obat</h4>
+        </div>
+        <div class="col-6 text-end">
+          <a href="{{ route('farmasi/obat/amprahan.index') }}" class="btn btn-outline-danger">Kembali</a>
+        </div>
+      </div>
+      <hr class="m-0 mt-2 mb-3">
+      <div class="row">
+        <div class="col-6">
+          <h5 class="mb-2 fw-bold">No. <span class="text-primary">{{ $item->no_distribusi ?? '...' }}</span></h5>
+          <h6 class="mb-1">Diamprah Oleh. <span class="text-dark fw-bold">{{ $item->user->name ?? '...' }}</span></h6>
+          <h6 class="mb-2">Dari <span class="text-dark fw-bold">{{ $item->unitAsal->name ?? '...' }}</span> Ke <span class="text-dark fw-bold">{{ $item->unitTujuan->name ?? '...' }}</span></h6>
+          @if ($item->status == 'SUCCESS')
+            <span class="badge bg-success">SUKSES</span>
+          @elseif ($item->status == 'CANCEL')
+            <span class="badge bg-warning">RETUR</span> 
+          @else
+            <span class="badge bg-danger">{{ $item->status == 'FAILED' ? 'GAGAL' : 'UNKNOWN' }}</span> 
+          @endif
+        </div>
+        <div class="col-6 text-end">
+          <h5 class="mb-1 fw-bold">Tgl. <span class="text-primary">{{ $item->created_at->format('d M Y') }}</span></h5>
+          <h5 class="fw-bold text-uppercase mb-1"></h5>
+          <h1 class="fw-bold"><span class="badge bg-warning">{{ $item->medicineDistributionDetails->count() ?? '' }} <span class="small">Item</span></span></h1>
+        </div>
+      </div>
+    </div>
   </div>
-  <hr class="m-0 mt-2 mb-3">
-  <div class="table-responsive text-nowrap">
-    <table class="table" id="example">
-      <thead>
-        <tr class="text-nowrap bg-dark">
-          <th>Valid</th>
-          <th>No</th>
-          <th>No Distribusi</th>
-          <th>Tanggal Distribusi</th>
-          <th>Kode Obat</th>
-          <th>Nama Obat</th>
-          <th>Harga Satuan</th>
-          <th>Jumlah</th>
-          <th>Satuan</th>
-          <th>Total Harga</th>
-          <th>Nomor Batch</th>
-          <th>Production Date</th>
-          <th>Expire</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($data as $item)
-        <tr>
-          <td><i class='bx bx-check'></i></td>
-          <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
-          <td>{{ $item->no_distribusi ?? '' }}</td>
-          <td>{{ $item->tanggal ?? '' }}</td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->medicine->kode ?? '' }} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->medicine->name ?? '' }} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              Rp. {{ number_format($detail->medicineStok->harga ?? '') }} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->jumlah ?? '' }} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->satuan ?? '' }} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              Rp. {{ number_format($detail->medicineStok->harga*$detail->jumlah) }} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->medicineStok->no_batch ?? ''}} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->medicineStok->production_date ?? ''}} <br>
-            @endforeach
-          </td>
-          <td>
-            @foreach ($item->medicineDistributionDetails as $detail)    
-              {{ $detail->medicineStok->exp_date ?? '' }} <br>
-            @endforeach
-          </td>
-          
-          {{-- <td>
-            @foreach ($item->medicineDistributionRequest->medicineDistributionDetails as $detail)    
-              {{ $detail->medicine->kode ?? '' }}
-              {{ $detail->medicine->name ?? '' }}
-              Rp. {{ number_format($detail->medicineStok->harga ?? '') }}
-              {{ $detail->jumlah ?? '' }}
-              {{ $detail->satuan ?? '' }}
-              Rp. {{ number_format($detail->medicineStok->harga*$detail->jumlah) }}
-              {{ $item->medicineStok->no_batch ?? ''}}
-              {{ $item->medicineStok->production_date ?? ''}}
-              {{ $item->medicineStok->exp_date ?? '' }}
-            @endforeach
-          </td> --}}
-
-          <td>{{ $item->status ?? '' }}</td>
-          <td>
-            <div class="dropdown">
-              <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                  data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-              </button>
-              <div class="dropdown-menu">
-                  <form action="{{ route('farmasi/obat/distribusi.destroy', $item->id) }}" method="POST">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="dropdown-item"
-                          onclick="return confirm('Yakin ingin menghapus data?')"><i
-                              class="bx bx-trash me-1"></i>Hapus</button>
-                  </form>
-              </div>
-          </div>
-          </td>
-          
-        </tr>
-        @endforeach
-        </tbody>
-    </table>
+<div class="card p-3 mt-2">
+  <div class="card-body">
+    <div class="table-responsive text-nowrap">
+      <table class="table" id="example">
+        <thead>
+          <tr class="text-nowrap bg-dark">
+            <th>Nomor Batch</th>
+            <th>Nama Obat</th>
+            <th>Production Date</th>
+            <th>Expire</th>
+            <th>Harga Satuan</th>
+            <th>Jumlah</th>
+            <th>Total Harga</th>
+            {{-- <th>Action</th> --}}
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($item->medicineDistributionDetails as $detail)
+          <tr>
+            <td>{{ $detail->medicineStok->no_batch ?? ''}} <br></td>
+            <td>{{ $detail->medicine->kode ?? '' }} - {{ $detail->medicine->name ?? '' }}</td>
+            <td>{{ $detail->medicineStok->production_date ?? ''}}</td>
+            <td>{{ $detail->medicineStok->exp_date ?? '' }}</td>
+            <td>Rp. {{ number_format($detail->medicineStok->base_harga ?? '') }}</td>
+            <td>{{ ($detail->jumlah ?? '') . ' ' . ($detail->satuan ?? '') }}</td>
+            <td>Rp. {{ number_format($detail->medicineStok->base_harga * $detail->jumlah) }}</td>
+            {{-- <td>
+                    <form action="" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Amprahan Obat ini ?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger"><i class="bx bx-trash me-1"></i>Cancel</button>
+                    </form>
+            </td> --}}
+            
+          </tr>
+          @endforeach
+          </tbody>
+      </table>
+    </div>
   </div>
 </div>
 @endsection

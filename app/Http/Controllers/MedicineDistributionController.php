@@ -4,23 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use App\Models\Medicine;
-use Illuminate\Support\Str;
 use App\Models\MedicineStok;
 use Illuminate\Http\Request;
-use App\Models\MedicineDistribution;
-use App\Models\MedicineDistributionDetail;
-use Illuminate\Support\Facades\Auth;
-use App\Models\MedicineDistributionRequest;
-use App\Models\MedicineDistributionResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\MedicineDistribution;
+use Illuminate\Support\Facades\Auth;
+use App\Models\MedicineDistributionDetail;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MedicineDistributionController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * DONE
      */
     public function index()
     {
@@ -42,10 +38,7 @@ class MedicineDistributionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * DONE
      */
     private function generateAmprahanNumber($current_no)
     {
@@ -187,54 +180,70 @@ class MedicineDistributionController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * DONE
      */
     public function show($id)
     {
-        $unit = Unit::find($id);
-        $data = MedicineDistribution::where('status', 'SELESAI')->where('unit_tujuan_id', $id)->get();
+        $item = MedicineDistribution::find($id);
         return view('pages.distribusiObat.show', [
             'title' => 'Amprahan',
             'menu' => 'Farmasi',
-            'unit' => $unit,
-            'data' => $data,
+            'item' => $item,
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * DONE
+     *Membatalkan Amprahan dan mengembalikan stok ke semula
      */
     public function destroy($id)
     {
-        $distribusi = MedicineDistribution::find($id);
-        $res = MedicineDistributionResponse::find($distribusi->medicine_distribution_response_id);
-        $req = MedicineDistributionRequest::find($res->medicine_distribution_request_id);
+        DB::beginTransaction();
+        $errors = [];
+        try {           
+            $item = MedicineDistribution::findOrFail(decrypt($id));
+            foreach ($item->medicineDistributionDetails as $key => $detail) {
+                $stokAsalAmprah = MedicineStok::findOrFail($detail->medicineStok->id);
+                $stokTujuanAmprah = MedicineStok::where('unit_id', $item->unit_tujuan_id)->where('medicine_id', $detail->medicine->id)->where('no_batch', $detail->medicineStok->no_batch)->firstOrFail();
+                
+                // cek stok yang tersedia dan bandingkan dengan jumlah amprah sebelumnya
+                if ($stokTujuanAmprah->stok < $detail->jumlah) {
+                    $errors[] = 'Stok Obat '. ($detail->medicine->name ?? '...') .'  Pada Unit '. ($item->unitTujuan->name ?? '...') .' Lebih Kecil Daripada Jumlah Amprahan Sebelumnya';
+                    continue;
+                }
 
-        $stokReq = MedicineStok::where('unit_category_id', $req->unit_category_id)->first();
-        $stokRes = MedicineStok::where('unit_category_id', $res->unit_category_id)->first();
-        if($stokReq){
-            $newStokReq = $stokReq->stok - $req->jumlah;
-            $stokReq->update([
-                'stok' => $newStokReq,
-            ]);
-        } if($stokRes){
-            $newStokRes = $stokRes->stok + $req->jumlah;
-            $stokRes->update([
-                'stok' => $newStokRes,
-            ]);
+                // update stok pada unit tujuan amprah
+                $newStokTujuan = $stokTujuanAmprah->stok - $detail->jumlah;
+                $stokTujuanAmprah->update([
+                    'stok' => $newStokTujuan,
+                ]);
+
+                if($stokAsalAmprah){
+                    $newStokAsal = $stokAsalAmprah->stok + $detail->jumlah;
+                    $stokAsalAmprah->update([
+                        'stok' => $newStokAsal,
+                    ]);
+                }
+            }
+
+            if (!empty($errors)) {
+                DB::rollBack();
+                return back()->with('errors', $errors);
+            }
+            DB::commit();
+
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->with('error', 'Data Tidak Ditemukan: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
         }
 
+        $item->update([
+            'status' => 'CANCEL'
+        ]);
         
-        $distribusi->delete();
-        $res->delete();
-        $req->delete();
-        
-        return back()->with('success', 'Berhasil Dihapus');
+        return back()->with('success', 'Retur Berhasil Dilakukan dan Stok Obat Sudah Diperbarui');
     }
 }

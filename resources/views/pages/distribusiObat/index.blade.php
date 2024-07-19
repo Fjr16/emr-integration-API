@@ -165,24 +165,36 @@
               <td>{{ $item->unitTujuan->name ?? '' }}</td>
               <td>{{ $item->created_at->format('d M Y') }}</td>
               <td>{{ $item->user->name ?? '' }}</td>
-              <td>{{ $item->status ?? '' }}</td>
               <td>
-                <div class="btn-group">
-                  <a class="btn btn-primary" href="{{ route('farmasi/obat/amprahan.show', $item->id) }}">Detail</a>
-                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="visually-hidden">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href=""><i class="bx bx-edit me-1"></i>Edit</a></li>
-                    <li>
-                      <form action="{{ route('farmasi/obat/amprahan.destroy', $item->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="dropdown-item"><i class="bx bx-x me-1"></i>Batal</button>
-                    </form>
-                    </li>
-                  </ul>
-                </div>
+                @if ($item->status == 'SUCCESS')
+                    <span class="badge bg-success">SUKSES</span>
+                @elseif ($item->status == 'CANCEL')
+                  <span class="badge bg-warning">RETUR</span> 
+                @else
+                  <span class="badge bg-danger">{{ $item->status == 'FAILED' ? 'GAGAL' : 'UNKNOWN' }}</span> 
+                @endif
+            </td>
+              <td>
+                @if ($item->status != 'SUCCESS')
+                  <a class="btn btn-sm btn-primary" href="{{ route('farmasi/obat/amprahan.show', $item->id) }}">Detail</a>
+                @else    
+                  <div class="btn-group">
+                    <a class="btn btn-sm btn-primary" href="{{ route('farmasi/obat/amprahan.show', $item->id) }}">Detail</a>
+                    <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href=""><i class="bx bxs-edit me-1"></i>Edit</a></li>
+                      <li>
+                        <form action="{{ route('farmasi/obat/amprahan.destroy', encrypt($item->id)) }}" method="POST">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="dropdown-item"><i class="bx bxs-left-arrow me-1"></i>Retur</button>
+                      </form>
+                      </li>
+                    </ul>
+                  </div>
+                @endif
               </td>
             </tr>
           @endforeach
