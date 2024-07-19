@@ -303,6 +303,10 @@
             placeholder : "Pilih Dignosa Sesuai kode ICD 10",
             allowClear : true
         });
+        $('.select2-w-placeholder-stok').select2({
+            placeholder : 'Pilih Stok',
+            allowClear : true
+        });
         $('.select2-w-placeholder-medicine').select2({
             placeholder : "Pilih Obat",
             allowClear : true,

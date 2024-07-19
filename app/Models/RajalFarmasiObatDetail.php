@@ -10,18 +10,21 @@ class RajalFarmasiObatDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rajal_farmasi_obat_invoice_id',
+        'rajal_farmasi_patient_id',
         'medicine_id',
         'medicine_stok_id',
         'unit_id',
-        'harga_satuan',
+        'nama_obat',
+        'aturan_pakai',
         'jumlah',
-        'total_harga',
-        'patient_category_id',
+        'satuan_obat',
+        'harga_satuan',
+        'sub_total',
+        'ditanggung_asuransi',
     ];
 
-    public function rajalFarmasiObatInvoice(){
-        return $this->belongsTo(RajalFarmasiObatInvoice::class);
+    public function rajalFarmasiPatient(){
+        return $this->belongsTo(RajalFarmasiPatient::class);
     }
     public function medicine(){
         return $this->belongsTo(Medicine::class);
@@ -31,8 +34,5 @@ class RajalFarmasiObatDetail extends Model
     }
     public function unit(){
         return $this->belongsTo(Unit::class);
-    }
-    public function patientCategory(){
-        return $this->belongsTo(PatientCategory::class);
     }
 }

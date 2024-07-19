@@ -2,366 +2,400 @@
 
 @section('content')
 
-    @if (session()->has('success'))
-        <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('success') }}
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+        }
+
+        * {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .bg-gray {
+            background-color: #d3d3d3
+        }
+
+        .page {
+            /* height: 210mm; */
+            height: auto;
+            /* width: 297mm; */
+            width: 210mm;
+            min-height: 13.97cm;
+            padding: 15mm;
+            margin: 15mm auto;
+            border: 1px #d3d3d3 solid;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .subpage {
+            padding: 1cm;
+            border: 5px red solid;
+            height: 257mm;
+            outline: 2cm #ffeaea solid;
+        }
+
+        th {
+            font-size: 10pt !important;
+        }
+
+        .borderhr {
+            color: black;
+            background-color: black;
+            border-color: black;
+            height: 5px;
+            opacity: 100;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .compact-table th,
+        .compact-table td {
+            padding: 2px 5px;
+            /* Reduce padding */
+            font-size: 10.5px;
+            /* Smaller font size */
+        }
+
+        .compact-table th {
+            /* white-space: nowrap; */
+            /* Prevent header text from wrapping */
+        }
+
+        @page {
+            size: A4;
+            /* Specify A4 size */
+            margin: 0;
+            margin-top: 10mm;
+            margin-bottom: 10mm;
+        }
+
+        @media print {
+
+            *,
+            *:before,
+            *:after {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+            }
+
+            .page {
+                margin: 15mm;
+                border: initial;
+                border-radius: initial;
+                width: initial;
+                min-height: initial;
+                box-shadow: initial;
+                background: initial;
+                page-break-after: always;
+            }
+        }
+    </style>
+    {{-- Informasi Pasien --}}
+    <div class="card mb-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    <h4 class="mb-1 text-primary d-flex">
+                        {{ $item->queue->patient->name }} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
+                        <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
+                    </h4>
+                    <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>
+                    <h6 class="mb-1">{{ $item->queue->dpjp->roomDetail->name ?? '' }}<h6>
+                    @if ($item->status == 'WAITING')                                    
+                        <span class="badge bg-warning">PERMINTAAN</span>
+                    @elseif ($item->status == 'ONGOING')
+                        <span class="badge bg-info">DITERIMA</span>
+                    @elseif ($item->status == 'FINISHED')
+                        <span class="badge bg-success">SUDAH DIAMBIL</span>
+                    @else
+                        <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                    @endif
+                </div>
+                <div class="col-8 text-end">
+                    <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->queue->no_antrian ?? '' }}</span></p>
+                    <p class="mb-0">Tanggungan : <span class="fw-bold fst-italic">{{ $item->queue->patientCategory->name }}</span></p>
+                    <p class="mb-0">Tgl. Lahir : <span class="fw-bold fst-italic">{{ $item->queue->patient->tanggal_lhr }}</span></p>
+                </div>
+            </div>
         </div>
-    @endif
-    @if (session()->has('error'))
-        <div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
+    </div>
+    {{-- end Informasi Pasien --}}
     <div class="row">
-        @can('daftar resep dokter')
-            <div class="col-sm-7">
-                {{-- <a href="{{ route('clear/farmasi/medicine') }}" class="btn btn-success">Reset Farmasi Gudang</a> --}}
-                {{-- <a href="{{ route('clear/farmasi/rajal') }}" class="btn btn-success">Reset Farmasi Rajal</a> --}}
-                <h6 class="m-0 mb-2">Daftar Resep Dokter</h6>
-                {{-- <table class="table table-bordered w-100">
-        <thead class="bg-dark">
-          <tr class="text-center">
-            <th>Tanggal / Jam</th>
-            <th>Nama Dokter</th>
-            <th>Nama Pasien</th>
-            <th>Daftar Resep</th>
-            <th>Nama Obat</th>
-            <th>Jumlah Obat</th>
-            <th>Aturan Pakai</th>
-            <th>Keterangan</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($item->rawatJalanPatient->rawatJalanPoliPatient->medicineReceipts as $receipt)
-          <tr class="text-center">
-            <td>{{ $receipt->created_at->format('Y-m-d') ?? '' }}</td>
-            <td>{{ $receipt->user->name ?? '' }}</td>
-            <td>{{  $receipt->patient->name ?? '' }}</td>
-            <td>
-              @foreach ($receipt->medicineReceiptDetails as $detail)
-                  {{ $detail->medicine->name ?? '-'}} | {{ $detail->jumlah ?? '-' }} | {{ $detail->aturan_pakai ?? '-' }} | {{ $detail->keterangan ?? '-' }} | {!! $detail->other ?? '' !!} <br>
-              @endforeach
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table> --}}
-
-                <div class="card p-4 rounded-5">
-                    <div class="card-header">
-                        <div class="row justify-content-center">
-                            <div class="col-8 text-center justify-content-center">
-                                <div class="d-flex flex-column">
-                                    <span class="fw-bold fs-5">dr. HAMZAH MUHAMMAD ZEIN, Sp.JP</span>
-                                    <hr class="my-0 border border-dark">
-                                    <span class="fw-bold">SIP : 1155/891/DKK/IV/2022</span>
-                                    <span>Spesialis Jantung</span>
-                                </div>
-                            </div>
-                            <div class="col-12 mt-3">
-                                <div class="d-flex flex-column">
-                                    <span class="fw-bold">Praktek :</span>
-                                    <span class="fw-bold">R.S. Khusus Bedah Ropanasuri</span>
-                                    <span>Jl. Aur No. 8 Padang</span>
-                                    <span>Telp. 31938 - 33854</span>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="border border-dark border-2 opacity-100">
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row ">
-                            <div class="col-6">
-                                <span>Ruangan</span>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        UGD
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Poliklinik
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Ranap
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <span>Tanggal :
-                                    {{ $etc->created_at->format('d-m-Y') ?? 'N/A' }}
-                                </span>
-                                <p class="mb-0">Riwayat Alergi Obat</p>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Tidak
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Ya, Nama Obat ........
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3 mb-5">
-                            @php
-                                function toRoman($number)
-                                {
-                                    $lookup = [
-                                        1000 => 'M',
-                                        900 => 'CM',
-                                        500 => 'D',
-                                        400 => 'CD',
-                                        100 => 'C',
-                                        90 => 'XC',
-                                        50 => 'L',
-                                        40 => 'XL',
-                                        10 => 'X',
-                                        9 => 'IX',
-                                        5 => 'V',
-                                        4 => 'IV',
-                                        1 => 'I',
-                                    ];
-                                    $result = '';
-                                    foreach ($lookup as $value => $symbol) {
-                                        while ($number >= $value) {
-                                            $result .= $symbol;
-                                            $number -= $value;
-                                        }
-                                    }
-                                    return $result;
-                                }
-                            @endphp
-                            @foreach ($item->rawatJalanPatient->rawatJalanPoliPatient->medicineReceipts as $receipt)
-                                @foreach ($receipt->medicineReceiptDetails as $detail)
-                                    <div class="col-12">
-                                        <div class="d-flex flex-row">
-                                            <div class="d-flex align-items-center" style="min-width: 150px"><span
-                                                    class="fw-bold">R / </span>
-                                                {{ $detail->medicine->name ?? '' }}</div>
-                                            <div class="row" style="max-width: 300px">
-                                                <div class="col-3">
-                                                    <span style="font-size:70px" class="fw-light">&int;</span>
-                                                </div>
-                                                <div class="col-7 d-flex align-items-center">
-                                                    <div class="row">
-                                                        <div class="col-12">{{ $detail->aturan_pakai ?? '' }}</div>
-                                                        <div class="col-12">{{ $detail->keterangan ?? '' }}</div>
-                                                        <div class="col-12">{{ $detail->other ?? '' }}</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-2 d-flex align-items-center">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="fw-bold">{{ toRoman($detail->jumlah ?? 0) }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+        <div class="accordion accordion-header-primary" id="form-tambah-obat">
+            <div class="accordion-item card">
+                <h2 class="accordion-header">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#form-tambah-obat-1" aria-expanded="false">
+                    <i class="bx bx-book me-2"></i> Resep Dokter
+                </button>
+                </h2>
+            
+                <div id="form-tambah-obat-1" class="accordion-collapse collapse" data-bs-parent="#form-tambah-obat">
+                <div class="accordion-body" id="form-input">
+                    <div class="page">
+                        <div class="header">
+                            <div class="row justify-content-center">
+                                <div class="col-8 text-center justify-content-center">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-bold fs-5">{{ $item->queue->dpjp->name ?? '....' }}</span>
+                                        <hr class="my-0 border border-dark border-1">
+                                        <span class="fw-bold">SIP : {{ $item->queue->dpjp->sip ?? '....' }}</span>
                                     </div>
-                                @endforeach
-                            @endforeach
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col-12">
-                                <table>
-                                    <tr>
-                                        <td>Nama Pasien</td>
-                                        <td>:</td>
-                                        <td class="ps-2">
-                                            {{ $etc->patient->name ?? '....' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>No Rekam Medis</td>
-                                        <td>:</td>
-                                        <td class="ps-2">
-                                            {{ implode('-', str_split(str_pad($etc->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) ?? '....' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tanggal Lahir Umur</td>
-                                        <td>:</td>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-bold">{{ $item->queue->patient->name ?? '....' }} / {{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) ?? '....' }}</span>
                                         @php
-                                            $tanggalLahir = new DateTime($etc->patient->tanggal_lhr);
+                                            $tanggalLahir = new DateTime($item->queue->patient->tanggal_lhr);
                                             $now = new DateTime();
                                             $ageDiff = $now->diff($tanggalLahir);
                                             $ageString = $ageDiff->format('%y tahun %m bulan');
                                         @endphp
-                                        <td class="ps-2">{{ $tanggalLahir->format('d-m-Y') ?? '....' }}
-                                            <span>({{ $ageString ?? '....' }})</span>
-                                        </td>
-                                        {{-- <td class="ps-2">
-                                            {{ $item->rawatJalanPatient->rawatJalanPoliPatient->medicineReceipts->first()->patient->tanggal_lhr }}
-                                        </td> --}}
-                                    </tr>
-                                    <tr>
-                                        <td>NIK</td>
-                                        <td>:</td>
-                                        <td class="ps-2">
-                                            {{ $etc->patient->nik ?? '....' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Berat Badan</td>
-                                        <td>:</td>
-                                        <td class="ps-2">
-                                            {{ $etc->patient->berat_badan ?? '....' }}
-                                            kg</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nama Dokter</td>
-                                        <td>:</td>
-                                        <td class="ps-2">
-                                            {{ $etc->user->name ?? '' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>No SIP</td>
-                                        <td>:</td>
-                                        <td class="ps-2">{{ $etc->user->sip ?? '' }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        @endcan
-        @can('input resep obat')
-            <div class="col-sm-5">
-                <form action="{{ route('rajal/farmasi/store') }}" method="POST">
-                    @csrf
-                    <h6 class="m-0">Form Input Obat Pasien</h6>
-                    <input type="hidden" name="rajal_farmasi_patient_id" class="form-control" value="{{ $item->id }}"
-                        required />
-                    <input type="hidden" name="patient_id" class="form-control"
-                        value="{{ $item->rawatJalanPatient->queue->patient_id }}" required />
-
-                    <div class="card mt-2">
-                        <div class="card-body">
-                            <div id="input-obat">
-                                <div class="row mt-2">
-                                    <div class="col-10">
-                                        <div class="row">
-                                            {{-- <div class="col-sm-12 mb-2">
-                                                <label for="unit_id" class="form-label">Unit Asal Obat</label>
-                                                <input type="hidden" id="unit_id" name="unit_id"
-                                                    value="{{ auth()->user()->unitCategory->unit->id }}" />
-                                                <input type="text" class="form-control"
-                                                    value="{{ auth()->user()->unitCategory->unit->name ?? 'Unknown' }}"
-                                                    required readonly />
-                                            </div> --}}
-                                            <div class="col-sm-6 mb-2">
-                                                <label for="medicine_id_1" class="form-label">Nama Obat</label>
-                                                <select id="medicine_id_1" name="medicine_id[]"
-                                                    class="form-select form-select-sm medicineId" data-allow-clear="true"
-                                                    onchange="showStok(this)" required>
-                                                    <option selected disabled>Pilih</option>
-                                                    @foreach ($dataObat as $obat)
-                                                        @if (old('medicine_id') == $obat->id)
-                                                            <option value="{{ $obat->id }}" selected>
-                                                                {{ $obat->kode ?? '' }}/{{ $obat->name ?? '' }}</option>
-                                                        @else
-                                                            <option value="{{ $obat->id }}">
-                                                                {{ $obat->kode ?? '' }}/{{ $obat->name ?? '' }}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <label class="form-label" for="basic-default-name">Stock</label>
-                                                <input type="number" id="stok" class="form-control" value=""
-                                                    required disabled />
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <label class="form-label" for="basic-default-name">Jumlah</label>
-                                                <input type="number" class="form-control" name="jumlah[]" id="jumlah"
-                                                    onkeyup="getTotalHarga(this)" required />
-                                            </div>
-                                            <div class="col-sm-4 mb-2">
-                                                <label for="patient_category_id" class="form-label">Tanggungan</label>
-                                                <select id="patient_category_id" name="patient_category_id[]"
-                                                    class="form-select form-select-md" data-allow-clear="true" required
-                                                    onchange="showStok(this)">
-                                                    {{-- <option selected disabled>Pilih</option> --}}
-                                                    @foreach ($tanggungans as $tanggungan)
-                                                        @if (old('patient_category_id') == $tanggungan->id)
-                                                            <option value="{{ $tanggungan->id }}" selected>
-                                                                {{ $tanggungan->name ?? '' }}</option>
-                                                        @else
-                                                            <option value="{{ $tanggungan->id }}">
-                                                                {{ $tanggungan->name ?? '' }}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label class="form-label" for="basic-default-name">Harga Satuan</label>
-                                                <input type="number" id="harga" name="harga[]" class="form-control"
-                                                    value="" required readonly />
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label class="form-label" for="basic-default-name">Total Harga</label>
-                                                <input type="number" name="total_harga[]" id="total_harga"
-                                                    class="form-control" value="" required readonly />
-                                            </div>
-                                        </div>
+                                        <span class="fw-bold">BB : {{ $item->queue->perawatInitialAssesment->bb ?? '...' }} kg</span>
+                                        <span class="fw-bold">Usia : {{ $ageString ?? '....' }}</span>
                                     </div>
-                                    <div class="col-sm-2 d-flex align-self-center">
-                                        <button type="button" class="btn btn-sm btn-dark mx-auto" onclick="tambahInput()"><i
-                                                class="bx bx-plus"></i></button>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-bold">R.S **F**F* **F***F** XYZ</span>
+                                        <span>Jl. Air Tawar Barat Padang</span>
+                                        <span>Telp. ***** - *****</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-end mt-3">
-                                <button class="btn btn-dark btn-sm">Simpan</button>
+                            <hr class="border border-dark border-3 opacity-100">
+                        </div>
+                
+                        <div class="content mt-4">
+                            <div class="row my-5">
+                                @foreach ($item->queue->medicineReceipt->medicineReceiptDetails as $detail)
+                                    <div class="col-12 mt-3">
+                                        <div class="d-flex flex-row">
+                                            <div class="d-flex align-items-center" style="min-width: 150px"><span class="fw-bold fs-4">R
+                                                    / &nbsp;</span>
+                                                <span class="fs-6">{{ $detail->medicine ? ($detail->medicine->name ?? '') : ($detail->nama_obat_custom ?? '') }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center ms-3">
+                                                <span class="fw-bold fs-5">NO.
+                                                    {{ $detail->jumlah ?? 0 }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 ps-4">
+                                        <div class="d-flex flex-row">
+                                            <span class="fs-1">S</span>
+                                            <div class="d-flex flex-row align-items-center ms-1 pt-3">
+                                                <div class="mx-2">{{ $detail->aturan_pakai ?? '' }}</div>
+                                                <div class="">{{ $detail->other ?? '' }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+        </div>
+        @php
+            $totalAkhir = 0;
+        @endphp
+        <div class="card">
+             {{-- alert --}}
+             @if (session()->has('success'))
+             <div class="alert alert-success d-flex" role="alert">
+                 <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+                 <div class="d-flex flex-column ps-1">
+                     <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+                     <span>{{ session('success') }}</span>
+                 </div>
+             </div>
+             @endif
+             @if (session()->has('error'))
+             <div class="alert alert-danger d-flex" role="alert">
+                 <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+                 <div class="d-flex flex-column ps-1">
+                     <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+                     <span>{{ session('error') }}</span>
+                 </div>
+             </div>
+             @endif
+             @if (session()->has('errors'))
+             <div class="alert alert-danger d-flex" role="alert">
+                 <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+                 <div class="d-flex flex-column ps-1">
+                     <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+                     <span>
+                     @foreach (session('errors') as $err)
+                         {{ $err ?? '' }} <br>
+                     @endforeach
+                     </span>
+                 </div>
+             </div>
+             @endif
+             
+            <div id="show-alert" class="row mb-0 mt-0"></div>
+            {{-- end alert --}}
+
+            <div class="card-body mb-0 pb-0">
+                <form action="{{ route('rajal/farmasi/create', encrypt($item->id)) }}" method="GET">
+                    <div class="row mb-0">
+                        <div class="col-sm-11">
+                            <label for="" class="form-label">Unit Asal Obat</label>
+                            <select name="unit_id" id="unit_id" class="form-control select2">
+                                @foreach ($units as $unit)
+                                @if ($unit->id == decrypt($unitIdSelected))
+                                    <option value="{{ $unit->id }}" selected>{{ $unit->name }}</option>
+                                @else
+                                    <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            <label class="col-sm-12 small text-warning fst-italic">*Hati-hati dalam memilih unit asal obat, stok obat dikurangi berdasarkan unit yang dipilih</label>
+                        </div>
+                        <div class="col-sm-1 mt-2">
+                            <label for="" class="form-label"></label>
+                            <button type="submit" class="btn btn-outline-warning">Change</button>
                         </div>
                     </div>
                 </form>
             </div>
-        @endcan
-        @can('daftar resep obat')
-            <div class="col-sm-12 mt-3 mb-3">
-                <table class="table" id="example1">
-                    <thead>
-                        <tr class="text-nowrap bg-dark">
-                            <th>No</th>
-                            <th>No Resep</th>
-                            <th>Nama Petugas</th>
-                            <th>Nama Pasien</th>
-                            <th>Tanggal / Jam</th>
-                            @canany(['edit resep obat', 'print resep obat'])
-                                <th class="text-center">Action</th>
-                            @endcanany
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($item->rajalFarmasiObatInvoices as $invoice)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $invoice->no_faktur ?? '' }}</td>
-                                <td>{{ $invoice->user->name ?? '' }}</td>
-                                <td>{{ $invoice->patient->name ?? '' }}</td>
-                                <td>{{ $invoice->created_at ?? '' }}</td>
-                                @canany(['edit resep obat', 'print resep obat'])
+            <form action="{{ route('rajal/farmasi/store', encrypt($item->id)) }}" method="POST">
+            @csrf
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 text-start">
+                        <button type="button" class="btn btn-sm btn-outline-primary fst-italic" onclick="tambahInput()"><i class="bx bx-plus"></i> Tambah Input</button>
+                    </div>
+                    <div class="col-6 text-end">
+                    <a href="{{ route('rajal/farmasi/index') }}" class="ms-3 btn btn-sm btn-outline-danger"><i class='bx bx-left-arrow me-1'></i>Kembali</a>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-3 mb-4">
+                    <table class="table" id="example1">
+                        <thead>
+                            <tr class="text-nowrap bg-dark">
+                                <th>Action</th>
+                                <th>Nama Obat</th>
+                                <th>Aturan Pakai</th>
+                                <th>Diminta</th>
+                                <th>Diserahkan</th>
+                                <th>Harga Satuan</th>
+                                <th>Sub Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="dinamic-input">
+                            @foreach ($item->queue->medicineReceipt->medicineReceiptDetails as $detail)
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="hapusInput(this)"><i class="bx bx-x"></i></button>
+                                    </td>
+                                    <td style="width:30%">
+                                        <input type="hidden" name="unit_id" value="{{ decrypt($unitIdSelected) }}">
+                                        @if ($detail->medicine_id)  
+                                            <div class="mb-2">
+                                                <select id="medicine_id2" name="medicine_id[]" class="form-select form-select-sm select2 medicine_id" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%" onchange="showStok(this)">
+                                                    <option value="" selected disabled></option>
+                                                    @foreach ($medicines as $obat)
+                                                        @if (old('medicine_id', $detail->medicine->id) == $obat->id)
+                                                            <option value="{{ $obat->id ?? '' }}" data-satuan="{{ $obat->small_unit ?? '' }}" selected >{{ $obat->kode ?? '' }}/{{ $obat->name ?? '' }}</option>
+                                                        @else
+                                                            <option value="{{ $obat->id ?? '' }}" data-satuan="{{ $obat->small_unit ?? '' }}">{{ $obat->kode ?? '...' }} / {{ $obat->name ?? '...' }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div> 
+                                            <div class="">
+                                                <select id="medicine_stok_id" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true) onchange="getHargaSatuan(this)">
+                                                    {{-- diisi dari js --}}
+                                                </select>
+                                            </div>  
+                                            {{-- <input type="hidden" class="form-control" name="nama_obat[]" value="{{ $detail->medicine->name ?? '' }}"> --}}
+                                        @else
+                                            <input type="text" class="form-control" name="nama_obat_custom[]" value="{{ $detail->nama_obat_custom ?? '' }}">
+                                        @endif
+                                    </td>
+                                    <td style="width:20%">
+                                        @if ($detail->medicine_id)
+                                            <input type="text" name="aturan_pakai[]" class="form-control" id="aturan_pakai" placeholder="Aturan Pakai" value="{{ $detail->aturan_pakai ?? '' }}"></input>
+                                        @else
+                                            <input type="text" name="aturan_pakai_custom[]" class="form-control" id="aturan_pakai_custom" placeholder="Aturan Pakai" value="{{ $detail->aturan_pakai ?? '' }}"></input>
+                                        @endif
+                                    </td>
+                                    <td style="width:15%">
+                                        <div class="input-group input-group-merge">
+                                            @if ($detail->medicine_id)
+                                                <input type="number" class="form-control" value="{{ $detail->jumlah }}" disabled/>
+                                            @else
+                                                <input type="number" class="form-control" name="jumlah_custom[]" value="{{ $detail->jumlah ?? 0 }}" readonly/>
+                                                <input type="hidden" name="satuan_obat_custom[]" value="{{ $detail->satuan_obat_custom ?? '' }}"/>
+                                            @endif
+                                            <span class="input-group-text text-dark satuan_obat_1">{{ $detail->medicine_id ? $detail->medicine->small_unit : $detail->satuan_obat_custom }}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width:15%">
+                                        <div class="input-group input-group-merge">
+                                            @if ($detail->medicine_id)
+                                                <input type="number" class="form-control" name="jumlah[]" aria-label="Amount" onkeyup="updateHarga(this)" value="{{ $detail->jumlah ?? '' }}"/>
+                                            @else
+                                                <input type="number" class="form-control" aria-label="Amount" value="0" disabled/>
+                                            @endif
+                                            <span class="input-group-text text-dark satuan_obat_2">{{ $detail->medicine_id ? $detail->medicine->small_unit : '' }}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width:10%">
+                                        <input type="number" class="form-control" name="harga_satuan[]" aria-label="Amount" value="0" {{ $detail->medicine_id ? 'readonly' : 'disabled' }} />
+                                    </td>
+                                    <td style="width:10%">
+                                        <input type="number" name="sub_total[]" value="0" class="form-control" {{ $detail->medicine_id ? 'readonly' : 'disabled' }}>
+                                    </td>
+                                </tr>
+                            @endforeach
+    
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-9">
+                        <span class="fw-bold fst-italic text-uppercase" colspan="3">Total Akhir</span>
+                    </div>
+                    <div class="col-sm-2 text-end pe-4 fw-bold">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text text-dark satuan_obat_2">Rp. </span>
+                            <input type="text" class="form-control text-center" id="total-harga" aria-label="Amount" value="0" readonly/>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="mt-4 me-4 text-end">
+                    <button type="submit" class="btn btn-md btn-primary me-1">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+               {{-- @canany(['edit resep obat', 'print resep obat'])
                                     <td class="text-center">
                                         @can('edit resep obat')
                                             <a href="{{ route('rajal/farmasi/edit', $invoice->id) }}"
@@ -372,136 +406,164 @@
                                                 class="btn btn-sm btn-dark"><i class="bx bx-printer"></i></a>
                                         @endcan
                                     </td>
-                                @endcanany
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endcan
-        @can('perbarui status farmasi rajal')
-            <div class="text-end mt-3">
-                <form action="{{ route('rajal/farmasi/update/status.updateStatus', $item->id) }}" method="POST">
-                    @method('PUT')
-                    @csrf
-                    <button type="submit" class="btn btn-success" name="status" value="SELESAI"
-                        onclick="return confirm('Yakin Ingin Melanjutkan ? ')">Selesai</button>
-                </form>
-            </div>
-        @endcan
+                                @endcanany --}}
+     
     </div>
 
     <script>
-        function enableMedicine(element) {
-            $(element).closest('.row').find('#medicine_id').val('Pilih').trigger('change');
-            $(element).closest('.row').find('#stok').val(null);
-            $(element).closest('.row').find('#jumlah').val(null);
-            $(element).closest('.row').find('#harga').val(null);
-            $(element).closest('.row').find('#total_harga').val(null);
-        }
-
+        // untuk dinamic select stok obat
+        const elementAlert = document.getElementById('show-alert');
+        const dataStok = @json($medicineStokAll);
+        const dataMedicine = @json($medicines);
+        // DONE
         function showStok(element) {
-            var unitId = $('#unit_id').val();
-            var medicine = $(element).closest('.row').find('.medicineId').val();
-            var tanggunganId = $(element).closest('.row').find('#patient_category_id').val();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+            // satuan otomatis
+            const satuanObat1 = element.parentNode.parentNode.parentNode.querySelector('.satuan_obat_1');
+            const satuanObat2 = element.parentNode.parentNode.parentNode.querySelector('.satuan_obat_2');
+            const selectedOption = $(element).select2('data')[0];
+            const satuan = selectedOption.element.dataset.satuan;
+            satuanObat1.textContent = satuan;
+            satuanObat2.textContent = satuan;
+            //end satuan otomatis
+
+            const unitId = $('#unit_id').val();
+            // let selectStok = element.parentNode.parentNode.parentNode.querySelector('input[name="medicine_stok_id[]');
+            let selectStok = element.parentNode.parentNode.querySelector('select[name="medicine_stok_id[]"]');
+            if (!unitId) {
+                alertShow('Error !!', 'Unit Asal Obat Harus Diisi', elementAlert);
+            }
+
+            // get data stok berdasarkan unit_id dan id obat
+            let dataSelectStok = dataStok.filter(function(item){
+                return item.unit_id == unitId && item.medicine.id == element.value;
             });
-            $.ajax({
-                type: 'POST',
-                url: "{{ URL::route('farmasi/obat/get/medicineStok/all.create') }}",
-                data: {
-                    medicine_id: medicine,
-                    unit_id: unitId,
-                    tanggungan_id: tanggunganId,
-                },
-                success: function(data) {
-                    if (data.stok && data.harga) {
-                        $(element).closest('.row').find('#stok').val(data.stok || 0);
-                        $(element).closest('.row').find('#harga').val(data.harga || 0);
-                        $(element).closest('.row').find('#jumlah').val(null);
-                        $(element).closest('.row').find('#total_harga').val(null);
-                    } else {
-                        $(element).closest('.row').find('#stok').val(0);
-                        $(element).closest('.row').find('#harga').val(0);
-                        $(element).closest('.row').find('#jumlah').val(null);
-                        $(element).closest('.row').find('#total_harga').val(null);
-                    }
-                }
-            });
+            
+            if (dataSelectStok.length == 0) {
+                selectStok.disabled = true;
+                $(selectStok).html(`<option value="null" selected>Tidak Ada Stok</option>`);
+            }else{
+                selectStok.disabled = false;
+                let temp = '<option value="" selected disabled></option>';
+                dataSelectStok.forEach(function(item){
+                    temp += `<option value="${item.id}" data-foo="harga satuan : ${item.base_harga ?? '...'} Rp | Stok : ${item.stok ?? '...'} ${item.medicine.small_unit ?? '...'} | Batch : ${item.no_batch ?? '...'} (${item.production_date ?? '...'} / ${item.exp_date ?? '...'})" data-satuan="${item.medicine.small_unit ?? ''}">${item.medicine.kode ?? '...'} / ${item.medicine.name ?? '...'}</option>`;
+                });
+                $(selectStok).html(temp);
+            }
         }
 
-        function getTotalHarga(element) {
-            const jumlah = $(element).val();
-            const harga_satuan = $(element).closest('.row').find('#harga').val();
-
-            const total_harga = jumlah * harga_satuan;
-            $(element).closest('.row').find('#total_harga').val(total_harga);
+        //DONE
+        function getHargaSatuan(element){
+            let Elementharga = element.parentNode.parentNode.parentNode.querySelector('input[name="harga_satuan[]"]');
+            const selectedStok = dataStok.find(function(item){
+                return item.id == element.value;
+            });
+            if (selectedStok) {
+                Elementharga.value = selectedStok.base_harga;
+            }else{
+                Elementharga.value = 0;
+            }
+            updateHarga(element);
         }
 
-        let count = 1;
+        // DONE
+        function updateHarga(element) {
+            let jumlah = element.parentNode.parentNode.parentNode.querySelector('input[name="jumlah[]"]').value;
+            let harga_satuan = element.parentNode.parentNode.parentNode.querySelector('input[name="harga_satuan[]"]').value;
 
+            // menghitung subTotal
+            let subTotalInput = element.parentNode.parentNode.parentNode.querySelector('input[name="sub_total[]"]');
+            const subTotal = jumlah * harga_satuan;
+            subTotalInput.value = subTotal;
+
+            getTotalAkhir();
+        }
+
+        // DONE
+        const ElementTotal = document.getElementById('total-harga');
+        function getTotalAkhir(){
+            let totalAkhir = 0;
+            let subTotalAll = document.querySelectorAll('input[name="sub_total[]"]');
+            subTotalAll.forEach(function(item){
+                totalAkhir += parseInt(item.value);
+            });
+            ElementTotal.value = totalAkhir;
+        }
+
+        let counter = 0;
         function tambahInput() {
-            count++;
-            var rowInput = document.getElementById('input-obat');
-            var data = `
-          <div class="row mt-2">
-            <div class="col-10">
-              <div class="row">
-                <div class="col-sm-6 mb-2">
-                  <label for="medicine_id_${count}" class="form-label">Nama Obat</label>
-                  <select id="medicine_id_${count}" name="medicine_id[]" class="select4 form-select form-select-sm medicineId" data-allow-clear="true" onchange="showStok(this)" required>
-                    <option selected disabled>Pilih</option>
-                    @foreach ($dataObat as $obat)
-                          <option value="{{ $obat->id }}">{{ $obat->kode ?? '' }}/{{ $obat->name ?? '' }}</option>
-                    @endforeach
-                  </select>
-                </div>
-                <div class="col-sm-3">
-                  <label class="form-label" for="basic-default-name">Stock</label>
-                  <input type="number" id="stok" class="form-control" value="" required disabled />
-                </div>
-                <div class="col-sm-3">
-                  <label class="form-label" for="basic-default-name">Jumlah</label>
-                  <input type="number" class="form-control" name="jumlah[]" id="jumlah" onkeyup="getTotalHarga(this)" required />
-                </div>
-                <div class="col-sm-4 mb-2">
-                  <label for="patient_category_id" class="form-label">Tanggungan</label>
-                  <select id="patient_category_id" name="patient_category_id[]" class="form-select form-select-md" data-allow-clear="true" required onchange="showStok(this)">
-                    @foreach ($tanggungans as $tanggungan)
-                        @if (old('patient_category_id') == $tanggungan->id)
-                          <option value="{{ $tanggungan->id }}" selected>{{ $tanggungan->name ?? '' }}</option>
-                        @else
-                          <option value="{{ $tanggungan->id }}">{{ $tanggungan->name ?? '' }}</option>
-                        @endif
-                    @endforeach
-                  </select>
-                </div>
-                <div class="col-sm-4">
-                  <label class="form-label" for="basic-default-name">Harga Satuan</label>
-                  <input type="number" id="harga" name="harga[]" class="form-control" value="" required readonly />
-                </div>
-                <div class="col-sm-4">
-                  <label class="form-label" for="basic-default-name">Total Harga</label>
-                  <input type="number" name="total_harga[]" id="total_harga" class="form-control" value="" required readonly />
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2 d-flex align-self-center">
-              <button type="button" class="btn btn-sm btn-danger mx-auto" onclick="hapusInput(this)"><i class="bx bx-minus"></i></button>
-            </div>
-          </div>
-        `;
+            counter = counter+1;
+            const rowInput = document.querySelector('.dinamic-input');
+            const content = `
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="hapusInput(this)"><i class="bx bx-x"></i></button>
+                </td>
+                <td style="width:30%">
+                    <input type="hidden" name="unit_id" value="{{ $unitIdSelected }}">
+                    <div class="mb-2">
+                        <select id="medicine_id_${counter}" name="medicine_id[]" class="form-select form-select-sm select2 medicine_id" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%" onchange="showStok(this)">
+                            <option value="" selected disabled></option>
+                            @foreach ($medicines as $obat)
+                                <option value="{{ $obat->id ?? '' }}" data-satuan="{{ $obat->small_unit ?? '' }}">{{ $obat->kode ?? '...' }} / {{ $obat->name ?? '...' }}</option>
+                            @endforeach
+                        </select>
+                    </div> 
+                    <div class="">
+                        <select id="medicine_stok_id_${counter}" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true) onchange="getHargaSatuan(this)">
+                            {{-- diisi dari js --}}
+                        </select>
+                    </div>  
+                    <input type="hidden" class="form-control" name="nama_obat[]" value="{{ $detail->medicine->name ?? '' }}">
+                </td>
+                <td style="width:20%">
+                    <input type="text" name="aturan_pakai[]" class="form-control" id="aturan_pakai" placeholder="Aturan Pakai" value=""></input>
+                </td>
+                <td style="width:15%">
+                    <div class="input-group input-group-merge">
+                        <input type="number" class="form-control" value=""/>
+                        <span class="input-group-text text-dark satuan_obat_1"></span>
+                    </div>
+                </td>
+                <td style="width:15%">
+                    <div class="input-group input-group-merge">
+                        <input type="number" class="form-control" name="jumlah[]" aria-label="Amount" onkeyup="updateHarga(this)" value=""/>
+                        <span class="input-group-text text-dark satuan_obat_2"></span>
+                        <input type="hidden" class="form-control" name="satuan_obat[]" value=""/>
+                    </div>
+                </td>
+                <td style="width:10%">
+                    <input type="number" class="form-control" name="harga_satuan[]" aria-label="Amount" value="0" readonly/>
+                </td>
+                <td style="width:10%">
+                    <input type="number" name="sub_total[]" value="" class="form-control" readonly>
+                </td>
+            </tr>`;
 
-            rowInput.insertAdjacentHTML('beforeend', data);
-            $('#medicine_id_' + count).select2();
+            rowInput.insertAdjacentHTML('beforeend', content);
+            $('#medicine_stok_id_' + counter).select2({
+                placeholder : 'Pilih Stok',
+                allowClear : true,
+                matcher: matchCustom,
+                templateResult: formatCustom
+            });
+            $('#medicine_id_' + counter).select2({
+                placeholder : 'Pilih Obat',
+                allowClear : true,
+            });
+        }
+        function hapusInput(element) {
+            var inputToRemove = element.closest('tr');
+            inputToRemove.remove();
         }
 
-        function hapusInput(button) {
-            var inputToRemove = button.parentNode.parentNode;
-            inputToRemove.parentNode.removeChild(inputToRemove);
-        }
+        // DONE
+        // merender stok untuk reload halaman pertamakali
+        document.addEventListener('DOMContentLoaded', function(){
+            const selectMedicineAll = document.querySelectorAll('.medicine_id');
+            selectMedicineAll.forEach(function(element){
+                showStok(element);
+            });
+        });
+
     </script>
 @endsection

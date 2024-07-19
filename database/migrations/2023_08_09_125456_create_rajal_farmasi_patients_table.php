@@ -15,8 +15,12 @@ return new class extends Migration
     {
         Schema::create('rajal_farmasi_patients', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
             $table->foreignId('queue_id')->nullable();
-            $table->enum('status', ['WAITING', 'ONGOING', 'FINISHED'])->nullable();
+            $table->foreignId('patient_id')->nullable();
+            $table->string('no_resep')->nullable();
+            $table->enum('status', ['WAITING', 'ONGOING', 'FINISHED'])->default('WAITING');
+            $table->bigInteger('grand_total')->default(0);
             $table->timestamps();
         });
     }
