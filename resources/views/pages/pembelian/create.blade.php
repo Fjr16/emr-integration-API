@@ -270,15 +270,8 @@
   function getTotal(element) {
     let jml = $(element).closest('.row').find('#jumlah_awal').val();
     const sat_awal = $(element).closest('.row').find('#satuan_awal').val();
-    let equals = 1;
-    if (sat_awal == medium_unit) {
-      equals = medium_to_small;
-    }else if(sat_awal == big_unit){
-      equals = medium_to_small;
-      jml = jml*big_to_medium;
-    }
-    
-    const jumlah = equals * jml;
+    // memanggil function conversionMaster dari main
+    const jumlah = conversionMaster(jml, sat_awal, medium_unit, big_unit, medium_to_small, big_to_medium);;
     $(element).closest('.row').find('#jumlah').val(jumlah);
   }
 

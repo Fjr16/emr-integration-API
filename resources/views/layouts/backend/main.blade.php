@@ -479,8 +479,8 @@
         });
     </script>
 
-    {{-- new alert --}}
     <script>
+        // {{-- new alert --}}
         function alertShow(status, message, elementID){
             const contentAlert = `
             <div class="alert alert-danger d-flex" role="alert">
@@ -498,6 +498,18 @@
             });
         }
 
+        // function untuk melakukan konversi satuan obat
+        function conversionMaster(jmlInput, satuanSelected, satuanSedang, satuanTerbesar, sedangKecil, besarSedang) {
+            let equals = 1;
+            if (satuanSelected == satuanSedang) {
+                equals = sedangKecil;
+            }else if(satuanSelected == satuanTerbesar){
+                equals = sedangKecil;
+                jmlInput = jmlInput*besarSedang;
+            }
+            const jumlahKonversi = equals * jmlInput;
+            return jumlahKonversi;
+        }
     </script>
 
     @yield('script')
