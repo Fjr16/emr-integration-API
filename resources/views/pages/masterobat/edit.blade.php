@@ -98,6 +98,31 @@
                 </div>
               </div>
             </div>
+            <hr>
+            <div class="row mb-4">
+              <h6>Pengaturan Harga</h6>
+              <div class="col-4">
+                <label class="form-label">Harga (Rp)</label>
+                <div class="input-group">
+                  <input type="text" name="base_harga" id="base_harga" value="{{ $item->base_harga ?? 0 }}" class="form-control" placeholder="Harga Obat" />
+                  <span class="input-group-text get-satuan-kecil">/</span>
+                </div>
+              </div>
+              <div class="col-4">
+                <label class="form-label">Disc / Satuan (Rp)</label>
+                <div class="input-group">
+                  <input type="text" name="disc" id="disc" value="{{ $item->disc ?? 0 }}" class="form-control" placeholder="Diskon Obat" />
+                  <span class="input-group-text get-satuan-kecil">/</span>
+                </div>
+              </div>
+              <div class="col-4">
+                <label class="form-label">Pajak / Satuan (Rp)</label>
+                <div class="input-group">
+                  <input type="text" name="pajak" id="pajak" value="{{ $item->pajak ?? 0 }}" class="form-control" placeholder="Pajak Obat" />
+                  <span class="input-group-text get-satuan-kecil">/</span>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-sm-12 text-start">
                   <button type="submit" class="btn btn-sm btn-dark">Simpan</button>

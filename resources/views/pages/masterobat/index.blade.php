@@ -59,30 +59,39 @@
             <div class="text-end mb-3">
               <a href="{{ route('farmasi/obat.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Master Obat</a>
             </div>
-            <div class="table-responsive text-nowrap">
+            <div class="table-responsive">
               <table class="table" id="example">
                 <thead>
-                  <tr class="text-nowrap bg-dark">
+                  <tr class="bg-dark">
                     <th>No</th>
                     <th>Kode</th>
                     <th>Nama</th>
                     <th>Jenis</th>
                     <th>Sediaan</th>
                     <th>Golongan</th>
-                    <th>Satuan</th>
+                    <th>Total Stok RS</th>
+                    <th>Harga /satuan (Rp)</th>
+                    <th>Diskon /satuan (Rp)</th>
+                    <th>Pajak /satuan (Rp)</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   @foreach ($data as $item) 
-                    <tr>
-                      <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
+                    <tr class="{{ $item->medicineStoks->sum('stok') <= 0 ? 'table-danger' : 'text-dark' }}">
+                      <td>{{ $loop->iteration }}</td>
                       <td>{{ $item->kode }}</td>
                       <td>{{ $item->name }}</td>
                       <td>{{ $item->medicineType->name }}</td>
                       <td>{{ $item->medicineForm->name ?? '-' }}</td>
                       <td>{{ $item->medicineCategory->name }}</td>
-                      <td>{{ $item->small_unit ?? '-' }}</td>
+                      <td>
+                        {{ $item->medicineStoks->sum('stok') ?? 'UNKNOWN' }}
+                        <span class="text-secondary text-uppercase">({{ $item->small_unit ?? 'UNKNOWN' }})</span>
+                      </td>
+                      <td>{{ $item->base_harga ?? '0' }}</td>
+                      <td>{{ $item->disc ?? '0' }}</td>
+                      <td>{{ $item->pajak ?? '0' }}</td>
                       <td>
                         <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

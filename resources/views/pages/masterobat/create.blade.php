@@ -99,6 +99,31 @@
                 </div>
               </div>
             </div>
+            <hr>
+            <div class="row mb-4">
+              <h6>Pengaturan Harga</h6>
+              <div class="col-4">
+                <label class="form-label">Harga (Rp)</label>
+                <div class="input-group">
+                  <input type="text" name="base_harga" id="base_harga" value="0" class="form-control" placeholder="Harga Obat" />
+                  <span class="input-group-text get-satuan-kecil">/</span>
+                </div>
+              </div>
+              <div class="col-4">
+                <label class="form-label">Disc / Satuan (Rp)</label>
+                <div class="input-group">
+                  <input type="text" name="disc" id="disc" value="0" class="form-control" placeholder="Diskon Obat" />
+                  <span class="input-group-text get-satuan-kecil">/</span>
+                </div>
+              </div>
+              <div class="col-4">
+                <label class="form-label">Pajak / Satuan (Rp)</label>
+                <div class="input-group">
+                  <input type="text" name="pajak" id="pajak" value="0" class="form-control" placeholder="Pajak Obat" />
+                  <span class="input-group-text get-satuan-kecil">/</span>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-sm-12 text-start">
                   <button type="submit" class="btn btn-md btn-dark">Simpan</button>
@@ -118,6 +143,7 @@
     var satuanTerbesar = document.getElementById('satuan_terbesar');
 
     var setSatuanKecil = document.getElementById('get-satuan-kecil');
+    var setSatuanKecilClass = document.querySelectorAll('.get-satuan-kecil');
     var setSatuanSedang1 = document.getElementById('get-satuan-sedang-awal');
     var setSatuanSedang2 = document.getElementById('get-satuan-sedang-akhir');
     var setSatuanBesar = document.getElementById('get-satuan-besar');
@@ -125,6 +151,9 @@
 
     satuanTerkecil.addEventListener('keyup', function(){
         setSatuanKecil.textContent = satuanTerkecil.value;
+        setSatuanKecilClass.forEach(element => {
+          element.textContent = '/' + satuanTerkecil.value;
+        });
     });
     satuanTerbesar.addEventListener('keyup', function(){
         setSatuanBesar.textContent = '1 ' + satuanTerbesar.value + ' =';

@@ -25,6 +25,9 @@ return new class extends Migration
             $table->string('medium_unit')->nullable();
             $table->integer('medium_to_big')->nullable();
             $table->string('big_unit')->nullable();
+            $table->integer('base_harga')->default(0);
+            $table->integer('disc')->default(0);
+            $table->integer('pajak')->default(0);
             $table->timestamps();
         });
     }

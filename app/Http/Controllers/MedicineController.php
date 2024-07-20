@@ -75,6 +75,12 @@ class MedicineController extends Controller
             'medicine_type_id' => 'required',
             'medicine_category_id' => 'required',
             'small_unit' => 'required',
+        ], [
+            'kode.required' => 'Kode Obat Tidak Boleh Kosong',
+            'name.required' => 'Nama Obat Tidak Boleh Kosong',
+            'medicine_category_id.required' => 'Jenis Obat Tidak Boleh Kosong',
+            'medicine_type_id.required' => 'Golongan Obat Tidak Boleh Kosong',
+            'small_unit.required' => 'Satuan Terkecil Obat Tidak Boleh Kosong',
         ]);
 
         $data = $request->all();
@@ -134,7 +140,14 @@ class MedicineController extends Controller
             'medicine_type_id' => 'required',
             'medicine_category_id' => 'required',
             'small_unit' => 'required',
+        ], [
+            'kode.required' => 'Kode Obat Tidak Boleh Kosong',
+            'name.required' => 'Nama Obat Tidak Boleh Kosong',
+            'medicine_category_id.required' => 'Jenis Obat Tidak Boleh Kosong',
+            'medicine_type_id.required' => 'Golongan Obat Tidak Boleh Kosong',
+            'small_unit.required' => 'Satuan Terkecil Obat Tidak Boleh Kosong',
         ]);
+        
         $item = Medicine::find($id);
         $data = $request->all();
         $item->update($data);

@@ -19,7 +19,10 @@ class Medicine extends Model
         'small_to_medium',
         'medium_unit',
         'medium_to_big',
-        'big_unit'
+        'big_unit',
+        'base_harga',
+        'disc',
+        'pajak',
     ];
 
     public function medicineType(){
