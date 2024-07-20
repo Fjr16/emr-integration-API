@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <h5 class="card-title">Margin Obat % (HPP + margin)</h5>
+                        <h5 class="card-title">Margin Obat %</h5>
                         <div class="col-sm-4">
                             <div class="input-group input-group-merge">
                                 <input type="number" oninput="this.value=this.value.slice(0,3)" name="margin" class="form-control" id="margin" value="{{ $item->margin ?? 0 }}" {{ $item->margin ? '':'disabled' }}/>

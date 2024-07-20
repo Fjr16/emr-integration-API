@@ -20,7 +20,7 @@
         <tr class="text-nowrap bg-dark">
           <th>No</th>
           <th>Nama Penjamin</th>
-          <th>Margin Obat (%)</th>
+          <th>Margin Obat</th>
           <th>Rumus Penjualan Obat</th>
           <th>Action</th>
         </tr>
@@ -30,7 +30,7 @@
           <tr>
             <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
             <td>{{ $item->name }}</td>
-            <td>{{ $item->margin ?? 0 }}</td>
+            <td>{{ $item->margin ?? 0 }} %</td>
             <td>
               {{ '(Harga Awal)'. ($item->include_margin_obt ? ' + (margin)' : '') . ($item->include_pajak_obt ? ' + (pajak)' : '') . ($item->include_disc_obt ? ' - (disc)' : '') }}
             </td>
