@@ -55,7 +55,7 @@
                 <div class="row mb-3">
                   <div class="col-sm-6">
                     <label class="form-label form-label-sm" for="unit_asal_id">Dari Unit</label>
-                    <select class="form-select form-select select2" name="unit_asal_id" id="unit_asal_id" aria-label="Default select example" style="width: 100%">
+                    <select class="form-select form-select select2" name="unit_asal_id" id="unit_asal_id" aria-label="Default select example" style="width: 100%" onchange="refreshStok()">
                       @foreach ($units as $unt)
                           @if (old('unit_asal_id', $unitAsal->id) == $unt->id)
                             <option selected value="{{ $unt->id }}">{{ $unt->name ?? '-' }}</option>
@@ -208,6 +208,12 @@
 const elementAlert = document.getElementById('show-alert');
 const dataStok = @json($medicineStokAll);
 const dataMedicine = @json($medicines);
+function refreshStok(){
+  const selectMedicineAll = document.querySelectorAll('select[name="medicine_id[]"]');
+  selectMedicineAll.forEach(medicine => {
+    generateStokAndConverter(medicine);
+  });
+}
 //generate data stok, satuan terkecil obat, dan generate konverter
 function generateStokAndConverter(element){
     let unitId = document.getElementById('unit_asal_id').value;
