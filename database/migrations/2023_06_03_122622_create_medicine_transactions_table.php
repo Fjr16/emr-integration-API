@@ -18,15 +18,15 @@ return new class extends Migration
             $table->foreignId('invoice_id')->nullable();
             $table->foreignId('unit_id')->nullable();
             $table->foreignId('medicine_id')->nullable();
-            $table->string('jumlah')->nullable();
-            $table->string('satuan')->nullable();
-            $table->string('harga')->nullable();
-            $table->string('total_harga')->nullable();
-            $table->string('no_batch')->nullable();
-            $table->string('production_date')->nullable();
-            $table->string('exp_date')->nullable();
-            $table->string('pajak')->nullable(); //rupiah
-            $table->string('diskon')->nullable(); //rupiah
+            $table->integer('jumlah')->default(0);
+            $table->string('satuan', 50)->nullable();
+            $table->integer('harga')->default(0);
+            $table->integer('total_harga')->default(0);
+            $table->string('no_batch', 100)->nullable();
+            $table->date('production_date')->nullable();
+            $table->date('exp_date')->nullable();
+            $table->integer('pajak')->default(0); //rupiah
+            $table->integer('diskon')->default(0); //rupiah
             $table->timestamps();
         });
     }

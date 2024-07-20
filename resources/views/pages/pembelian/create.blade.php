@@ -2,15 +2,36 @@
 
 @section('content')
 @if (session()->has('success'))
-      <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-        {{ session('success') }}
-      </div>
-  @endif
-  @if (session()->has('error'))
-      <div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-        {{ session('error') }}
-      </div>
-  @endif
+<div class="alert alert-success d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('error'))
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>{{ session('error') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('errors'))
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>
+          @foreach (session('errors') as $err)
+            {{ $err ?? '' }} <br>
+          @endforeach
+        </span>
+    </div>
+</div>
+@endif
 <form method="POST" action="{{ route('farmasi/obat/pembelian.store') }}">
   @csrf
   <div class="card mb-4">
@@ -50,6 +71,12 @@
         <hr>
         {{--  --}}
           <div class="row mb-3 dinamic-input">
+            <div class="col-12 d-flex">
+              <div class="form-check form-check-success text-danger">
+                <input class="form-check-input" type="checkbox" name="isUpdateHarga[]" value="1" id="isUpdateHarga"/>
+                <label class="form-check-label" for="isUpdateHarga">Tandai Jika Anda Ingin Mengupdate Harga Obat Dari Pembelian Ini</label>
+              </div>
+            </div>
             <div class="col-11">
               <div class="row">
                 <div class="col-sm-3">
@@ -100,15 +127,15 @@
                   <input type="date" name="exp_date[]" class="form-control " id="basic-default-name" value="{{ old('exp_date') }}" required />
                 </div>
                 <div class="col-sm-2">
-                  <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak (Rp)</label>
+                  <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak All (Rp)</label>
                     <input type="text" id="pajak" name="pajak[]" class="form-control" id="basic-default-name" />
                 </div>
-                <div class="col-sm-1">
-                  <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (%)</label>
+                {{-- <div class="col-sm-1">
+                  <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc All (%)</label>
                     <input type="text" id="diskon_persen" name="diskon_persen[]" class="form-control" id="basic-default-name" onkeyup="hitungDiskon(this)"/>
-                </div>
-                <div class="col-sm-1">
-                  <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (Rp)</label>
+                </div> --}}
+                <div class="col-sm-2">
+                  <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc All (Rp)</label>
                     <input type="text" id="diskon" name="diskon[]" class="form-control" id="basic-default-name" value="{{ old('diskon', 0) }}" required />
                 </div>
                 <div class="col-sm-2">
@@ -158,12 +185,12 @@
 
 
 <script>
-  function hitungDiskon(element){
-    diskonPersen = $(element).val();
-    totalHarga = $(element).closest('.row').find('#totalHarga').val();
-    konversiPersenToRp = totalHarga * diskonPersen / 100;
-    $(element).closest('.row').find('#diskon').val(konversiPersenToRp);
-  }
+  // function hitungDiskon(element){
+  //   diskonPersen = $(element).val();
+  //   totalHarga = $(element).closest('.row').find('#totalHarga').val();
+  //   konversiPersenToRp = totalHarga * diskonPersen / 100;
+  //   $(element).closest('.row').find('#diskon').val(konversiPersenToRp);
+  // }
   function sumAll(){
     totalKotor = 0;
     totalHargas = document.querySelectorAll('#totalHarga');
@@ -241,13 +268,14 @@
   }
 
   function getTotal(element) {
-    const jml = $(element).closest('.row').find('#jumlah_awal').val();
+    let jml = $(element).closest('.row').find('#jumlah_awal').val();
     const sat_awal = $(element).closest('.row').find('#satuan_awal').val();
     let equals = 1;
     if (sat_awal == medium_unit) {
       equals = medium_to_small;
     }else if(sat_awal == big_unit){
-      equals = big_to_medium;
+      equals = medium_to_small;
+      jml = jml*big_to_medium;
     }
     
     const jumlah = equals * jml;
@@ -270,6 +298,12 @@
     count = count+1;
     var contentToAdd = `
     <hr class="m-0 mt-2 mb-3">
+      <div class="col-12 d-flex">
+        <div class="form-check form-check-success text-danger">
+          <input class="form-check-input" type="checkbox" name="isUpdateHarga[]" value="1" id="isUpdateHarga${count}"/>
+          <label class="form-check-label" for="isUpdateHarga${count}">Tandai Jika Anda Ingin Mengupdate Harga Obat Dari Pembelian Ini</label>
+        </div>
+      </div>
       <div class="col-sm-11">
         <div class="row">
           <div class="col-sm-3">
@@ -319,15 +353,11 @@
                   <input type="date" name="exp_date[]" class="form-control " id="basic-default-name" value="{{ old('exp_date') }}" required />
           </div>
           <div class="col-sm-2">
-            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak (Rp)</label>
+            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak All (Rp)</label>
               <input type="text" id="pajak" name="pajak[]" class="form-control" id="basic-default-name" />
           </div>
-          <div class="col-sm-1">
-                <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (%)</label>
-                <input type="text" id="diskon_persen" name="diskon_persen[]" class="form-control" id="basic-default-name" onkeyup="hitungDiskon(this)"/>
-            </div>
-          <div class="col-sm-1">
-            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (Rp)</label>
+          <div class="col-sm-2">
+            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc All (Rp)</label>
               <input type="text" id="diskon" name="diskon[]" class="form-control" id="basic-default-name" value="{{ old('diskon', 0) }}" required />
           </div>
           <div class="col-sm-2">

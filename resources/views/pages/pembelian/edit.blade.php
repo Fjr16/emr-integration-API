@@ -87,15 +87,11 @@
                       <input type="date" name="exp_date[]" class="form-control " id="basic-default-name" value="{{ old('exp_date', $trans->exp_date) }}" required />
                     </div>
                     <div class="col-sm-2">
-                      <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak (Rp)</label>
+                      <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak All (Rp)</label>
                         <input type="text" id="pajak" name="pajak[]" class="form-control" id="basic-default-name" value="{{ old('pajak', $trans->pajak) }}" />
                     </div>
-                    <div class="col-sm-1">
-                      <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (%)</label>
-                        <input type="text" id="diskon_persen" name="diskon_persen[]" class="form-control" id="basic-default-name" onkeyup="hitungDiskon(this)"/>
-                    </div>
-                    <div class="col-sm-1">
-                      <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (Rp)</label>
+                    <div class="col-sm-2">
+                      <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc All (Rp)</label>
                         <input type="text" id="diskon" name="diskon[]" class="form-control" id="basic-default-name" value="{{ old('diskon', $trans->diskon) }}" required />
                     </div>
                     <div class="col-sm-2">
@@ -307,15 +303,11 @@
                   <input type="date" name="exp_date[]" class="form-control " id="basic-default-name" value="{{ old('exp_date') }}" required />
           </div>
           <div class="col-sm-2">
-            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak (Rp)</label>
+            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Pajak All (Rp)</label>
               <input type="text" id="pajak" name="pajak[]" class="form-control" id="basic-default-name" />
           </div>
           <div class="col-sm-1">
-                <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (%)</label>
-                <input type="text" id="diskon_persen" name="diskon_persen[]" class="form-control" id="basic-default-name" onkeyup="hitungDiskon(this)"/>
-            </div>
-          <div class="col-sm-1">
-            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc (Rp)</label>
+            <label class="row-sm-1 col-form-label form-label-sm" for="basic-default-name">Disc All (Rp)</label>
               <input type="text" id="diskon" name="diskon[]" class="form-control" id="basic-default-name" value="{{ old('diskon', 0) }}" required />
           </div>
           <div class="col-sm-2">
