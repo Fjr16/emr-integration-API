@@ -84,6 +84,21 @@ class RawatJalanFarmasiController extends Controller
         return $stts;
     }
 
+
+    private function sumHargaSatuanObat($patientCategory, $medicine){
+        $margin = 0; $pajak = 0; $disc = 0;
+        if ($patientCategory->include_margin_obt) {
+            $margin = ($medicine->base_harga * ($patientCategory->margin/100));
+        }
+        if ($patientCategory->include_disc_obt) {
+            $disc = $medicine->disc;
+        }
+        if ($patientCategory->include_pajak_obt) {
+            $pajak = $medicine->pajak;
+        }
+        return $hargaJual = $medicine->base_harga + $margin + $pajak - $disc;
+    }
+
     /**
      * DONE
      */
@@ -166,7 +181,14 @@ class RawatJalanFarmasiController extends Controller
                     $errors[] = 'Stok Obat ' . ($medicine->name ?? '...') . ' Tidak Mencukupi, Hanya Tersedia ' .$medicineStok->stok ?? 0;
                     continue;
                 }
-                $subTotal = ($jmlSerah * ($medicineStok->base_harga ?? 0));
+
+                //get darta harga obat plus margin, pajak dan diskon berdasarkan penjamin pasien
+                $patientCategory = $item->queue->patientCategory;                
+                if ($request->ditanggung_asuransi[$index] == false) {
+                    $patientCategory = PatientCategory::where('name', 'Umum')->firstOrFail();
+                }
+                $hargaPenjualanObat = $this->sumHargaSatuanObat($patientCategory, $medicine);
+                $subTotal = ($jmlSerah * ($hargaPenjualanObat ?? 0));
     
                 $itemDetail = RajalFarmasiObatDetail::create([
                     'rajal_farmasi_patient_id' => $item->id ?? null,
@@ -177,9 +199,9 @@ class RawatJalanFarmasiController extends Controller
                     'aturan_pakai' => $request->aturan_pakai[$index],
                     'jumlah' => $jmlSerah,
                     'satuan_obat' => $medicine->small_unit ?? null,
-                    'harga_satuan' => $medicineStok->base_harga ?? 0,
+                    'harga_satuan' => $hargaPenjualanObat ?? 0,
                     'sub_total' => $subTotal,
-                    // 'ditanggung_asuransi' => ,
+                    'ditanggung_asuransi' => $request->ditanggung_asuransi[$index],
                 ]);
                 $grandTotal += $itemDetail->sub_total ?? 0;
             }
@@ -232,7 +254,7 @@ class RawatJalanFarmasiController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('errors', $e->getMessage());
+            return back()->with('error', $e->getMessage());
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             return back()->with('error', 'Data Tidak Ditemukan: ' . $e->getMessage());

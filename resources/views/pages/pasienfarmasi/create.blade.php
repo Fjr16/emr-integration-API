@@ -296,11 +296,14 @@
                         <thead>
                             <tr class="text-nowrap bg-dark">
                                 <th>Action</th>
+                                @if ($item->queue->patientCategory != 'Umum')
+                                <th>Dijamin</th>
+                                @endif
                                 <th>Nama Obat</th>
                                 <th>Aturan Pakai</th>
                                 <th>Diminta</th>
                                 <th>Diserahkan</th>
-                                <th>Harga Satuan</th>
+                                <th>Harga</th>
                                 <th>Sub Total</th>
                             </tr>
                         </thead>
@@ -310,7 +313,15 @@
                                     <td>
                                         <button type="button" class="btn btn-sm btn-danger" onclick="hapusInput(this)"><i class="bx bx-x"></i></button>
                                     </td>
-                                    <td style="width:30%">
+                                    @if ($item->queue->patientCategory != 'Umum')
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" name="include[]" onchange="getHargaSatuan(this)" {{ $detail->medicine_id ? 'checked' : 'disabled' }}>
+                                            <input type="hidden" name="ditanggung_asuransi[]" value="1" {{ $detail->medicine_id ? '' : 'disabled' }}>
+                                        </div>
+                                    </td>
+                                    @endif
+                                    <td style="width:25%">
                                         <input type="hidden" name="unit_id" value="{{ decrypt($unitIdSelected) }}">
                                         @if ($detail->medicine_id)  
                                             <div class="mb-2">
@@ -326,11 +337,10 @@
                                                 </select>
                                             </div> 
                                             <div class="">
-                                                <select id="medicine_stok_id" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true) onchange="getHargaSatuan(this)">
+                                                <select id="medicine_stok_id" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true)>
                                                     {{-- diisi dari js --}}
                                                 </select>
                                             </div>  
-                                            {{-- <input type="hidden" class="form-control" name="nama_obat[]" value="{{ $detail->medicine->name ?? '' }}"> --}}
                                         @else
                                             <input type="text" class="form-control" name="nama_obat_custom[]" value="{{ $detail->nama_obat_custom ?? '' }}">
                                         @endif
@@ -342,7 +352,7 @@
                                             <input type="text" name="aturan_pakai_custom[]" class="form-control" id="aturan_pakai_custom" placeholder="Aturan Pakai" value="{{ $detail->aturan_pakai ?? '' }}"></input>
                                         @endif
                                     </td>
-                                    <td style="width:15%">
+                                    <td style="width:16%">
                                         <div class="input-group input-group-merge">
                                             @if ($detail->medicine_id)
                                                 <input type="number" class="form-control" value="{{ $detail->jumlah }}" disabled/>
@@ -353,7 +363,7 @@
                                             <span class="input-group-text text-dark satuan_obat_1">{{ $detail->medicine_id ? $detail->medicine->small_unit : $detail->satuan_obat_custom }}</span>
                                         </div>
                                     </td>
-                                    <td style="width:15%">
+                                    <td style="width:14%">
                                         <div class="input-group input-group-merge">
                                             @if ($detail->medicine_id)
                                                 <input type="number" class="form-control" name="jumlah[]" aria-label="Amount" onkeyup="updateHarga(this)" value="{{ $detail->jumlah ?? '' }}"/>
@@ -363,10 +373,10 @@
                                             <span class="input-group-text text-dark satuan_obat_2">{{ $detail->medicine_id ? $detail->medicine->small_unit : '' }}</span>
                                         </div>
                                     </td>
-                                    <td style="width:10%">
+                                    <td style="width:12%">
                                         <input type="number" class="form-control" name="harga_satuan[]" aria-label="Amount" value="0" {{ $detail->medicine_id ? 'readonly' : 'disabled' }} />
                                     </td>
-                                    <td style="width:10%">
+                                    <td style="width:13%">
                                         <input type="number" name="sub_total[]" value="0" class="form-control" {{ $detail->medicine_id ? 'readonly' : 'disabled' }}>
                                     </td>
                                 </tr>
@@ -384,7 +394,7 @@
                     <div class="col-sm-2 text-end pe-4 fw-bold">
                         <div class="input-group input-group-merge">
                             <span class="input-group-text text-dark satuan_obat_2">Rp. </span>
-                            <input type="text" class="form-control text-center" id="total-harga" aria-label="Amount" value="0" readonly/>
+                            <input type="text" class="form-control text-center pe-5" id="total-harga" aria-label="Amount" value="0" readonly/>
                         </div>
                     </div>
                 </div>
@@ -415,6 +425,8 @@
         const elementAlert = document.getElementById('show-alert');
         const dataStok = @json($medicineStokAll);
         const dataMedicine = @json($medicines);
+        const patientCategoryId = @json($item->queue->patientCategory->id);
+        const patientCategoryAll = @json($tanggungans);
         // DONE
         function showStok(element) {
             // satuan otomatis
@@ -445,23 +457,41 @@
                 selectStok.disabled = false;
                 let temp = '<option value="" selected disabled></option>';
                 dataSelectStok.forEach(function(item){
-                    temp += `<option value="${item.id}" data-foo="harga satuan : ${item.base_harga ?? '...'} Rp | Stok : ${item.stok ?? '...'} ${item.medicine.small_unit ?? '...'} | Batch : ${item.no_batch ?? '...'} (${item.production_date ?? '...'} / ${item.exp_date ?? '...'})" data-satuan="${item.medicine.small_unit ?? ''}">${item.medicine.kode ?? '...'} / ${item.medicine.name ?? '...'}</option>`;
+                    temp += `<option value="${item.id}" data-foo="harga awal : ${item.medicine.base_harga ?? '...'} Rp | Stok : ${item.stok ?? '...'} ${item.medicine.small_unit ?? '...'} | Batch : ${item.no_batch ?? '...'} (${item.production_date ?? '...'} / ${item.exp_date ?? '...'})" data-satuan="${item.medicine.small_unit ?? ''}">${item.medicine.kode ?? '...'} / ${item.medicine.name ?? '...'}</option>`;
                 });
                 $(selectStok).html(temp);
             }
+
+            // panggil function getHargaSatuan()
+            const elementCheckPenjamin = element.parentNode.parentNode.parentNode.querySelector('input[name="include[]"]');
+            getHargaSatuan(elementCheckPenjamin);
+            
         }
 
         //DONE
         function getHargaSatuan(element){
+            const elementInputTanggungan = element.parentNode.querySelector('input[name="ditanggung_asuransi[]"]');
             let Elementharga = element.parentNode.parentNode.parentNode.querySelector('input[name="harga_satuan[]"]');
-            const selectedStok = dataStok.find(function(item){
-                return item.id == element.value;
-            });
-            if (selectedStok) {
-                Elementharga.value = selectedStok.base_harga;
-            }else{
-                Elementharga.value = 0;
+            const medicineSelectedId = element.parentNode.parentNode.parentNode.querySelector('select[name="medicine_id[]"]').selectedOptions[0].value;
+            let penjaminItem = null;
+            if (element.checked) {
+                penjaminItem = patientCategoryAll.find(function(item){
+                    return item.id == patientCategoryId;
+                });
+                elementInputTanggungan.value = 1;
+            } else {
+                penjaminItem = patientCategoryAll.find(function(item){
+                    return item.name == 'Umum';
+                });
+                elementInputTanggungan.value = 0;
             }
+
+            if (penjaminItem == null) {
+                alertShow('Error !!', 'Terjadi Kesalahan, Penjamin Pasien Tidak Ditemukan', elementAlert);
+            }
+
+            const harga = sumHargaObat(penjaminItem, medicineSelectedId, elementAlert);
+            Elementharga.value = harga;
             updateHarga(element);
         }
 
@@ -498,8 +528,15 @@
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="hapusInput(this)"><i class="bx bx-x"></i></button>
                 </td>
+                @if ($item->queue->patientCategory != 'Umum')
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" name="include[]" checked onchange="getHargaSatuan(this)">
+                            <input type="hidden" name="ditanggung_asuransi[]" value="1">
+                        </div>
+                    </td>
+                @endif
                 <td style="width:30%">
-                    <input type="hidden" name="unit_id" value="{{ $unitIdSelected }}">
                     <div class="mb-2">
                         <select id="medicine_id_${counter}" name="medicine_id[]" class="form-select form-select-sm select2 medicine_id" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%" onchange="showStok(this)">
                             <option value="" selected disabled></option>
@@ -509,7 +546,7 @@
                         </select>
                     </div> 
                     <div class="">
-                        <select id="medicine_stok_id_${counter}" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true) onchange="getHargaSatuan(this)">
+                        <select id="medicine_stok_id_${counter}" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true)>
                             {{-- diisi dari js --}}
                         </select>
                     </div>  
@@ -535,7 +572,7 @@
                     <input type="number" class="form-control" name="harga_satuan[]" aria-label="Amount" value="0" readonly/>
                 </td>
                 <td style="width:10%">
-                    <input type="number" name="sub_total[]" value="" class="form-control" readonly>
+                    <input type="number" name="sub_total[]" value="0" class="form-control" readonly>
                 </td>
             </tr>`;
 

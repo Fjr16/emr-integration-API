@@ -510,6 +510,30 @@
             const jumlahKonversi = equals * jmlInput;
             return jumlahKonversi;
         }
+
+        // function hitung harga obat berdasarkan penjamin pasien
+        function sumHargaObat(penjamin, medicineId, alert){
+            const selectedMedicine = dataMedicine.find(function(item){
+                return item.id == medicineId;
+            });
+
+            if (!selectedMedicine || selectedMedicine.harga === 0) {
+                alertShow('Error !!', 'Obat Tidak Ditemukan atau Harga Obat Belum Diatur, silahkan hubungi admin', alert);
+            }
+
+            let margin = 0, pajak = 0, diskon = 0;
+            if (penjamin.include_margin_obt) {
+                margin = (selectedMedicine.base_harga * (penjamin.margin/100));
+            }
+            if (penjamin.include_disc_obt) {
+                diskon =  selectedMedicine.disc ?? 0;
+            }
+            if (penjamin.include_pajak_obt) {
+                pajak = selectedMedicine.pajak ?? 0;
+            }
+            const harga = (selectedMedicine.base_harga + margin + pajak - diskon);
+            return harga; 
+        }
     </script>
 
     @yield('script')
