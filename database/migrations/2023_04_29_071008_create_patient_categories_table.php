@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->integer('margin');
+            $table->integer('margin')->default(0);
+            $table->boolean('include_pajak_obt')->default(false);
+            $table->boolean('include_disc_obt')->default(false);
+            $table->boolean('include_margin_obt')->default(false);
         });
     }
 

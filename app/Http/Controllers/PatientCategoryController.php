@@ -46,6 +46,9 @@ class PatientCategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['include_pajak_obt'] = $request->include_pajak_obt ?? false;
+        $data['include_disc_obt'] = $request->include_disc_obt ?? false;
+        $data['include_margin_obt'] = $request->include_margin_obt ?? false;
         $item = PatientCategory::create($data);
         $action = Action::all();
         foreach($action as $action){
@@ -84,6 +87,9 @@ class PatientCategoryController extends Controller
     {
         $item = PatientCategory::find($id);
         $data = $request->all();
+        $data['include_pajak_obt'] = $request->include_pajak_obt ?? false;
+        $data['include_disc_obt'] = $request->include_disc_obt ?? false;
+        $data['include_margin_obt'] = $request->include_margin_obt ?? false;
         $item->update($data);
         return redirect()->route('pasien/category')->with('success' , 'SUKSES');
     }

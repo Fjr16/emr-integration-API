@@ -10,6 +10,10 @@ class PatientCategory extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'margin',
+        'include_pajak_obt',
+        'include_disc_obt',
+        'include_margin_obt',
     ];
 
     // public function consultingRates(){

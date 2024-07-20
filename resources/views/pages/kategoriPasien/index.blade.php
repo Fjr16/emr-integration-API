@@ -10,8 +10,8 @@
 <div class="card p-3 mt-5">
   
   <div class="d-flex">
-    <h4 class="align-self-center m-0">Kategori Pasien</h4>
-    <a href="{{ route('pasien/category.create') }}" class="btn btn-success ms-auto btn-sm m-0 mx-3">+ Tambah Kategori</a>
+    <h4 class="align-self-center m-0">Daftar Penjamin Pasien</h4>
+    <a href="{{ route('pasien/category.create') }}" class="btn btn-success ms-auto btn-sm m-0 mx-3">+ Tambah Penjamin</a>
   </div>
   <hr class="m-0 mt-2 mb-3">
   <div class="table-responsive text-nowrap">
@@ -19,8 +19,9 @@
       <thead>
         <tr class="text-nowrap bg-dark">
           <th>No</th>
-          <th>Kategori Pasien</th>
-          <th>Margin (%)</th>
+          <th>Nama Penjamin</th>
+          <th>Margin Obat (%)</th>
+          <th>Rumus Penjualan Obat</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -29,7 +30,10 @@
           <tr>
             <th scope="row" class="text-dark">{{ $loop->iteration }}</th>
             <td>{{ $item->name }}</td>
-            <td>{{ $item->margin ?? '' }}</td>
+            <td>{{ $item->margin ?? 0 }}</td>
+            <td>
+              {{ '(Harga Awal)'. ($item->include_margin_obt ? ' + (margin)' : '') . ($item->include_pajak_obt ? ' + (pajak)' : '') . ($item->include_disc_obt ? ' - (disc)' : '') }}
+            </td>
             <td>
               <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
