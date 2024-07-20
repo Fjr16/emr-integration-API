@@ -271,7 +271,7 @@
     let jml = $(element).closest('.row').find('#jumlah_awal').val();
     const sat_awal = $(element).closest('.row').find('#satuan_awal').val();
     // memanggil function conversionMaster dari main
-    const jumlah = conversionMaster(jml, sat_awal, medium_unit, big_unit, medium_to_small, big_to_medium);;
+    const jumlah = conversionMaster(jml, sat_awal, medium_unit, big_unit, medium_to_small, big_to_medium);
     $(element).closest('.row').find('#jumlah').val(jumlah);
   }
 
