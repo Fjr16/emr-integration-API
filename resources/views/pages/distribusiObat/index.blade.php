@@ -242,30 +242,39 @@ function generateStokAndConverter(element){
       return itm.id == element.value;
     });
     $(element).closest('.dinamic-input').find('.satuan_obat').text(itemMedicine.small_unit);
-    let dataSelectSatuan;
+    let dataSelectSatuan = '';
     if (!itemMedicine.big_unit && !itemMedicine.medium_to_big && !itemMedicine.medium_unit && !itemMedicine.small_to_medium) {
       dataSelectSatuan = '<option value="" selected disabled>Tidak Tersedia</option>';
     }else{
       if (itemMedicine.medium_unit && itemMedicine.small_to_medium) {
-        dataSelectSatuan +=`<option value="${itemMedicine.small_to_medium ?? 0}">${itemMedicine.medium_unit ?? ''}</option>`; 
+        dataSelectSatuan +=`<option value="${itemMedicine.medium_unit ?? ''}">${itemMedicine.medium_unit ?? ''}</option>`; 
       }
       if (itemMedicine.big_unit && itemMedicine.medium_to_big) {
-        dataSelectSatuan +=`<option value="${itemMedicine.medium_to_big ?? 0}">${itemMedicine.big_unit ?? ''}</option>`; 
+        dataSelectSatuan +=`<option value="${itemMedicine.big_unit ?? 0}">${itemMedicine.big_unit ?? ''}</option>`; 
       }
     }
     $(satuanSelect).html(dataSelectSatuan);
 }
 //event ketika select satuan berubah atau jumlah konverter berubah
 function satuanSelectChange(element){
-  const jumlahAwal = element.closest('.dinamic-input').querySelector('input[name="jumlah_awal[]"]');
-  const konvertingRes = jumlahAwal.value * element.value;
-  $(element).closest('.dinamic-input').find('input[name="jumlah[]"]').val(konvertingRes);
+  const selectedMedicineId = element.closest('.dinamic-input').querySelector('select[name="medicine_id[]"]').selectedOptions[0].value;
+  const medicine = dataMedicine.find(function(itm){
+      return itm.id == selectedMedicineId;
+  });
+  const selectedElement = element.selectedOptions[0].value;
+  const jumlahAwal = element.closest('.dinamic-input').querySelector('input[name="jumlah_awal[]"]').value;
+  const konversiRes = conversionMaster(jumlahAwal, selectedElement, medicine.medium_unit, medicine.big_unit, medicine.small_to_medium, medicine.medium_to_big);
+  $(element).closest('.dinamic-input').find('input[name="jumlah[]"]').val(konversiRes);
 }
 
 function satuanInputChange(element){
-  const satuanSelect = element.closest('.dinamic-input').querySelector('select[name="satuan_awal[]"]');
-  const konvertingRes = satuanSelect.value * element.value;
-  $(element).closest('.dinamic-input').find('input[name="jumlah[]"]').val(konvertingRes);
+  const selectedMedicineId = element.closest('.dinamic-input').querySelector('select[name="medicine_id[]"]').selectedOptions[0].value;
+  const medicine = dataMedicine.find(function(itm){
+      return itm.id == selectedMedicineId;
+  });
+  const satuanSelect = element.closest('.dinamic-input').querySelector('select[name="satuan_awal[]"]').value;
+  const konversiRes = conversionMaster(element.value, satuanSelect, medicine.medium_unit, medicine.big_unit, medicine.small_to_medium, medicine.medium_to_big);
+  $(element).closest('.dinamic-input').find('input[name="jumlah[]"]').val(konversiRes);
 }
 
 </script>
