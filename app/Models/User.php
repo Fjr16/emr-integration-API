@@ -115,9 +115,9 @@ class User extends Authenticatable
         return $this->hasMany(LaboratoriumRequest::class);
     }
 
-    public function rajalFarmasiObatInvoices()
+    public function rajalFarmasiPatient()
     {
-        return $this->hasMany(RajalFarmasiObatInvoice::class);
+        return $this->hasMany(RajalFarmasiPatient::class);
     }
     public function kasirPatients()
     {

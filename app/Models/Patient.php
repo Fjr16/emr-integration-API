@@ -106,11 +106,6 @@ class Patient extends Model
     {
         return $this->hasMany(LaboratoriumRequest::class);
     }
-
-    public function rajalFarmasiObatInvoices()
-    {
-        return $this->hasMany(RajalFarmasiObatInvoice::class);
-    }
     public function permintaanLaboratoriumPatologiAnatomikPatient()
     {
         return $this->hasMany(PermintaanLaboratoriumPatologiAnatomikPatient::class);

@@ -27,7 +27,7 @@ class MedicineUsedExport implements FromView,  WithColumnWidths, WithStyles
     public function view(): View
     {
         $item = Patient::find($this->id);
-        $data = $item->rajalFarmasiObatInvoices;
+        $data = $item->rajalFarmasiObatInvoices; //rajalInvoiceObatDigantiMenjadi rajalFarmasiPatient
         return view('pages.laporanAkhirObat.exportExcel', [
             'menu' => 'Laporan',
             'title' => 'Laporan Penggunaan Obat',

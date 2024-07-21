@@ -8,11 +8,27 @@
       </div>
   @endif
 <div class="card p-3 mt-5">
-    <div class="col-md-12">
+  <div class="row">
+    <div class="col-md-8">
         <h4 class="align-self-center m-0">
             Daftar Antrian Kasir
         </h4>
     </div>
+    <div class="col-md-3">
+      <form action="{{ route('rajal/kasir/pembayaran/index') }}" method="GET">
+          <div class="row">
+          <label class="col-form-label col-3"></label>
+          <div class="col-9">
+              <input type="date" id="tanggal" name="filter" value="{{ request('filter', date('Y-m-d')) }}" class="form-control">
+          </div>
+          </div>
+      </div>
+      <div class="col-1">
+          <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+      </form>
+    </div>
+  </div>
   <hr class="m-0 mt-2 mb-3">
   <div class="table-responsive text-nowrap">
     <table id="example" class="table">

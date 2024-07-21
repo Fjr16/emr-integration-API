@@ -85,7 +85,6 @@ Route::get('clear/permission', function () {
 
 // migrate refresh rajal
 Route::get('/rajal/clear/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_09_175345_create_rajal_farmasi_obat_invoices_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_08_09_141259_create_rajal_farmasi_obat_details_table.php');
     Artisan::call('migrate:refresh --path=/database/migrations/2023_08_09_125456_create_rajal_farmasi_patients_table.php');
     // resep dokter

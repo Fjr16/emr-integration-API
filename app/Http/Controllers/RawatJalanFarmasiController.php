@@ -18,7 +18,6 @@ use App\Models\RajalFarmasiPatient;
 use App\Models\RadiologiFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RajalFarmasiObatDetail;
-use App\Models\RajalFarmasiObatInvoice;
 use App\Models\PatientActionReportDetail;
 use App\Models\Queue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -277,7 +276,7 @@ class RawatJalanFarmasiController extends Controller
     }
     public function printKwitansi($id)
     {
-        $item = RajalFarmasiObatInvoice::find($id);
+        $item = RajalFarmasiPatient::find($id);
         return view('pages.surat.kwitansifarmasi', [
             "title" => "Farmasi",
             "menu" => "In Patient",
@@ -302,7 +301,7 @@ class RawatJalanFarmasiController extends Controller
      */
     public function edit($id)
     {
-        $item = RajalFarmasiObatInvoice::find($id);
+        $item = RajalFarmasiPatient::find($id);
 
         $tanggungans = PatientCategory::all();
 
@@ -336,7 +335,7 @@ class RawatJalanFarmasiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $itemInvoice = RajalFarmasiObatInvoice::find($id);
+        $itemInvoice = RajalFarmasiPatient::find($id);
 
         $grandTotal = 0;
         $unit_id = $request->input('unit_id');
@@ -374,7 +373,7 @@ class RawatJalanFarmasiController extends Controller
                     $jumlah = $request->input('jumlah')[$index] - $medicineStok->stok;
 
                     $dataDetail = [
-                        'rajal_farmasi_obat_invoice_id' => $itemInvoice->id,
+                        'rajal_farmasi_patient_id' => $itemInvoice->id,
                         'unit_id' => $unit_id,
                         'patient_category_id' => $tanggunganCat,
                         'medicine_id' => $medicine->id,

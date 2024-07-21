@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\KasirPatient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,11 @@ class KasirController extends Controller
      */
     public function index()
     {
-        $today = date('Y-m-d');
-        $data = KasirPatient::whereDate('created_at', $today)->get();
+        if (request('filter')) {
+            $filter = new DateTime(request('filter'));
+        }
+        $filterDate = $filter ?? now();
+        $data = KasirPatient::whereDate('created_at', $filterDate)->latest()->get();
         return view('pages.pasienPembayaran.index', [
             "title" => "Pembayaran",
             "menu" => "In Patient",
