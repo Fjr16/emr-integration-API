@@ -20,6 +20,10 @@ return new class extends Migration
             $table->text('intruksi')->nullable();
             $table->string('cara_keluar', 50)->nullable();
             $table->string('keadaan_keluar', 50)->nullable();
+            $table->boolean('receipts_ready')->default(false);
+            $table->boolean('actions_ready')->default(false);
+            $table->boolean('radiologies_ready')->default(false);
+            $table->boolean('laboratories_ready')->default(false);
             $table->enum('status', ['WAITING', 'ONGOING', 'FINISHED'])->default('WAITING');
             $table->timestamps();
         });

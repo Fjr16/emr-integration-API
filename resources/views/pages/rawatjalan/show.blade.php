@@ -1171,155 +1171,175 @@
                         </div>
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'resep dokter' ? 'show active' : '' }}" id="navs-justified-resep" role="tabpanel">
-                        <form action="{{ route('rajal/resep/dokter.store', $item->id) }}" method="POST">
-                            @csrf
-                            <div class="row mb-1">
-                                <div class="col-12">
-                                    <label for="medicine_id" class="form-label">Nama Obat</label>
-                                    <select id="medicine_id" name="medicine_id" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%">
-                                        <option value="" selected disabled></option>
-                                        @foreach ($medicines as $obat)
-                                            @if (old('medicine_id') == $obat->medicine->id)
-                                                <option value="{{ $obat->medicine->id }}" selected >{{ $obat->medicine->kode ?? '' }}/{{ $obat->medicine->name ?? '' }}</option>
-                                            @else
-                                                <option value="{{ $obat->medicine->id }}" data-foo="Obat {{ $obat->medicine->medicineType->name ?? '...' }} | {{ $obat->medicine->medicineCategory->name ?? '...' }} | Stok : {{ $obat->stok ?? '...' }} {{ $obat->medicine->small_unit ?? '...' }}" data-satuan="{{ $obat->medicine->small_unit ?? '' }}">{{ $obat->medicine->kode ?? '...' }} / {{ $obat->medicine->name ?? '...' }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-10">
-                                    <input type="text" name="nama_obat_custom" id="medicine_name" class="form-control" placeholder="Input disini untuk obat yang stoknya tidak tersedia / atau obat yang harus dibeli diluar">
-                                </div>
-                                <div class="col-2">
-                                    <input type="text" class="form-control" name="satuan_obat_custom" id="medicine_satuan" placeholder="Satuan Obat">
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-sm-6">
-                                    <label class="form-label" for="basic-default-name">Jumlah</label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="number" class="form-control" name="jumlah" aria-label="Amount" value="1" />
-                                        <span class="input-group-text bg-secondary text-white" id="satuan_jumlah_obat"></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="row mb-1">
-                                        <label class="form-label" for="basic-default-name">Aturan Pakai</label>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-md" data-allow-clear="true" id="interval_medicine">
-                                                <option selected disabled>Pilih</option>
-                                                <option value="1x1/2">1x1/2</option>
-                                                <option value="1x1">1x1</option>
-                                                <option value="2x1/2">2x1/2</option>
-                                                <option value="2x1">2x1</option>
-                                                <option value="3x1/2">3x1/2</option>
-                                                <option value="3x1">3x1</option>
-                                                <option value="4x1/2">4x1/2</option>
-                                                <option value="4x1">4x1</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-md" data-allow-clear="true" id="medium_makan">
-                                                <option selected disabled>Pilih</option>
-                                                <option value="Sendok Makan">Sendok Makan</option>
-                                                <option value="Sendok Teh">Sendok Teh</option>
-                                                <option value="Bungkus">Bungkus</option>
-                                                <option value="Kapsul">Kapsul</option>
-                                                <option value="Kaplet">Kaplet</option>
-                                                <option value="Tablet">Tablet</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-md" data-allow-clear="true" id="waktu_medicine">
-                                                <option selected disabled>Pilih</option>
-                                                <option value="Sebelum Makan">Sebelum Makan</option>
-                                                <option value="Sesudah Makan">Sesudah Makan</option>
-                                                <option value="Saat Makan">Saat Makan</option>
-                                                <option value="Dioleskan">Dioleskan</option>
-                                                <option value="Diteteskan">Diteteskan</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                        <div class="card-body {{ $item->rajalFarmasiPatient ? ($item->rajalFarmasiPatient->status != 'DENIED' ? 'card-block' : '') : '' }}">
+                            <form action="{{ route('rajal/resep/dokter.store', $item->id) }}" method="POST">
+                                @csrf
+                                <div class="row mb-1">
                                     <div class="col-12">
-                                        <input type="text" name="aturan_pakai" id="aturan_pakai" class="form-control" id="aturan_pakai" placeholder="Aturan Pakai"></input>
+                                        <label for="medicine_id" class="form-label">Nama Obat</label>
+                                        <select id="medicine_id" name="medicine_id" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%">
+                                            <option value="" selected disabled></option>
+                                            @foreach ($medicines as $obat)
+                                                @if (old('medicine_id') == $obat->medicine->id)
+                                                    <option value="{{ $obat->medicine->id }}" selected >{{ $obat->medicine->kode ?? '' }}/{{ $obat->medicine->name ?? '' }}</option>
+                                                @else
+                                                    <option value="{{ $obat->medicine->id }}" data-foo="Obat {{ $obat->medicine->medicineType->name ?? '...' }} | {{ $obat->medicine->medicineCategory->name ?? '...' }} | Stok : {{ $obat->stok ?? '...' }} {{ $obat->medicine->small_unit ?? '...' }}" data-satuan="{{ $obat->medicine->small_unit ?? '' }}">{{ $obat->medicine->kode ?? '...' }} / {{ $obat->medicine->name ?? '...' }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 my-4 text-start">
-                                    @if ($item->medicineReceipt)    
-                                    <a href="{{ route('rajal/resep/dokter.show', $item->id) }}" target="blank" class="btn btn-info btn-sm">
-                                        <i class='bx bx-printer'></i>
-                                    </a>
+                                <div class="row mb-4">
+                                    <div class="col-10">
+                                        <input type="text" name="nama_obat_custom" id="medicine_name" class="form-control" placeholder="Input disini untuk obat yang stoknya tidak tersedia / atau obat yang harus dibeli diluar">
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="text" class="form-control" name="satuan_obat_custom" id="medicine_satuan" placeholder="Satuan Obat">
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="basic-default-name">Jumlah</label>
+                                        <div class="input-group input-group-merge">
+                                            <input type="number" class="form-control" name="jumlah" aria-label="Amount" value="1" />
+                                            <span class="input-group-text bg-secondary text-white" id="satuan_jumlah_obat"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mb-1">
+                                            <label class="form-label" for="basic-default-name">Aturan Pakai</label>
+                                            <div class="col-4">
+                                                <select class="form-select form-select-md" data-allow-clear="true" id="interval_medicine">
+                                                    <option selected disabled>Pilih</option>
+                                                    <option value="1x1/2">1x1/2</option>
+                                                    <option value="1x1">1x1</option>
+                                                    <option value="2x1/2">2x1/2</option>
+                                                    <option value="2x1">2x1</option>
+                                                    <option value="3x1/2">3x1/2</option>
+                                                    <option value="3x1">3x1</option>
+                                                    <option value="4x1/2">4x1/2</option>
+                                                    <option value="4x1">4x1</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <select class="form-select form-select-md" data-allow-clear="true" id="medium_makan">
+                                                    <option selected disabled>Pilih</option>
+                                                    <option value="Sendok Makan">Sendok Makan</option>
+                                                    <option value="Sendok Teh">Sendok Teh</option>
+                                                    <option value="Bungkus">Bungkus</option>
+                                                    <option value="Kapsul">Kapsul</option>
+                                                    <option value="Kaplet">Kaplet</option>
+                                                    <option value="Tablet">Tablet</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <select class="form-select form-select-md" data-allow-clear="true" id="waktu_medicine">
+                                                    <option selected disabled>Pilih</option>
+                                                    <option value="Sebelum Makan">Sebelum Makan</option>
+                                                    <option value="Sesudah Makan">Sesudah Makan</option>
+                                                    <option value="Saat Makan">Saat Makan</option>
+                                                    <option value="Dioleskan">Dioleskan</option>
+                                                    <option value="Diteteskan">Diteteskan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <input type="text" name="aturan_pakai" id="aturan_pakai" class="form-control" id="aturan_pakai" placeholder="Aturan Pakai"></input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 my-4 text-start">
+                                        @if ($item->medicineReceipt)    
+                                        <a href="{{ route('rajal/resep/dokter.show', $item->id) }}" target="blank" class="btn btn-info btn-sm">
+                                            <i class='bx bx-printer'></i>
+                                        </a>
+                                        @endif
+                                    </div>
+                                    <div class="col-6 my-4 text-end">
+                                            <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                    </div>
+                                    @if ($item->rajalFarmasiPatient)
+                                        <div class="col-md-12 d-flex">
+                                            <h5 class="fw-bold me-2">Status Resep :</h5>
+                                            <div class="">
+                                                @if ($item->rajalFarmasiPatient->status == 'WAITING')                                    
+                                                    <span class="badge bg-warning">PERMINTAAN</span>
+                                                @elseif ($item->rajalFarmasiPatient->status == 'ONGOING')
+                                                    <span class="badge bg-info">DITERIMA</span>
+                                                @elseif ($item->rajalFarmasiPatient->status == 'FINISHED')
+                                                    <span class="badge bg-success">SUDAH DIAMBIL</span>
+                                                @elseif ($item->rajalFarmasiPatient->status == 'DENIED')
+                                                    <span class="badge bg-danger">DITOLAK / REVISI</span>
+                                                @else
+                                                    <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                                                @endif
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
-                                <div class="col-6 my-4 text-end">
-                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <table class="table">
-                            <thead>
-                                <tr class="text-nowrap bg-dark text-white">
-                                    <th>Action</th>
-                                    <th>Nama Obat</th>
-                                    <th>Aturan Pakai</th>
-                                    <th>Jumlah</th>
-                                    <th>Satuan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($item->medicineReceipt->medicineReceiptDetails ?? [] as $detailResep)     
-                                        <tr>
-                                            <td class="d-flex">
-                                            <form action="{{ route('rajal/resep/dokter.destroy', $detailResep->id) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type = "submit" class="btn btn-danger btn-sm">
-                                                    <i class='bx bx-trash'></i>
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('rajal/resep/dokter.update', $detailResep->id) }}" method="POST">
-                                                @csrf
-                                                @method('PUT') 
-                                                <button class="btn btn-primary btn-sm ms-2" type="submit"><i class='bx bx-up-arrow-alt'></i></button>
-                                            </td>
-                                            @if ($detailResep->medicine_id)    
-                                                <td>
-                                                    {{-- <input type="text" class="form-control" value="{{ $detailResep->medicine->name ?? '' }}" disabled> --}}
-                                                    {{ $detailResep->medicine->name ?? '' }}
+                            </form>
+    
+                            <table class="table">
+                                <thead>
+                                    <tr class="text-nowrap bg-dark text-white">
+                                        <th>Action</th>
+                                        <th>Nama Obat</th>
+                                        <th>Aturan Pakai</th>
+                                        <th>Jumlah</th>
+                                        <th>Satuan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($item->medicineReceipt->medicineReceiptDetails ?? [] as $detailResep)     
+                                            <tr>
+                                                <td class="d-flex">
+                                                <form action="{{ route('rajal/resep/dokter.destroy', $detailResep->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type = "submit" class="btn btn-danger btn-sm">
+                                                        <i class='bx bx-trash'></i>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('rajal/resep/dokter.update', $detailResep->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT') 
+                                                    <button class="btn btn-primary btn-sm ms-2" type="submit"><i class='bx bx-up-arrow-alt'></i></button>
                                                 </td>
-                                                <td>
-                                                    <input type="text" class="form-control form-control-sm" name="aturan_pakai" value="{{ $detailResep->aturan_pakai ?? '' }}">
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
-                                                </td>
-                                                <td>{{ $detailResep->medicine->small_unit ?? '' }}</td>
-                                            @else
-                                                <td>
-                                                    <input type="text" class="form-control form-control-sm" name="nama_obat_custom" value="{{ $detailResep->nama_obat_custom ?? '' }}">
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="aturan_pakai" class="form-control form-control-sm" value="{{ $detailResep->aturan_pakai ?? '' }}">
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="satuan_obat_custom" class="form-control form-control-sm" value="{{ $detailResep->satuan_obat_custom ?? '' }}">
-                                                </td>
-                                            @endif
-                                        </tr>
-                                    </form>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                @if ($detailResep->medicine_id)    
+                                                    <td>
+                                                        {{-- <input type="text" class="form-control" value="{{ $detailResep->medicine->name ?? '' }}" disabled> --}}
+                                                        {{ $detailResep->medicine->name ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-sm" name="aturan_pakai" value="{{ $detailResep->aturan_pakai ?? '' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
+                                                    </td>
+                                                    <td>{{ $detailResep->medicine->small_unit ?? '' }}</td>
+                                                @else
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-sm" name="nama_obat_custom" value="{{ $detailResep->nama_obat_custom ?? '' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="aturan_pakai" class="form-control form-control-sm" value="{{ $detailResep->aturan_pakai ?? '' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $detailResep->jumlah ?? '' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="satuan_obat_custom" class="form-control form-control-sm" value="{{ $detailResep->satuan_obat_custom ?? '' }}">
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        </form>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'tindakan' ? 'show active' : '' }}" id="navs-justified-tindakan" role="tabpanel">
                         <form action="{{ route('rajal/laporan/tindakan.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
@@ -1557,7 +1577,7 @@
                                                     <Label class="form-label">Status Pelayanan</Label>
                                                     <div class="col-md">
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" {{ $item->rawatJalanPoliPatient->status == 'WAITING' ? 'checked' : '' }} onclick="dalamPerawatan(this)"/>
+                                                            <input class="form-check-input" type="radio" name="status_pelayanan" id="belum_dilayani" value="WAITING" {{ $item->rawatJalanPoliPatient->status == 'WAITING' ? 'checked' : '' }} onclick="belumDilayani(this)"/>
                                                             <label class="form-check-label" for="belum_dilayani">Belum Dilayani</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
@@ -1627,13 +1647,38 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12 mt-5 ms-auto">
-                                                <button type="submit" id="btn-finish-pelayanan" class="btn btn-sm btn-primary">Submit</button>
-                                                @if ($item->rawatJalanPoliPatient->status == 'ONGOING' || $item->rawatJalanPoliPatient->status == 'FINISHED')
-                                                    <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
-                                                @endif
-                                            </div>
                                          </div>
+                                         {{-- verifikasi pengiriman data --}}
+                                         <div class="row mb-3 p-4 border">
+                                            <h5>Verifikasi Kesiapan Data Pasien</h5>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="receipts_ready" id="receipts_ready" value="1" onchange="receiptReadyFunc(this)" {{ $item->rawatJalanPoliPatient->receipts_ready ? 'checked' : '' }} style="{{ $item->rawatJalanPoliPatient->receipts_ready ? 'pointer-events : none;' : '' }}"/>
+                                                    <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->receipts_ready ? '' : 'receipts_ready' }}">Data resep obat</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" name="actions_ready" id="actions_ready" value="1" onchange="actionReadyFunc(this)" {{ $item->rawatJalanPoliPatient->actions_ready ? 'checked' : '' }} style="{{ $item->rawatJalanPoliPatient->actions_ready ? 'pointer-events : none;' : '' }}"/>
+                                                    <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->actions_ready ? '' : 'actions_ready' }}">Data tindakan dokter</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="radiologies_ready" id="radiologies_ready" value="1" onchange="radiologiReadyFunc(this)" {{ $item->rawatJalanPoliPatient->radiologies_ready ? 'checked' : '' }} style="{{ $item->rawatJalanPoliPatient->radiologies_ready ? 'pointer-events : none;' : '' }}"/>
+                                                    <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->radiologies_ready ? '' : 'radiologies_ready' }}">Data permintaan pemeriksaan radiologi</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="laboratories_ready" id="laboratories_ready" value="1" onchange="laborReadyFunc(this)" {{ $item->rawatJalanPoliPatient->laboratories_ready ? 'checked' : '' }} style="{{ $item->rawatJalanPoliPatient->laboratories_ready ? 'pointer-events : none;' : '' }}"/>
+                                                    <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->laboratories_ready ? '' : 'laboratories_ready' }}">Data permintaan pemeriksaan laboratorium</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- submit form --}}
+                                        <div class="col-12 mt-5 ms-auto">
+                                            <button type="submit" id="btn-finish-pelayanan" class="btn btn-sm btn-primary">Submit</button>
+                                            @if ($item->rawatJalanPoliPatient->status == 'ONGOING' || $item->rawatJalanPoliPatient->status == 'FINISHED')
+                                                <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
+                                            @endif
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="tab-pane fade {{ session('finished') == 'konsul-internal' ? 'show active' : '' }}" id="list-konsul-internal">
@@ -1680,8 +1725,7 @@
 
 
     {{-- modal --}}
-    <div class="modal fade" id="modalScrollable" tabindex="-1" aria-labelledby="modalScrollableTitle"
-        aria-hidden="true">
+    <div class="modal fade" id="modalScrollable" tabindex="-1" aria-labelledby="modalScrollableTitle" aria-hidden="true">
 
     </div>
 
@@ -1717,9 +1761,31 @@
             }
         });
 
+        // start function untuk status pelayanan
         // untuk event enable dan disable cara keluar dan keadaan keluar
         let caraKeluars = document.querySelectorAll('input[name="cara_keluar"]');
         let keadaanKeluars = document.querySelectorAll('input[name="keadaan_keluar"]');
+        const receiptReady = document.getElementById('receipts_ready');
+        const actionReady = document.getElementById('actions_ready');
+        const laboratoryReady = document.getElementById('laboratories_ready');
+        const radiologyReady = document.getElementById('radiologies_ready');
+        const modal = document.getElementById('modalScrollable');
+        function belumDilayani(element){
+            if (element.checked) {
+                caraKeluars.forEach(function(caraKeluar){
+                    caraKeluar.checked = false;
+                    caraKeluar.disabled = true;
+                });
+                keadaanKeluars.forEach(function(keadaanKeluar){
+                    keadaanKeluar.checked = false;
+                    keadaanKeluar.disabled = true;
+                });
+                receiptReady.disabled = true;
+                actionReady.disabled = true;
+                laboratoryReady.disabled = true;
+                radiologyReady.disabled = true;
+            }
+        }
         function dalamPerawatan(element){
             if (element.checked) {
                 caraKeluars.forEach(function(caraKeluar){
@@ -1730,6 +1796,10 @@
                     keadaanKeluar.checked = false;
                     keadaanKeluar.disabled = true;
                 });
+                receiptReady.disabled = false;
+                actionReady.disabled = false;
+                laboratoryReady.disabled = false;
+                radiologyReady.disabled = false;
             }
         }
         function sudahDilayani(element){
@@ -1741,6 +1811,244 @@
                     keadaanKeluar.disabled = false;
                 });
             }
+            receiptReady.disabled = false;
+            actionReady.disabled = false;
+            laboratoryReady.disabled = false;
+            radiologyReady.disabled = false;
+        }
+        function receiptReadyFunc(element){
+            if (element.checked) { 
+                element.checked = false;
+                modal.innerHTML = `
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalScrollableTitle">Data Resep</h5>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap bg-primary">
+                                    <th>#</th>
+                                    <th>Nama Obat</th>
+                                    <th>Aturan Pakai</th>
+                                    <th>Jumlah</th>
+                                    <th>Satuan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($item->medicineReceipt->medicineReceiptDetails ?? [] as $detailResep)     
+                                    <tr>
+                                        <td>
+                                            {{ $loop->iteration ?? '' }}
+                                        </td>
+                                        @if ($detailResep->medicine_id)    
+                                            <td>
+                                                {{ $detailResep->medicine->name ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{ $detailResep->aturan_pakai ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{ $detailResep->jumlah ?? '' }}
+                                            </td>
+                                            <td>{{ $detailResep->medicine->small_unit ?? '' }}</td>
+                                        @else
+                                            <td>
+                                                {{ $detailResep->nama_obat_custom ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{ $detailResep->aturan_pakai ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{ $detailResep->jumlah ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{ $detailResep->satuan_obat_custom ?? '' }}
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <p class="mt-4 mb-0 text-white text-center fst-italic text-uppercase p-4 bg-warning">
+                        *) Hati-hati dalam mengkonfirmasi data resep obat, setelah dikonfirmasi resep tidak akan bisa diedit kembali kecuali apoteker menolak permintaan resep 
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-primary" value="resep" onclick="hideModalWithConfirm(this.value)">Konfirmasi</button>
+                    </div>
+                    </div>
+                </div>
+                `;
+                $(modal).modal('show');
+            }
+        }
+        function actionReadyFunc(element){
+            if (element.checked) { 
+                element.checked = false;
+                modal.innerHTML = `
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalScrollableTitle">Data Tindakan Medis Pasien</h5>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap bg-primary">
+                                    <th>#</th>
+                                    <th>Nama Tindakan</th>
+                                    <th>Jumlah</th>
+                                    <th>Tarif</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($item->patientActionReport->patientActionReportDetails ?? [] as $detailTindakan)     
+                                    <tr>
+                                        <td>{{ $loop->iteration ?? '' }}</td>
+                                        <td>{{ $detailTindakan->action->name ?? '' }}</td>
+                                        <td>{{ $detailTindakan->jumlah ?? 0 }}</td>
+                                        <td>{{ number_format($detailTindakan->harga_satuan ?? 0) }}</td>
+                                        <td>{{ number_format($detail->sub_total ?? 0) }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr class="fw-bold">
+                                    <td colspan="4" class="text-center">Total Akhir</td>
+                                    <td>{{ number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-4 mb-0 text-white text-center fst-italic text-uppercase p-4 bg-warning">
+                        *) hati-hati dalam mengkonfirmasi data tindakan !!, setelah dikonfirmasi data tindakan akan masuk ke billing pasien dan tidak bisa diedit kembali 
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-primary" value="tindakan" onclick="hideModalWithConfirm(this.value)">Konfirmasi</button>
+                    </div>
+                    </div>
+                </div>
+                `;
+                $(modal).modal('show');
+            }
+        }
+        function radiologiReadyFunc(element){
+            if (element.checked) { 
+                element.checked = false;
+                modal.innerHTML = `
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalScrollableTitle">Data Permintaan Pemeriksaan Radiologi</h5>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap bg-primary">
+                                    <th>#</th>
+                                    <th>Nama Tindakan</th>
+                                    <th>Jumlah</th>
+                                    <th>Tarif</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($item->patientActionReport->patientActionReportDetails ?? [] as $detailTindakan)     
+                                    <tr>
+                                        <td>{{ $loop->iteration ?? '' }}</td>
+                                        <td>{{ $detailTindakan->action->name ?? '' }}</td>
+                                        <td>{{ $detailTindakan->jumlah ?? 0 }}</td>
+                                        <td>{{ number_format($detailTindakan->harga_satuan ?? 0) }}</td>
+                                        <td>{{ number_format($detail->sub_total ?? 0) }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr class="fw-bold">
+                                    <td colspan="4" class="text-center">Total Akhir</td>
+                                    <td>{{ number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-4 mb-0 text-white text-center fst-italic text-uppercase p-4 bg-warning">
+                        *) hati-hati dalam mengkonfirmasi data pemeriksaan radiologi !!! <br>setelah dikonfirmasi data permintaan akan diterima oleh petugas radiologi dan tidak bisa diedit kembali kecuali petugas radiologi menolak permintaan 
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-primary" value="radiologi" onclick="hideModalWithConfirm(this.value)">Konfirmasi</button>
+                    </div>
+                    </div>
+                </div>
+                `;
+                $(modal).modal('show');
+            }
+        }
+        function laborReadyFunc(element){
+            if (element.checked) { 
+                element.checked = false;
+                modal.innerHTML = `
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalScrollableTitle">Data Permintaan Pemeriksaan Laboratorium</h5>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap bg-primary">
+                                    <th>#</th>
+                                    <th>Nama Tindakan</th>
+                                    <th>Jumlah</th>
+                                    <th>Tarif</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($item->patientActionReport->patientActionReportDetails ?? [] as $detailTindakan)     
+                                    <tr>
+                                        <td>{{ $loop->iteration ?? '' }}</td>
+                                        <td>{{ $detailTindakan->action->name ?? '' }}</td>
+                                        <td>{{ $detailTindakan->jumlah ?? 0 }}</td>
+                                        <td>{{ number_format($detailTindakan->harga_satuan ?? 0) }}</td>
+                                        <td>{{ number_format($detail->sub_total ?? 0) }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr class="fw-bold">
+                                    <td colspan="4" class="text-center">Total Akhir</td>
+                                    <td>{{ number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-4 mb-0 text-white text-center fst-italic text-uppercase p-4 bg-warning">
+                        *) hati-hati dalam mengkonfirmasi data pemeriksaan Laboratorium !!! <br>setelah dikonfirmasi data permintaan akan diterima oleh petugas Laboratorium dan tidak bisa diedit kembali kecuali petugas Laboratorium menolak permintaan 
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-primary" value="laboratorium" onclick="hideModalWithConfirm(this.value)">Konfirmasi</button>
+                    </div>
+                    </div>
+                </div>
+                `;
+                $(modal).modal('show');
+            }
+        }
+        // end function untuk status peayanan
+
+        // function untuk menutup modal
+        function hideModalWithConfirm(identifier){
+            if (identifier == 'resep') {
+                receiptReady.checked = true;
+            }else if(identifier == 'tindakan'){
+                actionReady.checked = true;
+            }else if(identifier == 'radiologi'){
+                radiologyReady.checked = true;
+            }else if(identifier == 'laboratorium'){
+                laboratoryReady.checked = true;
+            }
+            $(modal).modal('hide');
         }
 
         function autoFillSOAP(element){
@@ -1921,23 +2229,33 @@
             const checkBelumDilayani = document.querySelector('#belum_dilayani');
             const checkDalamPerawatan = document.querySelector('#dalam_perawatan');
             const checkSudahDilayani = document.querySelector('#sudah_dilayani');
-            if (checkBelumDilayani.checked || checkDalamPerawatan.checked) {
-                caraKeluars.forEach(function(caraKeluar){
-                    caraKeluar.checked = false;
-                    caraKeluar.disabled = true;
-                });
-                keadaanKeluars.forEach(function(keadaanKeluar){
-                    keadaanKeluar.checked = false;
-                    keadaanKeluar.disabled = true;
-                });
+            if (checkBelumDilayani.checked) {
+               belumDilayani(checkBelumDilayani);
+            } else if(checkDalamPerawatan.checked){
+                dalamPerawatan(checkDalamPerawatan);
             } else if(checkSudahDilayani.checked){
-                caraKeluars.forEach(function(caraKeluar){
-                    caraKeluar.disabled = false;
-                });
-                keadaanKeluars.forEach(function(keadaanKeluar){
-                    keadaanKeluar.disabled = false;
-                });
+                sudahDilayani(checkSudahDilayani);
             }
+
+            // start trigger element dengan class card-block
+            $(".card-block").block({ 
+                message:
+                    `<div class="block-message"><h5 class="text-white">{{ $item->rajalFarmasiPatient ? ($item->rajalFarmasiPatient->status == 'WAITING' ? 'Menunggu Konfirmasi Apoteker' : ($item->rajalFarmasiPatient->status == 'ONGOING' ? 'Diterima Oleh Apoteker, Menunggu Penyerahan Obat' : 'Obat Telah Diserahkan Ke Pasien')) : '' }} ....</h5></div>`,
+                css: {
+                    backgroundColor: "transparent",
+                    border:"0",
+                    width:'50%',
+                    height:'100%',
+                    textAlign:'center',
+                    position: 'absolute',
+                    transform: 'translate(50%, 40%)',
+                },
+                overlayCSS: {
+                    backgroundColor: "#000",
+                    opacity: 0.6,
+                },
+            });
+            // end trigger element dengan class card-block
         });
     </script>
     <script>

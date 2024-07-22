@@ -16,6 +16,11 @@ class RawatJalanPoliPatient extends Model
         'cara_keluar',
         'keadaan_keluar',
         'status',
+        // verifikasi kesiapan data
+        'receipts_ready',
+        'actions_ready',
+        'radiologies_ready',
+        'laboratories_ready',
     ];
     
     public function queue(){

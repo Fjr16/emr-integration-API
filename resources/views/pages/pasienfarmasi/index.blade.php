@@ -55,6 +55,8 @@
                 <td class="text-center" style="width: 9%">
                   @if ($item->status == 'FINISHED')
                       <i class='bx bxs-check-circle text-center text-success' style="font-size: 250%"></i>
+                  @elseif($item->status == 'DENIED')
+                      <i class='bx bxs-x-circle text-center text-danger' style="font-size: 250%"></i>
                   @else     
                     <div class="btn-group me-4 dropend">
                         <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -70,7 +72,13 @@
                             <li> <a class="dropdown-item text-danger" href=""><i class="bx bx-x"></i> Batal</a> </li>
                           @else
                             <li> <a class="dropdown-item text-success" href="{{ route('rajal/farmasi/create', encrypt($item->id)) }}"><i class="bx bx-check"></i> Konfirmasi</a> </li>
-                            <li> <a class="dropdown-item text-danger" href=""><i class="bx bx-x"></i> Batal</a> </li>
+                            <li> 
+                              <form action="{{ route('rajal/farmasi/update.status', encrypt($item->id)) }}" method="POST">
+                                @method('PUT')
+                                @csrf
+                                <button class="dropdown-item text-danger" value="DENIED" name="status"><i class="bx bx-x"></i> Tolak / Revisi</button>
+                              </form>
+                            </li>
                           @endif
                         </ul>
                     </div>
@@ -98,6 +106,8 @@
                       <span class="badge bg-info">DITERIMA</span>
                   @elseif ($item->status == 'FINISHED')
                       <span class="badge bg-success">SUDAH DIAMBIL</span>
+                  @elseif ($item->status == 'DENIED')
+                      <span class="badge bg-danger">DITOLAK / REVISI</span>
                   @else
                       <span class="badge bg-success">TIDAK DIKETAHUI</span>
                   @endif

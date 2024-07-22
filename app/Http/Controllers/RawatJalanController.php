@@ -34,16 +34,13 @@ class RawatJalanController extends Controller
         $filterDate = $filter ?? now();
         $routeToFilter = route('rajal/index');
         $user = Auth::user();
-        if ($user->hasRole('Dokter Poli')) {
-            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function ($query) use ($filterDate) {
-                $query->whereDate('created_at', $filterDate);
-            })->whereHas('dpjp', function ($query2) {
-                $query2->where('dokter_id', Auth::user()->id);
+        if ($user->hasRole('Dokter Spesialis')) {
+            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)
+            ->whereHas('dpjp', function ($query2) use ($user) {
+                $query2->where('dokter_id', $user->id);
             })->get();
         } else {
-            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient', function ($query) use ($filterDate) {
-                $query->whereDate('created_at', $filterDate);
-            })->get();
+            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)->get();
         }
         $data = $data->sortBy(function ($queue) {
             $status = $queue->rawatJalanPoliPatient->status ?? '';
@@ -146,13 +143,33 @@ class RawatJalanController extends Controller
             $data['diet'] = $request->input('diet_pasien');
             $data['status'] = $request->status_pelayanan;
             $item = RawatJalanPoliPatient::find($id);
+            //data untuk pengiriman ke farmasi, radiologi, laboratorium, dan tindakan
+            if ($item->queue->dpjp->id == auth()->user()->id) {
+                if($request->receipts_ready && $request->receipts_ready == 1){
+                    $data['receipts_ready'] = true;
+                }
+                if($request->actions_ready && $request->actions_ready == 1){
+                    $data['actions_ready'] = true;
+                }
+                if($request->radiologies_ready && $request->radiologies_ready == 1){
+                    $data['radiologies_ready'] = true;
+                }
+                if($request->radiologies_ready && $request->radiologies_ready == 1){
+                    $data['laboratories_ready'] = true;
+                }
+            }
+            //end
             $item->update($data);
-            if ($item->status == 'FINISHED' || $item->status == 'ONGOING') {
+            if ($item->receipts_ready) {
                 // melempar data ke farmasi pasien
                 if ($item->queue->medicineReceipt) {
                     if (!$item->queue->rajalFarmasiPatient) {
                         RajalFarmasiPatient::create([
                             'queue_id' => $item->queue->id,
+                            'status' => 'WAITING',
+                        ]);
+                    }elseif($item->queue->rajalFarmasiPatient->status == 'DENIED'){
+                        $item->queue->rajalFarmasiPatient()->update([
                             'status' => 'WAITING',
                         ]);
                     }

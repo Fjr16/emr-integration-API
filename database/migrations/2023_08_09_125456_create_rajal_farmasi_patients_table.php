@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable();
             $table->foreignId('queue_id')->nullable();
             $table->foreignId('patient_id')->nullable();
-            $table->string('no_resep')->nullable();
-            $table->enum('status', ['WAITING', 'ONGOING', 'FINISHED'])->default('WAITING');
+            $table->string('no_resep', 50)->nullable();
+            $table->enum('status', ['WAITING', 'ONGOING', 'FINISHED', 'DENIED'])->default('WAITING');
             $table->bigInteger('grand_total')->default(0);
             $table->timestamps();
         });

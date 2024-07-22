@@ -24,7 +24,7 @@ class GetStokController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(Request $request) //untuk margin harga obat
     {
         $stok = MedicineStok::where('medicine_id', $request->medicine_id)->where('unit_id', $request->unit_id)->sum('stok');
         $item = MedicineStok::where('medicine_id', $request->medicine_id)->where('unit_id', $request->unit_id)->where('stok', '>', 0)->orderBy('exp_date', 'asc')->first();

@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\RajalFarmasiObatDetail;
 use App\Models\PatientActionReportDetail;
 use App\Models\Queue;
+use App\Models\RawatJalanPoliPatient;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -408,37 +410,55 @@ class RawatJalanFarmasiController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $item = RajalFarmasiPatient::find($id);
+        try {
+            $this->validate($request, [
+                'status' => 'required|in:DENIED,FINISHED',
+            ],[
+                'status.required' => 'Terjadi Kesalahan, Tidak ada status yang dikirimkan',
+                'status.in' => 'Terjadi Kesalahan, Status Tidak Diketahui',
+            ]);
 
-        if ($item && $item->rajalFarmasiObatDetails->isNotEmpty()) {
-            // check semua data obat dan stok dari permintaan
-            foreach ($item->rajalFarmasiObatDetails as $index => $detail) {
-                if ($detail->medicine_id && $detail->medicine_stok_id) {
-                    if (!$detail->medicineStok || !$detail->medicine) {
-                        return back()->with('error', 'Proses tidak dapat dilanjutkan, karena terdapat data obat atau stok tidak ditemukan');
-                    }
-                }
-            }
-
-            // jika berhasil maka lakukan pengurangan stok
-            foreach ($item->rajalFarmasiObatDetails as $index => $detail) {
-                if ($detail->medicine_id && $detail->medicine_stok_id) {
-                    $medicineStokItem = MedicineStok::find($detail->medicine_stok_id);
-                    $stok = $medicineStokItem->stok - $detail->jumlah ?? 0; 
-                    $medicineStokItem->update([
-                        'stok' => $stok,
-                    ]);
-                }
-            }
-        } else {
-            return back()->with('error', 'Data resep obat belum lengkap, mohon periksa kembali resep obat yang dikirimkan');
+            $item = RajalFarmasiPatient::findOrFail(decrypt($id));
+            $poli = RawatJalanPoliPatient::where('queue_id', $item->queue->id)->firstOrFail();
+            $item->update([
+                'status' => $request->status,
+            ]);
+            $poli->update([
+                'receipts_ready' => false,
+            ]);
+        } catch (ValidationException $th) {
+            return back()->with('error', $th->getMessage());
+        } catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        } catch (ModelNotFoundException $m){
+            return back()->with('error', 'Data Tidak Ditemukan: ' . $m->getMessage());
         }
 
-        $item->update([
-            'status' => 'FINISHED',
-        ]);
+        // if ($item && $item->rajalFarmasiObatDetails->isNotEmpty()) {
+        //     // check semua data obat dan stok dari permintaan
+        //     foreach ($item->rajalFarmasiObatDetails as $index => $detail) {
+        //         if ($detail->medicine_id && $detail->medicine_stok_id) {
+        //             if (!$detail->medicineStok || !$detail->medicine) {
+        //                 return back()->with('error', 'Proses tidak dapat dilanjutkan, karena terdapat data obat atau stok tidak ditemukan');
+        //             }
+        //         }
+        //     }
 
-        return redirect()->route('rajal/farmasi/index')->with('success', 'Status Berhasil Diperbarui, dan Stok Telah dikurangi !!');
+        //     // jika berhasil maka lakukan pengurangan stok
+        //     foreach ($item->rajalFarmasiObatDetails as $index => $detail) {
+        //         if ($detail->medicine_id && $detail->medicine_stok_id) {
+        //             $medicineStokItem = MedicineStok::find($detail->medicine_stok_id);
+        //             $stok = $medicineStokItem->stok - $detail->jumlah ?? 0; 
+        //             $medicineStokItem->update([
+        //                 'stok' => $stok,
+        //             ]);
+        //         }
+        //     }
+        // } else {
+        //     return back()->with('error', 'Data resep obat belum lengkap, mohon periksa kembali resep obat yang dikirimkan');
+        // }
+
+        return back()->with('success', 'Status Berhasil Diperbarui');
     }
 
     // menambahkan penjualan ke billing
