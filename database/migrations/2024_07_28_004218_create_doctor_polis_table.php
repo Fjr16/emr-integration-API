@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('doctors_schedules', function (Blueprint $table) {
+        Schema::create('doctor_polis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_poli_id')->nullable();
-            $table->string('day', 10)->nullable();
-            $table->time('start_at')->nullable();
-            $table->time('ends_at')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('poliklinik_id')->nullable();
+            $table->integer('tarif')->default(0);
+            $table->boolean('isActive')->default(true);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doctors_schedules');
+        Schema::dropIfExists('doctor_polis');
     }
 };

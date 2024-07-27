@@ -293,11 +293,6 @@
                         <div>Poliklinik</div>
                     </a>
                     <ul class="menu-sub">
-                            <li class="menu-item {{ $title == 'Jadwal Dokter' ? 'active' : '' }}">
-                                <a href="{{ route('dokter/jadwal.index') }}" class="menu-link">
-                                    <div>Edit Jadwal Dokter Poli</div>
-                                </a>
-                            </li>
                             <li class="menu-item {{ $title == 'Informasi Jadwal Dokter' ? 'active' : '' }}">
                                 <a href="{{ route('dokter/jadwal.all') }}" class="menu-link">
                                     <div>Info Jadwal Poli</div>

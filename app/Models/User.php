@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     protected $with = [
         'roomDetail',
-        'doctorSchedules',
+        // 'doctorSchedules',
     ];
 
     /**
@@ -94,10 +94,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Specialist::class, 'user_specialists');
     }
 
-    public function doctorSchedules()
-    {
-        return $this->hasMany(DoctorsSchedule::class);
-    }
+    // public function doctorSchedules()
+    // {
+    //     return $this->hasMany(DoctorsSchedule::class);
+    // }
     public function rmeCppts()
     {
         return $this->hasMany(RmeCppt::class);

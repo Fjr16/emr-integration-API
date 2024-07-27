@@ -29,74 +29,76 @@
         </tr>
       </thead>
       <tbody>
-        @foreach ($room->roomDetails as $item)
-        <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>{{ $item->name }}</td>
-          <td>
-             @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Senin' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
+        @foreach ($polikliniks as $poli)     
+          {{-- @foreach ($poli->doctorPolis as $item) --}}
+          <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $poli->name ?? '' }}</td>
+            <td>
+                @foreach ($poli->doctorPolis as $polidokter)
+                  @foreach ($polidokter->doctorSchedules as $dctr)
+                    @if ($dctr->day == 'Senin' && $dctr->start_at !== null)
+                      {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                    @endif
+                  @endforeach
+                @endforeach
+            </td>
+            <td>
+              @foreach ($poli->doctorPolis as $polidokter)
+                @foreach ($polidokter->doctorSchedules as $dctr)
+                  @if ($dctr->day == 'Selasa' && $dctr->start_at !== null)
+                    {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                  @endif
+                @endforeach
               @endforeach
-             @endforeach
-          </td>
-          <td>
-            @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Selasa' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
+            </td>
+            <td>
+              @foreach ($poli->doctorPolis as $polidokter)
+                @foreach ($polidokter->doctorSchedules as $dctr)
+                  @if ($dctr->day == 'Rabu' && $dctr->start_at !== null)
+                    {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                  @endif
+                @endforeach
               @endforeach
-             @endforeach
-          </td>
-          <td>
-            @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Rabu' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
+            </td>
+            <td>
+              @foreach ($poli->doctorPolis as $polidokter)
+                @foreach ($polidokter->doctorSchedules as $dctr)
+                  @if ($dctr->day == 'Kamis' && $dctr->start_at !== null)
+                    {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                  @endif
+                @endforeach
               @endforeach
-             @endforeach
-          </td>
-          <td>
-            @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Kamis' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
+            </td>
+            <td>
+              @foreach ($poli->doctorPolis as $polidokter)
+                @foreach ($polidokter->doctorSchedules as $dctr)
+                  @if ($dctr->day == 'Jumat' && $dctr->start_at !== null)
+                    {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                  @endif
+                @endforeach
               @endforeach
-             @endforeach
-          </td>
-          <td>
-            @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Jumat' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
+            </td>
+            <td>
+              @foreach ($poli->doctorPolis as $polidokter)
+                @foreach ($polidokter->doctorSchedules as $dctr)
+                  @if ($dctr->day == 'Sabtu' && $dctr->start_at !== null)
+                    {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                  @endif
+                @endforeach
               @endforeach
-             @endforeach
-          </td>
-          <td>
-            @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Sabtu' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
+            </td>
+            <td>
+              @foreach ($poli->doctorPolis as $polidokter)
+                @foreach ($polidokter->doctorSchedules as $dctr)
+                  @if ($dctr->day == 'Minggu' && $dctr->start_at !== null)
+                    {{ $polidokter->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
+                  @endif
+                @endforeach
               @endforeach
-             @endforeach
-          </td>
-          <td>
-            @foreach ($item->users as $user)
-              @foreach ($user->doctorSchedules as $dctr)
-                @if ($dctr->day == 'Minggu' && $dctr->start_at !== null)
-                  {{ $dctr->user->name }} | Jam {{ $dctr->start_at }} - {{ $dctr->ends_at }}<br>
-                @endif
-              @endforeach
-             @endforeach
-          </td>
-        </tr>    
+            </td>
+          </tr>    
+          {{-- @endforeach --}}
         @endforeach
       </tbody>
     </table>

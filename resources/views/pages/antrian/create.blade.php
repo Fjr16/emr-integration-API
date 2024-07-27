@@ -138,18 +138,34 @@
                 </div>
                 <div class="mb-3" id="diagnosa">
                 </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
                     <select class="form-control select2 doctor_id" id="doctor_id" name="doctor_id" required>
                         <option value="" selected>Pilih</option>
                         @foreach ($doctors as $doctor)
-                            @if (old('doctor_id') == $doctor->id)
-                                <option value="{{ $doctor->id }}" selected>
-                                    {{ $doctor->roomDetail->name ?? '' }} /
-                                    {{ $doctor->name ?? '' }}</option>
+                            @if (old('doctor_id') == $doctor->user->id)
+                                <option value="{{ $doctor->user->id }}" selected>
+                                    {{ $doctor->poli->name ?? '' }} /
+                                    {{ $doctor->user->name ?? '' }}</option>
                             @else
-                                <option value="{{ $doctor->id }}">{{ $doctor->roomDetail->name ?? '' }} /
-                                    {{ $doctor->name ?? '' }}</option>
+                                <option value="{{ $doctor->user->id }}">{{ $doctor->poli->name ?? '' }} /
+                                    {{ $doctor->user->name ?? '' }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div> --}}
+                <div class="mb-3">
+                    <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
+                    <select class="form-control select2 doctor_schedule_id" id="doctor_schedule_id" name="doctor_schedule_id" required>
+                        <option value="" selected>Pilih</option>
+                        @foreach ($doctorSchedules as $jadwal)
+                            @if (old('doctor_schedule_id') == $jadwal->id)
+                                <option value="{{ $jadwal->id }}" selected>
+                                    {{ $jadwal->poli->name ?? '' }} /
+                                    {{ $jadwal->user->name ?? '' }}</option>
+                            @else
+                                <option value="{{ $jadwal->id }}">{{ $jadwal->poli->name ?? '' }} /
+                                    {{ $jadwal->user->name ?? '' }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -311,7 +327,7 @@
                 type: 'get',
                 url: "{{ route('antrian.edit', '') }}" + "/" + id,
                 data: {
-                    doctor_id: $('#doctor_id').val(),
+                    doctor_schedule_id: $('#doctor_schedule_id').val(),
                     tgl_antrian: $('#tanggal_antrian').val(),
                     no_rujukan: $('#no_rujukan').val(),
                     last_diagnostic: $('#last_diagnostic').val(),
@@ -336,11 +352,11 @@
     $(document).ready(function() {
         var table = $('#tableJadwal tbody');
 
-        $('#doctor_id').on('change', function() {
-            var dokterID = $(this).val();
-            if (dokterID) {
+        $('#doctor_schedule_id').on('change', function() {
+            var dokterScheduleID = $(this).val();
+            if (dokterScheduleID) {
                 $.ajax({
-                    url: '/antrian/jadwalDokter/' + dokterID,
+                    url: '/antrian/jadwalDokter/' + dokterScheduleID,
                     type: "GET",
                     data: {
                         "_token": "{{ csrf_token() }}"

@@ -68,11 +68,9 @@
             </div>
         </div>
         {{--  --}}
-        <hr class="my-4">
         <div class="row mb-2 dinamic-input">
-        <h6 class="fw-bold">Jadwal Praktek</h6>
-        <div class="col-sm-4">
-            <label for="exampleFormControlSelect1" class="form-label">Dokter</label>
+        <div class="col-sm-7">
+            <label for="exampleFormControlSelect1" class="form-label">Dokter Praktek</label>
             <select class="form-select form-select-sm select2"
                 aria-label="Default select example" name="user_id[]" @required(true)>
                 <option selected disabled>Pilih</option>
@@ -85,26 +83,14 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-4">
             <label class="form-label" for="tarif">Tarif</label>
             <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" value="{{ old('tarif.' . 0) }}" required />
         </div>
-        <div class="col-sm-2">
-            <label class="form-label" for="hari">Hari</label>
-            <input type="text" name="day[]" class="form-control" id="hari" placeholder="Hari Praktek" value="{{ old('day.' . 0) }}" required />
-        </div>
-        <div class="col-sm-3">
-            <label class="form-label" for="jam_praktek">Jam Praktek</label>
-            <div class="input-group">
-                <input type="time" class="form-control" id="start_at" name="start_at[]" value="{{ old('start_at.' . 0) }}" required/>
-                <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                <input type="time" class="form-control" id="ends_at" name="ends_at[]" value="{{ old('ends_at.' . 0) }}" required/>
-            </div>
-        </div>
         <div class="col-sm-1">
             <div class="input-group mt-3 pt-3">
-                <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
+                <button type="button" class="btn btn-md btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
+                <button type="button" class="btn btn-md btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
             </div>
         </div>
         </div>
@@ -112,7 +98,7 @@
         @if (session('_old_input'))
         @foreach (collect(old('user_id'))->skip(1) as $key => $userId)    
             <div class="row mb-2 dinamic-input">
-                <div class="col-sm-4">
+                <div class="col-sm-7">
                     <select class="form-select form-select-sm select2" aria-label="Default select example" name="user_id[{{ $key }}]" @required(true)>
                         <option selected disabled>Pilih</option>
                         @foreach ($data as $item)
@@ -124,18 +110,8 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <input type="number" name="tarif[{{ $key }}]" class="form-control" id="tarif{{ $key }}" placeholder="0" value="{{ old('tarif.' . $key) }}" required />
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" placeholder="Hari Praktek" value="{{ old('day.' . $key) }}" required />
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <input type="time" class="form-control" id="start_at{{ $key }}" name="start_at[{{ $key }}]" value="{{ old('start_at.' . $key) }}" required/>
-                        <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                        <input type="time" class="form-control" id="ends_at" name="ends_at[{{ $key }}]" value="{{ old('ends_at.' . $key) }}" required/>
-                    </div>
                 </div>
                 <div class="col-sm-1">
                     <div class="input-group pt-1">
@@ -162,7 +138,7 @@
     function addContent(element){
         counter = counter+1;
         var content = `
-            <div class="col-sm-4">
+            <div class="col-sm-7">
                 <select class="form-select form-select-sm" aria-label="Default select example" name="user_id[]" id="user_id_${counter}" @required(true)>
                     <option selected disabled>Pilih</option>
                     @foreach ($data as $item)
@@ -174,18 +150,8 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-4">
                 <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" required />
-            </div>
-            <div class="col-sm-2">
-                <input type="text" name="day[]" class="form-control" id="hari" placeholder="Hari Praktek" required />
-            </div>
-            <div class="col-sm-3">
-                <div class="input-group">
-                    <input type="time" class="form-control" id="start_at" name="start_at[]" required/>
-                    <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                    <input type="time" class="form-control" id="ends_at" name="ends_at[]" required/>
-                </div>
             </div>
             <div class="col-sm-1">
                 <div class="input-group pt-1">

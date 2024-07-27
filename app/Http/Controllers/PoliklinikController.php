@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PoliklinikStoreRequest;
 use App\Http\Requests\PoliklinikUpdateRequest;
+use App\Models\DoctorPoli;
 use App\Models\DoctorsSchedule;
 use App\Models\Poliklinik;
 use App\Models\User;
@@ -15,11 +16,19 @@ class PoliklinikController extends Controller
 {
     public function index()
     {
+        if (session()->has('navPoli')) {
+            session(['navPoli' => session('navPoli')]);
+        }else{
+            session(['navPoli' => 'poliklinik']);
+        }
+
         $data = Poliklinik::where('isActive', true)->get();
+        $dataPoliDokter = DoctorPoli::where('isActive', true)->get();
         return view('pages.poli.index', [
             "title" => "Poliklinik",
             "menu" => "Setting",
-            "data" => $data
+            "data" => $data,
+            "dataPoliDokter" => $dataPoliDokter,
         ]);
     }
     public function create()
@@ -47,28 +56,13 @@ class PoliklinikController extends Controller
 
             $dokterIds = $request->input('user_id', []);
             $tarifs = $request->input('tarif', []);
-            $days = $request->input('day', []);
-            $startAts = $request->input('start_at', []);
-            $endsAts = $request->input('ends_at', []);
 
             foreach ($dokterIds as $key => $dokterId) {
-                // untuk check ada atau tidak jadwal yang bentrok di poli yang sama, dengan hari, jam mulai hingga jam selesai yang sama
-                $checkAnotherSameItem = DoctorsSchedule::where('poliklinik_id', $newPoli->id)
-                                                    ->where('day', $days[$key])
-                                                    ->where('start_at', $startAts[$key])
-                                                    ->where('ends_at', $endsAts[$key])
-                                                    ->exists();
-                if ($checkAnotherSameItem) {
-                    $errors[] = 'Data Baris ke {' . $key+1 . '} Bentrok dengan Jadwal Dokter Lain Pada Poli '.$newPoli->name;
-                }
 
-                DoctorsSchedule::create([
+                DoctorPoli::create([
                     'user_id' => $dokterId,
                     'poliklinik_id' => $newPoli->id,
                     'tarif' => $tarifs[$key],
-                    'day' => $days[$key],
-                    'start_at' => $startAts[$key],
-                    'ends_at' => $endsAts[$key],
                 ]);
             }
             if (!empty($errors)) {
@@ -100,6 +94,7 @@ class PoliklinikController extends Controller
 
     public function update(PoliklinikUpdateRequest $request, $id)
     {
+        dd($request->all());
         DB::beginTransaction();
         try {
             $errors = [];
@@ -111,32 +106,16 @@ class PoliklinikController extends Controller
             ]; 
 
             $item->update($dataPoli);
-            $item->jadwalDokter()->delete();
+            // $item->doctorPolis()->delete();
 
             $dokterIds = $request->input('user_id', []);
             $tarifs = $request->input('tarif', []);
-            $days = $request->input('day', []);
-            $startAts = $request->input('start_at', []);
-            $endsAts = $request->input('ends_at', []);
 
             foreach ($dokterIds as $key => $dokterId) {
-                // untuk check ada atau tidak jadwal yang bentrok di poli yang sama, dengan hari, jam mulai hingga jam selesai yang sama
-                $checkAnotherSameItem = DoctorsSchedule::where('poliklinik_id', $item->id)
-                                                    ->where('day', $days[$key])
-                                                    ->where('start_at', $startAts[$key])
-                                                    ->where('ends_at', $endsAts[$key])
-                                                    ->exists();
-                if ($checkAnotherSameItem) {
-                    $errors[] = 'Data Baris ke {' . $key+1 . '} Bentrok dengan Jadwal Dokter Lain Pada Poli '.$item->name;
-                }
-
-                DoctorsSchedule::create([
+                DoctorPoli::create([
                     'user_id' => $dokterId,
                     'poliklinik_id' => $item->id,
                     'tarif' => $tarifs[$key],
-                    'day' => $days[$key],
-                    'start_at' => $startAts[$key],
-                    'ends_at' => $endsAts[$key],
                 ]);
             }
             if (!empty($errors)) {
@@ -164,6 +143,31 @@ class PoliklinikController extends Controller
             
             DB::commit();
             return back()->with('success', 'Berhasil Dihapus');
+        } catch (Exception $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        } catch (ModelNotFoundException $e){
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function activateOrUnactivate($id, $status){
+        DB::beginTransaction();
+        try {
+            $item = DoctorPoli::findOrFail($id);
+            if ($status === 'unactivate') {
+                $item->update([
+                    'isActive' => false,
+                ]);
+            }
+            if ($status === 'activate') {
+                $item->update([
+                    'isActive' => true,
+                ]);
+            }
+            DB::commit();
+            return back()->with('success', 'Berhasil ' . ($status == 'unactivate' ? 'menonaktifkan dokter' : 'mengaktifkan kembali dokter'));
         } catch (Exception $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());

@@ -45,7 +45,6 @@
     </div>
 </div>
 @endif
-{{-- @dd(session()->all()); --}}
 <div class="card mb-4">
   <div class="card-header d-flex align-items-center justify-content-between">
       <h5 class="mb-0 fw-bold">Edit Poliklinik</h5>
@@ -69,16 +68,21 @@
             </div>
         </div>
         {{--  --}}
-        <hr class="my-4">
         <div class="row mb-2 dinamic-input">
-        <h6 class="fw-bold">Jadwal Praktek</h6>
-        <div class="col-sm-4">
-            <label for="exampleFormControlSelect1" class="form-label">Dokter</label>
-            <select class="form-select form-select-sm select2"
-                aria-label="Default select example" name="user_id[]" @required(true)>
+        <input type="hidden" name="doctor_poli_id[]" id="doctor_poli_id" value="{{ $item->doctorPolis[0]->id }}" {{ $item->doctorPolis[0]->isActive ? '' : 'disabled' }}>
+        <div class="col-sm-1 align-self-center">
+            @if ($item->doctorPolis[0]->isActive)
+                <a href="{{ route('poliklinik/activate/unactivate.activateOrUnactivate', [$item->doctorPolis[0]->id, 'unactivate']) }}" class="btn btn-sm btn-danger mt-4">Unactivate</a>
+            @else
+                <a href="{{ route('poliklinik/activate/unactivate.activateOrUnactivate', [$item->doctorPolis[0]->id, 'activate']) }}" class="btn btn-sm btn-success mt-4">activate</a>
+            @endif
+        </div>
+        <div class="col-sm-7">
+            <label for="exampleFormControlSelect1" class="form-label">Dokter Praktek</label>
+            <select class="form-select form-select-sm select2" aria-label="Default select example" name="user_id[]" @required(true) {{ $item->doctorPolis[0]->isActive ? '' : 'disabled' }}>
                 <option selected disabled>Pilih</option>
                 @foreach ($data as $dt)
-                    @if (old('user_id.' . 0, $item->jadwalDokter[0]->user_id ?? '') == $dt->id)
+                    @if (old('user_id.' . 0, $item->doctorPolis[0]->user_id ?? '') == $dt->id)
                         <option value="{{ $dt->id }}" selected>{{ $dt->staff_id . ' / ' . $dt->name }}</option>
                     @else
                         <option value="{{ $dt->id }}">{{ $dt->staff_id . ' / ' . $dt->name }}</option>
@@ -86,26 +90,14 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-sm-2">
-            <label class="form-label" for="tarif">Tarif</label>
-            <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" value="{{ old('tarif.' . 0, $item->jadwalDokter[0]->tarif ?? '') }}" required />
-        </div>
-        <div class="col-sm-2">
-            <label class="form-label" for="hari">Hari</label>
-            <input type="text" name="day[]" class="form-control" id="hari" placeholder="Hari Praktek" value="{{ old('day.' . 0, $item->jadwalDokter[0]->day ?? '') }}" required />
-        </div>
         <div class="col-sm-3">
-            <label class="form-label" for="jam_praktek">Jam Praktek</label>
-            <div class="input-group">
-                <input type="time" class="form-control" id="start_at" name="start_at[]" value="{{ old('start_at.' . 0, Carbon\Carbon::parse($item->jadwalDokter[0]->start_at)->format('H:i')) }}" required/>
-                <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                <input type="time" class="form-control" id="ends_at" name="ends_at[]" value="{{ old('ends_at.' . 0, Carbon\Carbon::parse($item->jadwalDokter[0]->ends_at)->format('H:i')) }}" required/>
-            </div>
+            <label class="form-label" for="tarif">Tarif</label>
+            <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" value="{{ old('tarif.' . 0, $item->doctorPolis[0]->tarif ?? '') }}" required {{ $item->doctorPolis[0]->isActive ? '' : 'disabled' }}/>
         </div>
         <div class="col-sm-1">
             <div class="input-group mt-3 pt-3">
-                <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
+                <button type="button" class="btn btn-md btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
+                {{-- <button type="button" class="btn btn-md btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button> --}}
             </div>
         </div>
         </div>
@@ -113,7 +105,8 @@
         @if (session('_old_input'))
         @foreach (collect(old('user_id'))->skip(1) as $key => $userId)    
             <div class="row mb-2 dinamic-input">
-                <div class="col-sm-4">
+            <input type="hidden" name="doctor_poli_id[]" id="doctor_poli_id{{ $key }}" value="{{ old('doctor_poli_id.' . $key) }}">
+                <div class="col-sm-7">
                     <select class="form-select form-select-sm select2" aria-label="Default select example" name="user_id[{{ $key }}]" @required(true)>
                         <option selected disabled>Pilih</option>
                         @foreach ($data as $item)
@@ -125,35 +118,33 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <input type="number" name="tarif[{{ $key }}]" class="form-control" id="tarif{{ $key }}" placeholder="0" value="{{ old('tarif.' . $key) }}" required />
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" placeholder="Hari Praktek" value="{{ old('day.' . $key) }}" required />
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <input type="time" class="form-control" id="start_at{{ $key }}" name="start_at[{{ $key }}]" value="{{ old('start_at.' . $key) }}" required/>
-                        <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                        <input type="time" class="form-control" id="ends_at" name="ends_at[{{ $key }}]" value="{{ old('ends_at.' . $key) }}" required/>
-                    </div>
                 </div>
                 <div class="col-sm-1">
                     <div class="input-group pt-1">
-                        <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                        <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
+                        <button type="button" class="btn btn-md btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
+                        <button type="button" class="btn btn-md btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
                     </div>
                 </div>
             </div>
         @endforeach
         @else
-        @foreach ($item->jadwalDokter->skip(1) as $key => $jd)    
+        @foreach ($item->doctorPolis->skip(1) as $key => $dp)    
             <div class="row mb-2 dinamic-input">
-                <div class="col-sm-4">
-                    <select class="form-select form-select-sm select2" aria-label="Default select example" name="user_id[{{ $key }}]" @required(true)>
+                <input type="hidden" name="doctor_poli_id[]" id="doctor_poli_id{{ $key }}" value="{{ $dp->id }}" {{ $dp->isActive ? '' : 'disabled' }}>
+                <div class="col-sm-1 align-self-center">
+                    @if ($dp->isActive)
+                        <a href="{{ route('poliklinik/activate/unactivate.activateOrUnactivate', [$dp->id, 'unactivate']) }}" class="btn btn-sm btn-danger">Unactivate</a>
+                    @else
+                        <a href="{{ route('poliklinik/activate/unactivate.activateOrUnactivate', [$dp->id, 'activate']) }}" class="btn btn-sm btn-success">activate</a>
+                    @endif
+                </div>
+                <div class="col-sm-7">
+                    <select class="form-select form-select-sm select2" aria-label="Default select example" name="user_id[{{ $key }}]" @required(true) {{ $dp->isActive ? '' : 'disabled' }}>
                         <option selected disabled>Pilih</option>
                         @foreach ($data as $item)
-                            @if ($jd->user->id == $item->id)
+                            @if ($dp->user->id == $item->id)
                                 <option value="{{ $item->id }}" selected>{{ $item->staff_id . ' / ' . $item->name }}</option>
                             @else
                                 <option value="{{ $item->id }}">{{ $item->staff_id . ' / ' . $item->name }}</option>
@@ -161,23 +152,13 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-sm-2">
-                    <input type="number" name="tarif[{{ $key }}]" class="form-control" id="tarif{{ $key }}" placeholder="0" value="{{ $jd->tarif ?? 0 }}" required />
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" placeholder="Hari Praktek" value="{{ $jd->day ?? '' }}" required />
-                </div>
                 <div class="col-sm-3">
-                    <div class="input-group">
-                        <input type="time" class="form-control" id="start_at{{ $key }}" name="start_at[{{ $key }}]" value="{{ Carbon\Carbon::parse($jd->start_at)->format('H:i') ?? '' }}" required/>
-                        <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                        <input type="time" class="form-control" id="ends_at" name="ends_at[{{ $key }}]" value="{{ Carbon\Carbon::parse($jd->ends_at)->format('H:i') ?? '00:00' }}" required/>
-                    </div>
+                    <input type="number" name="tarif[{{ $key }}]" class="form-control" id="tarif{{ $key }}" placeholder="0" value="{{ $dp->tarif ?? 0 }}" required {{ $dp->isActive ? '' : 'disabled' }}/>
                 </div>
                 <div class="col-sm-1">
                     <div class="input-group pt-1">
-                        <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                        <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
+                        <button type="button" class="btn btn-md btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
+                        {{-- <button type="button" class="btn btn-md btn-danger p-1" onclick="removeInputDinamic(this)" {{ $dp->isActive ? '' : 'disabled' }}><i class="bx bx-minus"></i></button> --}}
                     </div>
                 </div>
             </div>
@@ -199,7 +180,7 @@
     function addContent(element){
         counter = counter+1;
         var content = `
-            <div class="col-sm-4">
+            <div class="col-sm-7">
                 <select class="form-select form-select-sm" aria-label="Default select example" name="user_id[]" id="user_id_${counter}" @required(true)>
                     <option selected disabled>Pilih</option>
                     @foreach ($data as $item)
@@ -211,23 +192,13 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-4">
                 <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" required />
-            </div>
-            <div class="col-sm-2">
-                <input type="text" name="day[]" class="form-control" id="hari" placeholder="Hari Praktek" required />
-            </div>
-            <div class="col-sm-3">
-                <div class="input-group">
-                    <input type="time" class="form-control" id="start_at" name="start_at[]" required/>
-                    <span class="input-group-text bg-secondary text-white" id="basic-addon13">hingga</span>
-                    <input type="time" class="form-control" id="ends_at" name="ends_at[]" required/>
-                </div>
             </div>
             <div class="col-sm-1">
                 <div class="input-group pt-1">
-                    <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                    <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
+                    <button type="button" class="btn btn-md btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
+                    <button type="button" class="btn btn-md btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
                 </div>
             </div>`;
         dinamicInput(element, content, 'user_id_'+counter, 'Pilih', false);

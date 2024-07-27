@@ -11,76 +11,119 @@
     </div>
 </div>
 @endif
-<div class="card p-3 mt-5">
-  
-  <div class="d-flex">
-    <h4 class="align-self-center m-0">Daftar Poli</h4>
-    <a href="{{ route('poliklinik.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Tambah Poli</a>
-  </div>
-  <hr class="m-0 mt-2 mb-3">
-  <div class="table-responsive text-nowrap">
-    <table class="table">
-      <thead>
-        <tr class="text-nowrap bg-dark">
-          <th>No</th>
-          <th>Nama Poli</th>
-          <th>Dokter Praktek</th>
-          <th>Tarif</th>
-          <th>Hari</th>
-          <th>Waktu</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-          @foreach ($data as $item)
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $item->name ?? '' }}</td>
-            <td colspan="4" class="p-0">
-              <table class="table">
-                  @foreach ($item->jadwalDokter as $jadwal)
-                  <tr>
-                    <td style="width: 40%">
-                      {{ ($jadwal->user->staff_id ?? '') . ' / ' . ($jadwal->user->name) }}
-                    </td>
-                    <td style="width: 20%">
-                      Rp. {{ number_format($jadwal->tarif ?? 0) }}
-                    </td>
-                    <td style="width: 18%">
-                      {{ $jadwal->day ?? '-' }}
-                    </td>
-                    <td style="width: 22%">
-                      {{ ($jadwal->start_at ?? '00:00'). ' - ' . ($jadwal->ends_at ?? '00:00') }}
-                    </td>
-                  </tr>
-                    @endforeach
-              </table>
-            </td>
-            <td>
-              <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                      data-bs-toggle="dropdown">
-                      <i class="bx bx-dots-vertical-rounded"></i>
-                  </button>
-                  <div class="dropdown-menu">
-                      <a class="dropdown-item" href="{{ route('poliklinik.edit', $item->id) }}">
-                          <i class="bx bx-edit-alt me-1"></i>
-                          Edit
-                      </a>
-                      <form action="{{ route('poliklinik.destroy', $item->id) }}" method="POST">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="dropdown-item"
-                              onclick="return confirm('Yakin ingin menghapus data?')"><i
-                                  class="bx bx-trash me-1"></i>Hapus</button>
-                      </form>
-                  </div>
-              </div>
-          </td>
-          </tr>
-          @endforeach
-        </tbody>
-    </table>
+
+<div class="card-body">
+  <div class="nav-align-top mb-2 shadow-sm">
+    <ul class="nav nav-tabs nav-md" role="tablist">
+      <li class="nav-item">
+        <button id="btn-link" type="button" class="nav-link {{ session('navPoli') == 'poliklinik' ? 'active' : '' }} d-flex justify-content-center"
+        role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-poliklinik"
+        aria-controls="navs-justified-poliklinik" aria-selected="false">
+        <p class="m-0">Daftar Poli & Dokter</p>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button id="btn-link" type="button" class="nav-link {{ session('navPoli') == 'jadwal' ? 'active' : '' }} d-flex justify-content-center"
+        role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-jadwal"
+        aria-controls="navs-justified-jadwal" aria-selected="false">
+        <p class="m-0">Jadwal Poli</p>
+        </button>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane fade {{ session('navPoli') == 'poliklinik' ? 'show active' : '' }}" id="navs-justified-poliklinik" role="tabpanel">
+        <div class="text-end mb-3">
+          <a href="{{ route('poliklinik.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Tambah Poli</a>
+        </div>
+        @foreach ($data as $item)    
+          <div class="accordion accordion-header-primary" id="accordionStyle{{ $loop->iteration ?? '' }}">
+            <div class="accordion-item card border">
+                <h2 class="accordion-header">
+                    <button type="button" class="accordion-button collapsed text-uppercase" data-bs-toggle="collapse" data-bs-target="#accordionStyle{{ $loop->iteration }}-1" aria-expanded="false">
+                    {{ $item->kode ?? '' }} - {{ $item->name ?? '' }} ({{ $item->kode_antrian ?? '' }})
+                    </button>
+                </h2>
+            
+                <div id="accordionStyle{{ $loop->iteration }}-1" class="accordion-collapse collapse" data-bs-parent="#accordionStyle1">
+                    <div class="accordion-body">
+                      <div class="text-end mb-3 d-flex">
+                        <a class="btn btn-outline-warning ms-auto btn-sm m-0 p-1 me-2" href="{{ route('poliklinik.edit', $item->id) }}"><i class="bx bx-edit-alt me-1"></i></a>
+                        <form action="{{ route('poliklinik.destroy', $item->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger ms-auto btn-sm p-1 m-0"
+                                onclick="return confirm('Yakin ingin menghapus data?')"><i
+                                    class="bx bx-trash me-1"></i></button>
+                        </form>
+                      </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th class="text-dark">Dokter</th>
+                                  <th class="text-dark">Tarif</th>
+                                </tr>
+                              </thead>
+                              <tbody class="table-border-bottom-0">
+                                @foreach ($item->doctorPolis as $pivot)    
+                                  <tr>
+                                      <td>{{ ($pivot->user->staff_id ?? '') . ' / ' . ($pivot->user->name ?? '') }}</td>
+                                      <td>{{ $pivot->tarif ?? '0' }}</td>
+                                  </tr>
+                                @endforeach
+                                    
+                              </tbody>
+                            </table>
+                          </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        @endforeach
+      </div>
+      <div class="tab-pane fade {{ session('navPoli') == 'jadwal' ? 'show active' : '' }}" id="navs-justified-jadwal" role="tabpanel">
+        <div class="table-responsive text-nowrap">
+          <table class="table">
+            <thead>
+              <tr class="text-nowrap bg-dark">
+                <th>No</th>
+                <th>Poli / Dokter</th>
+                <th>Hari</th>
+                <th>Waktu</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach ($dataPoliDokter as $item)
+              <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td style="width: 40%">{{ ($item->poli->name) .' / ' . ($item->user->name ?? '') }}</td>
+                <td colspan="2" class="p-0">
+                  <table class="table">
+                      @foreach ($item->doctorSchedules as $jadwal)
+                      <tr>
+                        <td style="width: 25%">
+                          {{ $jadwal->day ?? '-' }}
+                        </td>
+                        <td style="width: 20%">
+                          {{ ($jadwal->start_at ?? '00:00'). ' - ' . ($jadwal->ends_at ?? '00:00') }}
+                        </td>
+                      </tr>
+                      @endforeach
+                  </table>
+                </td>
+                <td>
+                    <a href="{{ route('dokter/jadwal.create', $item->id) }}" class="btn btn-outline-primary btn-sm"><i class='bx bx-calendar-plus'></i></a>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+
 @endsection

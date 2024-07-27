@@ -16,7 +16,7 @@ class Poliklinik extends Model
         'isActive',
     ];
 
-    public function jadwalDokter() {
-        return $this->hasMany(DoctorsSchedule::class);
+    public function doctorPolis() {
+        return $this->hasMany(DoctorPoli::class);
     }
 }

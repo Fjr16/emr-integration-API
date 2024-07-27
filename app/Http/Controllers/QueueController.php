@@ -70,14 +70,16 @@ class QueueController extends Controller
             ->get();
 
         $categories = PatientCategory::all();
-        $doctors = User::where('isDokter', true)->whereHas('specialists')->get();
+        $doctorSchedules = DoctorsSchedule::whereHas('poli', function($query){
+            $query->where('isActive', true);
+        })->get();
         $patients = Patient::orderBy('no_rm', 'asc')->get();
         $jk = ['Pria', 'Wanita'];
         $status = ['Belum Kawin', 'Kawin', 'Janda', 'Duda'];
         return view('pages.antrian.create', [
             'title' => 'Entri Antrian',
             'menu' => 'Antrian',
-            'doctors' => $doctors,
+            'doctorSchedules' => $doctorSchedules,
             'categories' => $categories,
             'patients' => $patients,
             'antrians' => $antrians,
@@ -181,13 +183,16 @@ class QueueController extends Controller
         return response()->json($item);
     }
 
-    public function jadwalDokter($dokterID)
+    public function jadwalDokter($dokterScheduleId)
     {
-        
         try {
-            $data = DoctorsSchedule::where('user_id', $dokterID)
-                ->whereNotNull('start_at')->orWhereNot('start_at', '00:00:00')
-                ->whereNotNull('ends_at')->orWhereNot('ends_at', '00:00:00')
+            $itemJadwal = DoctorsSchedule::findOrFail($dokterScheduleId);
+            $data = DoctorsSchedule::where('user_id', $itemJadwal->user->id)
+                ->where('poliklinik_id', $itemJadwal->poli->id)
+                ->whereNotNull('start_at')
+                ->whereNot('start_at', '00:00:00')
+                ->whereNotNull('ends_at')
+                ->whereNot('ends_at', '00:00:00')
                 ->get();
             
             if ($data->isEmpty()) {
@@ -226,10 +231,10 @@ class QueueController extends Controller
                         $currentDate->addDay();
     
     
-                        $totalAntrian = Queue::where('status_antrian', 'WAITING')
+                        $totalAntrian = Queue::where('status_antrian', 'WAITING')->orWhere('status_antrian', 'ARRIVED')->orWhere('status_antrian', 'FINISHED')
                         ->whereDate('tgl_antrian', $date)
-                        ->whereHas('dpjp', function ($query) use ($dokterID) {
-                            $query->where('user_id', $dokterID);
+                        ->whereHas('dpjp', function ($query) use ($itemJadwal) {
+                            $query->where('user_id', $itemJadwal->user->id);
                         })->count();
     
                         // respon data
