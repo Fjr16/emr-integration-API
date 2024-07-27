@@ -9,21 +9,6 @@ use Spatie\Permission\Models\Permission;
 class RolesController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $data = Role::all();
-        return view('pages.role.index', [
-            "title" => "Role",
-            "menu" => "Setting",
-            "data" => $data,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -33,7 +18,7 @@ class RolesController extends Controller
         $data = Role::all();
         $permission = Permission::all();
         return view('pages.role.create', [
-            "title" => "Role",
+            "title" => "User",
             "menu" => "Setting",
             "data" => $data,
             "permission" => $permission
@@ -52,7 +37,10 @@ class RolesController extends Controller
         $item = Role::create($role);
 
         $item->givePermissionTo($request->permission_id);
-        return redirect()->route('user/role.index')->with('success', 'Role Berhasil di Tambahkan');
+        return redirect()->route('user.index')->with([
+            'success' => 'Role Berhasil di Tambahkan',
+            'navUser' => 'role',
+        ]);
     }
 
     /**
@@ -103,7 +91,10 @@ class RolesController extends Controller
             }
         }
 
-        return redirect()->route('user/role.index')->with('success', 'Berhasil Diperbarui');
+        return redirect()->route('user.index')->with([
+            'success' => 'Role Berhasil di perbarui',
+            'navUser' => 'role',
+        ]);
 
     }
 
@@ -118,6 +109,9 @@ class RolesController extends Controller
         $item = Role::find($id);
         $item->permissions()->detach();
         $item->delete();
-        return back()->with('success', 'Akses Berhasil di Hapus');
+        return back()->with([
+            'success' => 'Role Berhasil di Hapus',
+            'navUser' => 'role',
+        ]);
     }
 }

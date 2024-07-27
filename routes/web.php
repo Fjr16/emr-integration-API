@@ -54,6 +54,7 @@ use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\DiagnosticProcedurePatientController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
+use App\Http\Controllers\PoliklinikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -182,7 +183,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/user/specialist/destroy/{id}', [SpecialistController::class, 'destroy'])->name('user/specialist.destroy');
 
     //Role
-    Route::get('/user/role/index', [RolesController::class, 'index'])->name('user/role.index');
     Route::get('/user/role/create', [RolesController::class, 'create'])->name('user/role.create');
     Route::post('/user/role/store', [RolesController::class, 'store'])->name('user/role.store');
     Route::get('/user/role/edit/{id}', [RolesController::class, 'edit'])->name('user/role.edit');
@@ -211,6 +211,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ruang/detail/edit/{id}', [RoomDetailController::class, 'edit'])->name('ruang/detail.edit');
     Route::put('/ruang/detail/update/{id}', [RoomDetailController::class, 'update'])->name('ruang/detail.update');
     Route::delete('/ruang/detail/destroy/{id}', [RoomDetailController::class, 'destroy'])->name('ruang/detail.destroy');
+
+    //Poliklinik
+    Route::get('/poliklinik/index', [PoliklinikController::class, 'index'])->name('poliklinik.index');
+    Route::get('/poliklinik/create', [PoliklinikController::class, 'create'])->name('poliklinik.create');
+    Route::post('/poliklinik/store', [PoliklinikController::class, 'store'])->name('poliklinik.store');
+    Route::get('/poliklinik/edit/{id}', [PoliklinikController::class, 'edit'])->name('poliklinik.edit');
+    Route::put('/poliklinik/update/{id}', [PoliklinikController::class, 'update'])->name('poliklinik.update');
+    Route::delete('/poliklinik/destroy/{id}', [PoliklinikController::class, 'destroy'])->name('poliklinik.destroy');
 
     //Unit
     Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');

@@ -26,7 +26,7 @@
       <tbody>
           @foreach ($data as $item)
           <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
+            <td>{{ $loop->iteration }}</td>
             <td>{{ $item->name }}</td>
             <td>
               <div class="dropdown">

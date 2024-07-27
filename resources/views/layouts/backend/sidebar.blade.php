@@ -232,7 +232,7 @@
                     <ul class="menu-sub">
                             <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
                                 <a href="{{ route('user.index') }}" class="menu-link">
-                                    <div>Daftar Staff</div>
+                                    <div>Manajemen User</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
@@ -255,6 +255,11 @@
                                     <div>Ruangan</div>
                                 </a>
                             </li>
+                            <li class="menu-item {{ $title == 'Poliklinik' ? 'active' : '' }}">
+                                <a href="{{ route('poliklinik.index') }}" class="menu-link">
+                                    <div>Poliklinik</div>
+                                </a>
+                            </li>
                             <li class="menu-item {{ $title == 'Unit' ? 'active' : '' }}">
                                 <a href="{{ route('unit.index') }}" class="menu-link">
                                     <div>Unit / Departemen</div>
@@ -263,11 +268,6 @@
                             <li class="menu-item {{ $title == 'Specialist' ? 'active' : '' }}">
                                 <a href="{{ route('user/specialist.index') }}" class="menu-link">
                                     <div>Spesialis</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Role' ? 'active' : '' }}">
-                                <a href="{{ route('user/role.index') }}" class="menu-link">
-                                    <div>Role</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ $title == 'Pekerjaan' ? 'active' : '' }}">

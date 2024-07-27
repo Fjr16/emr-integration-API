@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\userStoreRequest;
 use App\Models\User;
 use App\Models\RoomDetail;
 use App\Models\Specialist;
@@ -12,22 +13,28 @@ use App\Models\PatientCategory;
 use App\Models\Unit;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $data = User::all();
+        if (session()->has('navUser')) {
+            session(['navUser' => session('navUser')]);
+        }else{
+            session(['navUser' => 'dokter']);
+        }
+        $data = User::whereNot('isDokter', true)->get();
+        $dataDokter = User::where('isDokter', true)->get();
+        $dataRole = Role::all();
         return view('pages.user.index', [
             "title" => "User",
             "menu" => "Setting",
-            "data" => $data
+            "data" => $data,
+            "dataDokter" => $dataDokter,
+            "dataRole" => $dataRole
         ]);
     }
 
@@ -64,8 +71,20 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(userStoreRequest $request)
     {
+        if (isset($request->isDokter) && $request->isDokter == true) {
+            try {
+                $this->validate($request, [
+                    'sip' => 'required',
+                ],[
+                    'sip.required' => 'Nomor Surat Izin Praktek (SIP) tidak boleh kosong',
+                ]);
+            } catch (ValidationException $th) {
+                return back()->with('error', $th->getMessage())->withInput();
+            }
+        }
+        // get all request
         $data = $request->all();
 
         $folder_path = 'assets/paraf-petugas/';
@@ -80,35 +99,19 @@ class UserController extends Controller
             $data['unit_id'] = null;
         }
         $data['password'] = Hash::make($request->password);
-        if ($data['room_detail_id'] == 'kosong') {
-            $data['room_detail_id'] = null;
-        }
         if ($new = User::create($data)) {
             $new->assignRole($request->role_name);
             // $role = Role::where('name', $request->role_name)->first();
             // $role->givePermissionTo($request->permission_id);
         }
-        if (preg_match('/Dokter/i', $new->roles->first()->name)) {
+        if (isset($request->isDokter) && $request->isDokter == true && !empty($request->specialist_id)) {
+            $navTab = 'dokter';
             $new->specialists()->sync($request->specialist_id);
-            if ($new->room_detail_id) {
-                $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-                foreach ($days as $day) {
-                    $jadwal['user_id'] = $new->id;
-                    $jadwal['day'] = $day;
-                    DoctorsSchedule::create($jadwal);
-                }
-            }
-            if ($new->consultingRates->isEmpty()) {
-                $dataTanggungan = PatientCategory::all();
-                foreach ($dataTanggungan as $itemTanggungan) {
-                    ConsultingRates::create([
-                        'user_id' => $new->id,
-                        'patient_category_id' => $itemTanggungan->id,
-                    ]);
-                }
-            }
         }
-        return redirect()->route('user.index')->with('success', 'User Berhasil Ditambahkan');
+        return redirect()->route('user.index')->with([
+            'success' => 'User Berhasil Ditambahkan',
+            'navUser' => $navTab ?? 'all',
+        ]);
     }
 
 
@@ -209,7 +212,10 @@ class UserController extends Controller
                 $item->specialists()->detach();
             }
         }
-        return redirect()->route('user.index')->with('success', 'User Berhasil di Perbarui');
+        return redirect()->route('user.index')->with([
+            'success' => 'User Berhasil Diperbarui',
+            'navUser' => 'all',
+        ]);
     }
 
     /**
@@ -224,6 +230,9 @@ class UserController extends Controller
         if ($item->delete()) {
             $item->specialists()->detach();
         }
-        return redirect()->route('user.index')->with('success', 'User Berhasil di Hapus');
+        return redirect()->route('user.index')->with([
+            'success' => 'User Berhasil Dihapus',
+            'navUser' => 'all',
+        ]);
     }
 }

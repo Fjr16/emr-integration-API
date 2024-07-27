@@ -42,13 +42,13 @@ class User extends Authenticatable
         'catatan',
         'staff_id',
         'unit_id',
-        'room_detail_id',
+        // 'room_detail_id',        poliklinik
         'password',
         'status',
         'isDokter',
         'paraf',
         'sip',
-        'kode_dokter_bpjs',
+        // 'kode_dokter_bpjs',
     ];
 
     protected $with = [
