@@ -240,11 +240,6 @@
                                     <div>Kategori Pasien</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ $title == 'Konsultasi' ? 'active' : '' }}">
-                                <a href="{{ route('konsultasi') }}" class="menu-link">
-                                    <div>Konsultasi</div>
-                                </a>
-                            </li>
                             <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
                                 <a href="{{ route('tindakan.index') }}" class="menu-link">
                                     <div>Tindakan</div>
