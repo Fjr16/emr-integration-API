@@ -126,43 +126,28 @@
                     <input type="text" class="form-control" id="no_rujukan" name="no_rujukan"
                         placeholder="" aria-describedby="defaultFormControlHelp"/>
                 </div>
-                <div class="mb-3">
-                    <label for="kodeDiagnosa" class="form-label">Kode Diagnosa</label>
-                    <input type="text" class="form-control" id="kodeDiagnosa" name="kodeDiagnosa" placeholder=""
-                        aria-describedby="defaultFormControlHelp"/>
-                </div>
-                <div class="mb-3">
-                    <label for="last_diagnostic" class="form-label">Nama Diagnosa</label>
-                    <input type="text" class="form-control" id="last_diagnostic" name="last_diagnostic"
-                        placeholder="" aria-describedby="defaultFormControlHelp"/>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="kodeDiagnosa" class="form-label">Kode Diagnosa</label>
+                        <input type="text" class="form-control" id="kodeDiagnosa" name="kodeDiagnosa" placeholder="" aria-describedby="defaultFormControlHelp" readonly/>
+                    </div>
+                    <div class="col-8">
+                        <label for="last_diagnostic" class="form-label">Nama Diagnosa</label>
+                        <input type="text" class="form-control" id="last_diagnostic" name="last_diagnostic"
+                            placeholder="" aria-describedby="defaultFormControlHelp" readonly/>
+                    </div>
                 </div>
                 <div class="mb-3" id="diagnosa">
                 </div>
-                {{-- <div class="mb-3">
+                <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
                     <select class="form-control select2 doctor_id" id="doctor_id" name="doctor_id" required>
                         <option value="" selected>Pilih</option>
-                        @foreach ($doctors as $doctor)
-                            @if (old('doctor_id') == $doctor->user->id)
-                                <option value="{{ $doctor->user->id }}" selected>
-                                    {{ $doctor->poli->name ?? '' }} /
-                                    {{ $doctor->user->name ?? '' }}</option>
+                        @foreach ($dokters as $dokter)
+                            @if (old('doctor_id') == $dokter->id)
+                                <option value="{{ $dokter->id }}" selected>{{ $dokter->poliklinik->name ?? '' }} / {{ $dokter->name ?? '' }}</option>
                             @else
-                                <option value="{{ $doctor->user->id }}">{{ $doctor->poli->name ?? '' }} /
-                                    {{ $doctor->user->name ?? '' }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div> --}}
-                <div class="mb-3">
-                    <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
-                    <select class="form-control select2 doctor_poli_id" id="doctor_poli_id" name="doctor_poli_id" required>
-                        <option value="" selected>Pilih</option>
-                        @foreach ($doctorPolis as $dokterPoli)
-                            @if (old('doctor_poli_id') == $dokterPoli->id)
-                                <option value="{{ $dokterPoli->id }}" selected>{{ $dokterPoli->poli->name ?? '' }} / {{ $dokterPoli->user->name ?? '' }}</option>
-                            @else
-                                <option value="{{ $dokterPoli->id }}">{{ $dokterPoli->poli->name ?? '' }} / {{ $dokterPoli->user->name ?? '' }}</option>
+                                <option value="{{ $dokter->id }}">{{ $dokter->poliklinik->name ?? '' }} / {{ $dokter->name ?? '' }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -171,7 +156,7 @@
                     <table class="table" id="tableJadwal">
                         <thead>
                             <tr class="text-nowrap bg-dark">
-                                <th>No</th>
+                                <th>#</th>
                                 <th>Tanggal</th>
                                 <th>Hari</th>
                                 <th>Total Antrian</th>
@@ -186,14 +171,13 @@
                     <input type="date" class="form-control" value="{{ old('tgl_antrian', $now) }}"
                         name="tgl_antrian" id="tanggal_antrian" />
                 </div>
-                <button type="button" id="storeModal" class="btn btn-sm btn-dark mb-3"
-                    onclick="">Simpan</button>
+                <button type="button" id="storeModal" class="btn btn-sm btn-outline-success mb-3" onclick="">Simpan</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="card p-3 mt-5">
+<div class="card p-3 mt-3">
     <div class="row">
         <div class="col-md-9">
             <h4 class="align-self-center m-0">Daftar Antrian Pasien</h4>
@@ -220,7 +204,7 @@
                     <th>Nama</th>
                     <th>Norm</th>
                     <th>Poli</th>
-                    <th>Diagnosa Terakhir</th>
+                    <th>Diagnosa Rujukan</th>
                     <th>status Antrian</th>
                 </tr>
             </thead>
@@ -236,8 +220,8 @@
                         <td>{{ $antrian->patient->name ?? '' }}</td>
                         <td>{{ implode('-', str_split(str_pad($antrian->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                         </td>
-                        <td>{{ $antrian->dpjp->roomDetail->name ?? '' }}</td>
-                        <td>{{ $antrian->last_diagnostic ?? '--' }}</td>
+                        <td>{{ $antrian->dpjp->poliklinik->name ?? '' }}</td>
+                        <td>{{ $antrian->last_diagnostic ?? 'TIDAK ADA' }}</td>
                         <td>
                             <span class="badge {{ $antrian->status_antrian == 'ARRIVED' ?  'bg-primary' : ($antrian->status_antrian == 'FINISHED' ? 'bg-sucess' : ($antrian->status_antrian == 'CANCEL' ? 'bg-danger' : 'bg-warning') ) }}">
                                 {{ $antrian->status_antrian == 'ARRIVED' ?  'SEDANG DILAYANI' : ($antrian->status_antrian == 'FINISHED' ? 'SELESAI' : ($antrian->status_antrian == 'CANCEL' ? 'ANTRIAN BATAL' : 'BELUM DILAYANI') ) }}
@@ -318,13 +302,14 @@
         })
     }
 
+    // modal konfirmasi sebelum disimpan pada db
     function openModal(id) {
         if (id) {
             $.ajax({
                 type: 'get',
                 url: "{{ route('antrian.edit', '') }}" + "/" + id,
                 data: {
-                    doctor_poli_id: $('#doctor_poli_id').val(),
+                    doctor_id: $('#doctor_id').val(),
                     tgl_antrian: $('#tanggal_antrian').val(),
                     no_rujukan: $('#no_rujukan').val(),
                     last_diagnostic: $('#last_diagnostic').val(),
@@ -342,6 +327,14 @@
             })
         }
     }
+
+    // mentransfer data tanggal ke tanggal berobat
+    function transferDate(tanggal){
+        const date = new Date(tanggal);
+        const tgl = date.toISOString().slice(0, 10);
+        $('#tanggal_antrian').val(tgl);
+
+    }
 </script>
 
 {{-- mengambil jadwal dokter --}}
@@ -349,11 +342,11 @@
     $(document).ready(function() {
         var table = $('#tableJadwal tbody');
 
-        $('#doctor_poli_id').on('change', function() {
-            var dokterPoliId = $(this).val();
-            if (dokterPoliId) {
+        $('#doctor_id').on('change', function() {
+            var dokterId = $(this).val();
+            if (dokterId) {
                 $.ajax({
-                    url: '/antrian/jadwalDokter/' + dokterPoliId,
+                    url: '/antrian/jadwalDokter/' + dokterId,
                     type: "GET",
                     data: {
                         "_token": "{{ csrf_token() }}"
@@ -374,7 +367,7 @@
 
                                     });
                                 var row = $('<tr>').append(
-                                    $('<td>').text(key + 1),
+                                    $('<td>').html(`<button class="btn btn-sm btn-outline-primary" value="${date}" type="button" onclick="transferDate(this.value)">choose</button>`),
                                     $('<td>').text(formattedDate),
                                     $('<td>').text(list.day),
                                     $('<td>').text(list.totalAntrian),

@@ -69,17 +69,17 @@ class QueueController extends Controller
         })->orderBy('tgl_antrian')->get();
 
         $categories = PatientCategory::all();
-        // $doctorSchedules = DoctorsSchedule::whereHas('poli', function($query){
-        //     $query->where('isActive', true);
-        // })->get();
-        $doctorPolis = DoctorPoli::where('isActive', true)->whereHas('doctorSchedules')->get();
+        $dokters = User::where('isDokter', true)->whereHas('poliklinik', function($poli){
+            $poli->where('isActive', true);
+        })->whereHas('doctorSchedules')->get();
+
         $patients = Patient::orderBy('no_rm', 'asc')->get();
         $jk = ['Pria', 'Wanita'];
         $status = ['Belum Kawin', 'Kawin', 'Janda', 'Duda'];
         return view('pages.antrian.create', [
             'title' => 'Entri Antrian',
             'menu' => 'Antrian',
-            'doctorPolis' => $doctorPolis,
+            'dokters' => $dokters,
             'categories' => $categories,
             'patients' => $patients,
             'antrians' => $antrians,
@@ -90,19 +90,15 @@ class QueueController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Perlu penambahan request validasi
      */
     public function store(Request $request)
     {
-        dd($request->all());
-        $item = DoctorPoli::find($request->doctor_poli_id);
+        $item = User::find($request->doctor_id);
         $today = now();
-        $doctors = User::find($request->doctor_id);
+        // $doctors = User::find($request->doctor_id);
 
-        $roomCode = $item->poli->kode_antrian ?? '';
+        $roomCode = $item->poliklinik->kode_antrian ?? '';
         if ($roomCode) {
             $lastQueue = Queue::whereDate('created_at', $today)
                 ->where('no_antrian', 'like', $roomCode . '%')
@@ -113,21 +109,18 @@ class QueueController extends Controller
             // Format nomor antrian sesuai aturan
             $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
         }else{
-            return back()->with('error', 'Mohon Lengkapi Data Master kode Dokter Anda !!');
+            return back()->with('error', 'Mohon Lengkapi Data Master Kode Antrian Dokter Anda !!');
         }
         
-        $data['no_antrian'] = $queueNumber;
         $data['patient_id'] = $request['patient_id'] ?? '';
-        $data['patient_category_id'] = $request['patient_category_id'];
-        // $data['dokter_id'] = $item->user_id;
-        // $data['poliklinik_id'] = $item->poliklinik_id;
-        $data['dokter_poli_id'] = $item->id;
-        $data['tgl_antrian'] = $request['tgl_antrian'];
-        $data['no_rujukan'] = $request['no_rujukan'];
-        $data['last_diagnostic'] = $request['last_diagnostic'];
-        $data['status_antrian'] = 'WAITING';
         $data['user_id'] = Auth::user()->id;
-        $data['kuota'] = $request['kuota'];
+        $data['dokter_id'] = $item->id;
+        $data['status_antrian'] = 'WAITING';
+        $data['no_antrian'] = $queueNumber;
+        $data['tgl_antrian'] = $request['tgl_antrian'];
+        $data['patient_category_id'] = $request['patient_category_id'];
+        $data['no_rujukan'] = $request['no_rujukan'] ?? null;
+        $data['last_diagnostic'] = $request['last_diagnostic'] ?? null;
 
         $new = Queue::create($data);
 
@@ -136,10 +129,8 @@ class QueueController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Error ketika jadwal berobat tidak sesuai dengan jadwal dokter
+     * Untuk show antrian setelah disubmit dan pada btn lihat
      */
     public function show($id)
     {
@@ -157,26 +148,22 @@ class QueueController extends Controller
             'jamAwal' => $jamAwal,
             'jamAkhir' => $jamAkhir,
         ]);
-        // return response()->json($item);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * DONE , modal konfirmasi sebelum submit
      */
     public function edit(Request $request, $id)
     {
         $item = Patient::findOrFail($id);
         $array = $request->all();
         $data = json_decode(json_encode($array), false);
-        $dokterPoli = DoctorPoli::find($request->doctor_poli_id);
+        $dokter = User::find($request->doctor_id);
         $patient_category = PatientCategory::find($request->patient_category_id);
         return view('pages.antrian.edit', [
             'item' => $item,
             'data' => $data,
-            'dokterPoli' => $dokterPoli,
+            'dokter' => $dokter,
             'patient_category' => $patient_category,
         ]);
     }
@@ -187,11 +174,18 @@ class QueueController extends Controller
         return response()->json($item);
     }
 
-    public function jadwalDokter($dokterPoliId)
+    // done untu mendapatkan daftar jadawal dokter 6 kali ke depan
+    public function jadwalDokter($dokterId)
     {
         try {
-            $item = DoctorPoli::findOrFail($dokterPoliId);
-            $data = DoctorsSchedule::where('doctor_poli_id', $item->id)->get();
+            $item = User::findOrFail($dokterId);
+            $data = DoctorsSchedule::where('user_id', $item->id)
+                                    ->whereNotNull('day')
+                                    ->whereNotNull('start_at')
+                                    ->whereNot('start_at', '00:00:00')
+                                    ->whereNotNull('ends_at')
+                                    ->whereNot('ends_at', '00:00:00')
+                                    ->get();
 
             
             if ($data->isEmpty()) {
@@ -233,7 +227,7 @@ class QueueController extends Controller
     
                         $totalAntrian = Queue::whereIn('status_antrian', ['WAITING', 'ARRIVED', 'FINISHED'])
                         ->whereDate('tgl_antrian', $date)
-                        ->where('dokter_id', $item->user->id)
+                        ->where('dokter_id', $item->id)
                         ->count();
     
                         // respon data

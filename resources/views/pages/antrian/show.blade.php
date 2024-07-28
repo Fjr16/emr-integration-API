@@ -1,31 +1,13 @@
     <div class="modal-content">
-      <div class="modal-header bg-warning">
-        <h5 class="modal-title text-white" id="backDropModalTitle">Detail Data Pasien</h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="backDropModalTitle">Antrian <span class="fst-italic fw-bold">{{ $item->no_antrian ?? ''}}</span></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row mb-3">
-          <label class="col-sm-3 col-form-label" for="basic-default-name">No Antrian</label>
+          <label class="col-sm-3 col-form-label" for="basic-default-name">No Rekam Medis / Nama</label>
           <div class="col-sm-9">
-            <input type="text" value="{{ $item->no_antrian ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label class="col-sm-3 col-form-label" for="basic-default-name">No Rekam Medis</label>
-          <div class="col-sm-9">
-            <input type="text" value="{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2))}}" class="form-control form-control-sm" id="basic-default-name" disabled />
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label for="basic-default-name" class="col-sm-3 col-form-label">Nama</label>
-          <div class="col-sm-9">
-            <input type="text" value="{{ $item->patient->name }}" class="form-control form-control-sm" id="basic-default-name" disabled />
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label for="basic-default-name" class="col-sm-3 col-form-label">Penjamin</label>
-          <div class="col-sm-9">
-            <input type="text" value="{{ $item->patientCategory->name }}" class="form-control form-control-sm" id="basic-default-name" disabled />
+            <input type="text" value="{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2))}} / {{ $item->patient->name }}" class="form-control form-control-sm" id="basic-default-name" disabled />
           </div>
         </div>
         <div class="row mb-3">
@@ -41,6 +23,12 @@
           </div>
         </div>
         <div class="row mb-3">
+          <label for="basic-default-name" class="col-sm-3 col-form-label">Penjamin</label>
+          <div class="col-sm-9">
+            <input type="text" value="{{ $item->patientCategory->name }}" class="form-control form-control-sm" id="basic-default-name" disabled />
+          </div>
+        </div>
+        <div class="row mb-3">
           <label for="basic-default-name" class="col-sm-3 col-form-label">Tanggal Berobat</label>
           <div class="col-sm-9">
             <input type="text" value="{{ $item->tgl_antrian }}" class="form-control form-control-sm" id="basic-default-name" disabled />
@@ -49,7 +37,7 @@
         <div class="row mb-3">
           <label for="basic-default-name" class="col-sm-3 col-form-label">Poli / Dokter</label>
           <div class="col-sm-9">
-            <input type="text" value="{{ $item->dpjp->roomDetail->name ?? '' }} / {{ $item->dpjp->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
+            <input type="text" value="{{ $item->dpjp->poliklinik->name ?? '' }} / {{ $item->dpjp->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
           </div>
         </div>
         <div class="row mb-3">
@@ -60,13 +48,13 @@
             </span>
           </div>
         </div>
-        <div class="card bg-warning p-1">
+        <div class="card bg-primary p-1">
           <div>
             <textarea class="form-control" id="text-area1" rows="9">
               Pasien Yth, {{ $item->patient->name }} sudah terdaftar di RS ***** ***** dengan:
 
               Nomor RM : {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2))}}
-              di Poli : {{ $item->dpjp->roomDetail->name ?? '' }}
+              di Poli : {{ $item->dpjp->poliklinik->name ?? '' }}
               Tanggal : {{ \Carbon\Carbon::parse($item->tgl_antrian)->format('d-m-Y') ?? ''}}
               Jadwal Dokter : {{ $jamAwal->format('H:i') ?? '' }}-{{ $jamAkhir->format('H:i') ?? '' }} WIB
 
@@ -75,11 +63,8 @@
 
             </textarea>
           </div>
-          <button type="button" class="btn btn-warning btn-sm mt-2" onclick="copyToClipboard()">Copy</button>
+          <button type="button" class="btn btn-primary btn-sm mt-2" onclick="copyToClipboard()">Copy</button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal">Tutup</button>
       </div>
     </div>
 

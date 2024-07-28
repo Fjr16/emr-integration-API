@@ -1,7 +1,7 @@
     <form action="{{ route('antrian.store') }}" method="POST">
     @csrf
     <div class="modal-content">
-      <div class="modal-header bg-warning">
+      <div class="modal-header bg-primary">
         <h5 class="modal-title text-white" id="backDropModalTitle">Anda Membuat Antrian Untuk Pasien: </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -74,8 +74,8 @@
                 <div class="row mb-3">
                     <label for="basic-default-name" class="col-sm-3 col-form-label">Poli / Dokter</label>
                     <div class="col-sm-7">
-                      <input type="hidden" name="doctor_poli_id" value="{{ $dokterPoli->id ?? '' }}">
-                      <input type="text" value="{{ $dokterPoli->poli->name ?? '' }} / {{ $dokterPoli->user->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
+                      <input type="hidden" name="doctor_id" value="{{ $dokter->id ?? '' }}">
+                      <input type="text" value="{{ $dokter->poliklinik->name ?? '' }} / {{ $dokter->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
                     </div>
                   </div>
             </div>
@@ -114,8 +114,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Batal</button>
+        <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Batal</button>
       </div>
     </div>
   </form>
