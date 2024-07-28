@@ -156,16 +156,13 @@
                 </div> --}}
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
-                    <select class="form-control select2 doctor_schedule_id" id="doctor_schedule_id" name="doctor_schedule_id" required>
+                    <select class="form-control select2 doctor_poli_id" id="doctor_poli_id" name="doctor_poli_id" required>
                         <option value="" selected>Pilih</option>
-                        @foreach ($doctorSchedules as $jadwal)
-                            @if (old('doctor_schedule_id') == $jadwal->id)
-                                <option value="{{ $jadwal->id }}" selected>
-                                    {{ $jadwal->poli->name ?? '' }} /
-                                    {{ $jadwal->user->name ?? '' }}</option>
+                        @foreach ($doctorPolis as $dokterPoli)
+                            @if (old('doctor_poli_id') == $dokterPoli->id)
+                                <option value="{{ $dokterPoli->id }}" selected>{{ $dokterPoli->poli->name ?? '' }} / {{ $dokterPoli->user->name ?? '' }}</option>
                             @else
-                                <option value="{{ $jadwal->id }}">{{ $jadwal->poli->name ?? '' }} /
-                                    {{ $jadwal->user->name ?? '' }}</option>
+                                <option value="{{ $dokterPoli->id }}">{{ $dokterPoli->poli->name ?? '' }} / {{ $dokterPoli->user->name ?? '' }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -327,7 +324,7 @@
                 type: 'get',
                 url: "{{ route('antrian.edit', '') }}" + "/" + id,
                 data: {
-                    doctor_schedule_id: $('#doctor_schedule_id').val(),
+                    doctor_poli_id: $('#doctor_poli_id').val(),
                     tgl_antrian: $('#tanggal_antrian').val(),
                     no_rujukan: $('#no_rujukan').val(),
                     last_diagnostic: $('#last_diagnostic').val(),
@@ -352,11 +349,11 @@
     $(document).ready(function() {
         var table = $('#tableJadwal tbody');
 
-        $('#doctor_schedule_id').on('change', function() {
-            var dokterScheduleID = $(this).val();
-            if (dokterScheduleID) {
+        $('#doctor_poli_id').on('change', function() {
+            var dokterPoliId = $(this).val();
+            if (dokterPoliId) {
                 $.ajax({
-                    url: '/antrian/jadwalDokter/' + dokterScheduleID,
+                    url: '/antrian/jadwalDokter/' + dokterPoliId,
                     type: "GET",
                     data: {
                         "_token": "{{ csrf_token() }}"

@@ -28,12 +28,4 @@ class RoomDetail extends Model
     {
         return $this->hasMany(User::class);
     }
-    public function hais()
-    {
-        return $this->hasMany(RanapHaisPatient::class);
-    }
-    public function ranapMppPatients()
-    {
-        return $this->hasMany(RanapMppPatient::class);
-    }
 }

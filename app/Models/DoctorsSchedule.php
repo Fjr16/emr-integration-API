@@ -10,17 +10,13 @@ class DoctorsSchedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'doctor_poli_id',
         'day',
         'start_at',
         'ends_at',
     ];
 
-    public function roomDetail(){
-        return $this->belongsTo(RoomDetail::class);
-    }
-
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function doctorPoli(){
+        return $this->belongsTo(DoctorPoli::class);
     }
 }

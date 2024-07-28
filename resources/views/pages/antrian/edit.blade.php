@@ -74,8 +74,8 @@
                 <div class="row mb-3">
                     <label for="basic-default-name" class="col-sm-3 col-form-label">Poli / Dokter</label>
                     <div class="col-sm-7">
-                      <input type="hidden" name="doctor_id" value="{{ $dokter->id ?? '' }}">
-                      <input type="text" value="{{ $dokter->roomDetail->name ?? '' }} / {{ $dokter->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
+                      <input type="hidden" name="doctor_poli_id" value="{{ $dokterPoli->id ?? '' }}">
+                      <input type="text" value="{{ $dokterPoli->poli->name ?? '' }} / {{ $dokterPoli->user->name ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
                     </div>
                   </div>
             </div>
