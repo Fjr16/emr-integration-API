@@ -42,10 +42,10 @@
               <table class="table text-nowrap" id="example">
                 <thead>
                   <tr class="bg-dark">
-                    <th>Nama</th>
                     <th>Staff Id</th>
-                    <th>NIK</th>
+                    <th>Nama</th>
                     <th>Jenis Kelamin</th>
+                    <th>NIK</th>
                     <th>Unit / Departemen</th>
                     <th>Username</th>
                     <th>Role</th>
@@ -56,10 +56,10 @@
                 <tbody>
                   @foreach ($data as $item) 
                     <tr>
-                      <td>{{ $item->name ?? '' }}</td>
                       <td>{{ $item->staff_id ?? '' }}</td>
-                      <td>{{ $item->nik ?? '' }}</td>
+                      <td>{{ $item->name ?? '' }}</td>
                       <td>{{ $item->gender ?? '' }}</td>
+                      <td>{{ $item->nik ?? '' }}</td>
                       <td>{{ $item->unit->name ?? '' }}</td>
                       <td>{{ $item->email ?? '' }}</td>
                       <td>{{ $item->roles->first()->name ?? '' }}</td>
@@ -99,9 +99,10 @@
               <table class="table text-nowrap" id="example2">
                 <thead>
                   <tr class="bg-dark">
-                    <th>Nama</th>
                     <th>Staff Id</th>
-                    <th>NIK</th>
+                    <th>Nama</th>
+                    {{-- <th>NIK</th> --}}
+                    <th>Poliklinik</th>
                     <th>Jenis Kelamin</th>
                     <th>Unit / Departemen</th>
                     <th>Username</th>
@@ -113,9 +114,10 @@
                 <tbody>
                   @foreach ($dataDokter as $item) 
                   <tr>
-                    <td>{{ $item->name ?? '' }}</td>
                     <td>{{ $item->staff_id ?? '' }}</td>
-                    <td>{{ $item->nik ?? '' }}</td>
+                    <td>{{ $item->name ?? '' }}</td>
+                    {{-- <td>{{ $item->nik ?? '' }}</td> --}}
+                    <td>{{ $item->poliklinik->name ?? '' }}</td>
                     <td>{{ $item->gender ?? '' }}</td>
                     <td>{{ $item->unit->name ?? '' }}</td>
                     <td>{{ $item->email ?? '' }}</td>

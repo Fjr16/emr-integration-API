@@ -45,16 +45,16 @@
       <div class="row mb-4">
         <div class="col-sm-4">
           <label class="form-label" for="basic-default-name">Nama Petugas</label>
-            <input type="text" name="name" class="form-control" id="basic-default-name" value="{{ old('name') }}" @required(true)/>
+            <input type="text" name="name" class="form-control" id="basic-default-name" placeholder="Nama Petugas" value="{{ old('name') }}" @required(true)/>
         </div>
         {{--  --}}
         <div class="col-sm-4">
             <label class="form-label" for="basic-default-name">NIK</label>
-            <input type="number" class="form-control" id="defaultFormControlInput" value="{{ old('nik') }}" name="nik" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="16" @required(true)/>
+            <input type="number" class="form-control" id="defaultFormControlInput" placeholder="03246234XXX" value="{{ old('nik') }}" name="nik" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="16" @required(true)/>
         </div>
         <div class="col-sm-4">
           <label class="form-label" for="basic-default-name">No Telp</label>
-          <input type="number" name="telp" class="form-control" id="basic-default-name" value="{{ old('telp') }}" @required(true)/>
+          <input type="number" name="telp" class="form-control" id="basic-default-name" placeholder="0813276XXXX" value="{{ old('telp') }}" @required(true)/>
         </div>
       </div>
       <div class="row mb-4">
@@ -111,21 +111,21 @@
         </div>
         <div class="col-sm-4">
           <label class="form-label" for="basic-default-name">Nama Rekening</label>
-          <input type="text" name="nama_rekening" class="form-control" id="basic-default-name" value="{{ old('nama_rekening') }}" @required(true)/>
+          <input type="text" name="nama_rekening" class="form-control" placeholder="Bank XXX" id="basic-default-name" value="{{ old('nama_rekening') }}" @required(true)/>
         </div>
         <div class="col-4">
           <label class="form-label" for="basic-default-name">Nomor Rekening</label>
-          <input type="number" name="no_rekening" class="form-control" id="basic-default-name" value="{{ old('no_rekening') }}" @required(true)/>
+          <input type="number" name="no_rekening" class="form-control" id="basic-default-name" value="{{ old('no_rekening', 0) }}" @required(true)/>
         </div>
       </div>
       <div class="row mb-4">
         <div class="col-sm-4">
           <label class="form-label" for="basic-default-name">Alamat Sesuai KTP</label>
-          <textarea name="alamat_ktp" class="form-control" rows="5" @required(true)>{{ old('alamat_ktp') }}</textarea>
+          <textarea name="alamat_ktp" class="form-control" placeholder="Jl. XXX XXX XX, No. XX XXXX" rows="5" @required(true)>{{ old('alamat_ktp') }}</textarea>
         </div>
         <div class="col-sm-4">
           <label class="form-label" for="basic-default-name">Alamat Domisili</label>
-          <textarea name="alamat_domisili" class="form-control" rows="5" @required(true)>{{ old('alamat_domisili') }}</textarea>
+          <textarea name="alamat_domisili" class="form-control" placeholder="Jl. XXX XXX XX, No. XX XXXX" rows="5" @required(true)>{{ old('alamat_domisili') }}</textarea>
         </div>
         <div class="col-sm-4">
           <label class="form-label" for="basic-default-name">Pengalaman Kerja</label>
@@ -155,13 +155,13 @@
             </div>
             <div class="col-sm-6">
               <label class="form-label" for="basic-default-name">No Telp Kontak Darurat</label>
-              <input type="number" name="no_kontak_darurat" class="form-control" id="basic-default-name" placeholder="No Telp Kontak Darurat" value="{{ old('kontak_darurat') }}"/>
+              <input type="number" name="no_kontak_darurat" class="form-control" placeholder="0813276XXXX" id="basic-default-name" value="{{ old('kontak_darurat') }}"/>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-12">
               <label class="form-label" for="basic-default-name">Alamat Kontak Darurat</label>
-              <textarea name="alamat_kontak_darurat" class="form-control" rows="7" placeholder="Alamat Kontak Darurat">{{ old('alamat_kontak_darurat') }}</textarea>
+              <textarea name="alamat_kontak_darurat" class="form-control" rows="7" placeholder="Jl. XXX XXX XX, No. XX XXXX">{{ old('alamat_kontak_darurat') }}</textarea>
             </div>
           </div>
         </div>
@@ -171,7 +171,7 @@
           <div class="row mb-3">
             <div class="col-sm-12">
               <label class="form-label" for="basic-default-name">Staff Id</label>
-              <input type="text" name="staff_id" class="form-control" id="basic-default-name" placeholder="Nomor Staff Id" value="{{ old('staff_id') }}"/>
+              <input type="text" name="staff_id" class="form-control" id="basic-default-name" placeholder="DRXXXX" value="{{ old('staff_id') }}"/>
             </div>
           </div>
           <div class="row mb-3">
@@ -196,11 +196,11 @@
           <div class="row mb-3">
             <div class="col-sm-6">
               <label class="form-label" for="basic-default-name">Username</label>
-              <input type="text" name="email" class="form-control" id="basic-default-name" value="{{ old('email') }}"/>
+              <input type="text" name="email" class="form-control" placeholder="username" id="basic-default-name" value="{{ old('email') }}"/>
             </div>
             <div class="col-sm-6">
               <label class="form-label" for="basic-default-name">Password</label>
-              <input type="text" name="password" class="form-control" id="basic-default-name"/>
+              <input type="text" name="password" class="form-control" placeholder="*******" id="basic-default-name"/>
             </div>
           </div>
           <div class="row mb-3">
@@ -221,12 +221,12 @@
           <div class="row mb-3">
             <div class="col-sm-12">
               <label class="form-label" for="basic-default-name">Catatan (opsional)</label>
-              <textarea name="catatan" class="form-control" rows="3">{{ old('catatan') }}</textarea>
+              <textarea name="catatan" class="form-control" rows="3" placeholder="Tuliskan keterangan tambahan atau catatan untuk user">{{ old('catatan') }}</textarea>
             </div>
           </div>
           <div class="row">
               <div class="col-sm-4">
-                <button type="button" class="btn btn-sm btn-outline-dark" id="addParaf" onclick="openModal(this)">Tambah Tanda Tangan</button>
+                <button type="button" class="btn btn-sm btn-outline-dark" id="addParaf" onclick="openModal(this)">Tanda Tangan</button>
               </div>
               <div class="col-sm-8">
                 <img src="" alt="" id="ttdImage" class="border">
@@ -240,11 +240,11 @@
         <div class="col-md">
           <h6 class="fw-medium d-inline me-2">Petugas adalah dokter</h6>
           <div class="form-check form-check-inline mt-4">
-            <input class="form-check-input" type="radio" name="isDokter" id="dokter-ya" value="1" onchange="formDokter(this.value)"/>
+            <input class="form-check-input" type="radio" name="isDokter" id="dokter-ya" value="1" onchange="formDokter(this.value)" {{ old('isDokter') == 1 ? 'checked' : ''}}/>
             <label class="form-check-label" for="dokter-ya">Ya</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="isDokter" id="dokter-no" value="0" checked onchange="formDokter(this.value)"/>
+            <input class="form-check-input" type="radio" name="isDokter" id="dokter-no" value="0" onchange="formDokter(this.value)" {{ old('isDokter') == 0 ? 'checked' : ''}} {{ old('isDokter') ? '' : 'checked' }}/>
             <label class="form-check-label" for="dokter-no">Tidak</label>
           </div>
         </div>
@@ -252,18 +252,27 @@
       <div id="dokter-form">
         <div class="row mb-4">
           <label class="col-sm-2 col-form-label" for="basic-default-name">No SIP</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" value="{{ old('sip') }}" name="sip" placeholder="XXX.XXXX/SIPD/DPMPTSP-XXX/XX/XXXX" id="sip" disabled>
+          </div>
+          <label class="col-sm-1 col-form-label" for="basic-default-name">Tarif</label>
+          <div class="col-sm-3">
+            <input type="number" class="form-control" name="tarif" value="{{ old('tarif', 0) }}" id="tarif" disabled>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <label class="col-sm-2 col-form-label" for="basic-default-name">Poliklinik</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" value="" name="sip" placeholder="" id="sip" disabled>
-            {{-- <select class="form-select select2 @error('room_detail_id') is-invalid @enderror" name="room_detail_id" aria-label="Default select example">
+            <select class="form-select select2 @error('poliklinik_id') is-invalid @enderror" name="poliklinik_id" id="poliklinik_id" aria-label="Default select example">
                 <option value="kosong" selected>Tidak Dalam Poli</option>
-                @foreach ($polis as $poli)
-                    @if (old('room_detail_id') == $poli->id)
+                @foreach ($polikliniks as $poli)
+                    @if (old('poliklinik_id') == $poli->id)
                         <option selected value="{{ $poli->id }}">{{ $poli->name }}</option>
                     @else
                         <option value="{{ $poli->id }}">{{ $poli->name }}</option>
                     @endif
                 @endforeach
-            </select> --}}
+            </select>
           </div>
         </div>
         <div class="row mb-3">
@@ -363,15 +372,22 @@
 
 function formDokter(value){
   const sip = document.getElementById('sip');
+  const tarif = document.getElementById('tarif');
   const spesialis = document.getElementById('specialist_id');
+  const poliklinik = document.getElementById('poliklinik_id');
   if (value == true) {
     sip.disabled = false;
+    tarif.disabled = false;
     spesialis.disabled = false;
+    poliklinik.disabled = false;
   } else {
     sip.value = null;
     sip.disabled = true;
+    tarif.value = 0;
+    tarif.disabled = true;
     spesialis.clear = null;
     spesialis.disabled = true;
+    poliklinik.disabled = true;
   }
 }
 </script>

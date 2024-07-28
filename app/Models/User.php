@@ -19,6 +19,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'unit_id',
+        'poliklinik_id',
         'name',
         'nik',
         'email',
@@ -41,18 +43,16 @@ class User extends Authenticatable
         'no_rekening',
         'catatan',
         'staff_id',
-        'unit_id',
-        // 'room_detail_id',        poliklinik
         'password',
         'status',
         'isDokter',
         'paraf',
         'sip',
-        // 'kode_dokter_bpjs',
+        'tarif',
     ];
 
     protected $with = [
-        'roomDetail',
+        'poliklinik',
         // 'doctorSchedules',
     ];
 
@@ -84,20 +84,19 @@ class User extends Authenticatable
         return $this->belongsTo(Unit::class);
     }
 
-    public function roomDetail()
+    public function poliklinik()    //new
     {
-        return $this->belongsTo(RoomDetail::class);
+        return $this->belongsTo(Poliklinik::class);
+    }
+    public function doctorSchedules()   //new
+    {
+        return $this->hasMany(DoctorsSchedule::class);
     }
 
     public function specialists()
     {
         return $this->belongsToMany(Specialist::class, 'user_specialists');
     }
-
-    // public function doctorSchedules()
-    // {
-    //     return $this->hasMany(DoctorsSchedule::class);
-    // }
     public function rmeCppts()
     {
         return $this->hasMany(RmeCppt::class);

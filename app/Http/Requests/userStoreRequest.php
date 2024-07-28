@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class userStoreRequest extends FormRequest
 {
@@ -23,27 +25,39 @@ class userStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $today = Carbon::now();
         return [
-            'name' => 'required',
+            'name' => 'required|max:100',
             'nik' => 'required|integer|max_digits:16',
-            'email' => 'required',
+            'email' => 'required|max:50',
+            'ayah' => 'max:50',
+            'ibu' => 'max:50',
             'gender' => 'required|in:Pria,Wanita',
-            'status_kawin' => 'required|in:Single,Menikah,Janda,Duda,Cerai,Dll',
+            'status_kawin' => 'required|in:Single,Menikah,Janda,Duda,Cerai,Dll|max:20',
             'jumlah_anak' => 'required|integer',
-            'tgl_lahir' => 'required|date',
-            'tgl_masuk' => 'required|date',
+            'tgl_lahir' => 'required|date|before:' . $today,
+            'tgl_masuk' => 'required|date|before_or_equal:' . $today,
+            'telp' => 'required|max:20',
+            'nama_kontak_darurat' => 'max:50',
+            'no_kontak_darurat' => 'max:20',
             'alamat_ktp' => 'required',
             'alamat_domisili' => 'required',
-            'pendidikan' => 'required|in:SD,SMP / MTS / SLTP SEDERAJAT,SMA / SMK / SLTA SEDERAJAT,S1,S2,S3',
-            'nama_rekening' => 'required',
+            'alamat_kontak_darurat' => 'nullable|string',
+            'pendidikan' => 'required|in:SD,SMP / MTS / SLTP SEDERAJAT,SMA / SMK / SLTA SEDERAJAT,S1,S2,S3|max:30',
+            'pengalaman' => 'nullable|string',
+            'nama_rekening' => 'required|max:30',
             'no_rekening' => 'required|integer',
-            'staff_id' => 'required|unique:users',
-            'unit_id' => 'required',
-            'password' => 'required|min_digits:4|max_digits:10',
-            // 'isDokter' => 'required|boolean',
+            'catatan' => 'nullable|string',
+            'staff_id' => 'required|unique:users|max:20',
+            'unit_id' => 'required|exists:units,id',
+            'password' => 'required|min_digits:4|max:10',
             'tanda_tangan' => 'required',
-            'telp' => 'required',
             'role_name' => 'required',
+            'isDokter' => 'required|boolean',
+            'sip' => 'required_if:isDokter,true',
+            'tarif' => 'required_if:isDokter,true',
+            'poliklinik_id' => 'required_if:isDokter,true',
+            // 'specialist_id' => 'required_if:isDokter,true',
         ];
     }
 
