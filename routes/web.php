@@ -219,7 +219,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/poliklinik/edit/{id}', [PoliklinikController::class, 'edit'])->name('poliklinik.edit');
     Route::put('/poliklinik/update/{id}', [PoliklinikController::class, 'update'])->name('poliklinik.update');
     Route::delete('/poliklinik/destroy/{id}', [PoliklinikController::class, 'destroy'])->name('poliklinik.destroy');
-    Route::get('/poliklinik/activate/unactivate/{id}/{status}', [PoliklinikController::class, 'activateOrUnactivate'])->name('poliklinik/activate/unactivate.activateOrUnactivate');
 
     //Unit
     Route::get('/unit', [UnitController::class, 'index'])->name('unit.index');
@@ -301,7 +300,6 @@ Route::group(['middleware' => 'auth'], function () {
     //Jadwal Dokter
     Route::get('/dokter/jadwal/create/{id}', [DoctorScheduleController::class, 'create'])->name('dokter/jadwal.create');
     Route::get('/dokter/jadwal/all', [DoctorScheduleController::class, 'all'])->name('dokter/jadwal.all');
-    Route::get('/dokter/jadwal/show/{id}', [DoctorScheduleController::class, 'show'])->name('dokter/jadwal.show');
     Route::post('/dokter/jadwal/store/{id}', [DoctorScheduleController::class, 'store'])->name('dokter/jadwal.store');
 
     //PembelianObat

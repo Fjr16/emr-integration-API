@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\ConsultingRates;
 use App\Models\DoctorsSchedule;
 use App\Models\PatientCategory;
+use App\Models\Poliklinik;
 use App\Models\Unit;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -47,21 +48,21 @@ class UserController extends Controller
     {
         $units = Unit::all();
         $role = Role::all();
-        $polis = RoomDetail::where('room_id', 1)->get();
         $jk = ['Pria', 'Wanita'];
         $stts = ['Single', 'Menikah', 'Janda', 'Duda', 'Cerai', 'Dll'];
         $specialists = Specialist::all();
         $pendidikan = ['SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
+        $polikliniks = Poliklinik::where('isActive', true)->get();
         return view('pages.user.create', [
             "title" => "User",
             "menu" => "Setting",
             "role" => $role,
-            "polis" => $polis,
             "units" => $units,
             "jk" => $jk,
             "stts" => $stts,
             "specialists" => $specialists,
-            "pendidikan" => $pendidikan
+            "pendidikan" => $pendidikan,
+            "polikliniks" => $polikliniks
         ]);
     }
 
@@ -73,39 +74,46 @@ class UserController extends Controller
      */
     public function store(userStoreRequest $request)
     {
-        if (isset($request->isDokter) && $request->isDokter == true) {
-            try {
-                $this->validate($request, [
-                    'sip' => 'required',
-                ],[
-                    'sip.required' => 'Nomor Surat Izin Praktek (SIP) tidak boleh kosong',
-                ]);
-            } catch (ValidationException $th) {
-                return back()->with('error', $th->getMessage())->withInput();
-            }
-        }
         // get all request
-        $data = $request->all();
+        $data = $request->validated();
 
+        // store ttd dokter
         $folder_path = 'assets/paraf-petugas/';
         Storage::makeDirectory('public/' . $folder_path);
-
         $ttdImage = base64_decode(str_replace('data:image/png;base64,', '', $request->input('tanda_tangan')));
         $file_name = $folder_path . uniqid() . '.png';
         Storage::put('public/' . $file_name, $ttdImage);
         $data['paraf'] = $file_name;
+        //end store ttd 
 
         if ($data['unit_id'] == 'kosong') {
             $data['unit_id'] = null;
         }
+        // untuk dokter
+        if ($request->isDokter == true) {
+            $data['poliklinik_id'] = $request->poliklinik_id;
+            if ($data['poliklinik_id'] == 'kosong') {
+                $data['poliklinik_id'] = null;
+            }
+            $data['tarif'] = $request->tarif;
+            $data['sip'] = $request->sip;
+            // session tab
+            $navTab = 'dokter';
+        }else{
+            $data['poliklinik_id'] = null;
+            $data['tarif'] = null;
+            $data['sip'] = null;
+        }
+        // end untuk dokter
+
         $data['password'] = Hash::make($request->password);
+
         if ($new = User::create($data)) {
             $new->assignRole($request->role_name);
             // $role = Role::where('name', $request->role_name)->first();
             // $role->givePermissionTo($request->permission_id);
         }
-        if (isset($request->isDokter) && $request->isDokter == true && !empty($request->specialist_id)) {
-            $navTab = 'dokter';
+        if ($request->isDokter == true && !empty($request->specialist_id)) {
             $new->specialists()->sync($request->specialist_id);
         }
         return redirect()->route('user.index')->with([
@@ -128,8 +136,8 @@ class UserController extends Controller
         $role = Role::all();
         $jk = ['Pria', 'Wanita'];
         $stts = ['Single', 'Menikah', 'Janda', 'Duda', 'Cerai', 'Dll'];
-        $status = ['AKTIF', 'OFF'];
-        $polis = RoomDetail::where('room_id', 1)->get();
+        $status = ['AKTIF', 'TIDAK AKTIF'];
+        $polikliniks = Poliklinik::where('isActive', true)->get();
         $specialists = Specialist::all();
         $pendidikan = ['SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
         return view('pages.user.edit', [
@@ -142,7 +150,7 @@ class UserController extends Controller
             "specialists" => $specialists,
             "jk" => $jk,
             "stts" => $stts,
-            "polis" => $polis,
+            "polikliniks" => $polikliniks,
             "pendidikan" => $pendidikan,
         ]);
     }

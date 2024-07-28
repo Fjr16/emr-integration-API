@@ -52,8 +52,8 @@
                 <h5 class="mb-0 fw-bold">Tambah Jadwal</h5>
             </div>
             <div class="col-6 text-end">
-                <span class="text-primary text-uppercase fw-bold">{{ ($item->user->staff_id ?? '') . ' / ' . ($item->user->name ?? '') }}</span><br>
-                <span class="fw-bold text-uppercase fst-italic">{{ $item->poli->name ?? '' }}</span>
+                <span class="text-primary text-uppercase fw-bold">{{ ($item->staff_id ?? '') . ' / ' . ($item->name ?? '') }}</span><br>
+                <span class="fw-bold text-uppercase fst-italic">{{ $item->poliklinik->name ?? '' }}</span>
             </div>
         </div>
     </div>
@@ -64,7 +64,16 @@
             <div class="row mb-2 dinamic-input">
                 <div class="col-sm-6">
                     <label class="form-label" for="hari">Hari</label>
-                    <input type="text" name="day[]" class="form-control" id="hari" placeholder="Hari Praktek" value="{{ old('day.' . 0, $item->doctorSchedules[0]->day ?? '') }}" required />
+                    <select name="day[]" class="form-control" id="hari" required>
+                        <option selected disabled>Pilih</option>
+                        @foreach ($days as $hr)
+                        @if (old('day.' . 0, $item->doctorSchedules[0]->day ?? '') == $hr)
+                            <option value="{{ $hr }}" selected>{{ $hr }}</option>
+                        @else
+                            <option value="{{ $hr }}">{{ $hr }}</option>                            
+                        @endif
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-sm-4">
                     <label class="form-label" for="jam_praktek">Jam Praktek</label>
@@ -86,7 +95,16 @@
                 @foreach (collect(old('day'))->skip(1) as $key => $day)    
                     <div class="row mb-2 dinamic-input">
                         <div class="col-sm-6">
-                            <input type="text" name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" placeholder="Hari Praktek" value="{{ $day }}" required />
+                            <select name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" required>
+                                <option selected disabled>Pilih</option>
+                                @foreach ($days as $hr)
+                                @if ($day == $hr)
+                                    <option value="{{ $hr }}" selected>{{ $hr }}</option>
+                                @else
+                                    <option value="{{ $hr }}">{{ $hr }}</option>                            
+                                @endif
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-sm-4">
                             <div class="input-group">
@@ -107,7 +125,16 @@
                 @foreach ($item->doctorSchedules->skip(1) as $key => $jd)    
                     <div class="row mb-2 dinamic-input">
                         <div class="col-sm-6">
-                            <input type="text" name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" placeholder="Hari Praktek" value="{{ $jd->day ?? '' }}" required />
+                            <select name="day[{{ $key }}]" class="form-control" id="hari{{ $key }}" required>
+                                <option selected disabled>Pilih</option>
+                                @foreach ($days as $hr)
+                                @if (($jd->day ?? '') == $hr)
+                                    <option value="{{ $hr }}" selected>{{ $hr }}</option>
+                                @else
+                                    <option value="{{ $hr }}">{{ $hr }}</option>                            
+                                @endif
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-sm-4">
                             <div class="input-group">
@@ -140,7 +167,12 @@
     function addContent(element){
         var content = `
             <div class="col-sm-6">
-                <input type="text" name="day[]" class="form-control" id="hari" placeholder="Hari Praktek" required />
+                <select name="day[]" class="form-control" id="hari" required>
+                    <option selected disabled>Pilih</option>
+                    @foreach ($days as $hr)
+                        <option value="{{ $hr }}">{{ $hr }}</option>                            
+                    @endforeach
+                </select>
             </div>
             <div class="col-sm-4">
                 <div class="input-group">

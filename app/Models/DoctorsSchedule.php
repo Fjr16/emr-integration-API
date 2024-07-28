@@ -10,13 +10,13 @@ class DoctorsSchedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_poli_id',
+        'user_id',
         'day',
         'start_at',
         'ends_at',
     ];
 
-    public function doctorPoli(){
-        return $this->belongsTo(DoctorPoli::class);
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

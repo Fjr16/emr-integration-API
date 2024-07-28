@@ -26,7 +26,7 @@
         <button id="btn-link" type="button" class="nav-link {{ session('navPoli') == 'jadwal' ? 'active' : '' }} d-flex justify-content-center"
         role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-jadwal"
         aria-controls="navs-justified-jadwal" aria-selected="false">
-        <p class="m-0">Jadwal Poli</p>
+        <p class="m-0">Jadwal Dokter</p>
         </button>
       </li>
     </ul>
@@ -57,23 +57,23 @@
                         </form>
                       </div>
                         <div class="table-responsive">
-                            <table class="table">
-                              <thead>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th class="text-dark">Dokter</th>
+                                <th class="text-dark">Tarif</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                              @foreach ($item->users as $user)    
                                 <tr>
-                                  <th class="text-dark">Dokter</th>
-                                  <th class="text-dark">Tarif</th>
+                                    <td>{{ ($user->staff_id ?? '') . ' / ' . ($user->name ?? '') }}</td>
+                                    <td>Rp. {{ number_format($user->tarif ?? 0) }}</td>
                                 </tr>
-                              </thead>
-                              <tbody class="table-border-bottom-0">
-                                @foreach ($item->users as $user)    
-                                  <tr>
-                                      <td>{{ ($user->staff_id ?? '') . ' / ' . ($user->name ?? '') }}</td>
-                                      <td>Rp. {{ number_format($user->tarif ?? 0) }}</td>
-                                  </tr>
-                                @endforeach
-                              </tbody>
-                            </table>
-                          </div>
+                              @endforeach
+                            </tbody>
+                          </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,44 +81,45 @@
         @endforeach
       </div>
       <div class="tab-pane fade {{ session('navPoli') == 'jadwal' ? 'show active' : '' }}" id="navs-justified-jadwal" role="tabpanel">
-        <div class="table-responsive text-nowrap">
-          <table class="table">
-            <thead>
-              <tr class="text-nowrap bg-dark">
-                <th>No</th>
-                <th>Poli / Dokter</th>
-                <th>Hari</th>
-                <th>Waktu</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{-- @foreach ($dataPoliDokter as $item)
-              <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td style="width: 40%">{{ ($item->poli->name) .' / ' . ($item->user->name ?? '') }}</td>
-                <td colspan="2" class="p-0">
+        <div id="accordionPopoutIcon" class="accordion accordion-popout">
+          @foreach ($dataDokters as $key => $dokter)
+          <div class="accordion-item card">
+            <h2 class="accordion-header text-body d-flex justify-content-between" id="dokter_{{ $key }}">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#jadwalDokter-{{ $key }}" aria-controls="jadwalDokter-{{ $key }}">
+                {{ $loop->iteration. '. ' . ($dokter->name ?? '...') . ' / ' . ($dokter->poliklinik->name ?? '...') }}
+              </button>
+            </h2>
+        
+            <div id="jadwalDokter-{{ $key }}" class="accordion-collapse collapse" data-bs-parent="#accordionPopoutIcon">
+              <div class="accordion-body">
+                <div class="text-start mb-2">
+                  <a href="{{ route('dokter/jadwal.create', $dokter->id) }}" class="btn btn-outline-warning btn-sm"><i class='bx bx-calendar-plus'></i> Jadwal</a>
+                </div>
+                <div class="table-responsive text-nowrap">
                   <table class="table">
-                      @foreach ($item->doctorSchedules as $jadwal)
+                    <thead>
+                      <tr class="text-nowrap bg-primary">
+                        <th>Hari</th>
+                        <th>Mulai</th>
+                        <th>Selesai</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($dokter->doctorSchedules as $jadwal)
                       <tr>
-                        <td style="width: 25%">
-                          {{ $jadwal->day ?? '-' }}
-                        </td>
-                        <td style="width: 20%">
-                          {{ ($jadwal->start_at ?? '00:00'). ' - ' . ($jadwal->ends_at ?? '00:00') }}
-                        </td>
+                        <td>{{ $jadwal->day ?? '-' }}</td>
+                        <td>{{ ($jadwal->start_at ?? '00:00')}}</td>
+                        <td>{{ ($jadwal->ends_at ?? '00:00') }}</td>
                       </tr>
                       @endforeach
+                    </tbody>
                   </table>
-                </td>
-                <td>
-                    <a href="{{ route('dokter/jadwal.create', $item->id) }}" class="btn btn-outline-primary btn-sm"><i class='bx bx-calendar-plus'></i></a>
-                </td>
-              </tr>
-              @endforeach --}}
-            </tbody>
-          </table>
-        </div>
+                </div>.
+              </div>
+            </div>
+          </div>  
+          @endforeach
+        </div>      
       </div>
     </div>
 

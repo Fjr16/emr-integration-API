@@ -6,6 +6,7 @@ use App\Http\Requests\PoliklinikStoreRequest;
 use App\Http\Requests\PoliklinikUpdateRequest;
 use App\Models\DoctorsSchedule;
 use App\Models\Poliklinik;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -21,10 +22,12 @@ class PoliklinikController extends Controller
         }
 
         $data = Poliklinik::where('isActive', true)->get();
+        $dataDokters = User::where('isDokter', true)->whereNotNull('poliklinik_id')->get();
         return view('pages.poli.index', [
             "title" => "Poliklinik",
             "menu" => "Setting",
             "data" => $data,
+            "dataDokters" => $dataDokters,
         ]);
     }
     public function create()

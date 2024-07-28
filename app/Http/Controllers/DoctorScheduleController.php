@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use App\Models\User;
-use App\Models\DoctorPoli;
 use App\Models\DoctorsSchedule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\JadwalPraktekRequest;
@@ -26,31 +24,17 @@ class DoctorScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $item = User::find($id);
-        return response()->json($item);
-    }
-
     // new Controller
 
     public function create($id)
     {
-        $item = DoctorPoli::find($id);
-        $data = User::where('isDokter', true)->get();
-        // $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        $item = User::find($id);
+        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
         return view('pages.jadwalDokter.create', [
             "title" => "Poliklinik",
             "menu" => "Setting",
             "item" => $item,
-            "data" => $data,
-            // "days" => $days
+            "days" => $days
         ]);
     }
 
@@ -59,7 +43,7 @@ class DoctorScheduleController extends Controller
         DB::beginTransaction();
         try {
             $errors = [];
-            $item = DoctorPoli::findOrFail($id);
+            $item = User::findOrFail($id);
 
             // remove all current schedules
             $item->doctorSchedules()->delete();
@@ -70,7 +54,7 @@ class DoctorScheduleController extends Controller
 
             foreach ($days as $key => $day) {
                 // untuk check ada atau tidak jadwal yang bentrok di poli yang sama, dengan hari, jam mulai hingga jam selesai yang sama
-                $checkAnotherSameItem = DoctorsSchedule::where('doctor_poli_id', $item->id)
+                $checkAnotherSameItem = DoctorsSchedule::where('user_id', $item->id)
                                                     ->where('day', $days[$key])
                                                     ->where('start_at', $startAts[$key])
                                                     ->where('ends_at', $endsAts[$key])
@@ -80,7 +64,7 @@ class DoctorScheduleController extends Controller
                 }
 
                 DoctorsSchedule::create([
-                    'doctor_poli_id' => $item->id,
+                    'user_id' => $item->id,
                     'day' => $day,
                     'start_at' => $startAts[$key],
                     'ends_at' => $endsAts[$key],

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('doctors_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_poli_id')->nullable();
+            $table->foreignId('user_id')->nullable();//dokter_id
             $table->string('day', 10)->nullable();
             $table->time('start_at')->nullable();
             $table->time('ends_at')->nullable();
