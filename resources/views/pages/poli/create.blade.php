@@ -67,62 +67,6 @@
                 <input type="text" name="kode_antrian" class="form-control" id="kode_antrian" value="{{ old('kode_antrian') }}" placeholder="Kode Antrian" required />
             </div>
         </div>
-        {{--  --}}
-        <div class="row mb-2 dinamic-input">
-        <div class="col-sm-7">
-            <label for="exampleFormControlSelect1" class="form-label">Dokter Praktek</label>
-            <select class="form-select form-select-sm select2"
-                aria-label="Default select example" name="user_id[]" @required(true)>
-                <option selected disabled>Pilih</option>
-                @foreach ($data as $item)
-                    @if (old('user_id.' . 0) == $item->id)
-                        <option value="{{ $item->id }}" selected>{{ $item->staff_id . ' / ' . $item->name }}</option>
-                    @else
-                        <option value="{{ $item->id }}">{{ $item->staff_id . ' / ' . $item->name }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <label class="form-label" for="tarif">Tarif</label>
-            <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" value="{{ old('tarif.' . 0) }}" required />
-        </div>
-        <div class="col-sm-1">
-            <div class="input-group mt-3 pt-3">
-                <button type="button" class="btn btn-md btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                <button type="button" class="btn btn-md btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
-            </div>
-        </div>
-        </div>
-        {{--  --}}
-        @if (session('_old_input'))
-        @foreach (collect(old('user_id'))->skip(1) as $key => $userId)    
-            <div class="row mb-2 dinamic-input">
-                <div class="col-sm-7">
-                    <select class="form-select form-select-sm select2" aria-label="Default select example" name="user_id[{{ $key }}]" @required(true)>
-                        <option selected disabled>Pilih</option>
-                        @foreach ($data as $item)
-                            @if ($userId == $item->id)
-                                <option value="{{ $item->id }}" selected>{{ $item->staff_id . ' / ' . $item->name }}</option>
-                            @else
-                                <option value="{{ $item->id }}">{{ $item->staff_id . ' / ' . $item->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-sm-4">
-                    <input type="number" name="tarif[{{ $key }}]" class="form-control" id="tarif{{ $key }}" placeholder="0" value="{{ old('tarif.' . $key) }}" required />
-                </div>
-                <div class="col-sm-1">
-                    <div class="input-group pt-1">
-                        <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                        <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-        @endif
-        {{--  --}}
         <hr class="mb-4">
         <div class="row justify-content-start">
             <div class="col-sm-4 text-start">
@@ -132,34 +76,4 @@
     </form>
   </div>
 </div>
-
-<script>
-    let counter = 0;
-    function addContent(element){
-        counter = counter+1;
-        var content = `
-            <div class="col-sm-7">
-                <select class="form-select form-select-sm" aria-label="Default select example" name="user_id[]" id="user_id_${counter}" @required(true)>
-                    <option selected disabled>Pilih</option>
-                    @foreach ($data as $item)
-                        @if (old('user_id') == $item->id)
-                            <option value="{{ $item->id }}" selected>{{ $item->staff_id . ' / ' . $item->name }}</option>
-                        @else
-                            <option value="{{ $item->id }}">{{ $item->staff_id . ' / ' . $item->name }}</option>
-                        @endif
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-sm-4">
-                <input type="number" name="tarif[]" class="form-control" id="tarif" placeholder="0" required />
-            </div>
-            <div class="col-sm-1">
-                <div class="input-group pt-1">
-                    <button type="button" class="btn btn-sm btn-primary p-1 me-2" onclick="addContent(this)"><i class="bx bx-plus"></i></button>
-                    <button type="button" class="btn btn-sm btn-danger p-1" onclick="removeInputDinamic(this)"><i class="bx bx-minus"></i></button>
-                </div>
-            </div>`;
-        dinamicInput(element, content, 'user_id_'+counter, 'Pilih', false);
-    }
-</script>
 @endsection

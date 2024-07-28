@@ -65,13 +65,12 @@
                                 </tr>
                               </thead>
                               <tbody class="table-border-bottom-0">
-                                @foreach ($item->doctorPolis as $pivot)    
+                                @foreach ($item->users as $user)    
                                   <tr>
-                                      <td>{{ ($pivot->user->staff_id ?? '') . ' / ' . ($pivot->user->name ?? '') }}</td>
-                                      <td>{{ $pivot->tarif ?? '0' }}</td>
+                                      <td>{{ ($user->staff_id ?? '') . ' / ' . ($user->name ?? '') }}</td>
+                                      <td>Rp. {{ number_format($user->tarif ?? 0) }}</td>
                                   </tr>
                                 @endforeach
-                                    
                               </tbody>
                             </table>
                           </div>
@@ -94,7 +93,7 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($dataPoliDokter as $item)
+              {{-- @foreach ($dataPoliDokter as $item)
               <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td style="width: 40%">{{ ($item->poli->name) .' / ' . ($item->user->name ?? '') }}</td>
@@ -116,7 +115,7 @@
                     <a href="{{ route('dokter/jadwal.create', $item->id) }}" class="btn btn-outline-primary btn-sm"><i class='bx bx-calendar-plus'></i></a>
                 </td>
               </tr>
-              @endforeach
+              @endforeach --}}
             </tbody>
           </table>
         </div>
