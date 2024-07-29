@@ -19,7 +19,7 @@
                 <div class="col-8">
                     <h4 class="align-self-center m-0">
                         Daftar Pasien
-                        @if ($user->hasRole('Dokter Poli'))
+                        @if ($user->hasRole('Dokter'))
                             Dokter
                             {{ Auth::user()->name }} ({{ Auth::user()->staff_id }})
                         @endif
@@ -52,7 +52,7 @@
                         @if ($user->hasRole('Rekam Medis dan Casemix'))
                         <th>General Consent</th>
                         @endif
-                        @if ($user->hasRole(['Dokter Spesialis', 'Dokter Umum', 'Perawat']))
+                        @if ($user->hasRole(['Dokter', 'Perawat']))
                             <th class="text-center">Action</th>
                         @endif
                         <th>No Antrian</th>
@@ -113,7 +113,7 @@
                                     @endif
                                 </td>
                             @endif
-                            @if ($user->hasRole(['Dokter Spesialis', 'Dokter Umum', 'Perawat']))
+                            @if ($user->hasRole(['Dokter', 'Perawat']))
                             <td class="text-center" style="width: 9%">
                                 <div class="btn-group dropend">
                                     <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

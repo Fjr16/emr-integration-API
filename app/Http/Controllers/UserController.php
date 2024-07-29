@@ -174,8 +174,8 @@ class UserController extends Controller
         if ($data['unit_id'] == 'kosong') {
             $data['unit_id'] = null;
         }
-        if ($data['room_detail_id'] == 'kosong') {
-            $data['room_detail_id'] = null;
+        if ($data['poliklinik_id'] == 'kosong') {
+            $data['poliklinik_id'] = null;
         }
 
 
@@ -196,26 +196,17 @@ class UserController extends Controller
         if ($item->update($data)) {
             $item->syncRoles($request->role_name);
 
-            if (preg_match('/Dokter/i', $item->roles->first()->name)) {
+            if ($item->isDokter == true) {
                 $item->specialists()->sync($request->specialist_id);
-                $checkSchedules = $item->doctorSchedules()->count();
-                if ($item->room_detail_id && $checkSchedules == 0) {
-                    $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-                    foreach ($days as $day) {
-                        $jadwal['user_id'] = $item->id;
-                        $jadwal['day'] = $day;
-                        DoctorsSchedule::create($jadwal);
-                    }
-                }
-                if ($item->consultingRates->isEmpty()) {
-                    $dataTanggungan = PatientCategory::all();
-                    foreach ($dataTanggungan as $itemTanggungan) {
-                        ConsultingRates::create([
-                            'user_id' => $item->id,
-                            'patient_category_id' => $itemTanggungan->id,
-                        ]);
-                    }
-                }
+                // $checkSchedules = $item->doctorSchedules()->count();
+                // if ($item->room_detail_id && $checkSchedules == 0) {
+                //     $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+                //     foreach ($days as $day) {
+                //         $jadwal['user_id'] = $item->id;
+                //         $jadwal['day'] = $day;
+                //         DoctorsSchedule::create($jadwal);
+                //     }
+                // }
             } else {
                 $item->specialists()->detach();
             }

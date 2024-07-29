@@ -23,7 +23,7 @@
                         <th>Nama</th>
                         <th>Poli / Dokter</th>
                         <th>No Kartu BPJS</th>
-                        <th>Diagnosa</th>
+                        <th>Diagnosa Rujukan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,15 +31,19 @@
                         <tr>
                             <td>
                                 @if ($item->status_antrian == 'WAITING')
-                                    <button class="btn btn-success btn-sm"
-                                    onclick="registerQueue({{ $item->id }})">Daftarkan</button>
-                                    <form action="{{ route('antrian/konfirmasi.store', $item->id) }}" class="d-inline"
-                                        method="POST">
-                                        @csrf
-                                        <button class="btn btn-danger btn-sm text-white" name="status_antrian"
-                                            value="CANCEL"
-                                            onclick="return confirm('Apakah Anda Yakin Ingin Membatalkan Antrian ?')">Batal</button>
-                                    </form>
+                                    <div class="btn-group dropend">
+                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class='bx bx-info-circle'></i> Registrasi Ulang</button>
+                                        <div class="dropdown-menu">
+                                            <button class="dropdown-item text-success" onclick="registerQueue({{ $item->id }})"><i class="bx bx-check"></i> Konfirmasi</button>
+                                            <form action="{{ route('antrian/konfirmasi.store', $item->id) }}" class="d-inline"
+                                                method="POST">
+                                                @csrf
+                                                <button class="dropdown-item text-danger" name="status_antrian"
+                                                    value="CANCEL"
+                                                    onclick="return confirm('Apakah Anda Yakin Ingin Membatalkan Antrian ?')"><i class="bx bx-x"></i> Batal</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 @elseif ($item->status_antrian == 'CANCEL')
                                     <span class="badge bg-danger">ANTRIAN BATAL</span>
                                 @endif
@@ -52,7 +56,7 @@
                             @endphp
                             <td>{{ $tglAntrian->format('d-m-Y') ?? '' }}</td>
                             <td>{{ $item->patient->name }}</td>
-                            <td>{{ $item->dpjp->roomDetail->name ?? '' }} /
+                            <td>{{ $item->dpjp->poliklinik->name ?? '' }} /
                                 {{ $item->dpjp->name ?? '' }}</td>
                             <td>{{ $item->patient->noka ?? '' }}</td>
                             <td>{{ $item->last_diagnostic ?? '-' }}</td>
@@ -68,19 +72,6 @@
 
     </div>
 
-    {{-- Store modal --}}
-    <div class="modal fade" id="openStoreModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-xl" id="showStoreModal">
-
-        </div>
-    </div>
-    {{-- modal --}}
-    <div class="modal fade" id="backDropModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-xl" id="showModal">
-
-        </div>
-    </div>
-
     <script>
         function registerQueue(id) {
             $.ajax({
@@ -88,7 +79,7 @@
                 url: "{{ route('antrian/konfirmasi.edit', '') }}/" + id,
                 success: function(data) {
                     var div = document.createElement('div');
-                    div.className = 'modal-dialog';
+                    div.className = 'modal-dialog modal-lg';
                     div.innerHTML = data;
 
                     $('#openModal').html(div);

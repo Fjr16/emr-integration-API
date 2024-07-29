@@ -210,7 +210,7 @@
               <select class="form-select @error('role_name') is-invalid @enderror select2" name="role_name" aria-label="Default select example">
                   <option selected disabled>Pilih</option>
                   @foreach ($role as $role)
-                      @if (old('role_name', $item->roles->first()->name) == $role->name)
+                      @if (old('role_name', $item->roles->first()->name ?? '') == $role->name)
                           <option selected value="{{ $role->name }}">{{ $role->name }}</option>
                       @else
                           <option value="{{ $role->name }}">{{ $role->name }}</option>
