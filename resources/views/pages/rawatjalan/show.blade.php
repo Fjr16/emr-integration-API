@@ -1917,7 +1917,7 @@
                                 @endforeach
                                 <tr class="fw-bold">
                                     <td colspan="4" class="text-center">Total Akhir</td>
-                                    <td>{{ number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0) }}</td>
+                                    <td>{{ $item->patientActionReport ? (number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0)) : '0' }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1967,7 +1967,7 @@
                                 @endforeach
                                 <tr class="fw-bold">
                                     <td colspan="4" class="text-center">Total Akhir</td>
-                                    <td>{{ number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0) }}</td>
+                                    <td>{{ $item->patientActionReport ? (number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0)) : '0' }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2017,7 +2017,7 @@
                                 @endforeach
                                 <tr class="fw-bold">
                                     <td colspan="4" class="text-center">Total Akhir</td>
-                                    <td>{{ number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0) }}</td>
+                                    <td>{{ $item->patientActionReport ? (number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0)) : '0' }}</td>
                                 </tr>
                             </tbody>
                         </table>
