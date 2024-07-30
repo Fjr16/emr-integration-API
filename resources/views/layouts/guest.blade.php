@@ -8,25 +8,49 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
 
+    {{-- core css --}}
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Scripts Core -->
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
+
+    <!-- Main JS -->
+    <script src="{{ asset('/assets/js/main.js') }}"></script>
+
+    <style>
+        .btn-primary {
+            background-color: #36BA98 !important;
+            border-color: #36BA98 !important;
+        }
+        .btn-primary:hover {
+            background-color: #249579 !important;
+        }
+        .text-success {
+            color: #36BA98 !important;
+        }
+    </style>
+
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </div>
-
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            {{ $slot }}
+<body>
+    <div class="container-fluid" style="background: #b3dacd;">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <a href="/" class="fw-bolder text-success fs-1">E Medical Record</a>
+                    </div>
+                    <div class="card-body">
+                        @yield('login-form')
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
