@@ -42,7 +42,7 @@ class MedicineTransactionPembelianController extends Controller
     {
         $suppliers = Supplier::all();
         $obats = Medicine::all();
-        $unitSelectedId = Auth::user()->unit->id;
+        $unitSelectedId = Auth::user()->unit->id ?? '';
         $units = Unit::all();
         return view('pages.pembelian.create', [
             "title" => "Pembelian",

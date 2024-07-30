@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GetConversion;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KasirController;
@@ -22,7 +21,6 @@ use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\DoctorPoliController;
 use App\Http\Controllers\GetWilayahController;
 use App\Http\Controllers\RawatJalanController;
-use App\Http\Controllers\RoomDetailController;
 use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\KontrolUlangController;
@@ -196,21 +194,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/job/edit/{id}', [JobController::class, 'edit'])->name('job.edit');
     Route::put('/job/update/{id}', [JobController::class, 'update'])->name('job.update');
     Route::delete('/job/destroy/{id}', [JobController::class, 'destroy'])->name('job.destroy');
-
-    //Ruang
-    Route::get('/ruang', [RoomController::class, 'index'])->name('ruang.index');
-    Route::get('/ruang/create', [RoomController::class, 'create'])->name('ruang.create');
-    Route::post('/ruang/store', [RoomController::class, 'store'])->name('ruang.store');
-    Route::get('/ruang/edit/{id}', [RoomController::class, 'edit'])->name('ruang.edit');
-    Route::put('/ruang/update/{id}', [RoomController::class, 'update'])->name('ruang.update');
-    Route::delete('/ruang/destroy/{id}', [RoomController::class, 'destroy'])->name('ruang.destroy');
-
-    //Detail Ruang
-    Route::get('/ruang/detail/create', [RoomDetailController::class, 'create'])->name('ruang/detail.create');
-    Route::post('/ruang/detail/store', [RoomDetailController::class, 'store'])->name('ruang/detail.store');
-    Route::get('/ruang/detail/edit/{id}', [RoomDetailController::class, 'edit'])->name('ruang/detail.edit');
-    Route::put('/ruang/detail/update/{id}', [RoomDetailController::class, 'update'])->name('ruang/detail.update');
-    Route::delete('/ruang/detail/destroy/{id}', [RoomDetailController::class, 'destroy'])->name('ruang/detail.destroy');
 
     //Poliklinik
     Route::get('/poliklinik/index', [PoliklinikController::class, 'index'])->name('poliklinik.index');
@@ -509,9 +492,5 @@ Route::get('/laporan/kasir/exportExcel/{id}', [ReportCashierController::class, '
 Route::get('/laporan/lab/patologi/klinik', [ReportPenunjangController::class, 'indexPk'])->name('laporan/lab/patologi/klinik.index');
 Route::get('/laporan/lab/patologi/klinik/show/{id}', [ReportPenunjangController::class, 'showPk'])->name('laporan/lab/patologi/klinik.show');
 Route::get('/laporan/lab/patologi/klinik/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelPk'])->name('laporan/lab/patologi/klinik.exportExcel');
-
-Route::get('/laporan/lab/patologi/anatomi', [ReportPenunjangController::class, 'indexPa'])->name('laporan/lab/patologi/anatomi.index');
-Route::get('/laporan/lab/patologi/anatomi/show/{id}', [ReportPenunjangController::class, 'showPa'])->name('laporan/lab/patologi/anatomi.show');
-Route::get('/laporan/lab/patologi/anatomi/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelPa'])->name('laporan/lab/patologi/anatomi.exportExcel');
 
 require __DIR__ . '/auth.php';

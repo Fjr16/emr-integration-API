@@ -245,11 +245,6 @@
                                     <div>Tindakan</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ $title == 'Ruang' ? 'active' : '' }}">
-                                <a href="{{ route('ruang.index') }}" class="menu-link">
-                                    <div>Ruangan</div>
-                                </a>
-                            </li>
                             <li class="menu-item {{ $title == 'Poliklinik' ? 'active' : '' }}">
                                 <a href="{{ route('poliklinik.index') }}" class="menu-link">
                                     <div>Poliklinik</div>
@@ -338,12 +333,6 @@
                         </a>
                     </li>
                     {{-- @endcan --}}
-                    {{-- @can('master tanggungan pasien') --}}
-                    <li class="menu-item {{ $title == 'Laporan Lab PA' ? 'active' : '' }}">
-                        <a href="{{ route('laporan/lab/patologi/anatomi.index') }}" class="menu-link">
-                            <div>Lab Patologi Anatomi</div>
-                        </a>
-                    </li>
                 </ul>
             </li>
             {{-- @endcanany --}}

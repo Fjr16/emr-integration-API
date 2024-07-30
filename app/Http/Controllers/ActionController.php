@@ -39,8 +39,8 @@ class ActionController extends Controller
         ];
         $patientCategories = PatientCategory::all();
         return view('pages.tindakan.create', [
-            "title" => "Jenis Tindakan",
-            "menu" => "Tindakan",
+            "title" => "Tindakan",
+            "menu" => "Setting",
             "data" => $data,
             "patientCategories" => $patientCategories
         ]);

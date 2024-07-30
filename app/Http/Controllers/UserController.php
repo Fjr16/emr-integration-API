@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\userStoreRequest;
 use App\Models\User;
-use App\Models\RoomDetail;
 use App\Models\Specialist;
 use Illuminate\Http\Request;
 use App\Models\ConsultingRates;
