@@ -138,7 +138,7 @@
                             <td>{{ $item->patient->jenis_kelamin ?? '-' }}</td>
                             <td>{{ $item->patient->telp ?? '-' }}</td>
                             @if ($user->hasRole('Perawat|Rekam Medis dan Casemix'))
-                                <td>{{ $item->dpjp->roomDetail->name ?? '' }} / {{ $item->dpjp->name ?? '' }}</td>
+                                <td>{{ $item->dpjp->poliklinik->name ?? '' }} / {{ $item->dpjp->name ?? '' }}</td>
                             @endif
                             <td>
                                 @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    

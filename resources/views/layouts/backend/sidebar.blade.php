@@ -84,12 +84,12 @@
                     <div>Poliklinik</div>
                 </a>
             </li>
-            <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
+            {{-- <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
                 <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
                     <i class='menu-icon tf-icons bx bxs-user-voice'></i>
                     <div>Rekam Medis</div>
                 </a>
-            </li>
+            </li> --}}
             <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
                 <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
                     <i class='menu-icon tf-icons bx bxs-capsule'></i>

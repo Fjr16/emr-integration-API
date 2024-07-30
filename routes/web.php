@@ -367,7 +367,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/rajal', [RawatJalanController::class, 'index'])->name('rajal/index');  //index rajal poli
     Route::get('/rajal/show/{id}/{title}', [RawatJalanController::class, 'show'])->name('rajal/show');
 //rekam medis
-    Route::get('/rajal/rekammedis/index', [RekamMedisPatientController::class, 'index'])->name('rajal/rekammedis.index'); //index rajal rekam medis
+    // Route::get('/rajal/rekammedis/index', [RekamMedisPatientController::class, 'index'])->name('rajal/rekammedis.index'); //index rajal rekam medis
 //status Pelayanan Poli
 Route::put('/rajal/status/pelayanan/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/status/pelayanan.update');
 

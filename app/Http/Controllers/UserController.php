@@ -101,7 +101,7 @@ class UserController extends Controller
             $navTab = 'dokter';
         }else{
             $data['poliklinik_id'] = null;
-            $data['tarif'] = null;
+            $data['tarif'] = 0;
             $data['sip'] = null;
         }
         // end untuk dokter
@@ -174,9 +174,22 @@ class UserController extends Controller
         if ($data['unit_id'] == 'kosong') {
             $data['unit_id'] = null;
         }
-        if ($data['poliklinik_id'] == 'kosong') {
+        // untuk dokter
+        if ($request->isDokter == true) {
+            $data['poliklinik_id'] = $request->poliklinik_id;
+            if ($data['poliklinik_id'] == 'kosong') {
+                $data['poliklinik_id'] = null;
+            }
+            $data['tarif'] = $request->tarif;
+            $data['sip'] = $request->sip;
+            // session tab
+            $navTab = 'dokter';
+        }else{
             $data['poliklinik_id'] = null;
+            $data['tarif'] = 0;
+            $data['sip'] = null;
         }
+        // end untuk dokter
 
 
         if ($request->input('tanda_tangan')) {
@@ -213,7 +226,7 @@ class UserController extends Controller
         }
         return redirect()->route('user.index')->with([
             'success' => 'User Berhasil Diperbarui',
-            'navUser' => 'all',
+            'navUser' => $navTab ?? 'all',
         ]);
     }
 
