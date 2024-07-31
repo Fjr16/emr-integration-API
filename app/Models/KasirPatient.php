@@ -9,14 +9,14 @@ class KasirPatient extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
-        'rawat_jalan_patient_id',
+        'user_id',  //petugas kasir
+        'queue_id',
         'total',
         'status',
     ];
 
-    public function rawatJalanPatient(){
-        return $this->belongsTo(RawatJalanPatient::class);
+    public function queue(){
+        return $this->belongsTo(Queue::class);
     }
 
     public function detailKasirPatients(){

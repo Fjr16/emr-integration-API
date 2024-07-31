@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KasirPatient;
 use App\Models\Queue;
 use Illuminate\Http\Request;
 use App\Models\RawatJalanPoliPatient;
+use Illuminate\Validation\ValidationException;
 
 class QueueConfirmController extends Controller
 {
@@ -83,17 +85,27 @@ class QueueConfirmController extends Controller
      */
     public function update($id)
     {
-        $item = Queue::find($id);
-        if ($item->status_antrian == 'WAITING') {
-            RawatJalanPoliPatient::create([
-                'queue_id' => $item->id,
-                'status' => 'WAITING'
-            ]);
-
-            $item->update([
-                'status_antrian' => 'ARRIVED',
-            ]);
-            return redirect()->route('rajal/general/consent.create', $id);
+        try {
+            $item = Queue::findOrFail($id);
+            if ($item->status_antrian == 'WAITING') {
+                RawatJalanPoliPatient::create([
+                    'queue_id' => $item->id,
+                    'status' => 'WAITING'
+                ]);
+    
+                $item->update([
+                    'status_antrian' => 'ARRIVED',
+                ]);
+                // buat main table billing kasir patient
+                KasirPatient::create([
+                    'queue_id' => $item->id,
+                    'status' => 'WAITING',
+                ]);
+    
+                return redirect()->route('rajal/general/consent.create', $id);
+            }
+        } catch (ValidationException $th) {
+            return back()->with('error', $th->getMessage());
         }
     }
 

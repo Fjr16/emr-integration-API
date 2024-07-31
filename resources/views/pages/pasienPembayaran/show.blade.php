@@ -7,27 +7,46 @@
         {{ session('success') }}
       </div>
   @endif
+  {{-- Informasi Pasien --}}
+  <div class="card mb-2">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <h4 class="mb-1 text-primary d-flex">
+                    {{ $item->queue->patient->name }} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
+                    <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
+                </h4>
+                <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>
+                <h6 class="mb-1">{{ $item->queue->dpjp->poliklinik->name ?? '' }}<h6>
+                @if ($item->status == 'WAITING')                                    
+                    <span class="badge bg-danger">BELUM BAYAR</span>
+                @elseif ($item->status == 'FINISHED')
+                    <span class="badge bg-success">SUDAH BAYAR</span>
+                @else
+                    <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                @endif
+            </div>
+            <div class="col-8 text-end">
+                <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->queue->no_antrian ?? '' }}</span></p>
+                <p class="mb-0">Tanggungan : <span class="fw-bold fst-italic">{{ $item->queue->patientCategory->name }}</span></p>
+                <p class="mb-0">Tgl. Lahir : <span class="fw-bold fst-italic">{{ $item->queue->patient->tanggal_lhr }}</span></p>
+                <div class="mb-0 mt-3 d-flex justify-content-end">
+                  <h2 class="fw-bold fst-italic rounded p-2 ">Rp. {{ number_format($item->total ?? 0) }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  {{-- end Informasi Pasien --}}
   <div class="card p-3">
-    <h6 class="m-0 mb-2">Data Pasien</h6>
-    <table class="mb-3">
-      <tr>
-        <td style="width: 200px">Nomor Rekam Medis</td>
-        <td>:</td>
-        <td>{{ implode('-', str_split(str_pad($item->rawatJalanPatient->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
-      </tr>
-      <tr>
-        <td>Nama Pasien</td>
-        <td>:</td>
-        <td>{{ $item->rawatJalanPatient->queue->patient->name ?? ''  }}</td>
-      </tr>
-      <tr>
-        <td>Total</td>
-        <td>:</td>
-        <td>{{ number_format($item->total ?? '') }}</td>
-      </tr>
-    </table>
-
-    @can('lihat detail pembayaran')
+    <div class="alert-secondary p-4" role="alert">
+      <h4 class="alert-heading d-flex align-items-center"><span class="alert-icon rounded-circle me-2"><i class='bx bx-error-alt'></i></span> Belum Ada Tagihan</h4>
+      <hr>
+      <div class="d-flex flex-column ps-1">
+        <span>Mohon menunggu tagihan pasien dimasukkan oleh staff medis lainnya, tagihan akan muncul jika pasien telah menerima beberapa pelayanan !</span>
+      </div>
+    </div>
+    {{-- @can('lihat detail pembayaran')
     <h6 class="m-0 mb-2">Data Tindakan Pasien</h6>
     <table class="table mb-3" >
       <thead>
@@ -168,7 +187,7 @@
       @can('print nota pembayaran')
       <a target="blank" href="{{ route('rajal/kasir/pembayaran/show', $item->id) }}" class="btn btn-sm btn-dark"><i class="bx bx-printer"></i></a>
       @endcan
-    </div>
+    </div> --}}
   </div>
 
 @endsection

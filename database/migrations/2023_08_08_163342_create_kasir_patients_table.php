@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('rawat_jalan_patient_id')->nullable();
-            $table->double('total')->nullable();
-            $table->string('status')->nullable();
+            $table->foreignId('queue_id')->nullable();
+            $table->double('total')->default(0);
+            $table->enum('status', ['WAITING', 'FINISHED'])->default('WAITING');
         });
     }
 
