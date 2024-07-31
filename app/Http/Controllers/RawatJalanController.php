@@ -102,7 +102,8 @@ class RawatJalanController extends Controller
         $diagnostics = Diagnostic::orderBy('icd_x_code')->get();
         $procedures = Procedure::get();
         // obat
-        $medicines = MedicineStok::where('stok' ,'>', 0)->get();
+        // $medicines = MedicineStok::where('stok' ,'>', 0)->get();
+        $medicines = Medicine::whereHas('medicineStoks')->with('medicineStoks')->get();
         // resep 
         //tindakan
         $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->with(['actionRates'])->get();

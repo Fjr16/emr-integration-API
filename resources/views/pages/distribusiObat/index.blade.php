@@ -57,7 +57,7 @@
                     <label class="form-label form-label-sm" for="unit_asal_id">Dari Unit</label>
                     <select class="form-select form-select select2" name="unit_asal_id" id="unit_asal_id" aria-label="Default select example" style="width: 100%" onchange="refreshStok()">
                       @foreach ($units as $unt)
-                          @if (old('unit_asal_id', $unitAsal->id) == $unt->id)
+                          @if (old('unit_asal_id', $unitAsal->id ?? '') == $unt->id)
                             <option selected value="{{ $unt->id }}">{{ $unt->name ?? '-' }}</option>
                           @else
                             <option value="{{ $unt->id }}">{{ $unt->name ?? '-' }}</option>
@@ -241,16 +241,18 @@ function generateStokAndConverter(element){
     let itemMedicine = dataMedicine.find(function(itm){
       return itm.id == element.value;
     });
-    $(element).closest('.dinamic-input').find('.satuan_obat').text(itemMedicine.small_unit);
+    $(element).closest('.dinamic-input').find('.satuan_obat').text(itemMedicine ? itemMedicine.small_unit : '');
     let dataSelectSatuan = '';
-    if (!itemMedicine.big_unit && !itemMedicine.medium_to_big && !itemMedicine.medium_unit && !itemMedicine.small_to_medium) {
-      dataSelectSatuan = '<option value="" selected disabled>Tidak Tersedia</option>';
-    }else{
-      if (itemMedicine.medium_unit && itemMedicine.small_to_medium) {
-        dataSelectSatuan +=`<option value="${itemMedicine.medium_unit ?? ''}">${itemMedicine.medium_unit ?? ''}</option>`; 
-      }
-      if (itemMedicine.big_unit && itemMedicine.medium_to_big) {
-        dataSelectSatuan +=`<option value="${itemMedicine.big_unit ?? 0}">${itemMedicine.big_unit ?? ''}</option>`; 
+    if (itemMedicine) {
+      if (!itemMedicine.big_unit && !itemMedicine.medium_to_big && !itemMedicine.medium_unit && !itemMedicine.small_to_medium) {
+        dataSelectSatuan = '<option value="" selected disabled>Tidak Tersedia</option>';
+      }else{
+        if (itemMedicine.medium_unit && itemMedicine.small_to_medium) {
+          dataSelectSatuan +=`<option value="${itemMedicine.medium_unit ?? ''}">${itemMedicine.medium_unit ?? ''}</option>`; 
+        }
+        if (itemMedicine.big_unit && itemMedicine.medium_to_big) {
+          dataSelectSatuan +=`<option value="${itemMedicine.big_unit ?? 0}">${itemMedicine.big_unit ?? ''}</option>`; 
+        }
       }
     }
     $(satuanSelect).html(dataSelectSatuan);

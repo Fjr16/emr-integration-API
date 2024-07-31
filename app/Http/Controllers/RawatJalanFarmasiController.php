@@ -56,6 +56,7 @@ class RawatJalanFarmasiController extends Controller
             $unitIdSelected = encrypt($unitIdSelected);
         }
         $item = RajalFarmasiPatient::find(decrypt($id));
+        // dd($item->queue->medicineReceipt->medicineReceiptDetails);
         $tanggungans = PatientCategory::all();
         
         $units = Unit::all();

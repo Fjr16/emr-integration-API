@@ -118,7 +118,7 @@
                         <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
                     <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>
-                    <h6 class="mb-1">{{ $item->queue->dpjp->roomDetail->name ?? '' }}<h6>
+                    <h6 class="mb-1">{{ $item->queue->dpjp->poliklinik->name ?? '' }}<h6>
                     @if ($item->status == 'WAITING')                                    
                         <span class="badge bg-warning">PERMINTAAN</span>
                     @elseif ($item->status == 'ONGOING')
@@ -296,7 +296,7 @@
                         <thead>
                             <tr class="text-nowrap bg-dark">
                                 <th>Action</th>
-                                @if ($item->queue->patientCategory != 'Umum')
+                                @if ($item->queue->patientCategory->name != 'Umum')
                                 <th>Dijamin</th>
                                 @endif
                                 <th>Nama Obat</th>
@@ -308,24 +308,22 @@
                             </tr>
                         </thead>
                         <tbody class="dinamic-input">
-                            @foreach ($item->queue->medicineReceipt->medicineReceiptDetails as $detail)
+                            @foreach ($item->queue->medicineReceipt->medicineReceiptDetails as $key => $detail)
                                 <tr>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-danger" onclick="hapusInput(this)"><i class="bx bx-x"></i></button>
                                     </td>
-                                    @if ($item->queue->patientCategory != 'Umum')
-                                    <td>
+                                    <td {{ $item->queue->patientCategory->name != 'Umum' ? '' : 'hidden' }}>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" role="switch" name="include[]" onchange="getHargaSatuan(this)" {{ $detail->medicine_id ? 'checked' : 'disabled' }}>
                                             <input type="hidden" name="ditanggung_asuransi[]" value="1" {{ $detail->medicine_id ? '' : 'disabled' }}>
                                         </div>
                                     </td>
-                                    @endif
                                     <td style="width:25%">
                                         <input type="hidden" name="unit_id" value="{{ decrypt($unitIdSelected) }}">
                                         @if ($detail->medicine_id)  
                                             <div class="mb-2">
-                                                <select id="medicine_id2" name="medicine_id[]" class="form-select form-select-sm select2 medicine_id" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%" onchange="showStok(this)">
+                                                <select id="medicine_id{{ $key }}" name="medicine_id[]" class="form-select form-select-sm select2 medicine_id" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%" onchange="showStok(this)">
                                                     <option value="" selected disabled></option>
                                                     @foreach ($medicines as $obat)
                                                         @if (old('medicine_id', $detail->medicine->id) == $obat->id)
@@ -337,7 +335,7 @@
                                                 </select>
                                             </div> 
                                             <div class="">
-                                                <select id="medicine_stok_id" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true)>
+                                                <select id="medicine_stok_id{{ $key }}" name="medicine_stok_id[]" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" style="width: 100%" @disabled(true)>
                                                     {{-- diisi dari js --}}
                                                 </select>
                                             </div>  
@@ -528,14 +526,12 @@
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="hapusInput(this)"><i class="bx bx-x"></i></button>
                 </td>
-                @if ($item->queue->patientCategory != 'Umum')
-                    <td>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" name="include[]" checked onchange="getHargaSatuan(this)">
-                            <input type="hidden" name="ditanggung_asuransi[]" value="1">
-                        </div>
-                    </td>
-                @endif
+                <td {{ $item->queue->patientCategory->name != 'Umum' ? '' : 'hidden' }}>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" name="include[]" checked onchange="getHargaSatuan(this)">
+                        <input type="hidden" name="ditanggung_asuransi[]" value="1">
+                    </div>
+                </td>
                 <td style="width:30%">
                     <div class="mb-2">
                         <select id="medicine_id_${counter}" name="medicine_id[]" class="form-select form-select-sm select2 medicine_id" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%" onchange="showStok(this)">

@@ -1,11 +1,37 @@
 @extends('layouts.backend.main')
 @section('content')
     @if (session()->has('success'))
-        <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('success') }}
+    <div class="alert alert-success d-flex" role="alert">
+        <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+        <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+            <span>{{ session('success') }}</span>
         </div>
+    </div>
     @endif
+    @if (session()->has('error'))
+    <div class="alert alert-danger d-flex" role="alert">
+        <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+        <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+            <span>{{ session('error') }}</span>
+        </div>
+    </div>
+    @endif
+    @if ($errors->any())
+    <div class="alert alert-danger d-flex" role="alert">
+        <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+        <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+            <span>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </span>
+        </div>
+    </div>
+    @endif
+
     <h5>Entri Data Pasien</h5>
     <form action="{{ route('pasien.store') }}" method="POST">
         @csrf
@@ -17,7 +43,7 @@
                         <div class="mb-3">
                             <label for="defaultFormControlInput" class="form-label">Nama Pasien</label>
                             <input type="text" class="form-control form-control-sm" id="defaultFormControlInput"
-                                name="name" placeholder="" aria-describedby="defaultFormControlHelp" value=""
+                                name="name" placeholder="" aria-describedby="defaultFormControlHelp" value="{{ old('name') }}"
                                 required />
                         </div>
                         <div class="row">
@@ -26,12 +52,12 @@
                                 <input type="number" class="form-control form-control-sm" id="defaultFormControlInput"
                                     name="nik"
                                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                    maxlength="16" />
+                                    maxlength="16" value="{{ old('nik') }}"/>
                             </div>
                             <div class="col col-6">
                                 <label for="defaultFormControlInput" class="form-label">No Kartu Bpjs</label>
-                                <input type="text" class="form-control form-control-sm" id="defaultFormControlInput"
-                                    name="noka"/>
+                                <input type="number" class="form-control form-control-sm" id="defaultFormControlInput"
+                                    name="noka" value="{{ old('noka') }}"/>
                         </div>
                         </div>
                         <div class="mb-3">
@@ -40,12 +66,12 @@
                                     <label for="defaultFormControlInput" class="form-label">Tempat Lahir</label>
                                     <input type="text" class="form-control form-control-sm col-7"
                                         id="defaultFormControlInput" name="tempat_lhr" placeholder=""
-                                        aria-describedby="defaultFormControlHelp" required />
+                                        aria-describedby="defaultFormControlHelp" required  value="{{ old('tempat_lhr') }}"/>
                                 </div>
                                 <div class="col-4">
                                     <label for="defaultFormControlInput" class="form-label">Tanggal Lahir</label>
                                     <input type="text" id="tanggal-lahir" placeholder="Tanggal Lahir"
-                                        class="form-control form-control-sm" name="tanggal_lhr">
+                                        class="form-control form-control-sm" name="tanggal_lhr" value="{{ old('tanggal_lhr') }}">
                                 </div>
                             </div>
                         </div>
@@ -102,26 +128,26 @@
                                     <label for="defaultFormControlInput" class="form-label">Nama Ayah</label>
                                     <input type="text" class="form-control form-control-sm"
                                         id="defaultFormControlInput" placeholder="" name="nm_ayah"
-                                        aria-describedby="defaultFormControlHelp" />
+                                        aria-describedby="defaultFormControlHelp" value="{{ old('nm_ayah') }}"/>
                                 </div>
                                 <div class="col-4">
                                     <label for="defaultFormControlInput" class="form-label">Nama Ibu</label>
                                     <input type="text" class="form-control form-control-sm"
                                         id="defaultFormControlInput" placeholder="" name="nm_ibu"
-                                        aria-describedby="defaultFormControlHelp" />
+                                        aria-describedby="defaultFormControlHelp" value="{{ old('nm_ibu') }}"/>
                                 </div>
                                 <div class="col-4">
                                     <label for="defaultFormControlInput" class="form-label">Nama Wali</label>
                                     <input type="text" class="form-control form-control-sm"
                                         id="defaultFormControlInput" placeholder="" name="nm_wali"
-                                        aria-describedby="defaultFormControlHelp" />
+                                        aria-describedby="defaultFormControlHelp" value="{{ old('nm_wali') }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="defaultFormControlInput" class="form-label">Telp</label>
                             <input type="number" class="form-control form-control-sm" id="defaultFormControlInput"
-                                placeholder="" name="telp" aria-describedby="defaultFormControlHelp" min="0" />
+                                placeholder="" name="telp" aria-describedby="defaultFormControlHelp" min="0" value="{{ old('telp') }}" />
                         </div>
                         <div class="mb-3">
                             <div class="row">
@@ -167,19 +193,19 @@
                                     <label for="defaultFormControlInput" class="form-label">Alamat</label>
                                     <input type="text" class="form-control form-control-sm"
                                         id="defaultFormControlInput" placeholder="" name="alamat"
-                                        aria-describedby="defaultFormControlHelp" />
+                                        aria-describedby="defaultFormControlHelp" value="{{ old('alamat') }}"/>
                                 </div>
                                 <div class="col-2">
                                     <label for="defaultFormControlInput" class="form-label">RW</label>
                                     <input type="number" class="form-control form-control-sm"
                                         id="defaultFormControlInput" placeholder="" name="rw" min="0"
-                                        aria-describedby="defaultFormControlHelp" />
+                                        aria-describedby="defaultFormControlHelp" value="{{ old('rw') }}"/>
                                 </div>
                                 <div class="col-2">
                                     <label for="defaultFormControlInput" class="form-label">RT</label>
                                     <input type="number" class="form-control form-control-sm"
                                         id="defaultFormControlInput" placeholder="" name="rt" min="0"
-                                        aria-describedby="defaultFormControlHelp" />
+                                        aria-describedby="defaultFormControlHelp" value="{{ old('rt') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -188,10 +214,10 @@
                                 <div class="col-7">
                                     <label for="exampleFormControlSelect1" class="form-label">Provinsi</label>
                                     <select class="select2-custom-size form-select select2 " id="provinsi_id"
-                                        aria-label="Default select example" name="province_id" onchange="getKota()">
+                                        aria-label="Default select example" name="province_id" onchange="getKota()" data-allow-clear="true">
                                         <option selected disabled>Pilih Provinsi</option>
                                         @foreach ($provinsi as $prov)
-                                            @if (old('provinsi') == $prov->id)
+                                            @if (old('province_id') == $prov->id)
                                                 <option value="{{ $prov->id }}" selected>{{ $prov->name }}</option>
                                             @else
                                                 <option value="{{ $prov->id }}">{{ $prov->name }}</option>
@@ -235,21 +261,21 @@
                                     <select class="form-select form-select-sm" id="bangsa"
                                         aria-label="Default select example" onchange="enableNegara(this)">
                                         <option selected disabled>Pilih</option>
-                                        <option value="Indonesia">Indonesia</option>
+                                        <option value="Indonesia" {{ old('bangsa') == 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
                                         <option value="Asing">Asing</option>
                                     </select>
                                 </div>
                                 <div class="col-5">
                                     <label for="negara_asing" class="form-label">Nama Negara</label>
                                     <input type="text" class="form-control form-control-sm" id="negara_asing"
-                                        placeholder="" aria-describedby="defaultFormControlHelp" disabled />
+                                        placeholder="" aria-describedby="defaultFormControlHelp"/>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="defaultFormControlInput" class="form-label">Suku Bangsa</label>
                             <input type="text" class="form-control form-control-sm" id="defaultFormControlInput"
-                                placeholder="" name="suku" aria-describedby="defaultFormControlHelp" />
+                                placeholder="" name="suku" aria-describedby="defaultFormControlHelp" value="{{ old('suku') }}"/>
                         </div>
                         <div class="row mb-3">
                             <div class="col-6">

@@ -301,7 +301,7 @@
                                             <div class="accordion-item card border">
                                                 <h2 class="accordion-header">
                                                     <button type="button" class="accordion-button collapsed text-uppercase" data-bs-toggle="collapse" data-bs-target="#accordionStyle{{ $loop->iteration }}-1" aria-expanded="false">
-                                                    {{ $kunj->dpjp->roomDetail->name ?? '' }} - {{ $kunj->dpjp->name ?? '' }}
+                                                    {{ $kunj->dpjp->poliklinik->name ?? '' }} - {{ $kunj->dpjp->name ?? '' }}
                                                     </button>
                                                 </h2>
                                             
@@ -956,7 +956,8 @@
                                                             <td>{{ $radiologi->user->name ?? '' }}
                                                                 ({{ $radiologi->user->staff_id ?? '' }})
                                                             </td>
-                                                            <td>{{ $radiologi->roomDetail->name ?? '' }}</td>
+                                                            <td>{{ $radiologi->queue->dpjp->poliklinik->name ?? '' }}</td>
+                                                            {{-- <td>{{ $radiologi->poliklinik->name ?? '' }}</td> --}}
                                                             <td>{!! $radiologi->diagnosa_klinis ?? '' !!}</td>
                                                             <td>{{ $radiologi->created_at->format('Y-m-d / H:i:s') }}</td>
                                                             <td>
@@ -1011,7 +1012,8 @@
                                                         <tr class="{{ $item->id == $labor->queue->id ? 'text-success' : '' }}">
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $labor->user->name ?? '' }}</td>
-                                                            <td>{{ $labor->roomDetail->name ?? '' }}</td>
+                                                            {{-- <td>{{ $labor->poliklinik->name ?? '' }}</td> --}}
+                                                            <td>{{ $labor->queue->dpjp->poliklinik->name ?? '' }}</td>
                                                             <td>{{ $labor->diagnosa ?? '' }}</td>
                                                             <td>{{ $labor->tipe_permintaan ?? '' }}</td>
                                                             <td>{{ $labor->tanggal_sampel ?? '' }}</td>
@@ -1180,10 +1182,10 @@
                                         <select id="medicine_id" name="medicine_id" class="form-select form-select-sm select2-w-placeholder-medicine" data-allow-clear="true" placeholder="placeholder-element-id" style="width: 100%">
                                             <option value="" selected disabled></option>
                                             @foreach ($medicines as $obat)
-                                                @if (old('medicine_id') == $obat->medicine->id)
-                                                    <option value="{{ $obat->medicine->id }}" selected >{{ $obat->medicine->kode ?? '' }}/{{ $obat->medicine->name ?? '' }}</option>
+                                                @if (old('medicine_id') == $obat->id)
+                                                    <option value="{{ $obat->id }}" selected >{{ $obat->kode ?? '' }}/{{ $obat->name ?? '' }}</option>
                                                 @else
-                                                    <option value="{{ $obat->medicine->id }}" data-foo="Obat {{ $obat->medicine->medicineType->name ?? '...' }} | {{ $obat->medicine->medicineCategory->name ?? '...' }} | Stok : {{ $obat->stok ?? '...' }} {{ $obat->medicine->small_unit ?? '...' }}" data-satuan="{{ $obat->medicine->small_unit ?? '' }}">{{ $obat->medicine->kode ?? '...' }} / {{ $obat->medicine->name ?? '...' }}</option>
+                                                    <option value="{{ $obat->id }}" data-foo="Obat {{ $obat->medicineType->name ?? '...' }} | {{ $obat->medicineCategory->name ?? '...' }} | Stok : {{ $obat->medicineStoks->sum('stok') ?? '...' }} {{ $obat->small_unit ?? '...' }}" data-satuan="{{ $obat->small_unit ?? '' }}">{{ $obat->kode ?? '...' }} / {{ $obat->name ?? '...' }}</option>
                                                 @endif
                                             @endforeach
                                         </select>

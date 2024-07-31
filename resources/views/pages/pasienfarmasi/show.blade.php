@@ -133,7 +133,7 @@
                             <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                         </h4>
                         <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>
-                        <h6 class="mt-0 mb-1">{{ $item->queue->dpjp->roomDetail->name ?? '' }}<h6>
+                        <h6 class="mt-0 mb-1">{{ $item->queue->dpjp->poliklinik->name ?? '' }}<h6>
                         <span class="badge bg-info my-0">{{ $item->status == 'FINISHED' ? 'SUDAH DIAMBIL' : ($item->status == 'ONGOING' ? 'DITERIMA' : 'PERMINTAAN') }}</span>
                     </div>
                     <div class="col-8 text-end">
