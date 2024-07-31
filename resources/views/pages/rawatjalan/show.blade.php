@@ -318,19 +318,19 @@
                                                                 </tr>
                                                               </thead>
                                                               <tbody class="table-border-bottom-0">
-                                                                @if ($item->soapDokter)     
+                                                                @if ($kunj->soapDokter)     
                                                                     <tr>
-                                                                        <td>{{ $item->soapDokter->created_at->format('d M Y') ?? '' }}</td>
-                                                                        <td>{{ $item->soapDokter->user->name ?? '' }}</td>
+                                                                        <td>{{ $kunj->soapDokter->created_at->format('d M Y') ?? '' }}</td>
+                                                                        <td>{{ $kunj->soapDokter->user->name ?? '' }}</td>
                                                                         <td>
                                                                             <p class="fw-bold mb-0">SUBJECTIVE:</p>
-                                                                            <p class="multi-line-text">{{ $item->soapDokter->subjective ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $kunj->soapDokter->subjective ?? '' }}</p>
                                                                             <p class="fw-bold mb-0">OBJECTIVE:</p>
-                                                                            <p class="multi-line-text">{{ $item->soapDokter->objective ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $kunj->soapDokter->objective ?? '' }}</p>
                                                                             <p class="fw-bold mb-0">ASSESMENT:</p>
-                                                                            <p class="multi-line-text">{{ $item->soapDokter->asesment ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $kunj->soapDokter->asesment ?? '' }}</p>
                                                                             <p class="fw-bold mb-0">PLANNING:</p>
-                                                                            <p class="multi-line-text">{{ $item->soapDokter->planning ?? '' }}</p>
+                                                                            <p class="multi-line-text">{{ $kunj->soapDokter->planning ?? '' }}</p>
                                                                         </td>
                                                                     </tr>
                                                                 @else

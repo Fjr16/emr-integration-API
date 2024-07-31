@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillingDoctorConsultation;
 use App\Models\KasirPatient;
 use App\Models\Queue;
 use Illuminate\Http\Request;
 use App\Models\RawatJalanPoliPatient;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class QueueConfirmController extends Controller
@@ -85,6 +88,8 @@ class QueueConfirmController extends Controller
      */
     public function update($id)
     {
+        DB::beginTransaction();
+        $errors = [];
         try {
             $item = Queue::findOrFail($id);
             if ($item->status_antrian == 'WAITING') {
@@ -96,16 +101,45 @@ class QueueConfirmController extends Controller
                 $item->update([
                     'status_antrian' => 'ARRIVED',
                 ]);
+
                 // buat main table billing kasir patient
-                KasirPatient::create([
+                if (!$item->dpjp) {
+                    $errors[] = 'Data Dokter terkait Tidak Ditemukan, mohon periksa kembali master data dokter';
+                }
+                if (!$item->dpjp->tarif || $item->dpjp->tarif == 0) {
+                    $errors[] = 'Tarif Untuk Dokter '. $item->dpjp->name . ' Tidak Ditemukan, mohon periksa kembali master data dokter';
+                }
+                if (!$item->dpjp->tarif <= 0) {
+                    $errors[] = 'Tarif Dokter harus Antara Rp 0.01 hingga 99.999.999,99, mohon periksa kembali master data dokter';
+                }
+                
+                $kp = KasirPatient::create([
                     'queue_id' => $item->id,
                     'status' => 'WAITING',
                 ]);
+                BillingDoctorConsultation::create([
+                    'kasir_patient_id' => $kp->id,
+                    'user_id' => $item->dpjp->id,
+                    'kode_dokter' => $item->dpjp->staff_id ?? '',
+                    'nama_dokter' => $item->dpjp->name ?? '',
+                    'nama_poli' => $item->dpjp->poliklinik->name ?? '',
+                    'tarif' => $item->dpjp->tarif,
+                ]);
+
+                if (!empty($errors)) {
+                    DB::rollBack();
+                    return back()->with('errors', $errors);
+                }
     
+                DB::commit();
                 return redirect()->route('rajal/general/consent.create', $id);
             }
         } catch (ValidationException $th) {
+            DB::rollBack();
             return back()->with('error', $th->getMessage());
+        } catch (Exception $e){
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
         }
     }
 
