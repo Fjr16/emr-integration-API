@@ -11,9 +11,8 @@
   <div class="row">
     <div class="col-md-8">
         <h4 class="align-self-center m-0">
-            Daftar Pasien
-            <span class="text text-primary text-uppercase fw-bold fs-7">Rawat Jalan</span>
-            <span class="text text-primary text-uppercase fw-bold fs-7">({{ date('d-m-Y') }})</span>
+            Daftar Resep
+            <span class="text text-primary fw-bold">Rawat Jalan ({{ date('d-m-Y') }})</span>
         </h4>
     </div>
     <div class="col-md-3">
