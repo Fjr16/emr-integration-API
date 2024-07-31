@@ -41,7 +41,7 @@
         <div class="row mb-3">
             <label for="basic-default-name" class="col-sm-3 col-form-label">Poli</label>
             <div class="col-sm-9">
-                <input type="text" value="{{ $item->dpjp->roomDetail->name ?? '' }}"
+                <input type="text" value="{{ $item->dpjp->poliklinik->name ?? '' }}"
                     class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>

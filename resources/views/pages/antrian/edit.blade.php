@@ -88,22 +88,22 @@
                     </div>
                   </div>
             </div>
-            <div class="col col-6">
+            {{-- <div class="col col-6">
                 <div class="row mb-3">
                     <label for="basic-default-name" class="col-sm-3 col-form-label">No Rujukan</label>
                     <div class="col-sm-7">
                       <input type="text" value="{{ $data->no_rujukan ?? '' }}" class="form-control form-control-sm" name="no_rujukan" readonly />
                     </div>
                   </div>
-            </div>
-            <div class="col col-6">
+            </div> --}}
+            {{-- <div class="col col-6">
                 <div class="row mb-3">
                     <label for="basic-default-name" class="col-sm-6 col-form-label">Diagnosa</label>
                     <div class="col-sm-6">
                       <input type="text" name="last_diagnostic" value="{{ $data->last_diagnostic ?? '' }}" class="form-control form-control-sm" readonly />
                     </div>
                   </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="row mb-3">

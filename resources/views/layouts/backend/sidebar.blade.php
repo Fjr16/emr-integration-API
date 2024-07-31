@@ -68,7 +68,7 @@
                     </li>
                     <li class="menu-item {{ $title == 'Daftar Antrian' ? 'active' : '' }}">
                         <a href="{{ route('antrian.index') }}" class="menu-link">
-                            <div>Daftar Antrian (Registrasi Ulang)</div>
+                            <div>Re-register Antrian</div>
                         </a>
                     </li>
                 </ul>

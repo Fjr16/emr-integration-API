@@ -91,7 +91,7 @@ class RajalGeneralConsentController extends Controller
         }
 
 
-        return redirect()->route('rajal/rekammedis.index')->with(
+        return redirect()->route('antrian.index')->with(
             [
                 'success' => 'Data Berhasil Ditambahkan',
             ]
@@ -215,7 +215,7 @@ class RajalGeneralConsentController extends Controller
             }
         };
 
-        return redirect()->route('rajal/rekammedis.index')->with(
+        return redirect()->route('antrian.index')->with(
             [
                 'success' => 'Data Berhasil Diperbarui',
             ]

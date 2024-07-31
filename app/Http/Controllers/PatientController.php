@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatientStoreRequest;
 use App\Models\Job;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -58,12 +59,12 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PatientStoreRequest $request)
     {
-        $this->validate($request, [
-            'noka' => 'required|unique:patients'
-        ]);
-        $data = $request->all();
+        // $this->validate($request, [
+        //     'noka' => 'required|unique:patients'
+        // ]);
+        $data = $request->validated();
         $patient = new Patient($data);
         $patient->save();
 

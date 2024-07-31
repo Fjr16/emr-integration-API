@@ -43,17 +43,17 @@
                 </div>
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Nama Pasien</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="" aria-describedby="defaultFormControlHelp" value="" />
+                    <input type="text" class="form-control" id="name" name="name" placeholder="" aria-describedby="defaultFormControlHelp" value="" disabled/>
                 </div>
                 <div class="mb-3">
                     <div class="row">
                         <div class="col-8">
                             <label for="defaultFormControlInput" class="form-label">Tempat Lahir</label>
-                            <input type="text" class="form-control col-7" id="tempat_lhr" name="tempat_lhr" placeholder="" aria-describedby="defaultFormControlHelp" />
+                            <input type="text" class="form-control col-7" id="tempat_lhr" name="tempat_lhr" placeholder="" aria-describedby="defaultFormControlHelp" disabled/>
                         </div>
                         <div class="col-4">
                             <label for="defaultFormControlInput" class="form-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control col-5" id="tanggal_lhr" name="tanggal_lhr" placeholder="" aria-describedby="defaultFormControlHelp" />
+                            <input type="date" class="form-control col-5" id="tanggal_lhr" name="tanggal_lhr" placeholder="" aria-describedby="defaultFormControlHelp" disabled/>
                         </div>
                     </div>
                 </div>
@@ -61,20 +61,20 @@
                     <div class="row">
                         <div class="col-5">
                             <label for="exampleFormControlSelect1" class="form-label">Jenis Kelamin</label>
-                            <select class="form-select" id="jenis_kelamin" aria-label="Default select example" name="jenis_kelamin">
+                            <select class="form-select" id="jenis_kelamin" aria-label="Default select example" name="jenis_kelamin" disabled>
                                 <option selected disabled>Pilih</option>
-                                @foreach ($jk as $jk)
-                                @if (old('jenis_kelamin') == $jk)
-                                <option value="{{ $jk }}" selected>{{ $jk }}</option>
-                                @else
-                                <option value="{{ $jk }}">{{ $jk }}</option>
-                                @endif
+                                    @foreach ($jk as $jk)
+                                    @if (old('jenis_kelamin') == $jk)
+                                        <option value="{{ $jk }}" selected>{{ $jk }}</option>
+                                    @else
+                                        <option value="{{ $jk }}">{{ $jk }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-7">
                             <label for="exampleFormControlSelect1" class="form-label">Status</label>
-                            <select class="form-select" id="status" aria-label="Default select example" name="status">
+                            <select class="form-select" id="status" aria-label="Default select example" name="status" disabled>
                                 <option selected disabled>Pilih</option>
                                 @foreach ($status as $status)
                                 @if (old('status') == $status)
@@ -89,15 +89,25 @@
                 </div>
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">No Telp</label>
-                    <input type="number" class="form-control" id="telp" name="telp" placeholder="" aria-describedby="defaultFormControlHelp" value="" />
+                    <input type="number" class="form-control" id="telp" name="telp" placeholder="" aria-describedby="defaultFormControlHelp" value="" disabled/>
                 </div>
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Alamat</label>
-                    <input type="text" class="form-control" placeholder="" id="alamat" name="alamat" aria-describedby="defaultFormControlHelp" />
+                    <input type="text" class="form-control" placeholder="" id="alamat" name="alamat" aria-describedby="defaultFormControlHelp" disabled/>
                 </div>
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">NIK</label>
-                    <input type="number" class="form-control" id="nik" name="nik" placeholder="" aria-describedby="defaultFormControlHelp" value="" />
+                    <input type="number" class="form-control" id="nik" name="nik" placeholder="" aria-describedby="defaultFormControlHelp" value="" disabled/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="noka" class="form-label">Nomor Kartu BPJS</label>
+                    <input type="text" class="form-control" id="noka" name="noka" placeholder="" aria-describedby="defaultFormControlHelp" />
                 </div>
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Penjamin</label>
@@ -111,22 +121,12 @@
                         @endforeach
                     </select>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6">
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="noka" class="form-label">Nomor Kartu BPJS</label>
-                    <input type="text" class="form-control" id="noka" name="noka" placeholder="" aria-describedby="defaultFormControlHelp" />
-                </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">No Rujukan / No Kontrol</label>
                     <input type="text" class="form-control" id="no_rujukan" name="no_rujukan"
                         placeholder="" aria-describedby="defaultFormControlHelp"/>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3" id="diagnosa">
                     <div class="col-4">
                         <label for="kodeDiagnosa" class="form-label">Kode Diagnosa</label>
                         <input type="text" class="form-control" id="kodeDiagnosa" name="kodeDiagnosa" placeholder="" aria-describedby="defaultFormControlHelp" readonly/>
@@ -136,9 +136,7 @@
                         <input type="text" class="form-control" id="last_diagnostic" name="last_diagnostic"
                             placeholder="" aria-describedby="defaultFormControlHelp" readonly/>
                     </div>
-                </div>
-                <div class="mb-3" id="diagnosa">
-                </div>
+                </div> --}}
                 <div class="mb-3">
                     <label for="defaultFormControlInput" class="form-label">Poli / Dokter</label>
                     <select class="form-control select2 doctor_id" id="doctor_id" name="doctor_id" required>

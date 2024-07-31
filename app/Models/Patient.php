@@ -79,15 +79,6 @@ class Patient extends Model
         });
     }
 
-    public function prmrjs()
-    {
-        return $this->hasMany(Prmrj::class);
-    }
-    public function initialAssesments()
-    {
-        return $this->hasMany(InitialAssesment::class);
-    }
-
     public function rmeCppts()
     {
         return $this->hasMany(RmeCppt::class);
@@ -106,15 +97,6 @@ class Patient extends Model
     {
         return $this->hasMany(LaboratoriumRequest::class);
     }
-    public function permintaanLaboratoriumPatologiAnatomikPatient()
-    {
-        return $this->hasMany(PermintaanLaboratoriumPatologiAnatomikPatient::class);
-    }
-    public function suratBuktiPelayananPatients()
-    {
-        return $this->hasMany(SuratBuktiPelayananPatient::class);
-    }
-
     public function perawatInitialAsesments() {
         return $this->hasMany(PerawatInitialAsesment::class);
     }

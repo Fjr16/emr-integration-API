@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo.png') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -152,6 +152,7 @@
     </div>
     <!-- / Layout wrapper -->
 
+    {{-- digunakan pada asesmen perawat --}}
     <script type="text/javascript">
         var radioAya = document.getElementById('radioAya');
         var radioAtidak = document.getElementById('radioAtidak');
@@ -182,7 +183,7 @@
         }, 2000);
     </script>
 
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         var kriteriaInputs = document.querySelectorAll('select[name="kriteria[]"]');
 
         kriteriaInputs.forEach(function(input) {
@@ -225,9 +226,9 @@
                 mandiri.className = 'bg-success';
             }
         }
-    </script>
+    </script> --}}
 
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         var skriningInputs = document.querySelectorAll('input[name="value_skrin[]"]');
         var totalInput = document.getElementById('total_skor_skrining');
 
@@ -244,7 +245,7 @@
             });
         });
         
-    </script>
+    </script> --}}
 
     {{-- signature pad js --}}
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
@@ -281,14 +282,12 @@
         });
         $('#example').DataTable();
         $('#example2').DataTable();
-        $('#example3').DataTable();
     </script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="{{ asset('/assets/vendor/libs/select2/select2.js') }}"></script>
     <script>
-        // $(document).ready(function() {
         $('.select2').select2({
             placeholder : 'Pilih',
         });
@@ -349,18 +348,6 @@
                     + '</div></div>'
             );
         }
-
-        $(".select4").select2();
-        // });
-        for (var i = 0; i <= 20; i++) {
-            $("#medicine_id_" + i).select2();
-            $("#medicine_id_ranap_" + i).select2();
-            $("#user_id_" + i).select2();
-            $("#room_detail_id_" + i).select2();
-            $("#ruang_tf1_" + i).select2();
-            $("#ruang_tf2_" + i).select2();
-            $("#ruang_tf3_" + i).select2();
-        }
     </script>
 
     {{-- script disabled untuk view patient --}}
@@ -394,7 +381,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         let counter1 = 1;
 
         function addInput(inputContainerId) {
@@ -420,7 +407,7 @@
             const input = button.parentNode;
             input.parentNode.removeChild(input);
         }
-    </script>
+    </script> --}}
 
     <script>
         function dinamicInput(element, content, idSelect2, placeholder, isClear) {
@@ -442,6 +429,7 @@
     </script>
 
     {{-- start expand collapse table --}}
+    {{-- penggunaan pada fitur export laporan penunjang pk  --}}
     <script>
         $(document).ready(function() {
             // Sembunyikan rincian tambahan saat halaman dimuat
@@ -459,11 +447,11 @@
     </script>
     {{-- end expand collapse table --}}    
 
-    <script>
+    {{-- <script>
         new PerfectScrollbar(document.getElementById('vertical-example'), {
         wheelPropagation: false
         });
-    </script>
+    </script> --}}
 
     <script>
         // {{-- new alert --}}

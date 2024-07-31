@@ -23,12 +23,13 @@ class QueueController extends Controller
     public function index()
     {
         $today = date('Y-m-d');
-        $data = Queue::whereIn('status_antrian', ['WAITING', 'CANCEL'])
-            ->whereDate('tgl_antrian', $today)
-            ->whereDoesntHave('rawatJalanPoliPatient')
+        // $data = Queue::whereIn('status_antrian', ['WAITING', 'CANCEL'])
+        $data = Queue::whereDate('tgl_antrian', $today)
+            // ->whereDoesntHave('rawatJalanPoliPatient')
             ->orderByRaw("CASE WHEN status_antrian = 'WAITING' THEN 0 
-                        WHEN status_antrian = 'CANCEL' THEN 1 
-                        ELSE 2 END")
+                        WHEN status_antrian = 'ARRIVED' THEN 1 
+                        WHEN status_antrian = 'FINISHED' THEN 2 
+                        ELSE 3 END")
             ->get();
 
 

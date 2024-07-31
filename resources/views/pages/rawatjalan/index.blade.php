@@ -49,12 +49,9 @@
             <table id="Field1NoOrder" class="table">
                 <thead>
                     <tr class="text-nowrap bg-dark">
-                        @if ($user->hasRole('Rekam Medis dan Casemix'))
-                        <th>General Consent</th>
-                        @endif
-                        @if ($user->hasRole(['Dokter', 'Perawat']))
-                            <th class="text-center">Action</th>
-                        @endif
+                        {{-- @if ($user->hasRole(['Dokter', 'Perawat'])) --}}
+                        <th class="text-center">Action</th>
+                        {{-- @endif --}}
                         <th>No Antrian</th>
                         <th>No Rekam Medis</th>
                         <th>Nama</th>
@@ -70,50 +67,7 @@
                 <tbody>
                     @foreach ($data as $item)
                         <tr>
-                            @if ($user->hasRole('Rekam Medis dan Casemix'))
-                                <td class="">
-                                    @if ($item->rajalGeneralConsent)
-                                      <div class="d-flex flex-row">
-                                        <a class="btn btn-warning btn-sm" href="{{ route('rajal/general/consent.edit', $item->id) }}">
-                                            <i class='bx bx-edit-alt me-1'></i>
-                                        </a>
-                                        <form action="{{ route('rajal/general/consent.destroy', $item->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm mx-2"
-                                                onclick="return confirm('Yakin ingin menghapus data?')"><i
-                                                    class="bx bx-trash me-1"></i></button>
-                                        </form>
-                                        <div class="btn-group dropend">
-                                            <button type="button" class="btn btn-dark btn-sm dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown">
-                                                <i class="bx bx-printer"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.show', $item->id ?? '') }}" target="_blank">
-                                                    <i class='bx bx-printer me-1'></i>
-                                                    General Consent
-                                                </a>
-                                            <a class="dropdown-item" href="{{ route('rajal/general/consent.showtatatertib', $item->id ?? '') }}" target="_blank">
-                                                <i class='bx bx-printer me-1'></i>
-                                                Tata Tertib
-                                            </a>
-                                            <a class="dropdown-item" href="{{ route('rajal/general/consent.showhakdankewajiban', $item->id) }}" target="_blank">
-                                                <i class='bx bx-printer me-1'></i>
-                                                Hak Dan Kewajiban
-                                            </a>
-                                            </div>
-                                        </div>
-                                      </div>
-                                    @else
-                                        <a class="btn btn-success btn-sm mx-2"
-                                            href="{{ route('rajal/general/consent.create', $item->id) }}">
-                                            <i class='bx bx-plus me-1'></i>
-                                        </a>
-                                    @endif
-                                </td>
-                            @endif
-                            @if ($user->hasRole(['Dokter', 'Perawat']))
+                            {{-- @if ($user->hasRole(['Dokter', 'Perawat'])) --}}
                             <td class="text-center" style="width: 9%">
                                 <div class="btn-group dropend">
                                     <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,7 +83,7 @@
                                     </ul>
                                 </div>
                             </td>
-                            @endif
+                            {{-- @endif --}}
                             <td>{{ $item->no_antrian ?? '-' }}</td>
                             <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                             </td>
