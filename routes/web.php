@@ -444,8 +444,9 @@ Route::delete('/rajal/konsul/internal/destroy/{id}', [KonsulInternalController::
 //rajal Kasir
     Route::get('/rajal/kasir/pembayaran', [KasirController::class, 'index'])->name('rajal/kasir/pembayaran/index');
     Route::get('/rajal/kasir/pembayaran/edit/{id}', [KasirController::class, 'edit'])->name('rajal/kasir/pembayaran/edit');
-Route::get('/rajal/kasir/pembayaran/show/{id}', [KasirController::class, 'show'])->name('rajal/kasir/pembayaran/show');
+    Route::get('/rajal/kasir/pembayaran/show/{id}', [KasirController::class, 'show'])->name('rajal/kasir/pembayaran/show');
     Route::put('/rajal/kasir/pembayaran/update/{id}', [KasirController::class, 'update'])->name('rajal/kasir/pembayaran/update');
+    Route::put('/rajal/kasir/revisi/billing/tindakan/{id}', [KasirController::class, 'revisiPatientAction'])->name('rajal/kasir/revisi/billing.tindakan');
 
 //Laboratorium Patient
     Route::get('/laboratorium/patient', [LaboratoriumPatientController::class, 'index'])->name('laboratorium/patient.index');

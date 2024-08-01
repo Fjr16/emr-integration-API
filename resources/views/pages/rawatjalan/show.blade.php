@@ -1371,9 +1371,27 @@
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'tindakan' ? 'show active' : '' }}" id="navs-justified-tindakan" role="tabpanel">
                         @if ($item->patientActionReport)
-                            <div class="col-12 my-2 text-start">
+                        <div class="row">
+                            <div class="col-6 my-2 text-start">
                                 <a href="{{ route('rajal/laporan/tindakan.show', $item->patientActionReport->id) }}" target="blank" class="btn btn-info btn-sm"><i class='bx bx-printer'></i></a>
                             </div>
+                            <div class="col-6 my-2 text-end">
+                                @if ($item->kasirPatient && $item->kasirPatient->billingDoctorActions)    
+                                    <div class="d-flex justify-content-end">
+                                        <h5 class="fw-bold me-2">Status Tagihan Tindakan :</h5>
+                                        <div>
+                                            @if ($item->rawatJalanPoliPatient->actions_ready == false && !empty($item->kasirPatient->billingDoctorActions))                                 
+                                                <span class="badge bg-danger">REVISI</span>
+                                            @elseif ($item->rawatJalanPoliPatient->actions_ready == true && !empty($item->kasirPatient->billingDoctorActions))
+                                                <span class="badge bg-info">DIKIRIM</span>
+                                            @else
+                                                <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                         @endif
                         <div class="card-body {{ $item->rawatJalanPoliPatient ? ($item->rawatJalanPoliPatient->actions_ready == true ? 'card-block-tindakan' : '') : '' }}">
                             <form action="{{ route('rajal/laporan/tindakan.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">

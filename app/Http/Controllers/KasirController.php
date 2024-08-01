@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use App\Models\KasirPatient;
+use App\Models\RawatJalanPoliPatient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -110,5 +111,18 @@ class KasirController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    // pengajuan revisi tindakan medis
+    public function revisiPatientAction($id)
+    {
+        $item = RawatJalanPoliPatient::find($id);
+        $item->update([
+            'actions_ready' => false,
+        ]);
+
+        return back()->with([
+            'success' => 'Revisi Berhasil Diajukan, Silahkan Menunggu perbaikan sebelum menyelesaikan pembayaran',
+        ]);
     }
 }
