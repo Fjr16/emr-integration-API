@@ -20,6 +20,32 @@
             </div>
         </div>
     @endif
+    @if (session()->has('exceptions'))
+    <div class="alert alert-danger d-flex" role="alert">
+        <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+        <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+            <span>
+            @foreach (session('exceptions') as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </span>
+        </div>
+    </div>
+    @endif
+    @if ($errors->any())
+    <div class="alert alert-danger d-flex" role="alert">
+        <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+        <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+            <span>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </span>
+        </div>
+    </div>
+    @endif
     <div class="d-flex justify-content-end mb-3 mt-0">
         <div id="show-alert">
         
@@ -1173,6 +1199,13 @@
                         </div>
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'resep dokter' ? 'show active' : '' }}" id="navs-justified-resep" role="tabpanel">
+                        <div class="d-flex my-2 justify-content-between">
+                            @if ($item->medicineReceipt)    
+                            <a href="{{ route('rajal/resep/dokter.show', $item->id) }}" target="blank" class="btn btn-info btn-sm">
+                                <i class='bx bx-printer'></i>
+                            </a>
+                            @endif
+                        </div>
                         <div class="card-body {{ $item->rajalFarmasiPatient ? ($item->rajalFarmasiPatient->status != 'DENIED' ? 'card-block' : '') : '' }}">
                             <form action="{{ route('rajal/resep/dokter.store', $item->id) }}" method="POST">
                                 @csrf
@@ -1251,14 +1284,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-6 my-4 text-start">
-                                        @if ($item->medicineReceipt)    
-                                        <a href="{{ route('rajal/resep/dokter.show', $item->id) }}" target="blank" class="btn btn-info btn-sm">
-                                            <i class='bx bx-printer'></i>
-                                        </a>
-                                        @endif
-                                    </div>
-                                    <div class="col-6 my-4 text-end">
+                                    <div class="col-12 my-4 text-end">
                                             <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
                                     </div>
                                     @if ($item->rajalFarmasiPatient)
@@ -1344,121 +1370,127 @@
                         </div>
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'tindakan' ? 'show active' : '' }}" id="navs-justified-tindakan" role="tabpanel">
-                        <form action="{{ route('rajal/laporan/tindakan.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
-                            @method('PUT')
-                            @csrf
-                            <div class="row mb-4">
-                                <div class="col-4">
-                                    <div class="row mb-3">
-                                        <label class="form-label">Tanggal/Jam tindakan</label>
-                                        <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ $item->patientActionReport->tgl_tindakan ?? date('Y-m-d H:i') }}"/>
+                        @if ($item->patientActionReport)
+                            <div class="col-12 my-2 text-start">
+                                <a href="{{ route('rajal/laporan/tindakan.show', $item->patientActionReport->id) }}" target="blank" class="btn btn-info btn-sm"><i class='bx bx-printer'></i></a>
+                            </div>
+                        @endif
+                        <div class="card-body {{ $item->rawatJalanPoliPatient ? ($item->rawatJalanPoliPatient->actions_ready == true ? 'card-block-tindakan' : '') : '' }}">
+                            <form action="{{ route('rajal/laporan/tindakan.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+                                @method('PUT')
+                                @csrf
+                                <div class="row mb-4">
+                                    <div class="col-4">
+                                        <div class="row mb-3">
+                                            <label class="form-label">Tanggal/Jam tindakan</label>
+                                            <input type="datetime-local" class="form-control" name="tgl_tindakan" value="{{ $item->patientActionReport->tgl_tindakan ?? date('Y-m-d H:i') }}"/>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="form-label">LAPORAN TINDAKAN</label>
+                                            <textarea class="form-control" id="editor" name="laporan_tindakan" cols="30" rows="10">{{ $item->patientActionReport->laporan_tindakan ?? '' }}</textarea>
+                                        </div>
                                     </div>
-                                    <div class="row mb-3">
-                                        <label class="form-label">LAPORAN TINDAKAN</label>
-                                        <textarea class="form-control" id="editor" name="laporan_tindakan" cols="30" rows="10">{{ $item->patientActionReport->laporan_tindakan ?? '' }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-                                    @if ($item->patientActionReport && $item->patientActionReport->patientActionReportDetails->isNotEmpty())
-                                        @foreach ($item->patientActionReport->patientActionReportDetails as $detailTindakan)    
+                                    <div class="col-8">
+                                        @if ($item->patientActionReport && $item->patientActionReport->patientActionReportDetails->isNotEmpty())
+                                            @foreach ($item->patientActionReport->patientActionReportDetails as $detailTindakan)    
+                                                <div class="row dinamic-input mb-2">
+                                                    <div class="col-5">
+                                                        @if ($loop->first)
+                                                        <label for="defaultFormControlInput" class="form-label">Tindakan</label>
+                                                        @endif
+                                                        <select class="form-control select2" id="action_ids_{{ $loop->iteration }}" data-allow-clear="true" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
+                                                        @foreach ($dataTindakan as $action)
+                                                            <option value="{{ $action->id }}" @selected(old('action_id', $detailTindakan->action->id) == $action->id)>{{ $action->name }}</option>
+                                                        @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-1">
+                                                        @if ($loop->first)
+                                                        <label class="form-label">Jumlah</label>
+                                                        @endif
+                                                        <input type="number" class="form-control" name="jumlah_tindakan[]" value="{{ $detailTindakan->jumlah ?? 1 }}" onchange="countSubTotal(this)"/>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        @if ($loop->first)
+                                                        <label class="form-label">Tarif</label>
+                                                        @endif
+                                                        <input type="number" class="form-control" name="tarif_tindakan[]" value="{{ $detailTindakan->harga_satuan ?? 0 }}" placeholder="Tarif Tindakan" readonly/>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        @if ($loop->first)                                                        
+                                                        <label class="form-label">Subtotal</label>
+                                                        @endif
+                                                        <input type="number" class="form-control" name="sub_total_tindakan[]" value="{{ $detailTindakan->sub_total ?? 0 }}" placeholder="Subtotal" readonly/>
+                                                    </div>
+                                                    @if ($loop->first)
+                                                    <div class="col-1 text-center align-self-center mt-4 pt-1">
+                                                        <button class="btn btn-sm btn-dark" onclick="addDinamicTindakan(this)" type="button">+</button>
+                                                    </div>
+                                                    @else
+                                                    <div class="col-1 text-center align-self-center">
+                                                        <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
+                                                    </div>
+                                                    @endif
+                                                </div> 
+                                            @endforeach
+                                        @else
                                             <div class="row dinamic-input mb-2">
                                                 <div class="col-5">
-                                                    @if ($loop->first)
                                                     <label for="defaultFormControlInput" class="form-label">Tindakan</label>
-                                                    @endif
-                                                    <select class="form-control select2" id="action_ids_{{ $loop->iteration }}" data-allow-clear="true" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
+                                                    <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
+                                                        <option selected disabled>Pilih Tindakan</option>
                                                     @foreach ($dataTindakan as $action)
-                                                        <option value="{{ $action->id }}" @selected(old('action_id', $detailTindakan->action->id) == $action->id)>{{ $action->name }}</option>
+                                                        <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
                                                     @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-1">
-                                                    @if ($loop->first)
                                                     <label class="form-label">Jumlah</label>
-                                                    @endif
-                                                    <input type="number" class="form-control" name="jumlah_tindakan[]" value="{{ $detailTindakan->jumlah ?? 1 }}" onchange="countSubTotal(this)"/>
+                                                    <input type="number" class="form-control" name="jumlah_tindakan[]" value="1" onchange="countSubTotal(this)"/>
                                                 </div>
                                                 <div class="col-2">
-                                                    @if ($loop->first)
                                                     <label class="form-label">Tarif</label>
-                                                    @endif
-                                                    <input type="number" class="form-control" name="tarif_tindakan[]" value="{{ $detailTindakan->harga_satuan ?? 0 }}" placeholder="Tarif Tindakan" readonly/>
+                                                    <input type="number" class="form-control" name="tarif_tindakan[]" value="0" placeholder="Tarif Tindakan" readonly/>
                                                 </div>
                                                 <div class="col-3">
-                                                    @if ($loop->first)                                                        
                                                     <label class="form-label">Subtotal</label>
-                                                    @endif
-                                                    <input type="number" class="form-control" name="sub_total_tindakan[]" value="{{ $detailTindakan->sub_total ?? 0 }}" placeholder="Subtotal" readonly/>
+                                                    <input type="number" class="form-control" name="sub_total_tindakan[]" value="0" placeholder="Subtotal" readonly/>
                                                 </div>
-                                                @if ($loop->first)
                                                 <div class="col-1 text-center align-self-center mt-4 pt-1">
                                                     <button class="btn btn-sm btn-dark" onclick="addDinamicTindakan(this)" type="button">+</button>
                                                 </div>
-                                                @else
-                                                <div class="col-1 text-center align-self-center">
-                                                    <button class="btn btn-sm btn-danger" type="button" onclick="removeInputDinamic(this)">-</button>
-                                                </div>
-                                                @endif
                                             </div> 
-                                        @endforeach
-                                    @else
-                                        <div class="row dinamic-input mb-2">
-                                            <div class="col-5">
-                                                <label for="defaultFormControlInput" class="form-label">Tindakan</label>
-                                                <select class="form-control select2" id="action_id" name="action_id[]" style="width: 100%" onchange="getDetailTindakan(this)">
-                                                    <option selected disabled>Pilih Tindakan</option>
-                                                @foreach ($dataTindakan as $action)
-                                                    <option value="{{ $action->id }}" @selected(old('action_id') == $action->id)>{{ $action->name }}</option>
-                                                @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-1">
-                                                <label class="form-label">Jumlah</label>
-                                                <input type="number" class="form-control" name="jumlah_tindakan[]" value="1" onchange="countSubTotal(this)"/>
-                                            </div>
-                                            <div class="col-2">
-                                                <label class="form-label">Tarif</label>
-                                                <input type="number" class="form-control" name="tarif_tindakan[]" value="0" placeholder="Tarif Tindakan" readonly/>
-                                            </div>
-                                            <div class="col-3">
-                                                <label class="form-label">Subtotal</label>
-                                                <input type="number" class="form-control" name="sub_total_tindakan[]" value="0" placeholder="Subtotal" readonly/>
-                                            </div>
-                                            <div class="col-1 text-center align-self-center mt-4 pt-1">
-                                                <button class="btn btn-sm btn-dark" onclick="addDinamicTindakan(this)" type="button">+</button>
-                                            </div>
-                                        </div> 
-                                    @endif
-                                </div>
-                            </div>
-                          
-                            @if (!$item->patientActionReport)
-                                <div class="row mb-3">
-                                    <div class="col-12 text-end">
-                                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                        @endif
                                     </div>
                                 </div>
+                              
+                                @if (!$item->patientActionReport)
+                                    <div class="row mb-3">
+                                        <div class="col-12 text-end">
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                @else
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-dark btn-sm">Update</button>
+                                    </div>
+                                </div>
+                                @endif
                             </form>
-                            @else
+                            @if ($item->patientActionReport)
                             <div class="row">
-                                <div class="col-12 text-end">
-                                    <a href="{{ route('rajal/laporan/tindakan.show', $item->patientActionReport->id) }}" target="blank" class="btn btn-info btn-sm"><i class='bx bx-printer'></i></a>
-                                    <button type="submit" class="btn btn-dark btn-sm">Update</button>
+                                <div class="col-12 text-start">
+                                    <form action="{{ route('rajal/laporan/tindakan.destroy', $item->patientActionReport->id) }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm" onsubmit=""><i class="bx bx-trash me-2"></i>Reset Tindakan</button>
+                                    </form>
                                 </div>
                             </div>
                             @endif
-                        </form>
-                        @if ($item->patientActionReport)
-                        <div class="row">
-                            <div class="col-12 text-start">
-                                <form action="{{ route('rajal/laporan/tindakan.destroy', $item->patientActionReport->id) }}" method="POST">
-                                    @method('DELETE')
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm" onsubmit=""><i class="bx bx-trash me-2"></i>Reset Tindakan</button>
-                                </form>
-                            </div>
                         </div>
-                        @endif
                     </div>
                     <div class="tab-pane fade {{ session('btn') == 'kontrol-ulang' ? 'show active' : '' }}" id="navs-justified-kontrol-ulang" role="tabpanel">
                         <form action="{{ route('rajal/kontrol/ulang.update', $item->id) }}" method="POST">
@@ -1507,14 +1539,22 @@
                             <div class="row mb-5">
                                 <div class="col-sm-3">
                                     <label for="subjective" class="form-label">Subjective</label>
-                                    <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ ($itemAss->keluhan_utama ?? '') . "\r\nRiw. " .($item->perawatInitialAssesment->riw_penyakit_pasien ?? '') }} </textarea>
+                                    @if ($item->soapDokter)
+                                        <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">{!! $item->soapDokter->subjective ?? '' !!} </textarea>
+                                    @else
+                                        <textarea name="subjective" id="subjective" class="form-control" rows="10" placeholder="Subjective">Keluhan: {{ ($itemAss->keluhan_utama ?? '') . "\r\nRiw. " .($item->perawatInitialAssesment->riw_penyakit_pasien ?? '') }} </textarea>
+                                    @endif
                                     <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="sub" onclick="autoFillSOAP(this)">
                                         <i class='bx bx-up-arrow-alt'></i> Tarik Data Anamnesa
                                     </button>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="objective" class="form-label">Objective</label>
-                                    <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . ($itemAss->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($itemAss->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($itemAss->td_sistolik ?? '') . " / " . ($itemAss->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($itemAss->suhu ?? '') . " °C\r\n" . "Nafas: " . ($itemAss->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($itemAss->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($itemAss->bb ?? '') . ' kg' }}</textarea>
+                                    @if ($item->soapDokter)
+                                        <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{!! $item->soapDokter->objective ?? '' !!}</textarea>
+                                    @else
+                                        <textarea name="objective" id="objective" class="form-control" rows="10" placeholder="Objective">{{ "Keadaan Umum: " . ($itemAss->keadaan_umum ?? '') . "\r\n" . "Nadi: " . ($itemAss->nadi ?? '') . " bpm\r\n" . "Tekanan Darah: " . ($itemAss->td_sistolik ?? '') . " / " . ($itemAss->td_diastolik ?? '') . " mmHg\r\n" . "Suhu: " . ($itemAss->suhu ?? '') . " °C\r\n" . "Nafas: " . ($itemAss->nafas ?? '') . " x/menit\r\n" . "Tinggi Badan: " . ($itemAss->tb ?? '') . " cm\r\n" . "Berat Badan: " . ($itemAss->bb ?? '') . ' kg' }}</textarea>
+                                    @endif
                                     <button type="button" class="btn btn-dark btn-sm mt-2 me-2 w-100" value="obj" onclick="autoFillSOAP(this)">
                                         <i class='bx bx-up-arrow-alt'></i> Tarik Data Asesmen
                                     </button>
@@ -1677,9 +1717,9 @@
                                         {{-- submit form --}}
                                         <div class="col-12 mt-5 ms-auto">
                                             <button type="submit" id="btn-finish-pelayanan" class="btn btn-sm btn-primary">Submit</button>
-                                            @if ($item->rawatJalanPoliPatient->status == 'ONGOING' || $item->rawatJalanPoliPatient->status == 'FINISHED')
+                                            {{-- @if ($item->rawatJalanPoliPatient->status == 'ONGOING' || $item->rawatJalanPoliPatient->status == 'FINISHED')
                                                 <button type="submit" class="btn btn-sm btn-danger mx-2">Batal</button>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </form>
                                 </div>
@@ -1914,7 +1954,7 @@
                                         <td>{{ $detailTindakan->action->name ?? '' }}</td>
                                         <td>{{ $detailTindakan->jumlah ?? 0 }}</td>
                                         <td>{{ number_format($detailTindakan->harga_satuan ?? 0) }}</td>
-                                        <td>{{ number_format($detail->sub_total ?? 0) }}</td>
+                                        <td>{{ number_format($detailTindakan->sub_total ?? 0) }}</td>
                                     </tr>
                                 @endforeach
                                 <tr class="fw-bold">
@@ -2257,6 +2297,23 @@
                     opacity: 0.6,
                 },
             });
+            $(".card-block-tindakan").block({ 
+                message:
+                    `<div class="block-message"><h5 class="text-white">{{ $item->rawatJalanPoliPatient ? ($item->rawatJalanPoliPatient->actions_ready == true ? ($item->kasirPatient->status == 'WAITING' ? 'Tagihan Telah Dikirim, Menunggu Pembayaran' : 'Tagihan Telah Dibayar') : '') : '' }} ....</h5></div>`,
+                css: {
+                    backgroundColor: "transparent",
+                    border:"0",
+                    width:'50%',
+                    height:'100%',
+                    textAlign:'center',
+                    position: 'absolute',
+                    transform: 'translate(50%, 40%)',
+                },
+                overlayCSS: {
+                    backgroundColor: "#000",
+                    opacity: 0.6,
+                },
+            });
             // end trigger element dengan class card-block
         });
     </script>
@@ -2277,7 +2334,7 @@
                     elementTarif.value = rate.tarif ?? 0;
                     elementSubTotal.value = rate.tarif * elementJumlah.value;   
                 } else {
-                    elementJumlah.value = 0;
+                    elementJumlah.value = 1;
                     elementTarif.value = 0;
                     elementSubTotal.value = 0;
                     alertShow('Not Found !!', 'Tarif Untuk Tindakan ini belum diinputkan', elementAlert);

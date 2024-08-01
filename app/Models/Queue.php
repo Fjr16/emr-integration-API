@@ -62,15 +62,6 @@ class Queue extends Model
     {
         return $this->hasMany(LaboratoriumRequest::class);
     }
-    public function suratBuktiPelayananPatients()
-    {
-        return $this->hasMany(SuratBuktiPelayananPatient::class);
-    }
-    public function suratKeteranganPatient()
-    {
-        return $this->hasOne(SuratKeteranganPatients::class);
-    }
-
     // new data
     public function perawatInitialAssesment()
     {
@@ -107,5 +98,9 @@ class Queue extends Model
     // farmasi patient
     public function rajalFarmasiPatient() {
         return $this->hasOne(RajalFarmasiPatient::class);
+    }
+    // billing patient
+    public function kasirPatient() {
+        return $this->hasOne(KasirPatient::class);
     }
 }

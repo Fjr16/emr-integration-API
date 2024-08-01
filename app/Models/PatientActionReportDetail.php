@@ -20,5 +20,8 @@ class PatientActionReportDetail extends Model
     public function action(){
         return $this->belongsTo(Action::class);
     }
+    public function patientActionReport(){
+        return $this->belongsTo(PatientActionReport::class);
+    }
 
 }

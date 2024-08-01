@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use id;
 use DateTime;
+use Exception;
 use App\Models\Queue;
 use App\Models\Action;
 use App\Models\Medicine;
 use App\Models\Procedure;
 use App\Models\Diagnostic;
+use App\Models\KasirPatient;
 use App\Models\MedicineStok;
 use Illuminate\Http\Request;
 use App\Models\MedicineReceipt;
+use Illuminate\Support\Facades\DB;
+use App\Models\BillingDoctorAction;
 use App\Models\PatientActionReport;
 use App\Models\RajalFarmasiPatient;
 use App\Models\RadiologiFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\PerawatInitialAsesment;
+use App\Models\BillingDoctorConsultation;
 use Illuminate\Validation\ValidationException;
 
 class RawatJalanController extends Controller
@@ -131,8 +137,26 @@ class RawatJalanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     private function createKasirPatientFirst($antrian) {
+        $kp = KasirPatient::create([
+            'queue_id' => $antrian->id,
+            'status' => 'WAITING',
+        ]);
+        BillingDoctorConsultation::create([
+            'kasir_patient_id' => $kp->id,
+            'user_id' => $antrian->dpjp->id,
+            'kode_dokter' => $antrian->dpjp->staff_id ?? '',
+            'nama_dokter' => $antrian->dpjp->name ?? '',
+            'nama_poli' => $antrian->dpjp->poliklinik->name ?? '',
+            'tarif' => $antrian->dpjp->tarif,
+        ]);
+     }
+
     public function update(Request $request, $id)
     {
+        DB::beginTransaction();
+        $errors = [];
         try {
             $this->validate($request, [
                 'status_pelayanan' => 'required',
@@ -144,6 +168,12 @@ class RawatJalanController extends Controller
             $data['diet'] = $request->input('diet_pasien');
             $data['status'] = $request->status_pelayanan;
             $item = RawatJalanPoliPatient::find($id);
+
+            // pastikan billing pasien telah dibuat
+            if (!$item->queue->kasirPatient) {
+                $this->createKasirPatientFirst($item->queue);
+            }
+
             //data untuk pengiriman ke farmasi, radiologi, laboratorium, dan tindakan
             if ($item->queue->dpjp->id == auth()->user()->id) {
                 if($request->receipts_ready && $request->receipts_ready == 1){
@@ -160,7 +190,10 @@ class RawatJalanController extends Controller
                 }
             }
             //end
+            // update status pelayanan
             $item->update($data);
+            //end update status
+
             if ($item->receipts_ready) {
                 // melempar data ke farmasi pasien
                 if ($item->queue->medicineReceipt) {
@@ -176,6 +209,67 @@ class RawatJalanController extends Controller
                     }
                 }
             }
+            // melempar data billing tindakan ke kasir
+            if ($item->actions_ready) {
+                if ($item->queue->patientActionReport && !empty($item->queue->patientActionReport->patientActionReportDetails)) {
+                    if (!empty($item->queue->kasirPatient->billingDoctorActions)) {
+                        $item->queue->kasirPatient->billingDoctorActions()->delete();
+                    }
+
+                    foreach ($item->queue->patientActionReport->patientActionReportDetails as $key => $detailTindakan) {
+
+                        if (!$item->queue->dpjp) {
+                            $errors[] = 'Data Dokter Penanggung Jawab pasien Tidak Ditemukan, mohon periksa kembali';
+                            continue;
+                        }
+                        if (!$detailTindakan->action || !$detailTindakan->action->action_code || !$detailTindakan->action->name) {
+                            $errors[] = 'Tindakan Yang Dipilih Pada Detail Laporan Tindakan ID {X} Tidak Valid Mohon periksa Kembali Master Data Tindakan';
+                            continue;
+                        }
+                        if (!$detailTindakan->harga_satuan || $detailTindakan->harga_satuan <= 0) {
+                            $errors[] = 'Harga Satuan Tindakan '. $detailTindakan->action->name .' Tidak Valid, mohon periksa data tindakan pasien';
+                            continue;
+                        }
+                        if (!$detailTindakan->sub_total || $detailTindakan->sub_total <= 0) {
+                            $errors[] = 'Sub Total Tindakan harus Antara Rp 0 hingga 99.999.999,99, mohon periksa kembali data tindakan Pasien';
+                            continue;
+                        }
+                        
+                        BillingDoctorAction::create([
+                            'kasir_patient_id' => $item->queue->kasirPatient->id,
+                            'user_id' => $item->queue->dpjp->id,
+                            'action_id' => $detailTindakan->action->id ?? null,
+                            'patient_category_id' => $item->queue->patientCategory->id ?? null,
+                            'kode_dokter' => $item->queue->dpjp->staff_id ?? null,
+                            'nama_dokter' => $item->queue->dpjp->name ?? null,
+                            'nama_poli' => $item->queue->dpjp->poliklinik->name ?? null,
+                            'kode_tindakan' => $detailTindakan->action->action_code,
+                            'nama_tindakan' => $detailTindakan->action->name,
+                            'jumlah' => $detailTindakan->jumlah,
+                            'tarif' => $detailTindakan->harga_satuan,
+                            'sub_total' => $detailTindakan->sub_total,
+                        ]);
+                    }
+
+                    if (!empty($errors)) {
+                        return back()->with([
+                            'exceptions' => $errors,
+                            'btn' => 'finished',
+                        ]);
+                        DB::rollBack();
+                    }
+
+                }else{
+                    return back()->with([
+                        'error' => 'Data Tindakan Medis Tidak Ditemukan, Pastikan Tindakan Medis Yang Dilakukan pada pasien telah Diinputkan',
+                        'btn' => 'finished',
+                    ]);
+                    DB::rollBack();
+                }
+            }
+            //end kasir
+
+            DB::commit();
             return back()->with([
                 'success' => 'Status Pelayanan Berhasil Disimpan',
                 'btn' => 'finished',
@@ -183,6 +277,11 @@ class RawatJalanController extends Controller
         } catch (ValidationException $th) {
             return back()->with([
                 'error' => 'Terjadi Kesalahan pada data yang anda kirimkan. Error Message: ' . $th->getMessage(),
+                'btn' => 'finished',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'error' => 'Terjadi Kesalahan pada data yang anda kirimkan. Error Message' . $e->getMessage(),
                 'btn' => 'finished',
             ]);
         }

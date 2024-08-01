@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatientActionRequest;
 use App\Models\Action;
 use App\Models\Queue;
 use App\Models\KasirPatient;
@@ -10,7 +11,9 @@ use App\Models\DetailKasirPatient;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PatientActionReportDetail;
-
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class PatientActionReportController extends Controller
 {
@@ -102,48 +105,73 @@ class PatientActionReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PatientActionRequest $request, $id)
     {
-        $item = Queue::find($id);
-        if ($item->patientActionReport) {
-            $itemTindakan = $item->patientActionReport;
-            $itemTindakan->update([
-                'tgl_tindakan' => $request->input('tgl_tindakan', date('Y-m-d H:i:s')),
-                'laporan_tindakan' => $request->input('laporan_tindakan'),
-            ]);
-        }else{
-            $ttd = null;
-            if ($item->dpjp->id == auth()->user()->id) {
-                $ttd = $item->dpjp->paraf;
+        DB::beginTransaction();
+        $errors = [];
+        try {
+            $item = Queue::findOrFail($id);
+            if ($item->patientActionReport) {
+                $itemTindakan = $item->patientActionReport;
+                $itemTindakan->update([
+                    'tgl_tindakan' => $request->input('tgl_tindakan', date('Y-m-d H:i:s')),
+                    'laporan_tindakan' => $request->input('laporan_tindakan'),
+                ]);
+            }else{
+                $ttd = null;
+                if ($item->dpjp->id == auth()->user()->id) {
+                    $ttd = $item->dpjp->paraf;
+                }
+                $itemTindakan = PatientActionReport::create([
+                    'user_id' => $item->dpjp->id,
+                    'queue_id' => $item->id,
+                    'tgl_tindakan' => $request->input('tgl_tindakan', date('Y-m-d H:i:s')),
+                    'laporan_tindakan' => $request->input('laporan_tindakan'),
+                    'ttd' => $ttd,
+                ]);
             }
-            $itemTindakan = PatientActionReport::create([
-                'user_id' => $item->dpjp->id,
-                'queue_id' => $item->id,
-                'tgl_tindakan' => $request->input('tgl_tindakan', date('Y-m-d H:i:s')),
-                'laporan_tindakan' => $request->input('laporan_tindakan'),
-                'ttd' => $ttd,
-            ]);
-        }
-        $itemTindakan->patientActionReportDetails()->delete();
-        $actionIds = $request->input('action_id', []);
-        $jumlah = $request->input('jumlah_tindakan', []);
-        $harga = $request->input('tarif_tindakan', []);
-        $subTotal = $request->input('sub_total_tindakan', []);
-        
-        foreach ($actionIds as $key => $actionId) {
-            PatientActionReportDetail::create([
-                'patient_action_report_id' => $itemTindakan->id,
-                'action_id' => $actionId,
-                'jumlah' => $jumlah[$key],
-                'harga_satuan' => $harga[$key],
-                'sub_total' => $subTotal[$key],
-            ]);
-        }
+            $itemTindakan->patientActionReportDetails()->delete();
+            $actionIds = $request->input('action_id', []);
+            $jumlah = $request->input('jumlah_tindakan', []);
+            $harga = $request->input('tarif_tindakan', []);
+            $subTotal = $request->input('sub_total_tindakan', []);
+            
+            foreach ($actionIds as $key => $actionId) {
+                PatientActionReportDetail::create([
+                    'patient_action_report_id' => $itemTindakan->id,
+                    'action_id' => $actionId,
+                    'jumlah' => $jumlah[$key],
+                    'harga_satuan' => $harga[$key],
+                    'sub_total' => $subTotal[$key],
+                ]);
+            }
 
-        return back()->with([
-            'success' => 'Berhasil Diperbarui',
-            'btn' => 'tindakan',
-        ]);
+            if (!empty($errors)) {
+                DB::rollBack();
+                return back()->with([
+                    'exceptions' => $errors,
+                    'btn' => 'tindakan',
+                ]);
+            }
+
+            DB::commit();
+            return back()->with([
+                'success' => 'Berhasil Diperbarui',
+                'btn' => 'tindakan',
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with([
+                'error' => $e->getMessage(),
+                'btn' => 'tindakan',
+            ]);
+        } catch (ValidationException $th) {
+            DB::rollBack();
+            return back()->with([
+                'error' => $th->getMessage(),
+                'btn' => 'tindakan',
+            ]);
+        }        
     }
 
     /**

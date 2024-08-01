@@ -106,10 +106,8 @@ class QueueConfirmController extends Controller
                 if (!$item->dpjp) {
                     $errors[] = 'Data Dokter terkait Tidak Ditemukan, mohon periksa kembali master data dokter';
                 }
-                if (!$item->dpjp->tarif || $item->dpjp->tarif == 0) {
-                    $errors[] = 'Tarif Untuk Dokter '. $item->dpjp->name . ' Tidak Ditemukan, mohon periksa kembali master data dokter';
-                }
-                if (!$item->dpjp->tarif <= 0) {
+                if (!$item->dpjp->tarif || $item->dpjp->tarif <= 0) {
+                    // $errors[] = 'Tarif Untuk Dokter '. $item->dpjp->name . ' Tidak Ditemukan, mohon periksa kembali master data dokter';
                     $errors[] = 'Tarif Dokter harus Antara Rp 0.01 hingga 99.999.999,99, mohon periksa kembali master data dokter';
                 }
                 
