@@ -151,6 +151,8 @@ class RawatJalanController extends Controller
             'nama_poli' => $antrian->dpjp->poliklinik->name ?? '',
             'tarif' => $antrian->dpjp->tarif,
         ]);
+
+        return $antrian->rawatJalanPoliPatient;
      }
 
     public function update(Request $request, $id)
@@ -171,7 +173,7 @@ class RawatJalanController extends Controller
 
             // pastikan billing pasien telah dibuat
             if (!$item->queue->kasirPatient) {
-                $this->createKasirPatientFirst($item->queue);
+                $item = $this->createKasirPatientFirst($item->queue);
             }
 
             //data untuk pengiriman ke farmasi, radiologi, laboratorium, dan tindakan
