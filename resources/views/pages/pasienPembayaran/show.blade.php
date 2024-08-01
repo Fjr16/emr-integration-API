@@ -39,13 +39,105 @@
   </div>
   {{-- end Informasi Pasien --}}
   <div class="card p-3">
-    <div class="alert-secondary p-4" role="alert">
-      <h4 class="alert-heading d-flex align-items-center"><span class="alert-icon rounded-circle me-2"><i class='bx bx-error-alt'></i></span> Belum Ada Tagihan</h4>
-      <hr>
-      <div class="d-flex flex-column ps-1">
-        <span>Mohon menunggu tagihan pasien dimasukkan oleh staff medis lainnya, tagihan akan muncul jika pasien telah menerima beberapa pelayanan !</span>
+    @if (empty($item->billingDoctorConsultations) || empty($item->detailKasirPatients))    
+      <div class="alert-secondary p-4" role="alert">
+        <h4 class="alert-heading d-flex align-items-center"><span class="alert-icon rounded-circle me-2"><i class='bx bx-error-alt'></i></span> Belum Ada Tagihan</h4>
+        <hr>
+        <div class="d-flex flex-column ps-1">
+          <span>Mohon menunggu tagihan pasien dimasukkan oleh staff medis lainnya, tagihan akan muncul jika pasien telah menerima beberapa pelayanan !</span>
+        </div>
       </div>
+    @else    
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-success">
+          <tr>
+            {{-- <th>Kategori</th> --}}
+            <th class="text-dark">No</th>
+            <th class="text-dark">Kode / Nama</th>
+            <th class="text-dark text-center">Tarif</th>
+            <th class="text-dark text-center">Jumlah</th>
+            <th class="text-dark text-center">Sub Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class=" ">
+            <td colspan="5"><h6 class="fw-bold fst-italic  small text-uppercase m-0 p-0"># Jasa Dokter</h6></td>
+          </tr>
+          @foreach ($item->billingDoctorConsultations as $jasaDokter)
+          <tr>
+            {{-- <td>Jasa Dokter</td> --}}
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ ($jasaDokter->kode_dokter ?? $item->queue->dpjp->staff_id) . ' / ' .($jasa_dokter->nama_dokter ?? $item->queue->dpjp->name) }}</td>
+            <td class="text-center">Rp. {{ number_format($jasaDokter->tarif ?? 0) }}</td>
+            <td class="text-center">1</td>
+            <td class="text-center">Rp. {{ number_format($jasaDokter->tarif ?? 0) }}</td>
+          </tr>
+          @endforeach
+          @if (!$item->queue->rawatJalanPoliPatient->actions_ready == false || !empty($item->billingDoctorActions))
+          <tr>
+            <td colspan="5">
+              <div class="d-flex justify-content-start m-0 p-0">
+                <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Tindakan Pelayanan Medis</h6>
+                @if ($item->queue->rawatJalanPoliPatient->actions_ready == true && !empty($item->billingDoctorActions))
+                <form action="{{ route('rajal/kasir/revisi/billing.tindakan', $item->queue->rawatJalanPoliPatient->id) }}" method="POST">
+                  @method('PUT')
+                  @csrf
+                  <button type="submit" class="m-0 p-1 btn btn-sm btn-warning small" onclick="return confirm('Apakah Anda Ingin mengajukan revisi Tagihan Tindakan ?')">Ajukan Revisi</button>
+                </form>
+                @elseif ($item->queue->rawatJalanPoliPatient->actions_ready == false && !empty($item->billingDoctorActions))
+                  <span class="m-0 p-1 badge bg-danger small">Menunggu Perbaikan</span>
+                @else
+                  <span class="m-0 p-1 badge bg-danger small"><i class="bx bx-x"></i> Error</span>
+                @endif
+              </div>
+            </td>
+          </tr>
+          @endif
+          @foreach ($item->billingDoctorActions as $tindakanMedis)
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td>{{ ($tindakanMedis->kode_tindakan ?? ($tindakanMedis->action->action_code ?? '')) . ' / ' . ($tindakanMedis->nama_tindakan ?? ($tindakanMedis->action->name ?? '')) }}</td>
+              <td class="text-center">Rp. {{ number_format($tindakanMedis->tarif ?? 0) }}</td>
+              <td class="text-center">{{ $tindakanMedis->jumlah ?? 0 }}</td>
+              <td class="text-center">Rp. {{ number_format($tindakanMedis->sub_total ?? 0) }}</td>
+            </tr>
+          @endforeach
+          <tr>
+            <td colspan="5"><h6 class="fw-bold fst-italic small text-uppercase m-0 p-0"># Tindakan Radiologi</h6></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Trevor Baker</td>
+            <td class="text-center">Rp. 35.000</td>
+            <td class="text-center">10</td>
+            <td class="text-center">Rp. 350.000</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+      {{-- <h6 class="m-0 mb-2">Jasa Dokter</h6>
+      <table class="table mb-3">
+        <thead>
+          <tr class="text-nowrap bg-dark">
+            <th>Kode / Nama </th>
+            <th>Tarif</th>
+            <th>Jumlah</th>
+            <th>Sub Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($item->billingDoctorConsultations as $jasaDokter)
+          <tr>
+            <td>{{ ($jasaDokter->kode_dokter ?? $item->queue->dpjp->staff_id) . ' / ' .($jasa_dokter->nama_dokter ?? $item->queue->dpjp->name) }}</td>
+            <td>{{ number_format($jasaDokter->tarif ?? 0) }}</td>
+            <td>1</td>
+            <td>{{ number_format($jasaDokter->tarif ?? 0) }}</td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table> --}}
+    @endif
     {{-- @can('lihat detail pembayaran')
     <h6 class="m-0 mb-2">Data Tindakan Pasien</h6>
     <table class="table mb-3" >
