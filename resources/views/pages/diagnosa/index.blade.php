@@ -15,7 +15,7 @@
     </div>
   <hr class="m-0 mt-2 mb-3">
   <div class="table-responsive text-nowrap">
-    <table class="table">
+    <table class="table" id="example">
       <thead>
         <tr class="text-nowrap bg-dark">
           <th>No</th>
@@ -27,7 +27,7 @@
       <tbody>
           @foreach ($data as $item)
           <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
+            <td scope="row">{{ $loop->iteration }}</td>
             <td>{{ $item->name }}</td>
             <td>{{ $item->icd_x_code ?? '' }}</td>
             <td>

@@ -34,7 +34,7 @@ class RawatJalanController extends Controller
         $filterDate = $filter ?? now();
         $routeToFilter = route('rajal/index');
         $user = Auth::user();
-        if ($user->hasRole('Dokter Spesialis')) {
+        if ($user->hasRole('Dokter')) {
             $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)
             ->whereHas('dpjp', function ($query2) use ($user) {
                 $query2->where('dokter_id', $user->id);

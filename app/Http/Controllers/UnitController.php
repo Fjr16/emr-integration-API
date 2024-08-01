@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Unit;
-use App\Models\UnitCategory;
-use App\Models\UnitCategoryPivot;
 use Illuminate\Http\Request;
 
 class UnitController extends Controller
@@ -31,11 +29,9 @@ class UnitController extends Controller
      */
     public function create()
     {
-        $sub_unit = UnitCategoryPivot::all();  
         return view('pages.unit.create', [
             'title' => 'Unit',
             'menu' => 'Setting',
-            'sub_unit' => $sub_unit,
         ]);
     }
 
@@ -48,27 +44,9 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        if($item = Unit::create($data)){
-            $sub_unit = UnitCategoryPivot::all();
-            foreach($sub_unit as $sub){
-                $category['unit_id'] = $item->id;
-                $category['unit_category_pivot_id'] = $sub->id;
-                UnitCategory::create($category);
-            }
-        }
+        Unit::create($data);
 
         return redirect()->route('unit.index')->with('success', 'Berhasil Ditambahkan');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -112,11 +90,6 @@ class UnitController extends Controller
     public function destroy($id)
     {
         $item = Unit::find($id);
-        if($item->unitCategories){
-            foreach($item->unitCategories as $sub_unit){
-                $sub_unit->delete();
-            }
-        }
         $item->delete();
 
         return back()->with('success', 'Berhasil Dihapus');

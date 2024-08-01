@@ -82,11 +82,12 @@ class ActionController extends Controller
             'Radiologi',
             'Laboratorium',
         ];
+        $this->sinkronTanggungan($id);
         $item = Action::find($id);
         $patientCategories = PatientCategory::all();
         return view('pages.tindakan.edit', [
-            "title" => "Jenis Tindakan",
-            "menu" => "Tindakan",
+            "title" => "Tindakan",
+            "menu" => "Setting",
             "item" => $item,
             "data" => $data,
             "patientCategories" => $patientCategories
@@ -118,7 +119,7 @@ class ActionController extends Controller
                 ]);
             }
         }
-        return redirect()->route('tindakan.index')->with('success', 'Tindakan berhasil Diperbarui');
+        return back()->with('success', 'Tindakan berhasil Diperbarui');
     }
 
     /**
@@ -135,5 +136,23 @@ class ActionController extends Controller
         }
         $item->delete();
         return back()->with('success', 'Tindakan Berhasil Dihapus');
+    }
+
+    
+    // untuk sinkronisasi tanggungan pada tindakan
+    private function sinkronTanggungan($id) {
+        $item = Action::find($id);
+        $tanggungans = PatientCategory::all();
+        $arrTanggunganExists = $item->actionRates->pluck('patient_category_id')->toArray();
+        foreach ($tanggungans as $tanggungan) {
+            if (in_array($tanggungan->id, $arrTanggunganExists)) {
+                continue;
+            }
+            ActionRate::create([
+                'action_id' => $item->id,
+                'patient_category_id' => $tanggungan->id,
+                // 'tarif' => 0,
+            ]);
+        }
     }
 }
