@@ -305,11 +305,17 @@
             matcher: matchCustom,
             templateResult: formatCustom
         });
+        $('.select2-action').select2({
+            placeholder : "Pilih Tindakan",
+            allowClear : true,
+            matcher: matchCustom,
+            templateResult: formatCustom
+        });
 
         // select2 ketika function di panggil
-        function regenerateSelect(selectType1){
+        function regenerateSelect(selectType1, ph){
             $('.' + selectType1).select2({
-                placeholder : "Pilih Obat",
+                placeholder : ph,
                 allowClear : true,
                 matcher: matchCustom,
                 templateResult: formatCustom
@@ -343,7 +349,7 @@
 
         function formatCustom(state) {
             return $(
-                '<div><div>' + state.text + '</div><div class="foo text-lowercase">'
+                '<div><div>' + state.text + '</div><div class="foo">'
                     + $(state.element).attr('data-foo')
                     + '</div></div>'
             );

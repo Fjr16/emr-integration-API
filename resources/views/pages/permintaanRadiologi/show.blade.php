@@ -147,24 +147,24 @@
                             <tr>
                                 <td class="fw-bold">Nama Pasien</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $itemRadiologi->patient->name ?? '' }}</td>
+                                <td>{{ $itemRadiologi->queue->patient->name ?? '' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Tgl lahir</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td> {{ $itemRadiologi->patient->tanggal_lhr ?? '' }}</td>
+                                <td> {{ $itemRadiologi->queue->patient->tanggal_lhr ?? '' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">No. RM</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
                                 <td>
-                                    {{ implode('-', str_split(str_pad($itemRadiologi->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                    {{ implode('-', str_split(str_pad($itemRadiologi->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">NIK</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $itemRadiologi->patient->nik ?? '' }}</td>
+                                <td>{{ $itemRadiologi->queue->patient->nik ?? '' }}</td>
                             </tr>
                         </table>
                     </td>
@@ -180,12 +180,33 @@
                             <tr>
                                 <td class="fw-bold">Asal Ruangan</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $itemRadiologi->roomDetail->name ?? '' }}</td>
+                                <td>{{ $itemRadiologi->queue->dpjp->poliklinik->name ?? '' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Diagnosa Klinis</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
                                 <td>{{ strip_tags($itemRadiologi->diagnosa_klinis) ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Status</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>
+                                    @if ($itemRadiologi->status == 'WAITING')
+                                        <span class="badge bg-warning">PERMINTAAN</span>
+                                    @elseif ($itemRadiologi->status == 'CANCEL')
+                                        <span class="badge bg-danger">BATAL</span>
+                                    @elseif ($itemRadiologi->status == 'DENIED')
+                                        <span class="badge bg-warning">DITOLAK</span>
+                                    @elseif ($itemRadiologi->status == 'ACCEPTED')
+                                        <span class="badge bg-primary">DITERIMA</span>
+                                    @elseif ($itemRadiologi->status == 'ONGOING')
+                                        <span class="badge bg-primary">SEDANG DIPERIKSA</span>
+                                    @elseif ($itemRadiologi->status == 'FINISHED')
+                                        <span class="badge bg-success">SELESAI</span>
+                                    @else
+                                        <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                                    @endif
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -199,18 +220,18 @@
             </p>
 
 
-            <table class="table-bordered w-100">
+            <table class="table w-100">
                 <thead>
-                    <tr class="bg-dark text-white text-center">
-                        <th>Kode Pemeriksaan</th>
-                        <th>Nama Pemeriksaan</th>
+                    <tr class="table-primary text-dark text-center">
+                        <th>Kode Tindakan</th>
+                        <th>Nama Tindakan</th>
                         <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($itemRadiologi->radiologiFormRequestDetails as $detail)                        
                         <tr class="text-center">
-                            <td>{{ $detail->action->icd_code ?? '' }}</td>
+                            <td>{{ $detail->action->action_code ?? '' }}</td>
                             <td>{{ $detail->action->name ?? '' }}</td>
                             <td>{{ $detail->keterangan ?? '-' }}</td>
                         </tr>

@@ -1,7 +1,6 @@
 @extends('layouts.backend.main')
 
 @section('content')
-
     @if (session()->has('success'))
         <div class="alert alert-success d-flex" role="alert">
             <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
@@ -935,9 +934,24 @@
                     <div class="tab-pane fade {{ session('btn') == 'penunjang' ? 'show active' : '' }}"
                         id="navs-justified-profile" role="tabpanel">
                         <div class="row">
+                            {{-- <div class="col-md-2 col-12 mb-3 mb-md-0">
+                                <div class="list-group">
+                                  <a class="list-group-item list-group-item-action {{ session('penunjang') == 'radiologi' ? 'active' : '' }}" id="radiologi-list" data-bs-toggle="list" href="#radiologi">Radiologi</a>
+                                  <a class="list-group-item list-group-item-action {{ session('penunjang') == 'laboratorium' ? 'active' : '' }}" id="laboratorium-list" data-bs-toggle="list" href="#laboratorium">Laboratorium</a>
+                                </div>
+                            </div>
+                            <div class="col-md-10 col-12 border">
+
+                                <div class="tab-content">
+                                    <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}" id="radiologi">
+                                    </div>
+                                    <div class="tab-pane fade {{ session('penunjang') == 'laboratorium' ? 'show active' : '' }}" id="laboratorium">
+                                    </div>
+                                </div>
+                            </div> --}}
                             <div class="col-sm-12">
                                 <div class="nav-align-top w-100 mb-4">
-                                    <ul class="nav nav-pills nav-sm mb-3 nav-fill" role="tablist">
+                                    <ul class="nav nav-pills nav-sm mb-0 nav-fill" role="tablist">
                                         <li class="nav-item">
                                             <button type="button"
                                                 class="border nav-link {{ session('penunjang') == 'radiologi' ? 'active' : '' }}"
@@ -958,27 +972,61 @@
                                         </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}"
-                                            id="navs-pills-justified-radiologi" role="tabpanel">
-                                            <div class="text-end">
+                                        <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}" id="navs-pills-justified-radiologi" role="tabpanel">
+                                            <div class="text-end mb-2 me-2">
                                                 <a href="{{ route('rajal/permintaan/radiologi.create', $item->id) }}"
-                                                    class="btn btn-success btn-sm">+Tambah Permintaan</a>
+                                                    class="btn btn-primary btn-sm"><i class="bx bx-plus"></i> Permintaan</a>
                                             </div>
                                             <table class="table">
                                                 <thead>
                                                     <tr class="text-nowrap">
-                                                        <th class="text-body">No</th>
+                                                        <th class="text-body">Action</th>
                                                         <th class="text-body">Dokter</th>
                                                         <th class="text-body">Asal Ruang</th>
                                                         <th class="text-body">Diagnosa Klinis</th>
                                                         <th class="text-body">Tanggal</th>
-                                                        <th class="text-body">Action</th>
+                                                        <th class="text-body">Status</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($item->patient->radiologiFormRequests()->orderBy('created_at', 'DESC')->get() as $radiologi)
-                                                        <tr class="{{ $item->id == $radiologi->queue->id ? 'text-success' : '' }}">
-                                                            <td>{{ $loop->iteration }}</td>
+                                                    @foreach ($item->radiologiFormRequests()->orderBy('created_at', 'DESC')->get() as $radiologi)
+                                                        <tr>
+                                                            <td>
+                                                                @if ($radiologi->status == 'CANCEL')
+                                                                    <span class="badge bg-danger"><i class="bx bx-x"></i></span>
+                                                                @else    
+                                                                    <div class="btn-group dropend">
+                                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <i class='bx bx-info-circle me-2'></i>Action
+                                                                        </button>
+                                                                        <ul class="dropdown-menu">
+                                                                            @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
+                                                                                <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
+                                                                                <li> <a class="dropdown-item text-info" href=""><i class='bx bx-file'></i> Hasil</a> </li>
+                                                                            @elseif ($radiologi->status == 'WAITING' || $radiologi->status != 'DENIED' || $radiologi->status == 'ACCEPTED')
+                                                                                <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
+                                                                                <li>
+                                                                                    <form action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
+                                                                                        @method('DELETE')
+                                                                                        @csrf
+                                                                                        <button type="submit" class="dropdown-item text-danger"><i class="bx bx-x"></i> Batal</button>
+                                                                                    </form>
+                                                                                </li>
+                                                                            @endif
+                                                                        </ul>
+                                                                    </div>
+                                                                @endif
+                                                                {{-- <div class="d-flex align-self-center">
+                                                                    @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
+                                                                        <button type="button" class="btn btn-info btn-sm"><i class='bx bx-file'></i></button>
+                                                                    @else    
+                                                                        <a href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
+                                                                            class="btn btn-warning btn-sm me-2"><i
+                                                                                class='bx bx-edit'></i></a>
+                                                                            
+                                                                    @endif
+                                                                </div> --}}
+                                                            </td>
                                                             <td>{{ $radiologi->user->name ?? '' }}
                                                                 ({{ $radiologi->user->staff_id ?? '' }})
                                                             </td>
@@ -987,27 +1035,21 @@
                                                             <td>{!! $radiologi->diagnosa_klinis ?? '' !!}</td>
                                                             <td>{{ $radiologi->created_at->format('Y-m-d / H:i:s') }}</td>
                                                             <td>
-                                                                <div class="d-flex align-self-center">
-                                                                    <a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
-                                                                        target="blank" class="btn btn-dark btn-sm mx-2"><i
-                                                                            class='bx bx-printer'></i></a>
-                                                                    @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
-                                                                        <button type="button" class="btn btn-info btn-sm"><i class='bx bx-file'></i></button>
-                                                                    @else    
-                                                                        <a href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
-                                                                            class="btn btn-warning btn-sm me-2"><i
-                                                                                class='bx bx-edit'></i></a>
-                                                                            <form
-                                                                                action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}"
-                                                                                method="POST">
-                                                                                @method('DELETE')
-                                                                                @csrf
-                                                                                <button type="submit"
-                                                                                    class="btn btn-sm btn-danger"><i
-                                                                                        class="bx bx-trash"></i></button>
-                                                                            </form>
-                                                                    @endif
-                                                                </div>
+                                                                @if ($radiologi->status == 'WAITING')
+                                                                    <span class="badge bg-warning">PERMINTAAN</span>
+                                                                @elseif ($radiologi->status == 'CANCEL')
+                                                                    <span class="badge bg-danger">BATAL</span>
+                                                                @elseif ($radiologi->status == 'DENIED')
+                                                                    <span class="badge bg-warning">DITOLAK</span>
+                                                                @elseif ($radiologi->status == 'ACCEPTED')
+                                                                    <span class="badge bg-primary">DITERIMA</span>
+                                                                @elseif ($radiologi->status == 'ONGOING')
+                                                                    <span class="badge bg-primary">SEDANG DIPERIKSA</span>
+                                                                @elseif ($radiologi->status == 'FINISHED')
+                                                                    <span class="badge bg-success">SELESAI</span>
+                                                                @else
+                                                                    <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach

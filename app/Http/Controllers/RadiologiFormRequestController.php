@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PermintaanRadiologiRequest;
 use App\Models\Action;
 use App\Models\Queue;
 use Illuminate\Http\Request;
-use App\Models\InitialAssesment;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\URL;
 use App\Models\RadiologiFormRequest;
 use App\Models\RadiologiFormRequestDetail;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RadiologiFormRequestController extends Controller
 {
@@ -31,36 +34,13 @@ class RadiologiFormRequestController extends Controller
      */
     public function create($id)
     {
-        $urlParent = URL::previous();
-
-        $data = Action::where('jenis_tindakan', 'Radiologi')->get();
+        $data = Action::where('jenis_tindakan', 'Radiologi')->with(['actionRates'])->get();
         $item = Queue::findOrFail($id);
-
-        $diagnosa = null;
-        $rawat_jalan_poli_patient_id = $item->rawatJalanPatient->rawatJalanPoliPatient->id ?? '';
-        if ($rawat_jalan_poli_patient_id) {
-            $assesmenAwalMedis = InitialAssesment::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
-            $patientActionReport = PatientActionReport::where('rawat_jalan_poli_patient_id', $rawat_jalan_poli_patient_id)->latest()->first();
-
-            if ($assesmenAwalMedis && $patientActionReport) {
-                if ($assesmenAwalMedis->created_at->isBefore($patientActionReport->created_at)) {
-                    $diagnosa = $patientActionReport->diagnosa;
-                } else {
-                    $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-                }
-            } elseif ($assesmenAwalMedis && !$patientActionReport) {
-                $diagnosa = $assesmenAwalMedis->diagnosa_kerja;
-            } elseif (!$assesmenAwalMedis && $patientActionReport) {
-                $diagnosa = $patientActionReport->diagnosa;
-            }
-        }
         return view('pages.permintaanRadiologi.create', [
             'title' => 'Rawat Jalan',
             'menu' => 'Rawat Jalan',
             'item' => $item,
             'data' => $data,
-            'diagnosa' => $diagnosa,
-            'urlParent' => $urlParent,
         ]);
     }
 
@@ -70,26 +50,21 @@ class RadiologiFormRequestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function store(PermintaanRadiologiRequest $request, $id)
     {
-        $this->validate($request, [
-            'patient_id' => 'required',
-            'room_detail_id' => 'required',
-            'ttd_user' => 'required',
-            'action_id' => 'required',
-        ]);
-        $queue = Queue::find($id);
+        DB::beginTransaction();
+        try {
+            $queue = Queue::findOrFail($id);
+            if (auth()->user()->id !== $queue->dpjp->id) {
+                return back()->with('error', 'Permintaan Hanya Dapat Dibuat Oleh Dokter Penanggung Jawab Pasien')->withInput();
+            }
 
         // Create new radiology request
-        $data = [
-            'user_id' => Auth::user()->id,
-            'patient_id' => $request->patient_id,
-            'queue_id' => $queue->id,
-            'room_detail_id' => $request->room_detail_id,
-            'diagnosa_klinis' => $request->diagnosa_klinis,
-            'catatan' => $request->catatan,
-            'ttd_dokter' => $request->ttd_user,
-        ];
+        $data = $request->validated();
+        $data['ttd_dokter'] = $data['ttd_user'] ?? null;
+        $data['user_id'] = Auth::user()->id;
+        $data['queue_id'] = $queue->id;
+        $data['catatan'] = $request->catatan ?? null;
 
         $item = RadiologiFormRequest::create($data);
         $detailActions = $request->input('action_id', []);
@@ -102,13 +77,23 @@ class RadiologiFormRequestController extends Controller
             ]);
         }
 
+        
+        DB::commit();
         return redirect()
             ->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])
             ->with([
-                'success' => 'Berhasil Ditambahkan',
-                'btn' => 'dokter',
-                'dokter' => 'radiologi',
+                'success' => 'Berhasil Membuat permintaan Pemeriksaan Radiologi',
+                'btn' => 'penunjang',
+                'penunjang' => 'radiologi',
             ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage())->withInput();
+        } catch(ModelNotFoundException $mn){
+            DB::rollBack();
+            return back()->with('error', $mn->getMessage())->withInput();
+        }
+        
     }
 
     /**
@@ -137,26 +122,21 @@ class RadiologiFormRequestController extends Controller
      */
     public function edit($id, $id2)
     {
-        $title = 'Rawat Jalan';
-        $menu = 'In Patient';
-        $urlParent = URL::previous();
         $queue = Queue::findOrFail($id);
-
         $item = RadiologiFormRequest::findOrFail($id2);
-        if ($item->status == 'FINISHED' || $item->status == 'ONGOING') {
+        if ($item->status == 'FINISHED' || $item->status == 'ONGOING' || $item->status == 'ACCEPTED') {
             return back()->with([
-                'error' => 'Data Tidak Dapat Diubah !! Karena Permintaan Dalam Pemeriksaan / Telah Selesai',
-                'btn' => 'dokter',
-                'dokter' => 'radiologi',
+                'error' => 'Data Tidak Dapat Diubah !! Karena Permintaan Telah Diterima Oleh petugas Radiologi',
+                'btn' => 'penunjang',
+                'penunjang' => 'radiologi',
             ]);
         }
         $data = Action::where('jenis_tindakan', 'Radiologi')->get();
 
         return view('pages.permintaanRadiologi.edit', [
-            'title' => $title,
-            'menu' => $menu,
+            'title' => 'Rawat Jalan',
+            'menu' => 'In Patient',
             'queue' => $queue,
-            'urlParent' => $urlParent,
             'item' => $item,
             'data' => $data,
         ]);
@@ -169,44 +149,53 @@ class RadiologiFormRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PermintaanRadiologiRequest $request, $id)
     {
-        $item = RadiologiFormRequest::find($id);
-        if ($item->status == 'FINISHED' || $item->status == 'ONGOING') {
-            return back()->with('error', 'Data Tidak Dapat Diubah !! Karena Status Dalam Pemeriksaan atau Telah Selesai ');
-        }
-        $data = [
-            'diagnosa_klinis' => $request->diagnosa_klinis,
-            'catatan' => $request->catatan,
-        ];
+        DB::beginTransaction();
+        try {
+            $item = RadiologiFormRequest::find($id);
+            if ($item->status == 'FINISHED' || $item->status == 'ONGOING' || $item->status == 'ACCEPTED') {
+                return back()->with('error', 'Data Tidak Dapat Diubah !! Karena Permintaan Telah Diterima Oleh Petugas radiologi');
+            }
+            if (auth()->user()->id !== $item->queue->dpjp->id) {
+                return back()->with('error', 'Permintaan Hanya Dapat Dibuat Oleh Dokter Penanggung Jawab Pasien')->withInput();
+            }
+
+
+        // Create new radiology request
+        $data = $request->validated();
+        $data['ttd_dokter'] = $data['ttd_user'] ?? null;
+        $data['user_id'] = Auth::user()->id;
+        $data['catatan'] = $request->catatan ?? null;
         $item->update($data);
 
-        $toUpdateDetails = $request->input('radiologi_detail_id', []);
+        $item->radiologiFormRequestDetails()->delete();
         $detailActions = $request->input('action_id', []);
         $detailKets = $request->input('keterangan', []);
         foreach ($detailActions as $key => $action) {
-            if (isset($toUpdateDetails[$key])) {
-                RadiologiFormRequestDetail::find($toUpdateDetails[$key])->update([
-                    'radiologi_form_request_id' => $item->id,
-                    'action_id' => $action,
-                    'keterangan' => $detailKets[$key]
-                ]);
-            }else{
-                RadiologiFormRequestDetail::create([
-                    'radiologi_form_request_id' => $item->id,
-                    'action_id' => $action,
-                    'keterangan' => $detailKets[$key]
-                ]);
-            }
+            RadiologiFormRequestDetail::create([
+                'radiologi_form_request_id' => $item->id,
+                'action_id' => $action,
+                'keterangan' => $detailKets[$key]
+            ]);
         }
 
+        
+        DB::commit();
         return redirect()
-        ->route('rajal/show', ['id' => $item->queue->id, 'title' => 'Rawat Jalan'])
-        ->with([
-            'success' => 'Berhasil Diubah',
-            'btn' => 'dokter',
-            'dokter' => 'radiologi',
-        ]);
+            ->route('rajal/show', ['id' => $item->queue->id, 'title' => 'Rawat Jalan'])
+            ->with([
+                'success' => 'Berhasil Memperbarui permintaan Pemeriksaan Radiologi',
+                'btn' => 'penunjang',
+                'penunjang' => 'radiologi',
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage())->withInput();
+        } catch(ModelNotFoundException $mn){
+            DB::rollBack();
+            return back()->with('error', $mn->getMessage())->withInput();
+        }
     }
 
     /**
@@ -219,20 +208,21 @@ class RadiologiFormRequestController extends Controller
     {
         // code baru
         $item = RadiologiFormRequest::find($id);
-        if ($item->status == 'FINISHED' || $item->status == 'ONGOING') {
+        if ($item->status == 'FINISHED' || $item->status == 'ONGOING' || $item->status == 'ACCEPTED') {
             return back()->with([
-                'error' => 'Data Tidak Dapat Dihapus !! Karena Permintaan Dalam Pemeriksaan / Telah Selesai',
-                'btn' => 'dokter',
-                'dokter' => 'radiologi',
+                'error' => 'Data Tidak Dibatalkan !! Karena Permintaan Telah Diterima Oleh Petugas Radiologi',
+                'btn' => 'penunjang',
+                'penunjang' => 'radiologi',
             ]);
         }
-        $item->radiologiFormRequestDetails()->delete();
-        $item->delete();
+        $item->update([
+            'status' => 'CANCEL',
+        ]);
         return back()
             ->with([
-                'success' => 'Berhasil Dihapus',
-                'btn' => 'dokter',
-                'dokter' => 'radiologi',
+                'success' => 'Permintaan Berhasil Dibatalkan',
+                'btn' => 'penunjang',
+                'penunjang' => 'radiologi',
             ]);
     }
 }

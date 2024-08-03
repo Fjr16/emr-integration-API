@@ -16,9 +16,7 @@ return new class extends Migration
         Schema::create('radiologi_form_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('patient_id')->nullable();
             $table->foreignId('queue_id')->nullable();
-            $table->foreignId('room_detail_id')->nullable();
             $table->string('diagnosa_klinis', 50)->nullable();
             $table->text('catatan')->nullable();
             $table->string('ttd_dokter', 100)->nullable();
