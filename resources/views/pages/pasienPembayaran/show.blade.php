@@ -61,7 +61,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class=" ">
+          <tr>
             <td colspan="5"><h6 class="fw-bold fst-italic  small text-uppercase m-0 p-0"># Jasa Dokter</h6></td>
           </tr>
           @foreach ($item->billingDoctorConsultations as $jasaDokter)
@@ -83,7 +83,7 @@
                 <form action="{{ route('rajal/kasir/revisi/billing.tindakan', $item->queue->rawatJalanPoliPatient->id) }}" method="POST">
                   @method('PUT')
                   @csrf
-                  <button type="submit" class="m-0 p-1 btn btn-sm btn-warning small" onclick="return confirm('Apakah Anda Ingin mengajukan revisi Tagihan Tindakan ?')">Ajukan Revisi</button>
+                  <button type="submit" class="m-0 p-1 btn btn-sm btn-outline-warning small" onclick="return confirm('Apakah Anda Ingin mengajukan revisi Tagihan Tindakan ?')">Ajukan Revisi</button>
                 </form>
                 @elseif ($item->queue->rawatJalanPoliPatient->actions_ready == false && !empty($item->billingDoctorActions))
                   <span class="m-0 p-1 badge bg-danger small">Menunggu Perbaikan</span>
@@ -103,106 +103,47 @@
               <td class="text-center">Rp. {{ number_format($tindakanMedis->sub_total ?? 0) }}</td>
             </tr>
           @endforeach
+
+          @if (!empty($item->billingRadiologies))
           <tr>
-            <td colspan="5"><h6 class="fw-bold fst-italic small text-uppercase m-0 p-0"># Tindakan Radiologi</h6></td>
+            <td colspan="5">
+                <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Pemeriksaan Radiologi</h6>
+            </td>
           </tr>
+          @endif
+          
+          @foreach ($item->billingRadiologies as $rad)     
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td>{{ ($rad->kode_tindakan ?? ($rad->action->action_code ?? '')) . ' / ' . ($rad->nama_tindakan ?? ($rad->action->name ?? '')) }}</td>
+              <td class="text-center">Rp. {{ number_format($rad->tarif ?? 0) }}</td>
+              <td class="text-center">{{ $rad->jumlah ?? 0 }}</td>
+              <td class="text-center">Rp. {{ number_format($rad->sub_total ?? 0) }}</td>
+            </tr>
+          @endforeach
+
+          @if (!empty($item->billingRadiologies))
           <tr>
-            <td>1</td>
-            <td>Trevor Baker</td>
-            <td class="text-center">Rp. 35.000</td>
-            <td class="text-center">10</td>
-            <td class="text-center">Rp. 350.000</td>
+            <td colspan="5">
+                <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Pemeriksaan Radiologi</h6>
+            </td>
           </tr>
+          @endif
+          
+          @foreach ($item->billingRadiologies as $rad)     
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td>{{ ($rad->kode_tindakan ?? ($rad->action->action_code ?? '')) . ' / ' . ($rad->nama_tindakan ?? ($rad->action->name ?? '')) }}</td>
+              <td class="text-center">Rp. {{ number_format($rad->tarif ?? 0) }}</td>
+              <td class="text-center">{{ $rad->jumlah ?? 0 }}</td>
+              <td class="text-center">Rp. {{ number_format($rad->sub_total ?? 0) }}</td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
-      {{-- <h6 class="m-0 mb-2">Jasa Dokter</h6>
-      <table class="table mb-3">
-        <thead>
-          <tr class="text-nowrap bg-dark">
-            <th>Kode / Nama </th>
-            <th>Tarif</th>
-            <th>Jumlah</th>
-            <th>Sub Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($item->billingDoctorConsultations as $jasaDokter)
-          <tr>
-            <td>{{ ($jasaDokter->kode_dokter ?? $item->queue->dpjp->staff_id) . ' / ' .($jasa_dokter->nama_dokter ?? $item->queue->dpjp->name) }}</td>
-            <td>{{ number_format($jasaDokter->tarif ?? 0) }}</td>
-            <td>1</td>
-            <td>{{ number_format($jasaDokter->tarif ?? 0) }}</td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table> --}}
     @endif
     {{-- @can('lihat detail pembayaran')
-    <h6 class="m-0 mb-2">Data Tindakan Pasien</h6>
-    <table class="table mb-3" >
-      <thead>
-        <tr class="text-nowrap bg-dark">
-          <th>Tindakan</th>
-          <th>Tanggal / Jam</th>
-          <th>Tarif</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($item->detailKasirPatients->where('category', 'Action') as $detail)
-        <tr>
-          <td>{{ $detail->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detail->tarif ?? '') }}</td>
-        </tr>
-        @endforeach
-        @foreach ($item->detailKasirPatients->where('category', 'Konsultasi') as $detail)
-        <tr>
-          <td>{{ $detail->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detail->tarif ?? '') }}</td>
-        </tr>
-        @endforeach
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2" class="text-center">Total</td>
-          @php
-              $totalAction = $item->detailKasirPatients->where('category', 'Action')->sum('tarif');
-              $totalKonsultasi = $item->detailKasirPatients->where('category', 'Konsultasi')->sum('tarif');
-              $totalOfBoth = $totalAction + $totalKonsultasi;
-          @endphp
-          <td>{{ number_format($totalOfBoth) }}</td>
-        </tr>
-      </tfoot>
-    </table>
-    <hr>
-    <h6 class="m-0 mb-2">Data Pemeriksaan Radiologi Pasien</h6>
-    <table class="table mb-3" >
-      <thead>
-        <tr class="text-nowrap bg-dark">
-          <th>Pemeriksaan</th>
-          <th>Tanggal / Jam</th>
-          <th>Tarif</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($item->detailKasirPatients->where('category', 'Pemeriksaan Radiologi') as $detail)
-        <tr>
-          <td>{{ $detail->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detail->tarif ?? '') }}</td>
-        </tr>
-        @endforeach
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2" class="text-center">Total</td>
-          <td>{{ number_format($item->detailKasirPatients->where('category', 'Pemeriksaan Radiologi')->sum('tarif')) }}</td>
-        </tr>
-      </tfoot>
-    </table>
-    <hr>
     <h6 class="m-0 mb-2">Data Pemeriksaan Laboratorium Patologi Klinik</h6>
     <table class="table mb-3" >
       <thead>
