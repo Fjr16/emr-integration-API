@@ -29,6 +29,9 @@ class KasirPatient extends Model
     public function billingDoctorActions(){
         return $this->hasMany(BillingDoctorAction::class);
     }
+    public function billingRadiologies(){
+        return $this->hasMany(BillingRadiology::class);
+    }
 
     public function user(){
         return $this->belongsTo(User::class);

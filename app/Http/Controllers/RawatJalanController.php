@@ -102,7 +102,7 @@ class RawatJalanController extends Controller
 
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
         $reportActions = PatientActionReport::where('queue_id', $item->id)->first();
-        $radiologiResults = RadiologiFormRequest::where('patient_id', $item->patient->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
+        $radiologiResults = RadiologiFormRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->latest()->get();
 
         // diagnostic dan procedure
         $diagnostics = Diagnostic::orderBy('icd_x_code')->get();
