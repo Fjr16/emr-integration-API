@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PermintaanRadiologiRequest;
 use App\Models\Action;
 use App\Models\Queue;
-use Illuminate\Http\Request;
-use App\Models\PatientActionReport;
-use Illuminate\Support\Facades\URL;
 use App\Models\RadiologiFormRequest;
 use App\Models\RadiologiFormRequestDetail;
 use Exception;
@@ -17,16 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class RadiologiFormRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      *
