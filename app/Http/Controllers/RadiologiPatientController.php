@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\RadiologiFormRequest;
 use App\Models\RadiologiFormRequestDetail;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RadiologiPatientController extends Controller
 {
@@ -41,6 +44,7 @@ class RadiologiPatientController extends Controller
         ]);
     }
 
+    // Print per pemeriksaan
     public function show($id)
     {
         $today = date('Y-m-d');
@@ -53,6 +57,55 @@ class RadiologiPatientController extends Controller
         ]);
     }
 
+    // print All
+    public function printAll($id)
+    {
+        $today = date('Y-m-d');
+        $rad = RadiologiFormRequest::with('radiologiFormRequestDetails')->find($id);
+        return view('pages.surat.hasilpemeriksaanradiologiAll', [
+            "title" => "Radiologi",
+            "menu" => "Radiologi",
+            'rad' => $rad,
+            'today' => $today,
+        ]);
+    }
+
+    public function validasiHasil($id) {
+        DB::beginTransaction();
+        $errors = [];
+        try {
+            $item = RadiologiFormRequest::find($id);
+            foreach ($item->radiologiFormRequestDetails as $detail) {
+                if ($detail->status == 'WAITING') {
+                    $errors[] = 'Tidak Dapat Memvalidasi, Hasil Pemeriksaan '. $detail->action->name . ' Belum Diinputkan';
+                    continue;
+                }
+
+                $detail->update([
+                    'status' => 'VALIDATE'
+                ]);
+            }
+            $item->update([
+                'validator_rad_id' => Auth::user()->id,
+                'status' => 'FINISHED',
+            ]);
+
+            if (!empty($errors)) {
+                DB::rollBack();
+                return back()->with('exceptions', $errors);
+            }
+
+            DB::commit();
+            return back()->with('success', 'Berhasil Memvalidasi');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        } catch (ModelNotFoundException $mn){
+            DB::rollBack();
+            return back()->with('error', $mn->getMessage());
+        }
+    }
 
     private function updateStatusRadiologi($radiologiFormRequestId, $currentStatus) {
         $itemRadiologiFormRequest = RadiologiFormRequest::find($radiologiFormRequestId);
@@ -95,8 +148,8 @@ class RadiologiPatientController extends Controller
         ]);
         //find item radiologi detail
         $item = RadiologiFormRequestDetail::find($id);
-        if ($item->radiologiFormRequest->status == 'FINISHED') {
-            return back()->with('error', 'Status Telah FINISH, Tidak Dapat Melakukan Perubahan');
+        if ($item->radiologiFormRequest->status == 'FINISHED' || $item->status == 'VALIDATE') {
+            return back()->with('error', 'Permintaan Telah Selesai, Tidak Dapat Melakukan Perubahan');
         }
 
         if ($request->status == 'VALIDATE') {
@@ -104,14 +157,15 @@ class RadiologiPatientController extends Controller
             $this->updateStatusRadiologi($item->radiologiFormRequest->id, $item->radiologiFormRequest->status);
         }else{
             $data = $request->validate([
-                'tanggal_periksa' => 'required',
                 'image' => 'image',
             ]);
     
             if($request->hasFile('image')){
                 $data['image'] = $request->file('image')->store('assets/hasil-radiologi', 'public');
             }
-    
+            if (!$item->tanggal_periksa) {
+                $data['tanggal_periksa'] = date('Y-m-d H:i:s');
+            }
             $data['hasil'] = $request->input('hasil');
             $data['status'] = $request->status;
             $data['user_id'] = Auth::user()->id;

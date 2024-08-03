@@ -15,17 +15,24 @@
   <div class="card">
     <div class="card-header">
       <h5 class="m-0">Hasil Permintaan Radiologi Pasien
-        <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->patient->name ?? ''}} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})</span>
+        <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->queue->patient->name ?? ''}} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})</span>
       </h5>
+      <h6 class="fw-bold mt-2">
+        Status: 
+        @if ($item->status == 'ACCEPTED')
+          <span class="badge bg-primary ms-1">MENUNGGU HASIL</span>
+        @elseif($item->status == 'ONGOING')
+          <span class="badge bg-danger ms-1">BELUM DIVALIDASI</span>
+        @else
+          <span class="badge bg-success ms-1">SUDAH VALIDASI</span>
+        @endif
+      </h6>
     </div>
     <div class="card-body">
       <table class="table">
         <thead>
           <tr class="text-nowrap bg-dark">
-            @canany(['input hasil pemeriksaan radiologi', 'print hasil pemeriksaan radiologi'])
             <th>Action</th>
-            @endcanany
-            <th>Status</th>
             <th>Tanggal / Jam</th>
             <th>Petugas</th>
             <th>Nama Pemeriksaan</th>
@@ -35,43 +42,26 @@
         <tbody>
           @foreach ($item->radiologiFormRequestDetails as $detail)    
           <tr>
-            @canany(['input hasil pemeriksaan radiologi', 'print hasil pemeriksaan radiologi'])
             <td>
-              <div class="dropdown">
-                <button type="button" class="btn bth-sm btn-success dropdown-toggle hide-arrow"
-                    data-bs-toggle="dropdown">
-                    Action
-                    <i class='bx bx-dots-vertical'></i>
+              <div class="btn-group dropdown">
+                <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class='bx bx-info-circle me-2'></i>Action
                 </button>
                 <div class="dropdown-menu">
-                  @if ($item->status != 'FINISHED')   
-                  <button class="dropdown-item" onclick="createHasil({{ $detail->id }})">
-                      <i class="bx bx-cloud-upload me-1"></i>
-                      Edit
-                  </button>
+                  @if ($item->status != 'FINISHED') 
+                    <li>
+                      <button class="dropdown-item" onclick="createHasil({{ $detail->id }})">
+                          <i class="bx bx-cloud-upload me-1"></i>
+                          Input / Edit Hasil
+                      </button>
+                    </li>
                   @endif
-                  @can('print hasil pemeriksaan radiologi')  
                   <a class="dropdown-item" href="{{ route('radiologi/patient/hasil.show', $detail->id) }}">
                       <i class="bx bx-printer me-1"></i>
                       Print
                   </a>
-                  @endcan
                 </div>
               </div>
-            </td>
-            @endcanany
-            <td>
-              <form action="{{ route('radiologi/patient/hasil.update', $detail->id) }}" method="POST">
-              @csrf
-              @method('PUT')
-                @if ($detail->status == 'WAITING')
-                  <button class="btn btn-sm btn-dark" disabled>{{ $detail->status }}</button>
-                @elseif($detail->status == 'UNVALIDATE')
-                  <button type="submit" class="btn btn-sm btn-danger" name="status" value="VALIDATE">{{ $detail->status }}</button>
-                @else
-                  <button class="btn btn-sm btn-success" disabled>{{ $detail->status }}</button>
-                @endif
-              </form>
             </td>
             <td>{{ $detail->tanggal_periksa ?? '-' }}</td>
             <td>{{ $detail->user->name ?? '-' }}</td>
@@ -100,27 +90,15 @@
                   </div>
                   <div class="modal-body">
                     <div class="row mb-3">
-                      <label for="name" class="col-form-label col-3">Name</label>
+                      <label for="name" class="col-form-label col-3">No. RM / Name</label>
                       <div class="col-9">
-                        <input type="text" id="name" value="{{ $item->patient->name ?? '' }}" class="form-control" disabled>
+                        <input type="text" id="name" value="{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->queue->patient->name ?? '' }}" class="form-control" disabled>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label for="jenis-kelamin" class="col-form-label col-3">Jenis Kelamin</label>
                       <div class="col-9">
-                        <input type="text" id="jenis-kelamin" value="{{ $item->patient->jenis_kelamin ?? '' }}" class="form-control" disabled>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="norm" class="col-form-label col-3">No RM</label>
-                      <div class="col-9">
-                        <input type="text" id="norm" value="{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}" class="form-control" disabled>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="tanggal" class="col-form-label col-3">Tanggal Pemeriksaan</label>
-                      <div class="col-9">
-                        <input type="datetime-local" id="tanggal" name="tanggal_periksa" value="{{ $detail->tanggal_periksa ?? $today }}" class="form-control">
+                        <input type="text" id="jenis-kelamin" value="{{ $item->queue->patient->jenis_kelamin ?? '' }}" class="form-control" disabled>
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -129,22 +107,25 @@
                         <textarea class="form-control ckeditor" id="ckeditor1" rows="2" name="hasil">{!! $detail->hasil ?? '' !!}</textarea>
                       </div>
                     </div>
-                    <div class="mb-3">
-                      <label for="formFileMultiple" class="form-label">Upload File Pemeriksaan</label>
-                      <input class="form-control" type="file" name="image" id="formFileMultiple" multiple>
-                      <div class="mt-3 col-sm-12">
-                        <h6>Gambar Saat Ini:</h6>
-                        @if ($detail->image)
-                            <img src="{{ Storage::url($detail->image) }}" alt="{{ $detail->image }}" width="200" height="200">
-                        @else
-                          <img src="{{ asset('assets/img/exception_icon/photo.png') }}" alt="" width="100" height="100">
+                      <div class="mb-3">
+                        <label for="formFileMultiple" class="form-label">Upload Gambar Pemeriksaan</label>
+                        <input class="form-control" type="file" name="image" id="formFileMultiple" multiple>
+                        
+                        @if ($detail->status == 'UNVALIDATE')      
+                        <div class="mt-3 col-sm-12">
+                          <h6>Gambar Saat Ini:</h6>
+                          @if ($detail->image)
+                              <img src="{{ Storage::url($detail->image) }}" alt="{{ $detail->image }}" width="200" height="200">
+                          @else
+                            <img src="{{ asset('assets/img/exception_icon/photo.png') }}" alt="" width="100" height="100">
+                          @endif
+                        </div>
                         @endif
                       </div>
-                    </div>
                   </div>
                   <div class="modal-footer">
                     <input type="hidden" name="status" value="UNVALIDATE">
-                    <button type="submit" class="btn btn-success btn-sm">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-sm">{{ $detail->status == 'WAITING' ? 'Submit' : 'Update' }}</button>
                   </div>
                 </div>
               </form>

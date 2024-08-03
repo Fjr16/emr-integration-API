@@ -31,51 +31,6 @@ class PatientActionReportController extends Controller
         $data['paraf'] = $request->input('ttd_user');
         $item = PatientActionReport::create($data);
 
-        //create tagihan Tindakan
-        // $queue = $item->rawatJalanPoliPatient->rawatJalanPatient->queue;
-        // $tindakanAll = PatientActionReportDetail::where('patient_action_report_id', $item->id)->get();
-        // if ($queue->rawatJalanPatient->kasirPatient) {
-        //     $itemKasirPatient = KasirPatient::find($queue->rawatJalanPatient->kasirPatient->id);
-
-        //     $total = $itemKasirPatient->total;
-        //     foreach ($tindakanAll as $member) {
-        //         $newDetail =  DetailKasirPatient::create([
-        //             'kasir_patient_id' => $itemKasirPatient->id,
-        //             'name' => $member->actionMembers->name,
-        //             'tanggal' => date('Y-m-d H:i:s'),
-        //             'category' => 'Action',
-        //             'jumlah' => '1',
-        //             'tarif' => $member->actionMembers->tarif_umum,
-        //         ]);
-        //         $total += $newDetail->tarif;
-        //     }
-        //     $itemKasirPatient->update([
-        //         'total' => $total,
-        //     ]);
-        // } else {
-        //     $total = 0;
-        //     foreach ($tindakanAll as $member) {
-        //         $total += $member->actionMembers->tarif_umum;
-        //     }
-        //     $itemKasirPatient = KasirPatient::create([
-        //         'rawat_jalan_patient_id' => $item->rawatJalanPoliPatient->rawatJalanPatient->id,
-        //         'user_id' => null,
-        //         'total' => $total,
-        //         'status' => 'PENDING',
-        //     ]);
-
-        //     foreach ($tindakanAll as $member) {
-        //         $newDetail = DetailKasirPatient::create([
-        //             'kasir_patient_id' => $itemKasirPatient->id,
-        //             'name' => $member->actionMembers->name,
-        //             'tanggal' => date('Y-m-d H:i:s'),
-        //             'category' => 'Action',
-        //             'jumlah' => '1',
-        //             'tarif' => $member->actionMembers->tarif_umum,
-        //         ]);
-        //     }
-        // }
-
         return back()->with([
             'success' => 'Berhasil Ditambahkan',
             'btn' => 'tindakan',

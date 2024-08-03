@@ -3,15 +3,50 @@
 @section('content')
 
 @if (session()->has('success'))
-      <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-        {{ session('success') }}
-      </div>
-  @endif
+<div class="alert alert-success d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+@endif
 @if (session()->has('error'))
-      <div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-        {{ session('error') }}
-      </div>
-  @endif
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>{{ session('error') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('exceptions'))
+<div class="alert alert-danger d-flex" role="alert">
+<span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+<div class="d-flex flex-column ps-1">
+    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+    <span>
+    @foreach (session('exceptions') as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+    </span>
+</div>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger d-flex" role="alert">
+<span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+<div class="d-flex flex-column ps-1">
+    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+    <span>
+    @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+    </span>
+</div>
+</div>
+@endif
+
 <div class="card p-3 mt-5">
     <div class="row">
       <div class="col-8">
@@ -39,9 +74,6 @@
       <thead>
         <tr class="text-nowrap bg-dark">
           <th>Action</th>
-          @can('show detail pemeriksaan radiologi')
-          <th class="text-center">Detail</th>
-          @endcan
           <th>No Reg Radiologi</th>
           <th>No Rekam Medis</th>
           <th>Nama</th>
@@ -49,40 +81,49 @@
           <th>Diagnosa</th>
           <th>Tanggal Periksa</th>
           <th>Validator</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
         @foreach ($data as $item)
         <tr>
           <td>
-            @if ($item->status == 'ACCEPTED')
-              <button class="btn btn-success btn-sm" onclick="createAntrian({{ $item->id }})">
-                <i class='bx bx-edit-alt me-1'></i>
-                Edit Jadwal
-              </button>
-            @elseif ($item->status == 'UNVALIDATED')                
-              <form action="{{ route('radiologi/patient/queue.update', $item->id) }}" method="POST" disabled>
-                @method('PUT')
-                @csrf
-                <button type="submit" class="btn btn-success btn-sm">
-                  <i class='bx bx-check'></i>
-                  Validasi
+            @if ($item->status == 'ACCEPTED' || $item->status == 'ONGOING')    
+              <div class="btn-group dropend">
+                <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class='bx bx-info-circle me-2'></i>Action
                 </button>
-              </form>
-            @else               
-            <button class="btn btn-success btn-sm" disabled>
-              {{ $item->status ?? '' }}
-            </button>
+                <ul class="dropdown-menu">
+                  @if ($item->status == 'ACCEPTED')  
+                  <li>
+                    <button class="dropdown-item text-warning" onclick="createAntrian({{ $item->id }})">
+                      <i class='bx bx-edit-alt me-1'></i>
+                      Reschedule
+                    </button>
+                  </li>
+                  @elseif ($item->status == 'ONGOING')
+                    <li>
+                      <form action="{{ route('radiologi/patient.validasiHasil', $item->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="dropdown-item text-success"><i class="bx bx-check"></i> Validasi</button>
+                      </form>
+                    </li>
+                  @endif
+                  <li>
+                    <a class="dropdown-item text-primary" href="{{ route('radiologi/patient.create', $item->id) }}">
+                      <i class='bx bx-show-alt me-1'></i>
+                        Periksa
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            @elseif ($item->status == 'FINISHED')
+              <a class="btn btn-sm btn-dark" target="_blank" href="{{ route('radiologi/patient/hasil.printAll', $item->id) }}"><i class="bx bx-printer"></i> Print</a>
+            @else
+                <span class="badge bg-danger">{{ $item->status ?? 'TIDAK DIKETAHUI' }}</span>
             @endif
           </td>
-          @can('show detail pemeriksaan radiologi')
-          <td>
-            <a class="btn btn-dark btn-sm" href="{{ route('radiologi/patient.create', $item->id) }}">
-              <i class='bx bx-show-alt me-1'></i>
-                show
-            </a>
-          </td>
-          @endcan
           <td>{{ $item->no_reg_rad ?? '' }}</td>
           <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
           <td>{{ $item->queue->patient->name ?? '' }}</td>
@@ -93,6 +134,15 @@
           @endphp
           <td>{{ $waktu->format('Y-m-d') ?? '-' }}</td>
           <td>{{ $item->validator->name ?? '-' }}</td>
+          <td>
+              @if ($item->status == 'ACCEPTED')
+                <span class="badge bg-primary ms-1">MENUNGGU HASIL</span>
+              @elseif($item->status == 'ONGOING')
+                <span class="badge bg-danger ms-1">BELUM DIVALIDASI</span>
+              @else
+                <span class="badge bg-success ms-1">SELESAI</span>
+              @endif
+          </td>
         </tr>
       @endforeach
       </tbody>

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailKasirPatient;
-use App\Models\KasirPatient;
+use App\Models\BillingRadiology;
 use App\Models\RadiologiFormRequest;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RadiologiPatientQueueController extends Controller
 {
@@ -58,12 +59,13 @@ class RadiologiPatientQueueController extends Controller
     public function store(Request $request, $id)
     {
         $item = RadiologiFormRequest::find($id);
-        $status = $request->input('status');
-        if ($status != 'ACCEPTED') {
+        $status = $request->status;
+        
+        if ($item->status == 'ACCEPTED') {
             $item->update([
                 'status' => $status,
             ]);
-        }else{
+        }elseif($item->status == 'WAITING'){
             $tanggal = $request->input('tanggal');
     
             $lastRegRad = RadiologiFormRequest::whereDate('jadwal_periksa', $tanggal)->orderBy('no_reg_rad', 'desc')->pluck('no_reg_rad')->first();
@@ -72,59 +74,55 @@ class RadiologiPatientQueueController extends Controller
                 $lastRegRad = $arrSplit[4];
             }
             $nextRegRad = $this->createRegRad($lastRegRad ?? 0);
-            $item->update([
-                'no_reg_rad' => $nextRegRad,
-                'jadwal_periksa' => $tanggal,
-                'status' => 'ACCEPTED',
-            ]);
+
+            DB::beginTransaction();
+            $errors = [];
+            try {
+                $item->update([
+                    'no_reg_rad' => $nextRegRad,
+                    'jadwal_periksa' => $tanggal,
+                    'status' => 'ACCEPTED',
+                ]);
+
+                foreach ($item->radiologiFormRequestDetails as $key => $detailTindakan) {
+    
+                    if (!$detailTindakan->action || !$detailTindakan->action->action_code || !$detailTindakan->action->name) {
+                        $errors[] = 'Tindakan Yang Dipilih Pada Detail Permintaan Radiologi ID {X} Tidak Valid Mohon periksa Kembali Master Data Tindakan';
+                        continue;
+                    }
+                    $actRate = $detailTindakan->action->actionRates->where('patient_category_id', $item->queue->patientCategory->id)->first();
+                    if (!$actRate || $actRate->tarif <= 0) {
+                        $errors[] = 'Harga Satuan Tindakan '. $detailTindakan->action->name .' Tidak Valid, mohon periksa data tindakan pasien';
+                        continue;
+                    }
+                    
+                    BillingRadiology::create([
+                        'kasir_patient_id' => $item->queue->kasirPatient->id,
+                        'action_id' => $detailTindakan->action->id ?? null,
+                        'patient_category_id' => $item->queue->patientCategory->id ?? null,
+                        'kode_tindakan' => $detailTindakan->action->action_code,
+                        'nama_tindakan' => $detailTindakan->action->name,
+                        'jumlah' => 1,
+                        'tarif' => $actRate->tarif,
+                        'sub_total' => $actRate->tarif,
+                    ]);
+                }
+                if (!empty($errors)) {
+                    DB::rollBack();
+                    return back()->with('errors', $errors);
+                }
+
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                return back()->with('error', $e->getMessage());
+            } catch (ModelNotFoundException $mn){
+                DB::rollBack();
+                return back()->with('error', $mn->getMessage());
+            }
+        }else{
+            return back()->with('error', 'Terjadi Kesalahan, Tidak Dapat Membuat Jadwal');
         }
-
-
-        // $patientCategoryId = $item->queue->patientCategory->id ?? '';
-        // if($patientCategoryId){
-        //     $kasirPatient = KasirPatient::where('rawat_jalan_patient_id', $item->queue->rawatJalanPatient->id)->first();
-        //     if($kasirPatient){
-        //         $total = $kasirPatient->total;
-        //         foreach ($item->radiologiPatientRequestDetails as $detail) {
-        //             $tarif = RadiologiFormRequestMasterRate::where('radiologi_form_request_master_id', $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->id)->where('patient_category_id', $patientCategoryId)->first();
-        //             DetailKasirPatient::create([
-        //                 'kasir_patient_id' => $kasirPatient->id,
-        //                 'name' => $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name,
-        //                 'tanggal' => date('Y-m-d H:i:s'),
-        //                 'category' => 'Pemeriksaan Radiologi',
-        //                 'jumlah' => 1,
-        //                 'tarif' => $tarif->tarif_umum ?? 0,
-        //             ]);
-        //             $total += $tarif->tarif_umum ?? 0;
-        //         }
-        //         $kasirPatient->update([
-        //             'total' => $total,
-        //         ]);
-        //     }else{
-        //         $total = 0;
-        //         $itemKasirPatient =  KasirPatient::create([
-        //             'rawat_jalan_patient_id' => $item->queue->rawatJalanPatient->id,
-        //             'total' => $total,
-        //             'status' => 'PENDING',
-        //         ]);
-        //         foreach ($item->radiologiPatientRequestDetails as $detail) {
-        //             $tarif = RadiologiFormRequestMasterRate::where('radiologi_form_request_master_id', $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->id)->where('patient_category_id', $patientCategoryId)->first();
-        //             DetailKasirPatient::create([
-        //                 'kasir_patient_id' => $itemKasirPatient->id,
-        //                 'name' => $detail->radiologiFormRequestDetail->radiologiFormRequestMaster->name,
-        //                 'tanggal' => date('Y-m-d H:i:s'),
-        //                 'category' => 'Pemeriksaan Radiologi',
-        //                 'jumlah' => 1,
-        //                 'tarif' => $tarif->tarif_umum ?? 0,
-        //             ]);
-        //             $total += $tarif->tarif_umum ?? 0; 
-        //         }
-        //         $itemKasirPatient->update([
-        //             'total' => $total,
-        //         ]);
-        //     }
-        // }
-
         return back()->with('success', 'Berhasil Memperbarui Antrian');
     }
 }

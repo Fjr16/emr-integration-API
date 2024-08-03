@@ -19,13 +19,12 @@
       <thead>
         <tr class="text-nowrap bg-dark">
           <th class="text-center">Action</th>
-          <th>No Rekam Medis</th>
-          <th>Nama</th>
+          <th>No RM / Nama</th>
           <th>Tanggungan</th>
           <th>Diagnosa Klinis</th>
           <th>Tanggal / Jam Permintaan</th>
           <th>List Pemeriksaan</th>
-          <th>Dokter</th>
+          <th>Dokter / Poli</th>
         </tr>
       </thead>
       <tbody>
@@ -34,56 +33,47 @@
             <td>
               @if ($item->radiologiFormRequestDetails)    
                 @if ($item->status == 'WAITING')    
-                  <div class="dropdown">
-                    <button type="button" class="btn bth-sm btn-dark dropdown-toggle hide-arrow"
-                        data-bs-toggle="dropdown">
-                        Action
-                        <i class='bx bx-dots-vertical'></i>
+                  <div class="btn-group dropend">
+                    <button type="button" class="btn btn-dark btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class='bx bx-info-circle me-2'></i> Konfirmasi
                     </button>
                     <div class="dropdown-menu">
-                      <button type="button" class="dropdown-item btn-success" onclick="createAntrian({{ $item->id }})">
-                        Terima
-                      </button>
+                      <button type="button" class="dropdown-item text-success" onclick="createAntrian({{ $item->id }})"> <i class="bx bx-check"></i> Terima </button>
                       <form action="{{ route('radiologi/patient/queue.store', $item->id) }}" method="POST">
                         @csrf
-                        <button type="submit" class="dropdown-item btn-danger" name="status" value="CANCEL" onclick="return confirm('Yakin Ingin Membatalkan Permintaan Radiologi ?')">
-                          Batal
-                        </button>
-                        <button type="submit" class="dropdown-item btn-warning" name="status" value="DENIED" onclick="return confirm('Yakin Ingin Menolak Permintaan Radiologi ?')">
-                          Tolak
-                        </button>
+                        <button type="submit" class="dropdown-item text-danger" name="status" value="DENIED" onclick="return confirm('Yakin Ingin Menolak Permintaan Radiologi ?')"><i class="bx bx-x"></i> Tolak</button>
                       </form>
                     </div>
                   </div>
                 @else
-                  @php
-                    if ($item->status == 'DENIED') {
-                      $classBg = 'warning';
-                    } elseif($item->status == 'CANCEL') {
-                      $classBg = 'danger';
-                    } else {
-                      $classBg = 'success';
-                    }
-                  @endphp
-                  <button type="button" class="btn btn-{{ $classBg }} btn-sm" disabled>
-                    {{ $item->status }}
-                  </button>
+                    @if ($item->status == 'DENIED')
+                      <span class="badge bg-warning"><i class='bx bxs-hand'></i> DITOLAK</span>
+                    @elseif($item->status == 'CANCEL')
+                      <span class="badge bg-danger"><i class="bx bx-x"></i> BATAL</span>
+                    @elseif($item->status == 'ACCEPTED')
+                      <span class="badge bg-primary"><i class="bx bx-check"></i> DITERIMA</span>
+                    @elseif($item->status == 'ONGOING')
+                      <span class="badge bg-primary"><i class='bx bx-search-alt-2'></i> SEDANG DIPERIKSA</i> </span>
+                    @elseif($item->status == 'FINISHED')
+                      <span class="badge bg-success"><i class="bx bx-check"></i> SELESAI</span>
+                    @endif
                 @endif
               @else
                 <a class="btn btn-success btn-sm" href="{{ route('radiologi/request.create', $item->id) }}">Edit Data</a>
               @endif
             </td>
-            <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
-            <td>{{ $item->queue->patient->name ?? '' }}</td>
+            <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->queue->patient->name ?? '' }}</td>
             <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
             <td>{!! $item->diagnosa_klinis ?? '' !!}</td>
             <td>{{ ($item->created_at != null) ?  $item->created_at->format('Y-m-d / H:i') : '' }}</td>
             <td>
               @foreach ($item->radiologiFormRequestDetails as $detail)
-              {{ $detail->action->name ?? '' }} <br>
+              <li>
+                {{ $detail->action->name ?? '' }}
+              </li>
               @endforeach
             </td>
-            <td>{{ $item->user->name ?? '' }}</td>
+            <td>{{ $item->user->name ?? '' }} / {{ $item->user->poliklinik->name ?? '' }}</td>
           </tr>
         @endforeach
         </tbody>

@@ -1000,10 +1000,10 @@
                                                                             <i class='bx bx-info-circle me-2'></i>Action
                                                                         </button>
                                                                         <ul class="dropdown-menu">
-                                                                            @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
+                                                                            @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING' || $radiologi->status == 'ACCEPTED')
                                                                                 <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
                                                                                 <li> <a class="dropdown-item text-info" href=""><i class='bx bx-file'></i> Hasil</a> </li>
-                                                                            @elseif ($radiologi->status == 'WAITING' || $radiologi->status != 'DENIED' || $radiologi->status == 'ACCEPTED')
+                                                                            @elseif ($radiologi->status == 'WAITING' || $radiologi->status != 'DENIED')
                                                                                 <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
                                                                                 <li>
                                                                                     <form action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
@@ -1016,16 +1016,6 @@
                                                                         </ul>
                                                                     </div>
                                                                 @endif
-                                                                {{-- <div class="d-flex align-self-center">
-                                                                    @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING')
-                                                                        <button type="button" class="btn btn-info btn-sm"><i class='bx bx-file'></i></button>
-                                                                    @else    
-                                                                        <a href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"
-                                                                            class="btn btn-warning btn-sm me-2"><i
-                                                                                class='bx bx-edit'></i></a>
-                                                                            
-                                                                    @endif
-                                                                </div> --}}
                                                             </td>
                                                             <td>{{ $radiologi->user->name ?? '' }}
                                                                 ({{ $radiologi->user->staff_id ?? '' }})
