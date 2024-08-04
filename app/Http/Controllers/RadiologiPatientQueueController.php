@@ -61,11 +61,7 @@ class RadiologiPatientQueueController extends Controller
         $item = RadiologiFormRequest::find($id);
         $status = $request->status;
         
-        if ($item->status == 'ACCEPTED') {
-            $item->update([
-                'status' => $status,
-            ]);
-        }elseif($item->status == 'WAITING'){
+        if($item->status == 'WAITING' && $status == 'ACCEPTED'){
             $tanggal = $request->input('tanggal');
     
             $lastRegRad = RadiologiFormRequest::whereDate('jadwal_periksa', $tanggal)->orderBy('no_reg_rad', 'desc')->pluck('no_reg_rad')->first();
@@ -109,7 +105,7 @@ class RadiologiPatientQueueController extends Controller
                 }
                 if (!empty($errors)) {
                     DB::rollBack();
-                    return back()->with('errors', $errors);
+                    return back()->with('exceptions', $errors);
                 }
 
                 DB::commit();
@@ -121,7 +117,9 @@ class RadiologiPatientQueueController extends Controller
                 return back()->with('error', $mn->getMessage());
             }
         }else{
-            return back()->with('error', 'Terjadi Kesalahan, Tidak Dapat Membuat Jadwal');
+            $item->update([
+                'status' => $status,
+            ]);
         }
         return back()->with('success', 'Berhasil Memperbarui Antrian');
     }

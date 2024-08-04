@@ -987,7 +987,7 @@
                                                                             @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING' || $radiologi->status == 'ACCEPTED')
                                                                                 <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
                                                                                 <li> <button class="dropdown-item text-info" onclick="showHasilRad({{ $radiologi->id }})"><i class='bx bx-file'></i> Hasil</button> </li>
-                                                                            @elseif ($radiologi->status == 'WAITING' || $radiologi->status != 'DENIED')
+                                                                            @elseif ($radiologi->status == 'WAITING' || $radiologi->status == 'DENIED')
                                                                                 <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
                                                                                 <li>
                                                                                     <form action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
