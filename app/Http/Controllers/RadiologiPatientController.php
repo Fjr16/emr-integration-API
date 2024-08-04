@@ -19,7 +19,9 @@ class RadiologiPatientController extends Controller
      */
     public function index()
     {
-        $data = RadiologiFormRequest::whereDate('created_at', date('Y-m-d'))->get();
+        $today = date('Y-m-d');
+        $filter = request('filter', $today);
+        $data = RadiologiFormRequest::whereDate('created_at', $filter)->get();
         return view('pages.pasienRadiologi.index', [
             "title" => "Radiologi",
             "menu" => "Radiologi",

@@ -931,24 +931,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade {{ session('btn') == 'penunjang' ? 'show active' : '' }}"
-                        id="navs-justified-profile" role="tabpanel">
+                    <div class="tab-pane fade {{ session('btn') == 'penunjang' ? 'show active' : '' }}" id="navs-justified-profile" role="tabpanel">
                         <div class="row">
-                            {{-- <div class="col-md-2 col-12 mb-3 mb-md-0">
-                                <div class="list-group">
-                                  <a class="list-group-item list-group-item-action {{ session('penunjang') == 'radiologi' ? 'active' : '' }}" id="radiologi-list" data-bs-toggle="list" href="#radiologi">Radiologi</a>
-                                  <a class="list-group-item list-group-item-action {{ session('penunjang') == 'laboratorium' ? 'active' : '' }}" id="laboratorium-list" data-bs-toggle="list" href="#laboratorium">Laboratorium</a>
-                                </div>
-                            </div>
-                            <div class="col-md-10 col-12 border">
-
-                                <div class="tab-content">
-                                    <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}" id="radiologi">
-                                    </div>
-                                    <div class="tab-pane fade {{ session('penunjang') == 'laboratorium' ? 'show active' : '' }}" id="laboratorium">
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="col-sm-12">
                                 <div class="nav-align-top w-100 mb-4">
                                     <ul class="nav nav-pills nav-sm mb-0 nav-fill" role="tablist">
@@ -1002,7 +986,7 @@
                                                                         <ul class="dropdown-menu">
                                                                             @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING' || $radiologi->status == 'ACCEPTED')
                                                                                 <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
-                                                                                <li> <a class="dropdown-item text-info" href=""><i class='bx bx-file'></i> Hasil</a> </li>
+                                                                                <li> <button class="dropdown-item text-info" onclick="showHasilRad({{ $radiologi->id }})"><i class='bx bx-file'></i> Hasil</button> </li>
                                                                             @elseif ($radiologi->status == 'WAITING' || $radiologi->status != 'DENIED')
                                                                                 <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
                                                                                 <li>
@@ -1104,6 +1088,76 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        {{-- hasil pemeriksaan radiologi --}}
+                        <div class="row mt-4">
+                            {{-- <hr> --}}
+                            {{-- <div class="text-center">
+                                <h5>Hasil Pemeriksaan</h5>
+                            </div> --}}
+                            <div class="card-body">
+                                @foreach ($radiologiResults as $resultRad)
+                                    <div class="accordion accordion-header-primary" id="radiologi-result-{{ $resultRad->id }}" hidden>
+                                        <div class="accordion-item card border">
+                                            <h2 class="accordion-header">
+                                                <button type="button" class="accordion-button collapsed text-uppercase" data-bs-toggle="collapse" data-bs-target="#hasil-radiologi-{{ $resultRad->id }}" aria-expanded="false">
+                                                    {{ $resultRad->no_reg_rad ?? 'Belum Tersedia' }} 
+                                                    @if ($resultRad->status == 'ACCEPTED')
+                                                    <span class="badge bg-primary ms-2">DITERIMA</span>
+                                                    @elseif($resultRad->status == 'ONGOING')
+                                                    <span class="badge bg-danger ms-2">BELUM VALIDASI</span>
+                                                    @else
+                                                    <span class="badge bg-success ms-2">SELESAI</span>
+                                                    @endif
+                                                </button>
+                                            </h2>
+                                            
+                                            <div id="hasil-radiologi-{{ $resultRad->id }}" class="accordion-collapse collapse" data-bs-parent="#radiologi-result-{{ $resultRad->id }}">
+                                                <div class="accordion-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-dark">Tanggal Periksa</th>
+                                                                    <th class="text-dark">Tindakan</th>
+                                                                    <th class="text-dark">Hasil Radiologi</th>
+                                                                    <th class="text-dark">Gambar Radiologi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="table-border-bottom-0">
+                                                                @if ($resultRad->radiologiFormRequestDetails)     
+                                                                    @foreach ($resultRad->radiologiFormRequestDetails as $detailRad)     
+                                                                    <tr>
+                                                                        <td>{{ $detailRad->created_at->format('d M Y') ?? '' }}</td>
+                                                                        <td>{{ $detailRad->action->name ?? '...' }}</td>
+                                                                        <td> <p class="multi-line-text">{!! $detailRad->hasil ?? '...' !!}</p></td>
+                                                                        <td>
+                                                                            @if ($detailRad->image)
+                                                                            <a href="{{ Storage::url($detailRad->image) }}" target="_blank">
+                                                                                <img src="{{ Storage::url($detailRad->image) }}" alt="{{ $detailRad->image }}" width="100" height="100">
+                                                                            </a>
+                                                                            @else
+                                                                                <img src="{{ asset('assets/img/exception_icon/photo.png') }}" alt="" width="100" height="100">
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="4" class="bg-info text-white">
+                                                                            Data Tidak Tersedia !!
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -1755,7 +1809,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="radiologies_ready" id="radiologies_ready" value="1" onchange="radiologiReadyFunc(this)" {{ $item->rawatJalanPoliPatient->radiologies_ready ? 'checked' : '' }} style="{{ $item->rawatJalanPoliPatient->radiologies_ready ? 'pointer-events : none;' : '' }}"/>
+                                                    <input class="form-check-input" type="checkbox" name="radiologies_ready" id="radiologies_ready" value="1" {{ $item->rawatJalanPoliPatient->radiologies_ready ? 'checked' : '' }} style="pointer-events : none;"/>
                                                     <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->radiologies_ready ? '' : 'radiologies_ready' }}">Data permintaan pemeriksaan radiologi</label>
                                                 </div>
                                                 <div class="form-check">
@@ -2027,56 +2081,6 @@
                 $(modal).modal('show');
             }
         }
-        function radiologiReadyFunc(element){
-            if (element.checked) { 
-                element.checked = false;
-                modal.innerHTML = `
-                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalScrollableTitle">Data Permintaan Pemeriksaan Radiologi</h5>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table">
-                            <thead>
-                                <tr class="text-nowrap bg-primary">
-                                    <th>#</th>
-                                    <th>Nama Tindakan</th>
-                                    <th>Jumlah</th>
-                                    <th>Tarif</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($item->patientActionReport->patientActionReportDetails ?? [] as $detailTindakan)     
-                                    <tr>
-                                        <td>{{ $loop->iteration ?? '' }}</td>
-                                        <td>{{ $detailTindakan->action->name ?? '' }}</td>
-                                        <td>{{ $detailTindakan->jumlah ?? 0 }}</td>
-                                        <td>{{ number_format($detailTindakan->harga_satuan ?? 0) }}</td>
-                                        <td>{{ number_format($detail->sub_total ?? 0) }}</td>
-                                    </tr>
-                                @endforeach
-                                <tr class="fw-bold">
-                                    <td colspan="4" class="text-center">Total Akhir</td>
-                                    <td>{{ $item->patientActionReport ? (number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0)) : '0' }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p class="mt-4 mb-0 text-white text-center fst-italic text-uppercase p-4 bg-warning">
-                        *) hati-hati dalam mengkonfirmasi data pemeriksaan radiologi !!! <br>setelah dikonfirmasi data permintaan akan diterima oleh petugas radiologi dan tidak bisa diedit kembali kecuali petugas radiologi menolak permintaan 
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-outline-primary" value="radiologi" onclick="hideModalWithConfirm(this.value)">Konfirmasi</button>
-                    </div>
-                    </div>
-                </div>
-                `;
-                $(modal).modal('show');
-            }
-        }
         function laborReadyFunc(element){
             if (element.checked) { 
                 element.checked = false;
@@ -2195,6 +2199,21 @@
                     plann.value += dataKontrol;
                 }else{
                     alertShow('Not Found !!', 'Data kontrol tidak ditemukan', elementAlert);
+                }
+            } else if(element.value == 'radiologi'){
+                const checkRadiologi = @json($item->radiologiFormRequests);
+                const filteredData = checkRadiologi.filter(rad => rad.status != 'CANCEL' && rad.status != 'DENIED');
+                if (filteredData) {
+                    let dataPemeriksaan = '\r\n\nPemeriksaan Radiologi : ';
+                    filteredData.forEach(function(itm){
+                        itm.radiologi_form_request_details.forEach(function(detail){
+                            dataPemeriksaan += '\r\n- ' + detail.action.name ?? '';
+                        });
+                    });
+                    let plann = element.closest('.row').querySelector('#planning');
+                    plann.value += dataPemeriksaan;
+                } else {
+                    alertShow('Not Found !!', 'Data permintaan radiologi tidak ditemukan', elementAlert);
                 }
             }
             $(targetElement).val(contentTarget);
@@ -2407,6 +2426,11 @@
         function transferDietPasien(value){
             const dietPasien = document.getElementById('diet_pasien');
             dietPasien.value += value + "\r\n";
+        }
+
+        // show hasil Radiologi
+        function showHasilRad(radiologiId){
+            $('#radiologi-result-'+radiologiId).removeAttr('hidden');
         }
     </script>
     

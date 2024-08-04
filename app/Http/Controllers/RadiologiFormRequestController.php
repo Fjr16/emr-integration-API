@@ -54,6 +54,11 @@ class RadiologiFormRequestController extends Controller
         $data['catatan'] = $request->catatan ?? null;
 
         $item = RadiologiFormRequest::create($data);
+        if($item->queue->rawatJalanPoliPatient->radiologies_ready == false){
+            $item->queue->rawatJalanPoliPatient()->update([
+                'radiologies_ready' => true,
+            ]);
+        }
         $detailActions = $request->input('action_id', []);
         $detailKets = $request->input('keterangan', []);
         foreach ($detailActions as $key => $action) {

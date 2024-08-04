@@ -39,7 +39,6 @@ use App\Http\Controllers\ReportPenunjangController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\RadiologiPatientController;
 use App\Http\Controllers\RawatJalanFarmasiController;
-use App\Http\Controllers\RekamMedisPatientController;
 use App\Http\Controllers\LaboratoriumPatientController;
 use App\Http\Controllers\PatientActionReportController;
 use App\Http\Controllers\RajalGeneralConsentController;
@@ -349,10 +348,9 @@ Route::group(['middleware' => 'auth'], function () {
 //rajal
     Route::get('/rajal', [RawatJalanController::class, 'index'])->name('rajal/index');  //index rajal poli
     Route::get('/rajal/show/{id}/{title}', [RawatJalanController::class, 'show'])->name('rajal/show');
-//rekam medis
-    // Route::get('/rajal/rekammedis/index', [RekamMedisPatientController::class, 'index'])->name('rajal/rekammedis.index'); //index rajal rekam medis
+
 //status Pelayanan Poli
-Route::put('/rajal/status/pelayanan/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/status/pelayanan.update');
+    Route::put('/rajal/status/pelayanan/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/status/pelayanan.update');
 
 //Rajal General Consent
 Route::get('rajal/general/consent/create/{id}', [RajalGeneralConsentController::class, 'create'])->name('rajal/general/consent.create');
@@ -384,9 +382,9 @@ Route::get('/rajal/cppt/update/ttd', [RmeCpptController::class, 'updateTtd'])->n
     Route::get('/rajal/permintaan/radiologi/create/{id}', [RadiologiFormRequestController::class, 'create'])->name('rajal/permintaan/radiologi.create');
     Route::post('/rajal/permintaan/radiologi/store/{id}', [RadiologiFormRequestController::class, 'store'])->name('rajal/permintaan/radiologi.store');
     Route::get('/rajal/permintaan/radiologi/show/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'show'])->name('rajal/permintaan/radiologi.show');
-Route::get('/rajal/permintaan/radiologi/edit/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'edit'])->name('rajal/permintaan/radiologi.edit');
-Route::post('/rajal/permintaan/radiologi/update/{id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
-Route::delete('/rajal/permintaan/radiologi/destroy/{id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
+    Route::get('/rajal/permintaan/radiologi/edit/{queue_id}/{radiologi_id}', [RadiologiFormRequestController::class, 'edit'])->name('rajal/permintaan/radiologi.edit');
+    Route::put('/rajal/permintaan/radiologi/update/{id}', [RadiologiFormRequestController::class, 'update'])->name('rajal/permintaan/radiologi.update');
+    Route::delete('/rajal/permintaan/radiologi/destroy/{id}', [RadiologiFormRequestController::class, 'destroy'])->name('rajal/permintaan/radiologi.destroy');
 
 //rajal request labor PK
     Route::get('/rajal/laboratorium/request/create/{id}', [LaboratoriumFormRequestController::class, 'index'])->name('rajal/laboratorium/request.index');
@@ -465,6 +463,8 @@ Route::get('/radiologi/patient', [RadiologiPatientController::class, 'index'])->
 Route::get('/radiologi/patient/create/{id}', [RadiologiPatientController::class, 'create'])->name('radiologi/patient.create');
 Route::get('/radiologi/patient/hasil/show/{id}', [RadiologiPatientController::class, 'show'])->name('radiologi/patient/hasil.show');
 Route::put('/radiologi/patient/hasil/update/{id}', [RadiologiPatientController::class, 'update'])->name('radiologi/patient/hasil.update');
+Route::put('/radiologi/patient/validasiHasil/{id}', [RadiologiPatientController::class, 'validasiHasil'])->name('radiologi/patient.validasiHasil');
+Route::get('/radiologi/patient/hasil/printAll/{id}', [RadiologiPatientController::class, 'printAll'])->name('radiologi/patient/hasil.printAll');
 
 //Radiologi Patient Queue
 Route::get('/radiologi/patient/queue', [RadiologiPatientQueueController::class, 'index'])->name('radiologi/patient/queue.index');

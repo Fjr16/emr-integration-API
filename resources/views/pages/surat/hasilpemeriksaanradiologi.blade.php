@@ -106,35 +106,16 @@
             <div class="content">
                <table>
                 <tr>
-                    <td style="width: 200px">Nama</td>
+                    <td style="width: 200px">No. RM / Nama</td>
                     <td style="width: 20px">:</td>
-                    <td class="fw-bold">{{ $item->radiologiFormRequest->patient->name ?? '' }}</td>
+                    <td class="fw-bold">
+                        {{ implode('-', str_split(str_pad($item->radiologiFormRequest->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->radiologiFormRequest->queue->patient->name ?? '' }} 
+                    </td>
                 </tr>
-                {{-- <tr>
-                    <td>Usia</td>
-                    <td>:</td>
-                    @php
-                        $lahir = $item->radiologiPatient->queue->patient->tanggal_lhr;
-                        list($thnL, $blnL, $tglL) = explode('-', $lahir);
-                        list($thnS, $blnS, $tglS) = explode('-', $today);
-
-                        $usia = $thnS - $thnL;
-                        if($blnS < $blnL || ( $blnS == $blnL && $tglS < $tglL)){
-                            $usia--;
-                        }
-
-                    @endphp
-                    <td>{{ $usia ?? '' }} Tahun</td>
-                </tr> --}}
                 <tr>
                     <td>Jenis Kelamin</td>
                     <td>:</td>
-                    <td>{{ $item->radiologiFormRequest->patient->jenis_kelamin ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>No. RM</td>
-                    <td>:</td>
-                    <td>{{ $item->radiologiFormRequest->patient->no_rm ?? '' }}</td>
+                    <td>{{ $item->radiologiFormRequest->queue->patient->jenis_kelamin ?? '' }}</td>
                 </tr>
                 <tr>
                     <td>No. Registrasi Radiologi</td>
@@ -161,7 +142,7 @@
                @isset($item->radiologiFormRequest->validator_rad_id)
                <br><br>
                <p class="m-0 text-decoration-underline">{{ $item->radiologiFormRequest->validator->name ?? '' }}</p>
-               <p class="m-0">{{ $item->radiologiFormRequest->validator->roomDetail->name ?? '' }}</p>
+               <p class="m-0">{{ $item->radiologiFormRequest->validator->poliklinik->name ?? '' }}</p>
                @else
                <br>
                     <h6 class="fw-bold m-0">(UNVALIDATE)</h6>

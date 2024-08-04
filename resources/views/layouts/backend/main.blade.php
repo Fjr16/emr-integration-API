@@ -183,70 +183,6 @@
         }, 2000);
     </script>
 
-    {{-- <script type="text/javascript">
-        var kriteriaInputs = document.querySelectorAll('select[name="kriteria[]"]');
-
-        kriteriaInputs.forEach(function(input) {
-            input.addEventListener('blur', function() {
-                var totalInput = document.querySelector('input[name="total"]');
-                var total = 0;
-
-                for (var i = 0; i < kriteriaInputs.length; i++) {
-                    var value = parseInt(kriteriaInputs[i].value) || 0;
-                    total += value;
-                }
-
-                skorASF(total);
-                totalInput.value = total;
-            });
-        });
-
-        function skorASF(total) {
-            var mandiri = document.getElementById('mandiri');
-            var kRingan = document.getElementById('ketergantungan-ringan');
-            var kSedang = document.getElementById('ketergantungan-sedang');
-            var kBerat = document.getElementById('ketergantungan-berat');
-            var kTotal = document.getElementById('ketergantungan-total');
-
-            mandiri.classList.remove('bg-success');
-            kRingan.classList.remove('bg-success');
-            kSedang.classList.remove('bg-warning');
-            kBerat.classList.remove('bg-danger');
-            kTotal.classList.remove('bg-danger');
-
-            if (total >= 0 && total <= 20) {
-                kTotal.className = 'bg-danger';
-            } else if (total > 20 && total <= 61) {
-                kBerat.className = 'bg-danger';
-            } else if (total > 61 && total <= 90) {
-                kSedang.className = 'bg-warning';
-            } else if (total > 90 && total <= 99) {
-                kRingan.className = 'bg-success';
-            } else if (total == 100) {
-                mandiri.className = 'bg-success';
-            }
-        }
-    </script> --}}
-
-    {{-- <script type="text/javascript">
-        var skriningInputs = document.querySelectorAll('input[name="value_skrin[]"]');
-        var totalInput = document.getElementById('total_skor_skrining');
-
-        skriningInputs.forEach(function(input) {
-            input.addEventListener('blur', function() {
-                var total = 0;
-
-                for (var i = 0; i < skriningInputs.length; i++) {
-                    var value = parseInt(skriningInputs[i].value) || 0;
-                    total += value;
-                }
-
-                totalInput.value = total;
-            });
-        });
-        
-    </script> --}}
-
     {{-- signature pad js --}}
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
 
@@ -387,34 +323,6 @@
         });
     </script>
 
-    {{-- <script>
-        let counter1 = 1;
-
-        function addInput(inputContainerId) {
-            const inputContainer = document.getElementById(inputContainerId);
-            const newInput = document.createElement('div');
-            newInput.className = 'row tambah-input mt-2';
-            let inputName = '';
-            if (inputContainerId === 'input-container1') {
-                counter1++;
-                inputName = `lainnya[]`;
-            } else if (inputContainerId === 'input-container2') {
-                counter1++;
-                inputName = `pola-nafas[]`;
-            }
-            newInput.innerHTML = `
-          <input class="form-control form-control-sm mx-3" style="max-width: 300px" name="${inputName}" type="text" aria-label=".form-control-sm example">
-          <button class="btn btn-sm btn-danger" style="max-width: 40px" onclick="removeInput(this)">-</button>
-        `;
-            inputContainer.parentNode.insertBefore(newInput, inputContainer.nextSibling);
-        }
-
-        function removeInput(button) {
-            const input = button.parentNode;
-            input.parentNode.removeChild(input);
-        }
-    </script> --}}
-
     <script>
         function dinamicInput(element, content, idSelect2, placeholder, isClear) {
             const rowInputDinamic = element.closest('.dinamic-input');
@@ -452,12 +360,6 @@
         });
     </script>
     {{-- end expand collapse table --}}    
-
-    {{-- <script>
-        new PerfectScrollbar(document.getElementById('vertical-example'), {
-        wheelPropagation: false
-        });
-    </script> --}}
 
     <script>
         // {{-- new alert --}}

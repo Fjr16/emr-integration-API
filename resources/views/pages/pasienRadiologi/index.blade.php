@@ -3,15 +3,69 @@
 @section('content')
 
 @if (session()->has('success'))
-      <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-        {{ session('success') }}
-      </div>
-  @endif
+<div class="alert alert-success d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('error'))
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>{{ session('error') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('exceptions'))
+<div class="alert alert-danger d-flex" role="alert">
+<span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+<div class="d-flex flex-column ps-1">
+    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+    <span>
+    @foreach (session('exceptions') as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+    </span>
+</div>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger d-flex" role="alert">
+<span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+<div class="d-flex flex-column ps-1">
+    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+    <span>
+    @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+    </span>
+</div>
+</div>
+@endif
 <div class="card p-3 mt-5">
-    <div class="col-md-12">
+    <div class="row">
+      <div class="col-8">
         <h4 class="align-self-center m-0">
-            Daftar Permintaan Radiologi
+          Daftar Permintaan Radiologi <span class="text text-primary">{{ $filter ?? '' }}</span>
         </h4>
+      </div>
+      <div class="col-3">
+        <form action="{{ route('radiologi/patient.index') }}" method="GET">
+          <div class="row">
+            <label class="col-form-label col-3"></label>
+            <div class="col-9">
+              <input type="date" id="tanggal" name="filter" value="{{ request('filter', date('Y-m-d')) }}" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="col-1">
+          <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+        </form>
     </div>
   <hr class="m-0 mt-2 mb-3">
   <div class="table-responsive text-nowrap">

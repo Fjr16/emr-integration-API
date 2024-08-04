@@ -9,6 +9,8 @@ class RadiologiFormRequestDetail extends Model
 {
     use HasFactory;
 
+    protected $with = ['action'];
+
     protected $fillable = [
         'radiologi_form_request_id',
         'action_id',
