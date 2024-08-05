@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillingOfMedicineFee;
 use DateTime;
 use App\Models\Unit;
 use App\Models\Medicine;
@@ -73,17 +74,6 @@ class RawatJalanFarmasiController extends Controller
             'units' => $units,
             'unitIdSelected' => $unitIdSelected,
         ]);
-    }
-
-
-    private function checkDetailBeforeUpdate($data) {
-        $stts = true;
-        foreach ($data as $key => $detail) {
-            if (!$detail->medicineStok) {
-                $stts = false;
-            }
-        }
-        return $stts;
     }
 
 
@@ -205,6 +195,21 @@ class RawatJalanFarmasiController extends Controller
                     'sub_total' => $subTotal,
                     'ditanggung_asuransi' => $request->ditanggung_asuransi[$index],
                 ]);
+
+                // membuat billing untuk obat pada kasir
+                BillingOfMedicineFee::create([
+                    'kasir_patient_id' => $item->queue->kasirPatient->id,
+                    'rajal_farmasi_obat_detail_id' => $itemDetail->id,
+                    'kode_obat' => $medicine->kode,
+                    'nama_obat' => $medicine->name,
+                    'satuan_obat' => $itemDetail->satuan_obat,
+                    'jumlah' => $itemDetail->jumlah,
+                    'tarif' => $itemDetail->harga_satuan,
+                    'sub_total' => $itemDetail->sub_total,
+                    'ditanggung_asuransi' => $itemDetail->ditanggung_asuransi,
+                ]);
+
+                // hitung total akhir untuk obat
                 $grandTotal += $itemDetail->sub_total ?? 0;
             }
 
@@ -254,7 +259,7 @@ class RawatJalanFarmasiController extends Controller
                 'grand_total' => $grandTotal,
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage());
         } catch (ModelNotFoundException $e) {
@@ -411,6 +416,7 @@ class RawatJalanFarmasiController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
             $this->validate($request, [
                 'status' => 'required|in:DENIED,FINISHED',
@@ -420,46 +426,29 @@ class RawatJalanFarmasiController extends Controller
             ]);
 
             $item = RajalFarmasiPatient::findOrFail(decrypt($id));
-            $poli = RawatJalanPoliPatient::where('queue_id', $item->queue->id)->firstOrFail();
             $item->update([
                 'status' => $request->status,
             ]);
-            $poli->update([
-                'receipts_ready' => false,
-            ]);
+            if ($request->status == 'DENIED') {
+                $poli = RawatJalanPoliPatient::where('queue_id', $item->queue->id)->firstOrFail();
+                $poli->update([
+                    'receipts_ready' => false,
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('rajal/farmasi/index')->with('success', 'Status Berhasil Diperbarui');
+
         } catch (ValidationException $th) {
+            DB::rollBack();
             return back()->with('error', $th->getMessage());
         } catch (Exception $e){
+            DB::rollBack();
             return back()->with('error', $e->getMessage());
         } catch (ModelNotFoundException $m){
+            DB::rollBack();
             return back()->with('error', 'Data Tidak Ditemukan: ' . $m->getMessage());
         }
-
-        // if ($item && $item->rajalFarmasiObatDetails->isNotEmpty()) {
-        //     // check semua data obat dan stok dari permintaan
-        //     foreach ($item->rajalFarmasiObatDetails as $index => $detail) {
-        //         if ($detail->medicine_id && $detail->medicine_stok_id) {
-        //             if (!$detail->medicineStok || !$detail->medicine) {
-        //                 return back()->with('error', 'Proses tidak dapat dilanjutkan, karena terdapat data obat atau stok tidak ditemukan');
-        //             }
-        //         }
-        //     }
-
-        //     // jika berhasil maka lakukan pengurangan stok
-        //     foreach ($item->rajalFarmasiObatDetails as $index => $detail) {
-        //         if ($detail->medicine_id && $detail->medicine_stok_id) {
-        //             $medicineStokItem = MedicineStok::find($detail->medicine_stok_id);
-        //             $stok = $medicineStokItem->stok - $detail->jumlah ?? 0; 
-        //             $medicineStokItem->update([
-        //                 'stok' => $stok,
-        //             ]);
-        //         }
-        //     }
-        // } else {
-        //     return back()->with('error', 'Data resep obat belum lengkap, mohon periksa kembali resep obat yang dikirimkan');
-        // }
-
-        return back()->with('success', 'Status Berhasil Diperbarui');
     }
 
     // menambahkan penjualan ke billing

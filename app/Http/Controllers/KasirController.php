@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\KasirPatient;
 use App\Models\RawatJalanPoliPatient;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class KasirController extends Controller
 {
@@ -30,31 +34,7 @@ class KasirController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -66,19 +46,31 @@ class KasirController extends Controller
         ]);
     }
 
+    private function sumTotalPembayaran($kasirPatient){
+        $totalJasa = $kasirPatient->billingDoctorConsultations()->sum('tarif') ?? 0;
+        $totalTindMedis = $kasirPatient->billingDoctorActions()->sum('sub_total') ?? 0;
+        $totalRad = $kasirPatient->billingRadiologies()->sum('sub_total') ?? 0;
+        $totalLab = $kasirPatient->billingLaboratories()->sum('sub_total') ?? 0;
+        $totalReceipt = $kasirPatient->billingOfMedicineFees()->sum('sub_total') ?? 0;
+        $total = $totalJasa + $totalTindMedis + $totalRad + $totalLab + $totalReceipt;
+
+        return $total;
+    }
+
+
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * DONE
      */
     public function edit($id)
     {
         $item = KasirPatient::find($id);
+        $totalAkhir = $this->sumTotalPembayaran($item);
+
         return view('pages.pasienPembayaran.show', [
             "title" => "Pembayaran",
             "menu" => "In Patient",
             "item" => $item,
+            "totalAkhir" => $totalAkhir,
         ]);
     }
 
@@ -91,26 +83,39 @@ class KasirController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = KasirPatient::find($id);
-        $stt = $request->input('status');
-        
-        $item->update([
-            'status' => $stt,
-            'user_id' => Auth::user()->id,
-        ]);
+        DB::beginTransaction();
+        try {
+            $this->validate($request, [
+                'status' => 'required|string|in:WAITING,FINISHED',
+            ]);
 
-        return redirect()->route('rajal/kasir/pembayaran/index')->with('success', 'Status Berhasil Diperbarui');
-    }
+            $item = KasirPatient::findOrFail(decrypt($id));
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            $stt = $request->status;
+            $totalAkhir = $this->sumTotalPembayaran($item);
+            if (!$totalAkhir || $totalAkhir < 0) {
+                return back()->with('error', 'Terjadi Kesalahan Saat Menghitung jumlah Tagihan');
+            }
+
+            $item->update([
+                'status' => $stt,
+                'total' => $totalAkhir,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            DB::commit();
+            return redirect()->route('rajal/kasir/pembayaran/index')->with('success', 'Status Berhasil Diperbarui');
+
+        } catch (ModelNotFoundException $mn) {
+            DB::rollBack();
+            return back()->with('error', $mn->getMessage());
+        } catch (Exception $e){
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        } catch (ValidationException $ve){
+            DB::rollBack();
+            return back()->with('error', $ve->getMessage());
+        }
     }
     
     // pengajuan revisi tindakan medis

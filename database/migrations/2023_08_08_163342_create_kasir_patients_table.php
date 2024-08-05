@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('queue_id')->nullable();
-            $table->double('total')->default(0);
+            $table->decimal('total', 10, 2)->default(0);
             $table->enum('status', ['WAITING', 'FINISHED'])->default('WAITING');
         });
     }

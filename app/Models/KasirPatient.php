@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class KasirPatient extends Model
 {
     use HasFactory;
+    protected $with = ['billingDoctorConsultations', 'billingDoctorActions', 'billingRadiologies', 'billingLaboratories', 'billingOfMedicineFees'];
     protected $fillable = [
         'user_id',  //petugas kasir
         'queue_id',
@@ -18,10 +19,6 @@ class KasirPatient extends Model
     public function queue(){
         return $this->belongsTo(Queue::class);
     }
-
-    public function detailKasirPatients(){
-        return $this->hasMany(DetailKasirPatient::class);
-    }
     // new
     public function billingDoctorConsultations(){
         return $this->hasMany(BillingDoctorConsultation::class);
@@ -31,6 +28,12 @@ class KasirPatient extends Model
     }
     public function billingRadiologies(){
         return $this->hasMany(BillingRadiology::class);
+    }
+    public function billingLaboratories(){
+        return $this->hasMany(BillingLaboratory::class);
+    }
+    public function billingOfMedicineFees(){
+        return $this->hasMany(BillingOfMedicineFee::class);
     }
 
     public function user(){

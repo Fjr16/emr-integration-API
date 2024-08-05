@@ -133,7 +133,7 @@
                             <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                         </h4>
                         <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>
-                        <h6 class="mb-1">{{ $item->queue->dpjp->roomDetail->name ?? '' }}<h6>
+                        <h6 class="mb-1">{{ $item->queue->dpjp->poliklinik->name ?? '' }}<h6>
                         @if ($item->status == 'WAITING')                                    
                             <span class="badge bg-warning">PERMINTAAN</span>
                         @elseif ($item->status == 'ONGOING')
@@ -279,10 +279,10 @@
                     </table>
                 </div>
                 <div class="mt-4 d-flex justify-content-center">
-                    <form action="{{ route('rajal/farmasi/update.status', $item->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Melanjutkan ?')">
+                    <form action="{{ route('rajal/farmasi/update.status', encrypt($item->id)) }}" method="POST" onsubmit="return confirm('Yakin Ingin Melanjutkan ?')">
                         @method('PUT')
                         @csrf
-                        <button type="submit" class="btn btn-outline-primary"><i class='bx bx-task me-1'></i> Serahkan</button>
+                        <button type="submit" name="status" value="FINISHED" class="btn btn-outline-primary"><i class='bx bx-task me-1'></i> Serahkan</button>
                     </form>
                     <button type="button" onclick="history.back()" class="ms-3 btn btn-outline-danger"><i class='bx bx-x me-1'></i> Batal</button>
                 </div>

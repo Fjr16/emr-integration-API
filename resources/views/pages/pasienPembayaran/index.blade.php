@@ -73,14 +73,14 @@
               @endif
             </td>
             <td>
-              @if ($item->rajalFarmasiPatient)    
-                @if ($item->rawatJalanFarmasi->status == 'WAITING')                                    
+              @if ($item->queue->rajalFarmasiPatient)    
+                @if ($item->queue->rajalFarmasiPatient->status == 'WAITING')                                    
                     <span class="badge bg-warning">PERMINTAAN</span>
-                @elseif ($item->rawatJalanFarmasi->status == 'ONGOING')
+                @elseif ($item->queue->rajalFarmasiPatient->status == 'ONGOING')
                     <span class="badge bg-info">DITERIMA</span>
-                @elseif ($item->rawatJalanFarmasi->status == 'FINISHED')
+                @elseif ($item->queue->rajalFarmasiPatient->status == 'FINISHED')
                     <span class="badge bg-success">SUDAH DIAMBIL</span>
-                @elseif ($item->rawatJalanFarmasi->status == 'DENIED')
+                @elseif ($item->queue->rajalFarmasiPatient->status == 'DENIED')
                     <span class="badge bg-danger">DITOLAK / REVISI</span>
                 @else 
                   <span class="badge bg-danger">TIDAK DIKETAHUI</span>

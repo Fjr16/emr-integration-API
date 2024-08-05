@@ -68,7 +68,7 @@
                               <hr class="dropdown-divider">
                             </li>
                             <li> <a class="dropdown-item text-success" href="{{ route('rajal/farmasi/create', encrypt($item->id)) }}"><i class="bx bx-edit"></i> Edit</a></li>
-                            <li> <a class="dropdown-item text-danger" href=""><i class="bx bx-x"></i> Batal</a> </li>
+                            {{-- <li> <a class="dropdown-item text-danger" href=""><i class="bx bx-x"></i> Batal</a> </li> --}}
                           @else
                             <li> <a class="dropdown-item text-success" href="{{ route('rajal/farmasi/create', encrypt($item->id)) }}"><i class="bx bx-check"></i> Konfirmasi</a> </li>
                             <li> 
@@ -112,7 +112,13 @@
                   @endif
                 </td>
                 <td>
-                    <span class="badge bg-success">STATUS TAGIHAN</span>  
+                  @if ($item->status == 'WAITING')                                    
+                      <span class="badge bg-danger">BELUM BAYAR</span>
+                  @elseif ($item->status == 'FINISHED')
+                      <span class="badge bg-success">SUDAH BAYAR</span>
+                  @else
+                      <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                  @endif
                 </td>
                 <td><a class="btn btn-sm btn-primary" href="{{ route('rajal/farmasi/show', $item->id) }}"><i class="bx bx-show-alt me-1"></i></a></td>
               </tr>
