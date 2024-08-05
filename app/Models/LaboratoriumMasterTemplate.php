@@ -9,6 +9,8 @@ class LaboratoriumMasterTemplate extends Model
 {
     use HasFactory;
 
+    protected $with = ['laboratoriumMasterTemplateDetails'];
+
     protected $fillable = [
         'name',
     ];

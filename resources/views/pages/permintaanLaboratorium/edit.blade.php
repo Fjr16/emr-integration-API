@@ -52,25 +52,25 @@
                 <div class="row">
                     <div class="col-4">
                         <h4 class="mb-1 text-primary d-flex">
-                            {{ $item->patient->name }} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
-                            <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
+                            {{ $item->queue->patient->name }} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
+                            <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                         </h4>
-                        <h6 class="mb-1">{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }}) / <span class="fw-bold">{{ $item->dpjp->poliklinik->name ?? '' }}</span></h6>
+                        <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }}) / <span class="fw-bold">{{ $item->dpjp->poliklinik->name ?? '' }}</span></h6>
                         <h6 class="mb-1"><h6>
-                        @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
+                        @if ($item->queue->rawatJalanPoliPatient->status == 'WAITING')                                    
                             <span class="badge bg-danger">BELUM DILAYANI</span>
-                        @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
+                        @elseif ($item->queue->rawatJalanPoliPatient->status == 'ONGOING')
                             <span class="badge bg-warning">DALAM PERAWATAN</span>
-                        @elseif ($item->rawatJalanPoliPatient->status == 'FINISHED')
+                        @elseif ($item->queue->rawatJalanPoliPatient->status == 'FINISHED')
                             <span class="badge bg-success">SUDAH DILAYANI</span>
                         @else
                             <span class="badge bg-success">TIDAK DIKETAHUI</span>
                         @endif
                     </div>
                     <div class="col-8 text-end">
-                        <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->no_antrian ?? '' }}</span></p>
-                        <p class="mb-0">Tanggungan : <span class="fw-bold fst-italic">{{ $item->patientCategory->name }}</span></p>
-                        <p class="mb-0">Tgl. Lahir : <span class="fw-bold fst-italic">{{ $item->patient->tanggal_lhr }}</span></p>
+                        <p class="mb-0">No. Antrian : <span class="fst-italic fw-bold">{{ $item->queue->no_antrian ?? '' }}</span></p>
+                        <p class="mb-0">Tanggungan : <span class="fw-bold fst-italic">{{ $item->queue->patientCategory->name }}</span></p>
+                        <p class="mb-0">Tgl. Lahir : <span class="fw-bold fst-italic">{{ $item->queue->patient->tanggal_lhr }}</span></p>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,8 @@
         <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">Tambah Permintaan Laboratorium</h5>
         </div>
-        <form action="{{ route('rajal/laboratorium/request.store', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+        <form action="{{ route('rajal/laboratorium/request.update', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda Yakin Ingin Melanjutkan ?')">
+            @method('PUT')
             @csrf
             <div class="card-body">
                 <div class="row">
@@ -89,15 +90,15 @@
                             <label for="tipe_permintaan" class="col-form-label col-3">Kategori Permintaan</label>
                             <div class="col-9">
                                 <select name="tipe_permintaan" class="form-select" id="tipe_permintaan">
-                                    <option value="Reguler" {{ old('tipe_permintaan') == 'Reguler' ? 'selected' : '' }}>Reguler</option>
-                                    <option value="Urgent" {{ old('tipe_permintaan') == 'Urgent' ? 'selected' : '' }}>Urgent</option>
+                                    <option value="Reguler" {{ old('tipe_permintaan', $item->tipe_permintaan) == 'Reguler' ? 'selected' : '' }}>Reguler</option>
+                                    <option value="Urgent" {{ old('tipe_permintaan', $item->tipe_permintaan) == 'Urgent' ? 'selected' : '' }}>Urgent</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="tanggal" class="col-form-label col-3">Tanggal Pengambilan Sampel</label>
                             <div class="col-9">
-                                <input class="form-control" type="date" value="{{ old('tanggal_sampel', date('Y-m-d')) }}" name="tanggal_sampel" id="tanggal" required/>
+                                <input class="form-control" type="date" value="{{ old('tanggal_sampel', $item->tanggal_sampel ?? date('Y-m-d')) }}" name="tanggal_sampel" id="tanggal" required/>
                             </div>
                         </div>
                     </div>
@@ -105,13 +106,13 @@
                         <div class="row mb-3">
                             <label for="diagnosa" class="col-form-label col-3">Diagnosa Klinis</label>
                             <div class="col-9">
-                                <input class="form-control" type="text" name="diagnosa" value="{{ old('diagnosa', $item->doctorInitialAssesment ? ($item->doctorInitialAssesment->keluhan_utama ?? '') : '')  }}" required></input>
+                                <input class="form-control" type="text" name="diagnosa" value="{{ old('diagnosa', $item->diagnosa) }}" required></input>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="catatan" class="col-form-label col-3">Catatan</label>
                             <div class="col-9">
-                                <textarea class="form-control" type="text" name="catatan">{!! old('catatan', $catatan ?? '') !!}</textarea>
+                                <textarea class="form-control" type="text" name="catatan">{!! old('catatan', $item->catatan ?? '') !!}</textarea>
                             </div>
                         </div>
                     </div>
@@ -143,16 +144,16 @@
                         <div class="col-5">
                             <select name="action_id[]" id="action_id_1" class="form-control form-select select2-action">
                                 @foreach ($data as $act)
-                                    @if (old('action_id.' . 0, $act->id))
-                                        <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->patientCategory->id ?? '')->pluck('tarif')->first()) }}" selected>{{ $act->name }}</option>
+                                    @if (old('action_id.' . 0, $item->laboratoriumRequestDetails[0]->action_id) == $act->id)
+                                        <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}" selected>{{ $act->name }}</option>
                                     @else
-                                        <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
+                                        <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
                                     @endif
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-6">
-                            <textarea name="keterangan[]" class="form-control" id="keterangan_{{ $act->id }}" cols="30" rows="1" placeholder="Tambahkan Keterangan Untuk Pemeriksaan Disini ...">{{ old('keterangan.' . 0) }}</textarea>
+                            <textarea name="keterangan[]" class="form-control" id="keterangan_{{ $act->id }}" cols="30" rows="1" placeholder="Tambahkan Keterangan Untuk Pemeriksaan Disini ...">{{ old('keterangan.' . 0, $item->laboratoriumRequestDetails[0]->keterangan) }}</textarea>
                         </div>
                         <div class="col-1">
                             <button type="button" class="btn btn-success" onclick="addInput(this)"><i class="bx bx-plus"></i></button>
@@ -165,15 +166,37 @@
                                 <select name="action_id[{{ $key }}]" id="action_id{{ $key }}" class="form-control form-select select2-action">
                                     @foreach ($data as $act)
                                         @if ($actionId == $act->id)
-                                            <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->patientCategory->id ?? '')->pluck('tarif')->first()) }}" selected>{{ $act->name }}</option>
+                                            <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}" selected>{{ $act->name }}</option>
                                         @else
-                                            <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
+                                            <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-6">
                                 <textarea name="keterangan[{{ $key }}]" class="form-control" id="keterangan{{ $key }}" cols="30" rows="1" placeholder="Tambahkan Keterangan Untuk Pemeriksaan Disini ...">{{ old('keterangan.' . 0) }}</textarea>
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-danger" onclick="removeInputNew(this)"><i class="bx bx-minus"></i></button>
+                            </div>
+                        </div>
+                        @endforeach
+                    @else
+                        @foreach ($item->laboratoriumRequestDetails->skip(1) as $index => $detail)
+                        <div class="row loopHere my-2">
+                            <div class="col-5">
+                                <select name="action_id[{{ $index }}]" id="action_id{{ $index }}" class="form-control form-select select2-action">
+                                    @foreach ($data as $act)
+                                        @if (($detail->action_id ?? '') == $act->id)
+                                            <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}" selected>{{ $act->name }}</option>
+                                        @else
+                                            <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <textarea name="keterangan[{{ $index }}]" class="form-control" id="keterangan{{ $index }}" cols="30" rows="1" placeholder="Tambahkan Keterangan Untuk Pemeriksaan Disini ...">{{ $detail->keterangan ?? '' }}</textarea>
                             </div>
                             <div class="col-1">
                                 <button type="button" class="btn btn-danger" onclick="removeInputNew(this)"><i class="bx bx-minus"></i></button>
@@ -203,8 +226,8 @@
                                 <div class="text-center" style="min-width: 300px">
                                     <label class="form-label fw-bold" id="label-kolom">Dokter yang meminta</label>
                                     <div class="d-flex flex-column">
-                                        <img src="" alt="" id="imgTtdUser" class="">
-                                        <textarea id="ttd_user" name="ttd_dokter" style="display: none;"></textarea>
+                                        <img src="{{ Storage::url($item->ttd_dokter ?? '') }}" alt="" id="imgTtdUser" class="">
+                                        <textarea id="ttd_user" name="ttd_dokter" style="display: none;">{{ $item->ttd_dokter ?? null }}</textarea>
                                         <button type="button" class="btn btn-sm btn-dark px-lg-5 mb-2"
                                             onclick="openModal(this)">Tanda
                                             Tangan</button>
@@ -222,7 +245,7 @@
                     <button type="submit" class="btn btn-outline-primary me-2"><i class="bx bx-save"></i> Submit</button>
                     {{ session()->flash('btn', 'penunjang'); }}
                     {{ session()->flash('penunjang', 'laboratorium'); }}
-                    <a href="{{ route('rajal/show', ['id' => $item->id, 'title' => 'Rawat Jalan']) }}" class="btn btn-outline-danger"><i class="bx bx-left-arrow"></i> Kembali</a>
+                    <a href="{{ route('rajal/show', ['id' => $item->queue->id, 'title' => 'Rawat Jalan']) }}" class="btn btn-outline-danger"><i class="bx bx-left-arrow"></i> Kembali</a>
                 </div>
             </div>
         </form>
@@ -257,7 +280,7 @@
 
     @section('script')
     <script>
-        var patientCategoryId = @json($item->patient_category_id ?? '');
+        var patientCategoryId = @json($item->queue->patient_category_id ?? '');
         // get Ttd User modal
         function openModal(element) {
             $('#getTtdModal').modal('show');
@@ -322,7 +345,7 @@
             <div class="col-5">
                 <select name="action_id[]" id="action_id_${counter}" class="form-control form-select select2-action">
                     @foreach ($data as $act)
-                        <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
+                        <option value="{{ $act->id }}" data-foo="Tarif Pemeriksaan : Rp. {{ number_format($act->actionRates->where('patient_category_id', $item->queue->patientCategory->id ?? '')->pluck('tarif')->first()) }}">{{ $act->name }}</option>
                     @endforeach
                 </select>
             </div>

@@ -389,6 +389,8 @@ Route::get('/rajal/cppt/update/ttd', [RmeCpptController::class, 'updateTtd'])->n
 //rajal request labor PK
     Route::get('/rajal/laboratorium/request/create/{id}', [LaboratoriumFormRequestController::class, 'index'])->name('rajal/laboratorium/request.index');
     Route::post('rajal/laboratorium/request/store/{id}', [LaboratoriumFormRequestController::class, 'store'])->name('rajal/laboratorium/request.store');
+    Route::get('/rajal/laboratorium/request/edit/{id}', [LaboratoriumFormRequestController::class, 'edit'])->name('rajal/laboratorium/request.edit');
+    Route::put('rajal/laboratorium/request/update/{id}', [LaboratoriumFormRequestController::class, 'update'])->name('rajal/laboratorium/request.update');
     Route::get('/rajal/laboratorium/request/show/{queue_id}/{labor_id}', [LaboratoriumFormRequestController::class, 'show'])->name('rajal/laboratorium/request.show');
     Route::delete('/rajal/laboratorium/request/destroy/{id}', [LaboratoriumFormRequestController::class, 'destroy'])->name('rajal/laboratorium/request.destroy');
 

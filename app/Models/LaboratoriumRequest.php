@@ -12,8 +12,6 @@ class LaboratoriumRequest extends Model
     protected $fillable = [
         'user_id',  //dokter yang membuat permintaan
         'queue_id',
-        'patient_id',
-        'room_detail_id',
         'diagnosa',
         'catatan',
         'ttd_dokter',
@@ -39,12 +37,6 @@ class LaboratoriumRequest extends Model
     }
     public function queue(){
         return $this->belongsTo(Queue::class);
-    }
-    public function patient(){
-        return $this->belongsTo(Patient::class);
-    }
-    public function roomDetail(){
-        return $this->belongsTo(RoomDetail::class);
     }
     public function laboratoriumRequestDetails(){
         return $this->hasMany(LaboratoriumRequestDetail::class);

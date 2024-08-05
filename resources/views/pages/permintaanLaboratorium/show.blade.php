@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ROPANASURI</title>
+    <title>Permintaan Laboratorium</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
@@ -133,22 +133,22 @@
                             <tr>
                                 <td class="fw-bold">Nama Pasien</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $item->patient->name ?? '' }}</td>
+                                <td>{{ $queue->patient->name ?? '' }} / {{ implode('-', str_split(str_pad($queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Tgl. Lahir</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $item->patient->tanggal_lhr ?? '' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold">No. RM</td>
-                                <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+                                <td>{{ $queue->patient->tanggal_lhr ?? '' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Tanggungan</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
+                                <td>{{ $queue->patientCategory->name ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Asal Ruang</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>{{ $queue->dpjp->poliklinik->name ?? '' }}</td>
                             </tr>
                         </table>
                     </td>
@@ -157,12 +157,7 @@
                             <tr>
                                 <td class="fw-bold">Diagnosa</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{!! $item->diagnosa ?? '' !!}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold">Asal Ruang</td>
-                                <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $item->queue->doctorPatient->user->roomDetail->name ?? '' }}</td>
+                                <td>{{  $item->diagnosa ?? '' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Tgl. Ambil Sampel</td>
@@ -172,26 +167,51 @@
                             <tr>
                                 <td class="fw-bold">Kategori</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td class="{{ $item->tipe_permintaan == 'Urgent' ? 'btn btn-sm btn-danger' : '' }}">{{ $item->tipe_permintaan ?? '' }}</td>
+                                <td>
+                                    <span class="{{ $item->tipe_permintaan == 'Urgent' ? 'badge bg-danger' : '' }}">
+                                        {{ $item->tipe_permintaan ?? '' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Status</td>
+                                <td class="ps-4 pe-1 fw-bold">:</td>
+                                <td>
+                                    @if ($item->status == 'WAITING')
+                                        <span class="badge bg-warning">PERMINTAAN</span>
+                                    @elseif ($item->status == 'CANCEL')
+                                        <span class="badge bg-danger">BATAL</span>
+                                    @elseif ($item->status == 'DENIED')
+                                        <span class="badge bg-warning">DITOLAK</span>
+                                    @elseif ($item->status == 'ACCEPTED')
+                                        <span class="badge bg-primary">DITERIMA</span>
+                                    @elseif ($item->status == 'UNVALIDATE')
+                                        <span class="badge bg-primary">SEDANG DIPERIKSA</span>
+                                    @elseif ($item->status == 'FINISHED')
+                                        <span class="badge bg-success">SELESAI</span>
+                                    @else
+                                        <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                                    @endif
+                                </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
             </table>
-
-            <table class="table-bordered w-100">
+            <hr>
+            <table class="table w-100">
                 <thead>
-                    <tr class="bg-dark text-white text-center">
-                        <th>Kode Pemeriksaan</th>
-                        <th>Nama Pemeriksaan</th>
+                    <tr class="table-primary text-white text-center">
+                        <th>Kode Tindakan</th>
+                        <th>Nama Tindakan</th>
                         <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($item->laboratoriumRequestDetails as $detail)                        
                         <tr class="text-center">
-                            <td>{{ $detail->action->icd_code ?? '' }}</td>
-                            <td>{{ $detail->action->name ?? '' }}</td>
+                            <td>{{ $detail->action->action_code ?? '...' }}</td>
+                            <td>{{ $detail->action->name ?? '...' }}</td>
                             <td>{{ $detail->keterangan ?? '-' }}</td>
                         </tr>
                     @endforeach
@@ -200,7 +220,7 @@
 
             <div class="row">
                 <div class="col-6" style="font-size: 3mm;">
-                    <p class="fst-italic">*) Dijadwalkan dan dipersiapkan oleh Petugas Laboratorium Patologi Klinik</p>
+                    <p class="fst-italic">*) Dijadwalkan dan dipersiapkan oleh Petugas Laboratorium</p>
                 </div>
                 <div class="col-6">
                     <div class="d-flex flex-column justify-content-end small mt-5">
