@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
 use App\Models\PerawatInitialAsesment;
 use App\Models\BillingDoctorConsultation;
+use App\Models\LaboratoriumRequest;
 use Illuminate\Validation\ValidationException;
 
 class RawatJalanController extends Controller
@@ -103,6 +104,7 @@ class RawatJalanController extends Controller
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
         $reportActions = PatientActionReport::where('queue_id', $item->id)->first();
         $radiologiResults = RadiologiFormRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->orWhere('status', 'ACCEPTED')->with('radiologiFormRequestDetails')->latest()->get();
+        $laboratoriumResults = LaboratoriumRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'UNVALIDATE')->orWhere('status', 'ACCEPTED')->with('laboratoriumRequestDetails')->latest()->get();
 
         // diagnostic dan procedure
         $diagnostics = Diagnostic::orderBy('icd_x_code')->get();
@@ -123,6 +125,7 @@ class RawatJalanController extends Controller
             'today' => $today,
             'reportActions' => $reportActions,
             'radiologiResults' => $radiologiResults,
+            'laboratoriumResults' => $laboratoriumResults,
             'diagnostics' => $diagnostics,
             'procedures' => $procedures,
             'medicines' => $medicines,

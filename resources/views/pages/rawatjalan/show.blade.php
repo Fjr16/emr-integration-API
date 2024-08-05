@@ -957,10 +957,12 @@
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}" id="navs-pills-justified-radiologi" role="tabpanel">
-                                            <div class="text-end mb-2 me-2">
-                                                <a href="{{ route('rajal/permintaan/radiologi.create', $item->id) }}"
-                                                    class="btn btn-primary btn-sm"><i class="bx bx-plus"></i> Permintaan</a>
-                                            </div>
+                                            @if (!$item->radiologiFormRequests()->where('status', '!=' ,'CANCEL')->orderBy('created_at', 'DESC')->first())    
+                                                <div class="text-end mb-2 me-2">
+                                                    <a href="{{ route('rajal/permintaan/radiologi.create', $item->id) }}"
+                                                        class="btn btn-primary btn-sm"><i class="bx bx-plus"></i> Permintaan</a>
+                                                </div>
+                                            @endif
                                             <table class="table">
                                                 <thead>
                                                     <tr class="text-nowrap">
@@ -985,7 +987,6 @@
                                                                         </button>
                                                                         <ul class="dropdown-menu">
                                                                             @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING' || $radiologi->status == 'ACCEPTED')
-                                                                                <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
                                                                                 <li> <button class="dropdown-item text-info" onclick="showHasilRad({{ $radiologi->id }})"><i class='bx bx-file'></i> Hasil</button> </li>
                                                                             @elseif ($radiologi->status == 'WAITING' || $radiologi->status == 'DENIED')
                                                                                 <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
@@ -997,6 +998,7 @@
                                                                                     </form>
                                                                                 </li>
                                                                             @endif
+                                                                            <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
                                                                         </ul>
                                                                     </div>
                                                                 @endif
@@ -1030,57 +1032,79 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="tab-pane fade {{ session('penunjang') == 'laboratorium' ? 'show active' : '' }}"
-                                            id="navs-pills-justified-laboratorium" role="tabpanel">
-                                            <div class="text-end">
-                                                <a href="{{ route('rajal/laboratorium/request.index', $item->id) }}"
-                                                    class="btn btn-success btn-sm">+Tambah Permintaan</a>
-                                            </div>
+                                        <div class="tab-pane fade {{ session('penunjang') == 'laboratorium' ? 'show active' : '' }}" id="navs-pills-justified-laboratorium" role="tabpanel">
+                                            @if (!$item->laboratoriumRequests()->where('status', '!=', 'CANCEL')->orderBy('created_at', 'desc')->first())
+                                                <div class="text-end mb-2 me-2">
+                                                    <a href="{{ route('rajal/laboratorium/request.index', $item->id) }}"
+                                                        class="btn btn-primary btn-sm"><i class="bx bx-plus"></i> Permintaan</a>
+                                                </div>
+                                            @endif
                                             <table class="table">
                                                 <thead>
                                                     <tr class="text-nowrap">
-                                                        <th class="text-body">No</th>
+                                                        <th class="text-body">Action</th>
                                                         <th class="text-body">Dokter</th>
                                                         <th class="text-body">Asal Ruang</th>
-                                                        <th class="text-body">Diagnosa</th>
+                                                        <th class="text-body">Diagnosa Klinis</th>
                                                         <th class="text-body">Kategori</th>
                                                         <th class="text-body">Tgl. Ambil Sampel</th>
                                                         <th class="text-body">Tanggal Permintaan</th>
-                                                        <th class="text-body">Action</th>
+                                                        <th class="text-body">Status</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($item->patient->laboratoriumRequests as $labor)
-                                                        <tr class="{{ $item->id == $labor->queue->id ? 'text-success' : '' }}">
-                                                            <td>{{ $loop->iteration }}</td>
-                                                            <td>{{ $labor->user->name ?? '' }}</td>
-                                                            {{-- <td>{{ $labor->poliklinik->name ?? '' }}</td> --}}
+                                                    @foreach ($item->laboratoriumRequests as $labor)
+                                                        <tr>
+                                                            <td>
+                                                                @if ($labor->status == 'CANCEL')
+                                                                    <span class="badge bg-danger"><i class="bx bx-x"></i></span>
+                                                                @else    
+                                                                    <div class="btn-group dropend">
+                                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <i class='bx bx-info-circle me-2'></i>Action
+                                                                        </button>
+                                                                        <ul class="dropdown-menu">
+                                                                            @if ($labor->status == 'FINISHED' || $labor->status == 'UNVALIDATE' || $labor->status == 'ACCEPTED')
+                                                                                <li> <button class="dropdown-item text-info" onclick="showHasilLab({{ $labor->id }})"><i class='bx bx-file'></i> Hasil</button> </li>
+                                                                            @elseif ($labor->status == 'WAITING' || $labor->status == 'DENIED')
+                                                                                <li> <a class="dropdown-item text-warning" href="{{ route('rajal/laboratorium/request.edit', $labor->id) }}"><i class="bx bx-edit"></i> Edit</a> </li>
+                                                                                <li>
+                                                                                    <form action="{{ route('rajal/laboratorium/request.destroy', $labor->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
+                                                                                        @method('DELETE')
+                                                                                        @csrf
+                                                                                        <button type="submit" class="dropdown-item text-danger"><i class="bx bx-x"></i> Batal</button>
+                                                                                    </form>
+                                                                                </li>
+                                                                            @endif
+                                                                                <li><a href="{{ route('rajal/laboratorium/request.show', ['queue_id' => $item->id, 'labor_id' => $labor->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ ($labor->user->name ?? '') . ' (' .($labor->user->staff_id) . ')' }}</td>
                                                             <td>{{ $labor->queue->dpjp->poliklinik->name ?? '' }}</td>
                                                             <td>{{ $labor->diagnosa ?? '' }}</td>
                                                             <td>{{ $labor->tipe_permintaan ?? '' }}</td>
                                                             <td>{{ $labor->tanggal_sampel ?? '' }}</td>
                                                             <td>{{ $labor->created_at->format('Y-m-d') ?? '' }}</td>
                                                             <td>
-                                                                <div class="d-flex align-self-center">
-                                                                    <a href="{{ route('rajal/laboratorium/request.show', ['queue_id' => $item->id, 'labor_id' => $labor->id]) }}"
-                                                                        target="blank" class="btn btn-dark btn-sm mx-2"><i
-                                                                            class='bx bx-printer'></i></a>
-                                                                    @if ($labor->status == 'FINISHED' || $labor->status == 'ONGOING')
-                                                                        <button type="button" class="btn btn-info btn-sm"><i class='bx bx-file'></i></button>
-                                                                    @else
-                                                                        <a href="" class="btn btn-warning btn-sm me-2"><i class='bx bx-edit'></i></a>
-                                                                        <form
-                                                                            action="{{ route('rajal/laboratorium/request.destroy', $labor->id) }}"
-                                                                            method="POST">
-                                                                            @method('DELETE')
-                                                                            @csrf
-                                                                            <button type="submit"
-                                                                                class="btn btn-sm btn-danger"><i
-                                                                                    class="bx bx-trash"></i></button>
-                                                                        </form>
-                                                                    @endif
-                                                                </div>
+                                                                @if ($labor->status == 'WAITING')
+                                                                    <span class="badge bg-warning">PERMINTAAN</span>
+                                                                @elseif ($labor->status == 'CANCEL')
+                                                                    <span class="badge bg-danger">BATAL</span>
+                                                                @elseif ($labor->status == 'DENIED')
+                                                                    <span class="badge bg-warning">DITOLAK</span>
+                                                                @elseif ($labor->status == 'ACCEPTED')
+                                                                    <span class="badge bg-primary">DITERIMA</span>
+                                                                @elseif ($labor->status == 'UNVALIDATE')
+                                                                    <span class="badge bg-primary">SEDANG DIPERIKSA</span>
+                                                                @elseif ($labor->status == 'FINISHED')
+                                                                    <span class="badge bg-success">SELESAI</span>
+                                                                @else
+                                                                    <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                                                                @endif
                                                             </td>
+                                                           
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -1118,7 +1142,7 @@
                                                     <div class="table-responsive">
                                                         <table class="table">
                                                             <thead>
-                                                                <tr>
+                                                                <tr class="table-primary">
                                                                     <th class="text-dark">Tanggal Periksa</th>
                                                                     <th class="text-dark">Tindakan</th>
                                                                     <th class="text-dark">Hasil Radiologi</th>
@@ -1143,6 +1167,83 @@
                                                                         </td>
                                                                     </tr>
                                                                     @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="4" class="bg-info text-white">
+                                                                            Data Tidak Tersedia !!
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @foreach ($laboratoriumResults as $resultLab)
+                                    <div class="accordion accordion-header-primary" id="labor-result-{{ $resultLab->id }}" hidden>
+                                        <div class="accordion-item card border">
+                                            <h2 class="accordion-header">
+                                                <button type="button" class="accordion-button collapsed text-uppercase" data-bs-toggle="collapse" data-bs-target="#hasil-labor-{{ $resultLab->id }}" aria-expanded="false">
+                                                    {{ $resultLab->no_reg ?? 'Belum Tersedia' }} 
+                                                    {{--  --}}
+                                                    <span class="ms-2">
+                                                        diperiksa Pada Tgl. {{ $resultLab->tanggal_periksa_selesai ?? '' }}
+                                                    </span>
+                                                    {{--  --}}
+                                                    @if ($resultLab->status == 'ACCEPTED')
+                                                    <span class="badge bg-primary ms-2">DITERIMA</span>
+                                                    @elseif($resultLab->status == 'UNVALIDATE')
+                                                    <span class="badge bg-danger ms-2">BELUM VALIDASI</span>
+                                                    @else
+                                                    <span class="badge bg-success ms-2">SELESAI</span>
+                                                    @endif
+                                                    
+                                                </button>
+                                            </h2>
+                                            
+                                            <div id="hasil-labor-{{ $resultLab->id }}" class="accordion-collapse collapse" data-bs-parent="#labor-result-{{ $resultLab->id }}">
+                                                <div class="accordion-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr class="table-primary">
+                                                                    <th class="text-dark">Tindakan</th>
+                                                                    <th class="text-dark">Keterangan</th>
+                                                                    <th class="text-dark">Hasil</th>
+                                                                    <th class="text-dark">Kondisi Kritis</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="table-border-bottom-0">
+                                                                @if ($resultLab->laboratoriumRequestDetails)     
+                                                                    @foreach ($resultLab->laboratoriumRequestDetails as $detailLab)     
+                                                                    <tr>
+                                                                        <td>{{ $detailLab->action->name ?? '...' }}</td>
+                                                                        <td>{{ $detailLab->keterangan ?? '...' }}</td>
+                                                                        <td>{{ $detailLab->hasil ?? '...' }} <span class="ms-2 small fw-bold fst-italic">{{ $detailLab->satuan ?? '...' }}</span></p></td>
+                                                                        <td>
+                                                                            @if ($detailLab->kritis == true)
+                                                                                Ya
+                                                                            @elseif ($detailLab->kritis == false)
+                                                                                Tidak
+                                                                            @else
+                                                                                Unknown
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                    <tr>
+                                                                        <td colspan="4" class="text-center">
+                                                                            <span class="fw-bold">Kesan Dan Anjuran</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="4">
+                                                                            <p class="multi-line-text {{ $resultLab->kesan_anjuran ? '' : 'text-center fw-bold' }}">{!! $resultLab->kesan_anjuran ?? '--- TIDAK ADA KESAN ATAU ANJURAN ---' !!}</p>
+                                                                        </td>
+                                                                    </tr>
                                                                 @else
                                                                     <tr>
                                                                         <td colspan="4" class="bg-info text-white">
@@ -2431,6 +2532,10 @@
         // show hasil Radiologi
         function showHasilRad(radiologiId){
             $('#radiologi-result-'+radiologiId).removeAttr('hidden');
+        }
+        // show hasil labor
+        function showHasilLab(labId){
+            $('#labor-result-'+labId).removeAttr('hidden');
         }
     </script>
     

@@ -113,7 +113,7 @@
                   <li>
                     <a class="dropdown-item text-primary" href="{{ route('radiologi/patient.create', $item->id) }}">
                       <i class='bx bx-show-alt me-1'></i>
-                        Periksa
+                        Input Hasil
                     </a>
                   </li>
                 </ul>

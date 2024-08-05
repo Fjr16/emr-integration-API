@@ -140,14 +140,16 @@
                     $tgl_periksa = new Carbon\Carbon(strtotime($item->tanggal_periksa));
                 @endphp
                 <p class="m-0">Padang, {{ $tgl_periksa->format('d M Y') ?? $item->created_at->format('d M Y') }}<span id="tanggal"></span></p>
-                @isset($item->radiologiFormRequest->validator_rad_id)
-                <br><br>
-                <p class="m-0 text-decoration-underline">{{ $item->radiologiFormRequest->validator->name ?? '' }}</p>
-                <p class="m-0">{{ $item->radiologiFormRequest->validator->poliklinik->name ?? '' }}</p>
+                @isset($rad->validator_rad_id)
+                    <a href="{{ Storage::url($rad->ttd_dokter) }}">
+                        <img src="{{ Storage::url($rad->ttd_dokter) }}" alt="{{ $rad->ttd_dokter }}" width="150" height="100">
+                    </a>
+                    <p class="m-0 text-decoration-underline">{{ $item->radiologiFormRequest->validator->name ?? '' }}</p>
+                    <p class="m-0">{{ $item->radiologiFormRequest->validator->poliklinik->name ?? '' }}</p>
                 @else
-                <br>
-                        <h6 class="fw-bold m-0">(UNVALIDATE)</h6>
-                    @endisset
+                    <br>
+                    <h6 class="fw-bold m-0">(UNVALIDATE)</h6>
+                @endisset
                 </div>
             </div>
         @endforeach

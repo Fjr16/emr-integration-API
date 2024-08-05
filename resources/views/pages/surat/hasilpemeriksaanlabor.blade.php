@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Hasil Pemeriksaan Labor PK</title>
+        <title>Hasil Pemeriksaan Laboratorium</title>
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css"
@@ -139,17 +139,17 @@
                                 <tr>
                                     <td class="fw-bold" style="width: 100px">Nama / No RM</td>
                                     <td class="fw-bold" style="width: 10px">:</td>
-                                    <td>{{ $item->patient->name ?? '' }} / {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+                                    <td>{{ $item->queue->patient->name ?? '' }} / {{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Tgl. Lahir</td>
                                     <td class="fw-bold">:</td>
-                                    <td>{{ $item->patient->tanggal_lhr ?? '' }}</td>
+                                    <td>{{ $item->queue->patient->tanggal_lhr ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">NIK</td>
                                     <td class="fw-bold">:</td>
-                                    <td>{{ $item->patient->nik ?? '' }}</td>
+                                    <td>{{ $item->queue->patient->nik ?? '' }}</td>
                                 </tr>
                                 <tr>
                                   <td class="fw-bold">Tanggungan</td>
@@ -166,7 +166,7 @@
                               <tr>
                                 <td class="fw-bold">Asal Ruangan</td>
                                 <td class="fw-bold">:</td>
-                                <td>{{ $item->roomDetail->name ?? '' }}</td>
+                                <td>{{ $item->queue->dpjp->poliklinik->name ?? '' }}</td>
                               </tr>
                                 <tr>
                                   <td class="fw-bold">Diagnosa</td>
@@ -185,18 +185,21 @@
                                 <tr>
                                     <td class="fw-bold">Tipe Permintaan</td>
                                     <td class="fw-bold">:</td>
-                                    <td class="{{ $item->tipe_permintaan == 'Urgent' ? 'bg-danger' : 'bg-secondary' }} text-white p-1 rounded">{{ $item->tipe_permintaan ?? '' }}</td>
+                                    <td>
+                                      <span class="{{ $item->tipe_permintaan == 'Urgent' ? 'badge bg-danger text-white' : '' }}">{{ $item->tipe_permintaan ?? '' }}</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>  
                 </div>
 
+                <hr>
                 <div class="row mt-2">
                   <div class="col-12">
-                    <table class="table">
+                    <table class="table tex-nowrap">
                       <thead>
-                        <tr class="text-nowrap">
+                        <tr class="table-primary">
                           <th>Kode</th>
                           <th>Nama</th>
                           <th class="text-center">Hasil</th>
@@ -207,11 +210,11 @@
                         @foreach ($item->laboratoriumRequestDetails as $index => $detail)
                           <tr>
                             <td>
-                              {{ $detail->action->icd_code ?? '' }}
+                              {{ $detail->action->action_code ?? '' }}
                             </td>
                             <td>{{ $detail->action->name ?? '' }}</td>
                             <td class="text-center">
-                              {{ $detail->hasil ?? '' }}
+                              {{ $detail->hasil ?? '' }} <span class="fw-bold small fst-italic">{{ $detail->satuan }}</span>
                             </td>
                             <td class="text-center">
                               {{ $detail->kritis == true ? 'Ya' : 'Tidak' }}

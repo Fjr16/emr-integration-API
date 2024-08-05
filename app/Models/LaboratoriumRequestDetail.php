@@ -14,6 +14,7 @@ class LaboratoriumRequestDetail extends Model
         'action_id',
         'keterangan',  
         'hasil',    //tipe float
+        'satuan',
         'kritis',   //boolean
     ];
 

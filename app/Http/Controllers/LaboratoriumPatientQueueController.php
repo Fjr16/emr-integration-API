@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KasirPatient;
+use App\Models\BillingLaboratory;
 use Illuminate\Http\Request;
-use App\Models\DetailKasirPatient;
+use Illuminate\Support\Facades\DB;
 use App\Models\LaboratoriumRequest;
-use Illuminate\Support\Facades\Auth;
 
 class LaboratoriumPatientQueueController extends Controller
 {
@@ -54,74 +53,74 @@ class LaboratoriumPatientQueueController extends Controller
     {
         $item = LaboratoriumRequest::find($id);
         $status = $request->input('status');
-        if ($status != 'ACCEPTED') {
-            $item->update([
-                'status' => $status,
-            ]);
-        }else{
-            $tanggal = $request->input('tanggal');
-    
-            $lastReg = LaboratoriumRequest::whereDate('jadwal_periksa', $tanggal)->orderBy('no_reg', 'desc')->pluck('no_reg')->first();
+        $tanggal = $request->input('tanggal');
 
-            if ($lastReg) {
-                $arrSplit = explode('/', $lastReg);
-                $lastReg = $arrSplit[4];
-            }
-            $nextReg = $this->createRegPK($lastReg ?? 0);
+        $lastReg = LaboratoriumRequest::whereDate('jadwal_periksa', $tanggal)->orderBy('no_reg', 'desc')->pluck('no_reg')->first();
+        if ($lastReg) {
+            $arrSplit = explode('/', $lastReg);
+            $lastReg = $arrSplit[4];
+        }
+        $nextReg = $this->createRegPK($lastReg ?? 0);
+
+        if ($status == 'RESCHEDULE'){
             $item->update([
                 'no_reg' => $nextReg,
                 'jadwal_periksa' => $tanggal,
                 'status' => 'ACCEPTED',
             ]);
+        }else if ($status == 'ACCEPTED'){
+            DB::beginTransaction();
+            $errors = [];
+            try {
+                $item->update([
+                    'no_reg' => $nextReg,
+                    'jadwal_periksa' => $tanggal,
+                    'status' => 'ACCEPTED',
+                ]);
+
+                foreach ($item->laboratoriumRequestDetails as $key => $detailTindakan) {
+    
+                    if (!$detailTindakan->action || !$detailTindakan->action->action_code || !$detailTindakan->action->name) {
+                        $errors[] = 'Tindakan Yang Dipilih Pada Detail Permintaan Radiologi ID {X} Tidak Valid Mohon periksa Kembali Master Data Tindakan';
+                        continue;
+                    }
+                    $actRate = $detailTindakan->action->actionRates->where('patient_category_id', $item->queue->patientCategory->id)->first();
+                    if (!$actRate || $actRate->tarif <= 0) {
+                        $errors[] = 'Harga Satuan Tindakan '. $detailTindakan->action->name .' Tidak Valid, mohon periksa data tindakan pasien';
+                        continue;
+                    }
+                    
+                    BillingLaboratory::create([
+                        'kasir_patient_id' => $item->queue->kasirPatient->id,
+                        'action_id' => $detailTindakan->action->id ?? null,
+                        'patient_category_id' => $item->queue->patientCategory->id ?? null,
+                        'kode_tindakan' => $detailTindakan->action->action_code,
+                        'nama_tindakan' => $detailTindakan->action->name,
+                        'jumlah' => 1,
+                        'tarif' => $actRate->tarif,
+                        'sub_total' => $actRate->tarif,
+                    ]);
+                }
+                if (!empty($errors)) {
+                    DB::rollBack();
+                    return back()->with('exceptions', $errors);
+                }
+
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                return back()->with('error', $e->getMessage());
+            } catch (ModelNotFoundException $mn){
+                DB::rollBack();
+                return back()->with('error', $mn->getMessage());
+            }
+        } else {
+            $item->update([
+                'status' => $status,
+            ]);
         }
 
-        //create Tagihan
-        // $patientCategoryId = $item->queue->patientCategory->id ?? '';
-        // if($patientCategoryId){
-        //     $kasirPatient = KasirPatient::where('rawat_jalan_patient_id', $item->queue->rawatJalanPatient->id)->first();
-        //     if($kasirPatient){
-        //         $total = $kasirPatient->total;
-        //         foreach ($item->laboratoriumRequest->laboratoriumRequestDetails as $detail) {
-        //             $tarif = LaboratoriumRequestMasterRate::where('laboratorium_request_master_variable_id', $detail->laboratoriumRequestMasterVariable->id)->where('patient_category_id', $patientCategoryId)->first();
-        //             DetailKasirPatient::create([
-        //                 'kasir_patient_id' => $kasirPatient->id,
-        //                 'name' => $detail->laboratoriumRequestMasterVariable->name,
-        //                 'tanggal' => date('Y-m-d H:i:s'),
-        //                 'category' => 'Pemeriksaan Laboratorium PK',
-        //                 'jumlah' => 1,
-        //                 'tarif' => $tarif->tarif_umum ?? 0,
-        //             ]);
-        //             $total += $tarif->tarif_umum ?? 0;
-        //         }
-        //         $kasirPatient->update([
-        //             'total' => $total,
-        //         ]);
-        //     }else{
-        //         $total = 0;
-        //         $itemKasirPatient =  KasirPatient::create([
-        //             'rawat_jalan_patient_id' => $item->queue->rawatJalanPatient->id,
-        //             'total' => $total,
-        //             'status' => 'PENDING',
-        //         ]);
-        //         foreach ($item->laboratoriumRequest->laboratoriumRequestDetails as $detail) {
-        //             $tarif = LaboratoriumRequestMasterRate::where('laboratorium_request_master_variable_id', $detail->laboratoriumRequestMasterVariable->id)->where('patient_category_id', $patientCategoryId)->first();
-        //             DetailKasirPatient::create([
-        //                 'kasir_patient_id' => $itemKasirPatient->id,
-        //                 'name' => $detail->laboratoriumRequestMasterVariable->name,
-        //                 'tanggal' => date('Y-m-d H:i:s'),
-        //                 'category' => 'Pemeriksaan Laboratorium PK',
-        //                 'jumlah' => 1,
-        //                 'tarif' => $tarif->tarif_umum ?? 0,
-        //             ]);
-        //             $total += $tarif->tarif_umum ?? 0; 
-        //         }
-        //         $itemKasirPatient->update([
-        //             'total' => $total,
-        //         ]);
-        //     }
-        // }
-
-        return back()->with('success', 'Berhasil Memperbarui Antrian');
+        return back()->with('success', 'Berhasil Memperbarui Permintaan');
     }
     /**
      * Update the specified resource in storage.

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('action_id')->nullable();
             $table->string('keterangan')->nullable();
             $table->float('hasil')->default(0);
+            $table->string('satuan', 50)->nullable();
             $table->boolean('kritis')->default(false);
             $table->timestamps();
         });
