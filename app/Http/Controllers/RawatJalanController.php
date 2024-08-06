@@ -98,7 +98,7 @@ class RawatJalanController extends Controller
         }
 
         $today = new DateTime();
-        $item = Queue::findOrFail($id);
+        $item = Queue::findOrFail(decrypt($id));
         $riwKunjungans = Queue::where('patient_id', $item->patient->id)->where('status_antrian', 'ARRIVED')->orWhere('status_antrian', 'FINISHED')->latest()->get();
 
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
@@ -117,7 +117,7 @@ class RawatJalanController extends Controller
         $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->with(['actionRates'])->get();
 
         return view('pages.rawatjalan.show', [
-            "title" => $title,
+            "title" => decrypt($title),
             "menu" => "In Patient",
             "item" => $item,
             "itemAss" => $itemAss,

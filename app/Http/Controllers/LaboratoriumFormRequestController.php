@@ -89,7 +89,7 @@ class LaboratoriumFormRequestController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])
+            return redirect()->route('rajal/show', ['id' => encrypt($id), 'title' => encrypt('Rawat Jalan')])
             ->with([
                 'success' => 'Berhasil Menambahkan Permintaan laboratorium',
                 'btn' => 'penunjang',
@@ -175,7 +175,7 @@ class LaboratoriumFormRequestController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('rajal/show', ['id' => $item->queue->id, 'title' => 'Rawat Jalan'])
+            return redirect()->route('rajal/show', ['id' => encrypt($item->queue->id), 'title' => encrypt('Rawat Jalan')])
             ->with([
                 'success' => 'Berhasil Memperbarui Permintaan laboratorium',
                 'btn' => 'penunjang',

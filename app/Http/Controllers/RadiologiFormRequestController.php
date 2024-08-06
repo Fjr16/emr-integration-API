@@ -72,7 +72,7 @@ class RadiologiFormRequestController extends Controller
         
         DB::commit();
         return redirect()
-            ->route('rajal/show', ['id' => $id, 'title' => 'Rawat Jalan'])
+            ->route('rajal/show', ['id' => encrypt($id), 'title' => encrypt('Rawat Jalan')])
             ->with([
                 'success' => 'Berhasil Membuat permintaan Pemeriksaan Radiologi',
                 'btn' => 'penunjang',
@@ -175,7 +175,7 @@ class RadiologiFormRequestController extends Controller
         
         DB::commit();
         return redirect()
-            ->route('rajal/show', ['id' => $item->queue->id, 'title' => 'Rawat Jalan'])
+            ->route('rajal/show', ['id' => encrypt($item->queue->id), 'title' => encrypt('Rawat Jalan')])
             ->with([
                 'success' => 'Berhasil Memperbarui permintaan Pemeriksaan Radiologi',
                 'btn' => 'penunjang',

@@ -106,7 +106,7 @@
                                 <td>{{ $queue->patient->name ?? '' }}</td>
                                 <td>{{ $queue->category ?? '' }}</td>
                                 <td>{{ $queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('rajal/show', [$queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
+                                <td><a href="{{ route('rajal/show', [encrypt($queue->id), encrypt('Rawat Jalan')]) }}" class="btn btn-sm btn-success">Show</a></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -136,7 +136,7 @@
                                 <td>{{ $queue->patient->name ?? '' }}</td>
                                 <td>{{ $queue->category ?? '' }}</td>
                                 <td>{{ $queue->status_antrian ?? '' }}</td>
-                                <td><a href="{{ route('rajal/show', [$queue->id, 'RAWAT JALAN']) }}" class="btn btn-sm btn-success">Show</a></td>
+                                <td><a href="{{ route('rajal/show', [encrypt($queue->id), encrypt('Rawat Jalan')]) }}" class="btn btn-sm btn-success">Show</a></td>
                             </tr>
                             @endforeach
                         </tbody>

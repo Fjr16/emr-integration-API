@@ -87,7 +87,7 @@
                 <div class="">
                     <h6 class="text-center bg-dark text-white py-2">PERSETUJUAN UNTUK PERAWATAN DAN PENGOBATAN</h6>
                     <ol>
-                        <li> Saya menyetujui untuk perawatan di RSK Bedah Ropanasuri sebagai pasien rawat jalan tergantung
+                        <li> Saya menyetujui untuk perawatan di RS **** **** sebagai pasien rawat jalan tergantung
                             kepada rencana asuhan sesuai dengan kebutuhan pasien.</li>
                         <li>
                             Saya mengetahui bahwa saya memiliki kondisi yang membutuhkan perawatan medis, saya mengizinkan
@@ -126,7 +126,7 @@
                             <li>
                                 Saya mengerti dan memahami bahwa saya memiliki hak untuk menyetujui atau menolak
                                 persetujuan,
-                                untuk setiap prosedur / terapi dan saya memahami dan menyadari bahwa RSK Bedah Ropanasuri
+                                untuk setiap prosedur / terapi dan saya memahami dan menyadari bahwa RS **** ****
                                 atau
                                 dokter tidak bertanggung jawab atas hasil yang merugikan saya.
                             </li>
@@ -143,8 +143,7 @@
                             perawatan medis dan rencana pengobatan.
                         </li>
                         <li>
-                            Saya telah mendapat informasi tentang "Hak dan Tanggung jawab Pasien di RSK Bedah Ropanasuri
-                            Padang
+                            Saya telah mendapat informasi tentang "Hak dan Tanggung jawab Pasien di RS **** ****
                             melalu banner, leaflet, dan form tertulis yang disediakan oleh petugas.
                         </li>
                     </ol>
@@ -164,7 +163,7 @@
                                     mengizinkan</option>
                             </select>
                         </span>
-                        RSK Bedah Ropanasuri untuk difoto/direkam dan dikutsertakan dalam survei.
+                        RS **** **** untuk difoto/direkam dan dikutsertakan dalam survei.
                     </p>
                     <div class="mb-3">
                         <p class="d-flex">
@@ -192,7 +191,7 @@
                     </h6>
                     <ol>
                         <li>
-                            Saya telah memahami bahwa RSK Bedah Ropanasuri bertanggung jawab atas semua harta benda yang
+                            Saya telah memahami bahwa RS **** **** bertanggung jawab atas semua harta benda yang
                             dibawa pasien ODC (Pelayanan Satu Hani) pasien rawat inap, serta untuk pasien yang tidak mampu
                             mengamb keputusan untuk menjaga keamanan harta benda mereka karena tidak sadarkan diri atau
                             tidak didampingi penunggu. Dan apabila saya membutuhkan, maka saya dapat menitipkan
@@ -212,12 +211,12 @@
                     <ol>
                         <li>
                             Saya memahami informasi yang ada di dalam diri saya, termasuk diagnosis, hasil laboratorium, dan
-                            hasil tes diagnostik yang akan digunakan untuk perawatan medis, RSK Bedah Ropanasuri akan
+                            hasil tes diagnostik yang akan digunakan untuk perawatan medis, RS **** **** akan
                             menjamin
                             kerahasiaannya.
                         </li>
                         <li>
-                            Saya memberi wewenang kepada RSK Bedah Ropanasuri untuk memberikan informasi tentang rahasia
+                            Saya memberi wewenang kepada RS **** **** untuk memberikan informasi tentang rahasia
                             kedokteran saya bila diperlukan untuk memproses klaim Asuransi termasuk namun tidak terbatas
                             pada
                             BPJS Kesehatan, BPJS Ketenagakerjaan, asuransi kesehatan lainnya, Perusahaan, Dinas Kesehatan,
@@ -291,7 +290,7 @@
                         PENDAPAT KEDUA (SECOND OPINION)
                     </h6>
                     <p>
-                        RSK Bedah Ropanasuri memfasilitasi permintaan pasien untuk mencari pendapat kedua (second opinion)
+                        RS **** **** memfasilitasi permintaan pasien untuk mencari pendapat kedua (second opinion)
                         tanpa perlu khawatir akan mempengaruhi perawatannya selama di dalam/luar Rumah Sakit
                     </p>
                 </div>
@@ -300,7 +299,7 @@
                         PENYAMPAIAN KELUHAN/PENDAPAT SELAMA PERAWATAN
                     </h6>
                     <p>
-                        RSK Bedah Ropanasuri meneydiakan fasilitas kepada pasien dan keluarga untuk menyampaikan
+                        RS **** **** meneydiakan fasilitas kepada pasien dan keluarga untuk menyampaikan
                         keluhan/pendapat sejak pasien mengakses pelayanan, selama menjalani masa perawatan dan pada proses
                         pemulangan melalui:
                     </p>
@@ -308,7 +307,7 @@
                         a. Pengisian kotak saran yang berada di IGD/Rawat jalan/Rawat Inap
                     </p>
                     <p>
-                        b. Melalul layanan pengaduan di Aplikasi WhatsApp: 0812-6729-2974
+                        b. Melalul layanan pengaduan di Aplikasi WhatsApp: 0813-7858-0551
                     </p>
                 </div>
                 <div class="">
@@ -316,7 +315,7 @@
                         INFORMASI TATA TERTIB BAGI PASIEN, PENGUNJUNG DAN PENUNGGU PASIEN
                     </h6>
                     <p>
-                        Saya telah menerima informasi tentang tata tertib yang diberlakukan oleh RSK Bedah Ropanasuri dan
+                        Saya telah menerima informasi tentang tata tertib yang diberlakukan oleh RS **** **** dan
                         saya beserta keluarga bersedia untuk mematuhinya.
                     </p>
                 </div>
@@ -325,8 +324,7 @@
                         INFORMASI BIAYA
                     </h6>
                     <p>
-                        Pasien umum / pribadi pembiayaan yang dikenakan mengacu kepada tarif pelayanan yang ada di RSK Bedah
-                        Ropanasuri Padang.
+                        Pasien umum / pribadi pembiayaan yang dikenakan mengacu kepada tarif pelayanan yang ada di RS **** ****.
                     </p>
                 </div>
                 <div class="">
@@ -455,8 +453,7 @@
                                         </li>
                                         <li>
                                             Setiap pasien / pengunjung wajib
-                                            mematuhi tata tertib yang berlaku di RSK
-                                            Bedah Ropanasuri dan wajib melakukan
+                                            mematuhi tata tertib yang berlaku di RS **** **** dan wajib melakukan
                                             screening sebelum memasuki Rumah Sakit
                                         </li>
                                         <li>
@@ -481,21 +478,20 @@
                                             ruangan.
                                         </li>
                                         <li>
-                                            Dilarang keras merokok di lingkungan RSK
-                                            Bedah Ropanasuri bagi pasien,
+                                            Dilarang keras merokok di lingkungan RS **** **** bagi pasien,
                                             dan keluarga.
                                         </li>
                                         <li>
-                                            Pihak RSK Bedah Ropanasuri melarang
+                                            Pihak RS **** **** melarang
                                             kepada pasien dan keluarga untuk tidak
                                             membawa barang berharga ke rumah sakit,
                                             akan tetapi untuk pasien dengan kondisi
-                                            tertentu RSK Bedah Ropanasuri
+                                            tertentu RS **** ****
                                             menyediakan tempat penyimpanan harta
                                             sementara.
                                         </li>
                                         <li>
-                                            Pihak RSK Bedah Ropanasuri tidak
+                                            Pihak RS **** **** tidak
                                             bertanggung jawab apabila terjadi
                                             kehilangan uang / barang berharga selama
                                             masa perawatan atau kunjungan.
@@ -503,22 +499,11 @@
                                         <li>
                                             Segala pembiayaan yang ada terkait dengan
                                             tatalaksana pelayanan mengacu kepada tarif
-                                            yang berlaku di RSK Bedah Ropanasuri.
+                                            yang berlaku di RS **** ****.
                                         </li>
                                     </ol>
                                 </td>
                             </tr>
-                            {{-- <tr>
-                                <td>
-                                    <p class="m-0 fw-bold">
-                                        Dengan tanda tangan saya dibawah ini, saya
-                                        menyatakan bahwa saya telah menerima
-                                        informasi, membaca, dan memahami item pada
-                                        Tata Tertib RSK Bedah
-                                        Ropanasuri.
-                                    </p>
-                                </td>
-                            </tr> --}}
                         </tbody>
                     </table>
 

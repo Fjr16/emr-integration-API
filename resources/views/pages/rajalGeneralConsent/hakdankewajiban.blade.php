@@ -339,8 +339,7 @@
                                 Dengan tanda saya dibawah ini, saya
                                 menyatakan bahwa saya telah menerima
                                 informasi, membaca, dan memahami item pada
-                                Hak dan Kewajiban Pasien RSK Bedah
-                                Ropanasuri.
+                                Hak dan Kewajiban Pasien RS **** ****.
                             </p>
                             <div class="row">
                                 <div class="col-5 text-center">
@@ -385,22 +384,21 @@
         </div>
 
         {{-- Footer --}}
-        <div class="d-flex flex-row justify-content-between mt-5">
+        <div class="d-flex flex-row justify-content-between mt-5 PT-5">
             <div class="d-flex flex-row text-center" style="font-size: 5pt">
                 <div class="col col-3 text-center">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
+                    <p>Jl. Air Tawar Barat No. 8, Padang Timur, Kota Padang, Sumatera Barat</p>
                 </div>
                 <div class="col col-3 text-center">
                     <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
+                    <p>RS*******ar@gmail.com</p>
                 </div>
                 <div class="col col-3 text-center">
                     <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                    <p>(0751) 31938 - ***** - ***** - ****</p>
                 </div>
             </div>
-            <p class="mt-2"><span class="border border-dark">RM 02.RJ.PM</span></p>
         </div>
     </div>
 

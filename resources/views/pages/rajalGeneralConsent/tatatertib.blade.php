@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TATA TERTIB RAWAT INAP</title>
+    <title>TATA TERTIB RS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -224,8 +224,7 @@
                                 </li>
                                 <li>
                                     Setiap pasien / pengunjung wajib
-                                    mematuhi tata tertib yang berlaku di RSK
-                                    Bedah Ropanasuri dan wajib melakukan
+                                    mematuhi tata tertib yang berlaku di RS **** **** dan wajib melakukan
                                     screening sebelum memasuki Rumah Sakit
                                 </li>
                                 <li>
@@ -249,21 +248,20 @@
                                     ruangan.
                                 </li>
                                 <li>
-                                    Dilarang keras merokok di lingkungan RSK
-                                    Bedah Ropanasuri bagi pasien,
+                                    Dilarang keras merokok di lingkungan RS **** **** bagi pasien,
                                     dan keluarga.
                                 </li>
                                 <li>
-                                    Pihak RSK Bedah Ropanasuri melarang
+                                    Pihak RS **** **** melarang
                                     kepada pasien dan keluarga untuk tidak
                                     membawa barang berharga ke rumah sakit,
                                     akan tetapi untuk pasien dengan kondisi
-                                    tertentu RSK Bedah Ropanasuri
+                                    tertentu RS **** ****
                                     menyediakan tempat penyimpanan harta
                                     sementara.
                                 </li>
                                 <li>
-                                    Pihak RSK Bedah Ropanasuri tidak
+                                    Pihak RS **** **** tidak
                                     bertanggung jawab apabila terjadi
                                     kehilangan uang / barang berharga selama
                                     masa perawatan atau kunjungan.
@@ -271,7 +269,7 @@
                                 <li>
                                     Segala pembiayaan yang ada terkait dengan
                                     tatalaksana pelayanan mengacu kepada tarif
-                                    yang berlaku di RSK Bedah Ropanasuri.
+                                    yang berlaku di RS **** ****.
                                 </li>
                             </ol>
                         </td>
@@ -282,8 +280,7 @@
                                 Dengan tanda tangan saya dibawah ini, saya
                                 menyatakan bahwa saya telah menerima
                                 informasi, membaca, dan memahami item pada
-                                Tata Tertib RSK Bedah
-                                Ropanasuri.
+                                Tata Tertib RS **** ****.
                             </p>
                             <div class="row">
                                 <div class="col-5 text-center">
@@ -328,36 +325,23 @@
         </div>
 
         {{-- Footer --}}
-        <div class="d-flex flex-row justify-content-between mt-5">
+        <div class="d-flex flex-row justify-content-between mt-5 PT-5">
             <div class="d-flex flex-row text-center" style="font-size: 5pt">
                 <div class="col col-3 text-center">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
+                    <p>Jl. Air Tawar Barat No. 8, Padang Timur, Kota Padang, Sumatera Barat</p>
                 </div>
                 <div class="col col-3 text-center">
                     <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
+                    <p>RS*******ar@gmail.com</p>
                 </div>
                 <div class="col col-3 text-center">
                     <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                    <p>(0751) 31938 - ***** - ***** - ****</p>
                 </div>
             </div>
-            <p class="mt-2"><span class="border border-dark">RM 03.RJ.PM</span></p>
         </div>
     </div>
-
-    <script>
-        // Mendapatkan tanggal saat ini
-        var today = new Date();
-        var options = {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        };
-        document.getElementById("tanggal").innerText =
-            today.toLocaleDateString("id-ID", options);
-    </script>
 </body>
 
 </html>

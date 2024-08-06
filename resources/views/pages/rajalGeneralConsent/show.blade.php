@@ -257,8 +257,7 @@
                         <td>
                             <ol class="m-0">
                                 <li>
-                                    Saya menyetujui untuk perawatan di RSK
-                                    Bedah Ropanasuri sebagai pasien rawat
+                                    Saya menyetujui untuk perawatan di RS **** **** sebagai pasien rawat
                                     inap tergantung kepada rencana asuhan
                                     sesuai dengan kebutuhan pasien.
                                 </li>
@@ -317,8 +316,7 @@
                                             menyetujui atau menolak
                                             persetujuan, untuk setiap
                                             prosedur/terapi dan saya
-                                            memahami dan menyadari bahwa RSK
-                                            Bedah Ropanasuri atau dokter
+                                            memahami dan menyadari bahwa RS **** **** atau dokter
                                             tidak bertanggung jawab atas
                                             hasil yang merugikan saya.
                                         </li>
@@ -346,8 +344,7 @@
                             </p>
                             <p style="margin-top: -4mm">
                                 Saya telah mendapat informasi tentang "Hak
-                                dan Tanggung Jawab Pasien" di RSK Bedah
-                                Ropanasuri Padang melalui banner, leaflet,
+                                dan Tanggung Jawab Pasien" di RS **** **** melalui banner, leaflet,
                                 dan form tertulis yang disediakan oleh
                                 petugas
                             </p>
@@ -367,7 +364,7 @@
                             <ol>
                                 <li>
                                     Saya {{ $item->kebutuhan_privasi1 ?? '.........' }}
-                                    RSK Bedah Ropanasuri untuk difoto /
+                                    RS **** **** untuk difoto /
                                     direkam dan diikutsertakan dalam survei.
                                 </li>
                                 <li class="mb-3">
@@ -404,18 +401,17 @@
                 <div class="d-flex flex-row text-center" style="font-size: 5pt">
                     <div class="col col-3 text-center">
                         <i class="bi bi-geo-alt-fill"></i>
-                        <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
+                        <p>Jl. Air Tawar Barat No. 8, Padang Timur, Kota Padang, Sumatera Barat</p>
                     </div>
                     <div class="col col-3 text-center">
                         <i class="bi bi-envelope-at-fill"></i>
-                        <p>rskbropanasuripadang@gmail.com</p>
+                        <p>RS*******ar@gmail.com</p>
                     </div>
                     <div class="col col-3 text-center">
                         <i class="bi bi-telephone-fill"></i>
-                        <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                        <p>(0751) 31938 - ***** - ***** - ****</p>
                     </div>
                 </div>
-                <p class="mt-2"><span class="border border-dark">RM 01.RJ.PM.REV.1-1/2</span></p>
             </div>
         </div>
     </div>
@@ -486,12 +482,11 @@
                                     dalam diri saya, termasuk diagnosis,
                                     hasil laboratorium, dan hasil tes
                                     diagnostik yang akan digunakan untuk
-                                    perawatan medis, RSK Bedah Ropanasuri
+                                    perawatan medis, RS **** ****
                                     akan menjamin kerahasiaannya.
                                 </li>
                                 <li>
-                                    Saya memberi wewenang kepada RSK Bedah
-                                    Ropanasuri untuk memberikan informasi
+                                    Saya memberi wewenang kepada RS **** **** untuk memberikan informasi
                                     tentang rahasia kedokteran saya bila
                                     diperlukan untuk memproses klaim
                                     Asuransi termasuk namun tidak terbatas
@@ -537,7 +532,7 @@
                     <tr>
                         <td>
                             <p>
-                                RSK Bedah Ropanasuri memfasilitasi
+                                RS **** **** memfasilitasi
                                 permintaan pasien untuk mencari pendapat
                                 kedua (second opinion) tanpa perlu khawatir
                                 akan mempengaruhi perawatannya selama di
@@ -557,7 +552,7 @@
                     <tr>
                         <td>
                             <p>
-                                RSK Bedah Ropanasuri meneydiakan fasilitas
+                                RS **** **** meneydiakan fasilitas
                                 kepada pasien dan keluarga untuk
                                 menyampaikan keluhan pendapat sejak pasien
                                 mengakses pelayanan, selama menjalani masa
@@ -589,7 +584,7 @@
                         <td>
                             <p>
                                 Saya telah menerima informasi tentang tata tertib
-                                yang diberlakukan oleh RSK Bedah Ropanasuri dan saya beserta keluarga bersedia untuk
+                                yang diberlakukan oleh RS **** **** dan saya beserta keluarga bersedia untuk
                                 mematuhinya.
                             </p>
                         </td>
@@ -608,7 +603,7 @@
                             <p>
                                 Pasien umum / pribadi pembiayaan yang
                                 dikenakan mengacu kepada tarif pelayanan yang
-                                ada di RSK Bedah Ropanasuri Padang.
+                                ada di RS **** ****.
                             </p>
                         </td>
                     </tr>
@@ -678,21 +673,20 @@
 
         {{-- Footer --}}
         <div class="d-flex flex-row justify-content-between mt-5 PT-5">
-            <div class="d-flex flex-row text-center mt-5" style="font-size: 5pt">
+            <div class="d-flex flex-row text-center" style="font-size: 5pt">
                 <div class="col col-3 text-center">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <p>Jl. Aur No. 8, Ujung Gurun, Padang Barat, Kota Padang, Sumatera Barat</p>
+                    <p>Jl. Air Tawar Barat No. 8, Padang Timur, Kota Padang, Sumatera Barat</p>
                 </div>
                 <div class="col col-3 text-center">
                     <i class="bi bi-envelope-at-fill"></i>
-                    <p>rskbropanasuripadang@gmail.com</p>
+                    <p>RS*******ar@gmail.com</p>
                 </div>
                 <div class="col col-3 text-center">
                     <i class="bi bi-telephone-fill"></i>
-                    <p>(0751) 31938 - 33854 - 25735 - 8955227</p>
+                    <p>(0751) 31938 - ***** - ***** - ****</p>
                 </div>
             </div>
-            <p class="mt-2 pt-5"><span class="border border-dark">RM 01.RJ.PM.REV.1-2/2</span></p>
         </div>
     </div>
 </body>

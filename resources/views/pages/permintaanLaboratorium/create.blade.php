@@ -222,7 +222,7 @@
                     <button type="submit" class="btn btn-outline-primary me-2"><i class="bx bx-save"></i> Submit</button>
                     {{ session()->flash('btn', 'penunjang'); }}
                     {{ session()->flash('penunjang', 'laboratorium'); }}
-                    <a href="{{ route('rajal/show', ['id' => $item->id, 'title' => 'Rawat Jalan']) }}" class="btn btn-outline-danger"><i class="bx bx-left-arrow"></i> Kembali</a>
+                    <a href="{{ route('rajal/show', ['id' => encrypt($item->id), 'title' => encrypt('Rawat Jalan')]) }}" class="btn btn-outline-danger"><i class="bx bx-left-arrow"></i> Kembali</a>
                 </div>
             </div>
         </form>
