@@ -78,7 +78,7 @@
                                           <li>
                                             <hr class="dropdown-divider">
                                           </li>
-                                          <li> <a class="dropdown-item" href="{{ route('asesmen/awal/perawat.create_step_one', $item->id) }}">Perawat</a> </li>
+                                          <li> <a class="dropdown-item" href="{{ route('asesmen/awal/perawat.create_step_one', encrypt($item->id)) }}">Perawat</a> </li>
                                           <li> <a class="dropdown-item" href="{{ route('rajal/show', ['id' => encrypt($item->id), 'title' => encrypt($title)]) }}">Dokter</a> </li>
                                         </ul>
                                     </div>

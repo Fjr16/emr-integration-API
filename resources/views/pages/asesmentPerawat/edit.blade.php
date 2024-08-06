@@ -38,7 +38,7 @@
     <div class="card">
         <div class="card-header">
             <div class="col-12 text-start mb-2">
-                <a href="{{ route('asesmen/awal/perawat.create_step_one', $item->queue->id) }}" class="btn btn-dark btn-sm">Kembali</a>
+                <a href="{{ route('asesmen/awal/perawat.create_step_one', encrypt($item->queue->id)) }}" class="btn btn-dark btn-sm">Kembali</a>
             </div>
         </div>
         <div class="card-body">

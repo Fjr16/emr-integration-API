@@ -26,7 +26,7 @@ class AsesmentPerawatController extends Controller
             'Resiko Tinggi (ditemukan a dan b)'
 
         ];
-        $item = Queue::find($id);
+        $item = Queue::find(decrypt($id));
         $itemAss = $item->perawatInitialAssesment;
         return view('pages.asesmentPerawat.print', [
             'title' => 'Print Assesment Perawat',
@@ -48,7 +48,7 @@ class AsesmentPerawatController extends Controller
     }
 
     public function create_step_one($id){
-        $item = Queue::find($id);
+        $item = Queue::find(decrypt($id));
         $itemAss = $item->perawatInitialAssesment;
 
         if (!Session::has('perawat')) {
@@ -237,7 +237,7 @@ class AsesmentPerawatController extends Controller
         return $dataToUpdate;
     } 
     public function edit($id){
-        $item = PerawatInitialAsesment::find($id);
+        $item = PerawatInitialAsesment::find(decrypt($id));
 
         if (!Session::has('perawat')) {
             Session::flash('perawat', 'anamnesis');

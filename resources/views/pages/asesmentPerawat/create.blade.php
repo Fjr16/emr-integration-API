@@ -41,8 +41,8 @@
             <div class="card-header pb-0">
                 <div class="row">
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('asesmen/awal/perawat.print', $item->id) }}" class="btn btn-sm btn-dark me-2" target="_blank"><i class="bx bx-printer"></i></a>
-                        <a href="{{ route('asesmen/awal/perawat.edit', $itemAss->id) }}" class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>
+                        <a href="{{ route('asesmen/awal/perawat.print', encrypt($item->id)) }}" class="btn btn-sm btn-dark me-2" target="_blank"><i class="bx bx-printer"></i></a>
+                        <a href="{{ route('asesmen/awal/perawat.edit', encrypt($itemAss->id)) }}" class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>
                     </div>
                 </div>
                 <div class="row">
