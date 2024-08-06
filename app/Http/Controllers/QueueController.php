@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DoctorPoli;
 use App\Models\Queue;
 use App\Models\DoctorsSchedule;
 use App\Models\Patient;

@@ -40,18 +40,6 @@
                 <input type="text" value="{{ $item->patient->noka ?? '-' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>
-        {{-- <div class="row mb-3">
-            <label for="basic-default-name" class="col-sm-3 col-form-label">No Rujukan</label>
-            <div class="col-sm-9">
-                <input type="text" value="{{ $item->no_rujukan ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="basic-default-name" class="col-sm-3 col-form-label">Diagnosa Rujukan</label>
-            <div class="col-sm-9">
-                <input type="text" value="{{ $item->last_diagnostic ?? '' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
-            </div>
-        </div> --}}
     </div>
     <div class="modal-footer">
         <a href="{{ route('antrian/konfirmasi.update', $item->id) }}" class="btn btn-outline-primary btn-sm">Konfirmasi</a>

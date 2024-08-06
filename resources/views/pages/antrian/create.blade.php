@@ -221,9 +221,17 @@
                         <td>{{ $antrian->dpjp->poliklinik->name ?? '' }}</td>
                         <td>{{ $antrian->last_diagnostic ?? 'TIDAK ADA' }}</td>
                         <td>
-                            <span class="badge {{ $antrian->status_antrian == 'ARRIVED' ?  'bg-primary' : ($antrian->status_antrian == 'FINISHED' ? 'bg-sucess' : ($antrian->status_antrian == 'CANCEL' ? 'bg-danger' : 'bg-warning') ) }}">
-                                {{ $antrian->status_antrian == 'ARRIVED' ?  'SEDANG DILAYANI' : ($antrian->status_antrian == 'FINISHED' ? 'SELESAI' : ($antrian->status_antrian == 'CANCEL' ? 'ANTRIAN BATAL' : 'BELUM DILAYANI') ) }}
-                            </span>
+                            @if ($antrian->status_antrian == 'FINISHED')
+                                <span class="badge bg-success">SUDAH DILAYANI</span>
+                            @elseif ($antrian->status_antrian == 'WAITING')
+                                <span class="badge bg-warning">BELUM DILAYANI</span>
+                            @elseif ($antrian->status_antrian == 'ARRIVED')
+                                <span class="badge bg-primary">SEDANG DILAYANI</span>
+                            @elseif ($antrian->status_antrian == 'CANCEL')
+                                <span class="badge bg-danger">ANTRIAN BATAL</span>
+                            @else
+                                <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

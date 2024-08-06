@@ -50,7 +50,6 @@
                         <th>Nama</th>
                         <th>Poli / Dokter</th>
                         <th>No Kartu BPJS</th>
-                        {{-- <th>Diagnosa Rujukan</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -76,16 +75,6 @@
                                 @else     
                                     @if ($item->rajalGeneralConsent)
                                         <div class="d-flex flex-row">
-                                        {{-- <a class="btn btn-warning btn-sm" href="{{ route('rajal/general/consent.edit', $item->id) }}">
-                                            <i class='bx bx-edit-alt me-1'></i>
-                                        </a>
-                                        <form action="{{ route('rajal/general/consent.destroy', $item->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm mx-2"
-                                                onclick="return confirm('Yakin ingin menghapus data?')"><i
-                                                    class="bx bx-trash me-1"></i></button>
-                                        </form> --}}
                                         <div class="btn-group dropend">
                                             <button type="button" class="btn btn-dark btn-sm dropdown-toggle hide-arrow"
                                                 data-bs-toggle="dropdown">
@@ -128,14 +117,16 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                @if ($item->status_antrian == 'WAITING')
-                                    <span class="badge bg-warning">BELUM DILAYANI</span>
-                                @elseif ($item->status_antrian == 'CANCEL')
-                                    <span class="badge bg-danger">ANTRIAN BATAL</span>
-                                @elseif($item->status_antrian == 'ARRIVED')
-                                    <span class="badge bg-primary">SEDANG DILAYANI</span>
-                                @else
+                                @if ($antrian->status_antrian == 'FINISHED')
                                     <span class="badge bg-success">SUDAH DILAYANI</span>
+                                @elseif ($antrian->status_antrian == 'WAITING')
+                                    <span class="badge bg-warning">BELUM DILAYANI</span>
+                                @elseif ($antrian->status_antrian == 'ARRIVED')
+                                    <span class="badge bg-primary">SEDANG DILAYANI</span>
+                                @elseif ($antrian->status_antrian == 'CANCEL')
+                                    <span class="badge bg-danger">ANTRIAN BATAL</span>
+                                @else
+                                    <span class="badge bg-danger">TIDAK DIKETAHUI</span>
                                 @endif
                             </td>
                             <td>{{ $item->no_antrian ?? '' }}</td>

@@ -103,6 +103,12 @@ class KasirController extends Controller
                 'user_id' => Auth::user()->id,
             ]);
 
+            if ($item->status == 'FINISHED') {
+                $item->queue()->update([
+                    'status_antrian' => 'FINISHED',
+                ]);
+            }
+
             DB::commit();
             return redirect()->route('rajal/kasir/pembayaran/index')->with('success', 'Status Berhasil Diperbarui');
 

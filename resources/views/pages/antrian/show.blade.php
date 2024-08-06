@@ -43,9 +43,17 @@
         <div class="row mb-3">
           <label for="basic-default-name" class="col-sm-3 col-form-label">Status</label>
           <div class="col-sm-9">
-            <span class="badge {{ $item->status_antrian == 'ARRIVED' ?  'bg-primary' : ($item->status_antrian == 'FINISHED' ? 'bg-sucess' : ($item->status_antrian == 'CANCEL' ? 'bg-danger' : 'bg-warning') ) }}">
-              {{ $item->status_antrian == 'ARRIVED' ?  'SEDANG DILAYANI' : ($item->status_antrian == 'FINISHED' ? 'SELESAI' : ($item->status_antrian == 'CANCEL' ? 'ANTRIAN BATAL' : 'BELUM DILAYANI') ) }}
-            </span>
+            @if ($antrian->status_antrian == 'FINISHED')
+                <span class="badge bg-success">SUDAH DILAYANI</span>
+            @elseif ($antrian->status_antrian == 'WAITING')
+                <span class="badge bg-warning">BELUM DILAYANI</span>
+            @elseif ($antrian->status_antrian == 'ARRIVED')
+                <span class="badge bg-primary">SEDANG DILAYANI</span>
+            @elseif ($antrian->status_antrian == 'CANCEL')
+                <span class="badge bg-danger">ANTRIAN BATAL</span>
+            @else
+                <span class="badge bg-danger">TIDAK DIKETAHUI</span>
+            @endif
           </div>
         </div>
         <div class="card bg-primary p-1">
