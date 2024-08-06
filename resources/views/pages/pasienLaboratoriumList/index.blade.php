@@ -84,7 +84,7 @@
       </thead>
       <tbody>
         @foreach ($data as $item)    
-        <tr class="{{ $item->tipe_permintaan == 'Urgent' ? 'text-danger' : '' }}">
+        <tr class="{{ $item->tipe_permintaan == 'Urgent' ? 'table-danger' : '' }}">
           <td>
             @if ($item->laboratoriumRequestDetails)    
               @if ($item->status == 'WAITING')    
@@ -109,14 +109,14 @@
                     <span class="badge bg-danger"><i class="bx bx-x"></i> BATAL</span>
                   @elseif($item->status == 'ACCEPTED')
                     <span class="badge bg-primary"><i class="bx bx-check"></i> DITERIMA</span>
-                  @elseif($item->status == 'ONGOING')
+                  @elseif($item->status == 'UNVALIDATE')
                     <span class="badge bg-primary"><i class='bx bx-search-alt-2'></i> SEDANG DIPERIKSA</i> </span>
                   @elseif($item->status == 'FINISHED')
                     <span class="badge bg-success"><i class="bx bx-check"></i> SELESAI</span>
                   @endif
               @endif
             @else
-              <a class="btn btn-success btn-sm" href="{{ route('laboratorium/PK/request.create', $item->laboratoriumRequest->id) }}">Edit Data</a>
+              <span class="badge bg-danger">DATA ERROR !!</span>
             @endif
           </td>
           <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->queue->patient->name ?? '-' }}</td>

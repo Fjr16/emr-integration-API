@@ -63,7 +63,7 @@
                         </button>
                         <ul class="dropdown-menu">
                           @if ($item->status != 'WAITING')
-                            <li> <a class="dropdown-item text-info" href="{{ route('rajal/farmasi/serahkan.obat', $item->id) }}"><i class='bx bx-task me-1'></i> Serahkan Obat</a> </li>
+                            <li> <a class="dropdown-item text-info" href="{{ route('rajal/farmasi/serahkan.obat', encrypt($item->id)) }}"><i class='bx bx-task me-1'></i> Serahkan Obat</a> </li>
                             <li>
                               <hr class="dropdown-divider">
                             </li>
@@ -112,9 +112,9 @@
                   @endif
                 </td>
                 <td>
-                  @if ($item->status == 'WAITING')                                    
+                  @if ($item->queue->kasirPatient->status == 'WAITING')                                    
                       <span class="badge bg-danger">BELUM BAYAR</span>
-                  @elseif ($item->status == 'FINISHED')
+                  @elseif ($item->queue->kasirPatient->status == 'FINISHED')
                       <span class="badge bg-success">SUDAH BAYAR</span>
                   @else
                       <span class="badge bg-danger">TIDAK DIKETAHUI</span>

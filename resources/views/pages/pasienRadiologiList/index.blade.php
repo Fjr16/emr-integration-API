@@ -111,7 +111,7 @@
                     </li>
                   @endif
                   <li>
-                    <a class="dropdown-item text-primary" href="{{ route('radiologi/patient.create', $item->id) }}">
+                    <a class="dropdown-item text-primary" href="{{ route('radiologi/patient.create', encrypt($item->id)) }}">
                       <i class='bx bx-show-alt me-1'></i>
                         Input Hasil
                     </a>
@@ -119,7 +119,7 @@
                 </ul>
               </div>
             @elseif ($item->status == 'FINISHED')
-              <a class="btn btn-sm btn-dark" target="_blank" href="{{ route('radiologi/patient/hasil.printAll', $item->id) }}"><i class="bx bx-printer"></i> Print</a>
+              <a class="btn btn-sm btn-dark" target="_blank" href="{{ route('radiologi/patient/hasil.printAll', encrypt($item->id)) }}"><i class="bx bx-printer"></i> Print</a>
             @else
                 <span class="badge bg-danger">{{ $item->status ?? 'TIDAK DIKETAHUI' }}</span>
             @endif

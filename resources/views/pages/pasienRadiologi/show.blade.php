@@ -14,19 +14,26 @@
   @endif
   <div class="card">
     <div class="card-header">
-      <h5 class="m-0">Hasil Permintaan Radiologi Pasien
-        <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->queue->patient->name ?? ''}} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})</span>
-      </h5>
-      <h6 class="fw-bold mt-2">
-        Status: 
-        @if ($item->status == 'ACCEPTED')
-          <span class="badge bg-primary ms-1">MENUNGGU HASIL</span>
-        @elseif($item->status == 'ONGOING')
-          <span class="badge bg-danger ms-1">BELUM DIVALIDASI</span>
-        @else
-          <span class="badge bg-success ms-1">SUDAH VALIDASI</span>
-        @endif
-      </h6>
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <h5 class="m-0">Hasil Permintaan Radiologi Pasien
+            <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->queue->patient->name ?? ''}} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})</span>
+          </h5>
+          <h6 class="fw-bold mt-2">
+            Status: 
+            @if ($item->status == 'ACCEPTED')
+              <span class="badge bg-primary ms-1">MENUNGGU HASIL</span>
+            @elseif($item->status == 'ONGOING')
+              <span class="badge bg-danger ms-1">BELUM DIVALIDASI</span>
+            @else
+              <span class="badge bg-success ms-1">SUDAH VALIDASI</span>
+            @endif
+          </h6>
+        </div>
+        <div class="">
+          <a href="{{ route('radiologi/patient/queue.index') }}" class="btn btn-sm btn-outline-danger"><i class="bx bx-left-arrow"></i> Kembali</a>
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <table class="table">
@@ -56,7 +63,7 @@
                       </button>
                     </li>
                   @endif
-                  <a class="dropdown-item" href="{{ route('radiologi/patient/hasil.show', $detail->id) }}">
+                  <a class="dropdown-item" target="_blank" href="{{ route('radiologi/patient/hasil.show', $detail->id) }}">
                       <i class="bx bx-printer me-1"></i>
                       Print
                   </a>

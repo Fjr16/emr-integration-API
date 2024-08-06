@@ -114,7 +114,7 @@
                     </li>       
                   @endif
                   <li>
-                    <a class="dropdown-item text-primary" href="{{ route('laboratorium/patient/hasil.create', $item->id) }}">
+                    <a class="dropdown-item text-primary" href="{{ route('laboratorium/patient/hasil.create', encrypt($item->id)) }}">
                       <i class="bx bx-cloud-upload"></i>
                       Edit / input Hasil
                     </a>
@@ -122,7 +122,7 @@
                 </div>
               </div>
             @elseif ($item->status == 'FINISHED')
-              <a class="btn btn-sm btn-dark pt-2 ms-1" target="blank" href="{{ route('laboratorium/patient/hasil.show', $item->id) }}">
+              <a class="btn btn-sm btn-dark pt-2 ms-1" target="blank" href="{{ route('laboratorium/patient/hasil.show', encrypt($item->id)) }}">
                 <i class="bx bx-printer me-1"></i>
                 Print
               </a>

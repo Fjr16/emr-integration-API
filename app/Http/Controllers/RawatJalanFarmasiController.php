@@ -326,7 +326,7 @@ class RawatJalanFarmasiController extends Controller
 
     public function serahkanObat($id)
     {
-        $item = RajalFarmasiPatient::find($id);
+        $item = RajalFarmasiPatient::find(decrypt($id));
         return view('pages.pasienfarmasi.penyerahan', [
             "title" => "Farmasi",
             "menu" => "In Patient",
@@ -340,6 +340,7 @@ class RawatJalanFarmasiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * Perlu perbaikan
      */
     public function update(Request $request, $id)
     {
@@ -403,15 +404,52 @@ class RawatJalanFarmasiController extends Controller
         return redirect()->route('rajal/farmasi/create', $itemInvoice->rajalFarmasiPatient->id)->with('success', 'Berhasil Diperbarui');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+
+    // pengurangan stok Obat
+    private function sinkronisasiStok($itemFarmasi) {
+        DB::beginTransaction();
+        $errors = [];
+        try {
+            foreach ($itemFarmasi->rajalFarmasiObatDetails->whereNotNull('medicine_id') as $detail) {
+                $medicineStok = MedicineStok::findOrFail($detail->medicine_stok_id);
+                if ($medicineStok->stok < $detail->jumlah) {
+                    $errors[] = 'Stok Obat ' . ($detail->medicine->name ?? '') . ' Tidak Mencukupi';
+                    continue;
+                }
+    
+                $newStok = $medicineStok->stok - $detail->jumlah;
+                $medicineStok->update([
+                    'stok' => $newStok,
+                ]);
+            }
+
+            if (!empty($errors)) {
+                DB::rollBack();
+                return response()->json([
+                    'messages' => $errors,
+                    'code' => 501,
+                ], 501);
+            }
+
+            DB::commit();
+            return response()->json([
+                'message' => 'success',
+                'code' => 200,
+            ], 200);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $e->getMessage(),
+                'code' => 500,
+            ], 500);
+        } catch (ModelNotFoundException $mn){
+            DB::rollBack();
+            return response()->json([
+                'message' => $mn->getMessage(),
+                'code' => 500,
+            ], 500);
+        }
     }
 
     public function updateStatus(Request $request, $id)
@@ -436,6 +474,18 @@ class RawatJalanFarmasiController extends Controller
                 ]);
             }
 
+            if ($item->status == 'FINISHED') {
+                $res = $this->sinkronisasiStok($item);
+                if ($res->getStatusCode() === 501 ) {
+                    DB::rollBack();
+                    $errors = $res->getOriginalContent()['messages'];
+                    return back()->with('exceptions', $errors);
+                }elseif($res->getStatusCode() === 500){
+                    DB::rollBack();
+                    return back()->with('error', $res->getOriginalContent()['messages']);
+                }
+            }
+
             DB::commit();
             return redirect()->route('rajal/farmasi/index')->with('success', 'Status Berhasil Diperbarui');
 
@@ -449,125 +499,5 @@ class RawatJalanFarmasiController extends Controller
             DB::rollBack();
             return back()->with('error', 'Data Tidak Ditemukan: ' . $m->getMessage());
         }
-    }
-
-    // menambahkan penjualan ke billing
-     // $queue = Queue::find($item->queue->id);
-            // if ($queue->kasirPatient) {
-            //     $itemKasir = KasirPatient::find($queue->kasirPatient->id);
-            //     $total = $queue->kasirPatient->total + $item->grand_total ?? 0;
-
-            //     $itemKasir->update([
-            //         'total' => $total,
-            //     ]);
-            // } else {
-            //     $itemKasir =  KasirPatient::create([
-            //         'queue_id' => $queue->id,
-            //         'user_id' => null,
-            //         'total' => $total,
-            //         'status' => 'PENDING',
-            //     ]);
-            // }
-            // foreach ($item->rajalFarmasiObatDetails as $detail) {
-            //     DetailKasirPatient::create([
-            //         'kasir_patient_id' => $itemKasir->id,
-            //         'name' => $detail->medicine->name,
-            //         'tanggal' => $detail->medicine->created_at,
-            //         'category' => 'Medicine',
-            //         'jumlah' => $detail->jumlah,
-            //         'tarif' => $detail->harga_satuan,
-            //     ]);
-            // }
-
-    // public function updateStatusRME(Request $request, $id){
-    //     $stts = $request->input('status');
-    //     $rajal = RawatJalanPatient::where('queue_id', $id)->first();
-    //     $queue = Queue::find($id);
-
-    //     // if($rajal->rawatJalanPoliPatient->status == 'SELESAI'){
-    //         if($stts == 'LABORATORIUM PA'){
-    //             if(!in_array('LABORATORIUM PA', $rajal->rajalRoadPatients->pluck('name')->toArray())){
-    //                 dd('laboratorium pa');
-    //                 // $itemReq = LaboratoriumRequest::create([
-    //                 //     'user_id' => Auth::user()->id,
-    //                 //     'patient_id' => $queue->patient->id,
-    //                 //     'queue_id' => $queue->id,
-    //                 //     'laboratorium_request_type_master_id' => $tipeReguler->id,
-    //                 //     'room_detail_id' => Auth::user()->room_detail_id ?? '',
-    //                 //     'tanggal' => date('Y-m-d'),
-    //                 // ]);
-    //                     // LaboratoriumPatientResult::create([
-    //                     //     'queue_id' => $queue->id,
-    //                     //     'laboratorium_request_id' => $itemReq->id,
-    //                     //     'status' => 'WAITING',
-    //                     // ]);
-    //             }else{
-    //                 return back()->with('forbidden', 'Antrian Telah Terdaftar Di Laboratorium PA, Silahkan Buat Antrian Baru');
-    //             }
-    //         }elseif($stts == 'RADIOLOGI'){
-    //             if(!in_array('RADIOLOGI', $rajal->rajalRoadPatients->pluck('name')->toArray())){
-    //                 $itemRad = RadiologiFormRequest::create([
-    //                     'user_id' => Auth::user()->id,
-    //                     'queue_id' => $queue->id,
-    //                     'patient_id' => $queue->patient->id,
-    //                     'room_detail_id' => Auth::user()->room_detail_id ?? '',
-    //                 ]);
-    //                 $item = RadiologiPatient::create([
-    //                     'queue_id' => $queue->id,
-    //                     'patient_id' => $queue->patient->id,
-    //                     'radiologi_form_request_id' => $itemRad->id,
-    //                     'status' => 'WAITING',
-    //                 ]);
-    //             }else{
-    //                 return back()->with('forbidden', 'Antrian Telah Terdaftar Di Radiologi, Silahkan Buat Antrian Baru');
-    //             }
-    //             // foreach ($rajal->rawatJalanPoliPatient->radiologiFormRequests as $reqRadiologi) {
-    //             //     $checkList = RadiologiPatient::where('queue_id', $rajal->queue_id)->where('radiologi_form_request_id', $reqRadiologi->id)->first();
-    //             //     if($checkList){
-    //             //         continue;
-    //             //     }
-
-    //                 // $detailIds = $item->radiologiFormRequest->radiologiFormRequestMasters()->where('radiologi_form_request_id', $item->radiologiFormRequest->id)->pluck('radiologi_form_request_details.id');
-    //                 // foreach($detailIds as $detailId){
-    //                 //     RadiologiPatientRequestDetail::create([
-    //                 //         'radiologi_patient_id' => $item->id,
-    //                 //         'radiologi_form_request_detail_id' => $detailId,
-    //                 //         'status' => 'WAITING',
-    //                 //     ]);
-    //                 // }
-    //             // }
-    //         }elseif($stts == 'LABORATORIUM PK'){
-    //             if(!in_array('LABORATORIUM PK', $rajal->rajalRoadPatients->pluck('name')->toArray())){
-    //                 $tipeReguler = LaboratoriumRequestTypeMaster::find(1);
-    //                 if($queue){
-    //                     $itemReq = LaboratoriumRequest::create([
-    //                         'user_id' => Auth::user()->id,
-    //                         'patient_id' => $queue->patient->id,
-    //                         'queue_id' => $queue->id,
-    //                         'laboratorium_request_type_master_id' => $tipeReguler->id,
-    //                         'room_detail_id' => Auth::user()->room_detail_id ?? '',
-    //                         'tanggal' => date('Y-m-d'),
-    //                     ]);
-    //                     LaboratoriumPatientResult::create([
-    //                         'queue_id' => $queue->id,
-    //                         'laboratorium_request_id' => $itemReq->id,
-    //                         'status' => 'WAITING',
-    //                     ]);
-    //                 }
-    //             }else{
-    //                 return back()->with('forbidden', 'Antrian Telah Terdaftar Di Laboratorium PK, Silahkan Buat Antrian Baru');
-    //             }
-    //         }
-    //         $checkRoad = $rajal->rajalRoadPatients->where('name', $stts)->first();
-    //         if(!$checkRoad)
-    //         RajalRoadPatient::create([
-    //             'rawat_jalan_patient_id' => $rajal->id,
-    //             'name' => $stts,
-    //         ]);
-    //     // }else{
-    //     //     return back()->with('forbidden', 'Gagal !! Status Pada Poli Belum Selesai');
-    //     // }
-
-    //     return back()->with('success', 'Status Berhasil Diperbarui');
-    // }
+    }   
 }

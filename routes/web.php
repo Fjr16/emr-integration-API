@@ -434,7 +434,7 @@ Route::delete('/rajal/konsul/internal/destroy/{id}', [KonsulInternalController::
     Route::put('/rajal/farmasi/update/status/{id}', [RawatJalanFarmasiController::class, 'updateStatus'])->name('rajal/farmasi/update/status.updateStatus');
     Route::post('/rajal/farmasi/store/{id}', [RawatJalanFarmasiController::class, 'store'])->name('rajal/farmasi/store');
     Route::get('/rajal/farmasi/edit/{id}', [RawatJalanFarmasiController::class, 'edit'])->name('rajal/farmasi/edit');
-    Route::put('/rajal/farmasi/update/{id}', [RawatJalanFarmasiController::class, 'update'])->name('rajal/farmasi/update');
+    // Route::put('/rajal/farmasi/update/{id}', [RawatJalanFarmasiController::class, 'update'])->name('rajal/farmasi/update');
     Route::delete('/rajal/farmasi/delete/{id}', [RawatJalanFarmasiController::class, 'destroy'])->name('rajal/farmasi/delete');
     Route::get('/rajal/farmasi/show/{id}', [RawatJalanFarmasiController::class, 'show'])->name('rajal/farmasi/show');
     Route::get('/rajal/farmasi/serahkan/obat/{id}', [RawatJalanFarmasiController::class, 'serahkanObat'])->name('rajal/farmasi/serahkan.obat');

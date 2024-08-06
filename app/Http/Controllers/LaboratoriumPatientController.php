@@ -38,7 +38,7 @@ class LaboratoriumPatientController extends Controller
     public function create($id)
     {
         $today = new DateTime(date('Y-m-d H:i:s'));
-        $item = LaboratoriumRequest::find($id);
+        $item = LaboratoriumRequest::find(decrypt($id));
         return view('pages.pasienLaboratorium.create', [
             "title" => "Antrian Laboratorium PK",
             "menu" => "Laboratorium PK",
@@ -130,7 +130,7 @@ class LaboratoriumPatientController extends Controller
      */
     public function show($id)
     {
-        $item = LaboratoriumRequest::find($id);
+        $item = LaboratoriumRequest::find(decrypt($id));
         return view('pages.surat.hasilpemeriksaanlabor', [
             "title" => "Laboratorium PK",
             "menu" => "Laboratorium PK",

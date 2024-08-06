@@ -145,7 +145,7 @@
                         <img src="{{ Storage::url($rad->ttd_dokter) }}" alt="{{ $rad->ttd_dokter }}" width="150" height="100">
                     </a>
                     <p class="m-0 text-decoration-underline">{{ $item->radiologiFormRequest->validator->name ?? '' }}</p>
-                    <p class="m-0">{{ $item->radiologiFormRequest->validator->poliklinik->name ?? '' }}</p>
+                    <p class="m-0">{{ $item->radiologiFormRequest->validator->sip ?? '' }}</p>
                 @else
                     <br>
                     <h6 class="fw-bold m-0">(UNVALIDATE)</h6>

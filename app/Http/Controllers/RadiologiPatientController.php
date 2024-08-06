@@ -37,7 +37,7 @@ class RadiologiPatientController extends Controller
     public function create($id)
     {
         $today = date('Y-m-d H:i:s');
-        $item = RadiologiFormRequest::find($id);
+        $item = RadiologiFormRequest::find(decrypt($id));
         return view('pages.pasienRadiologi.show', [
             "title" => "Antrian Radiologi",
             "menu" => "Radiologi",
@@ -63,7 +63,7 @@ class RadiologiPatientController extends Controller
     public function printAll($id)
     {
         $today = date('Y-m-d');
-        $rad = RadiologiFormRequest::with('radiologiFormRequestDetails')->find($id);
+        $rad = RadiologiFormRequest::find(decrypt($id));
         return view('pages.surat.hasilpemeriksaanradiologiAll', [
             "title" => "Radiologi",
             "menu" => "Radiologi",

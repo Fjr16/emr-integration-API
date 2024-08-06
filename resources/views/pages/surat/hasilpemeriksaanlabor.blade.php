@@ -233,6 +233,20 @@
                     {{ $item->kesan_anjuran ?? '' }}
                   </div>
                 </div>
+                {{-- ttd --}}
+                <div class="text-end mt-4">
+                  <p class="m-0">Padang, {{ $item->created_at->format('d M Y') }}<span id="tanggal"></span></p>
+                  @isset($item->validator_id)
+                      <a href="{{ Storage::url($item->ttd_dokter) }}">
+                          <img src="{{ Storage::url($item->ttd_dokter) }}" alt="{{ $item->ttd_dokter }}" width="150" height="100">
+                      </a>
+                      <p class="m-0 text-decoration-underline">{{ $item->validator->name ?? '' }}</p>
+                      <p class="m-0">{{ $item->validator->sip ?? '' }}</p>
+                  @else
+                      <br>
+                      <h6 class="fw-bold m-0">(UNVALIDATE)</h6>
+                  @endisset
+                </div>
             </div>
         </div>
     </body>
