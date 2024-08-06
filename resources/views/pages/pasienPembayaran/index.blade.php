@@ -52,7 +52,7 @@
           @foreach ($data as $item)    
           <tr>
             <td>
-              <a class="btn btn-dark btn-sm" href="{{ route('rajal/kasir/pembayaran/edit', $item->id) }}">
+              <a class="btn btn-dark btn-sm" href="{{ route('rajal/kasir/pembayaran/edit', encrypt($item->id)) }}">
                 <i class='bx bx-show-alt me-1'></i>
                   show
               </a>

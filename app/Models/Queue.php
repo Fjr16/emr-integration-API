@@ -10,7 +10,22 @@ class Queue extends Model
     use HasFactory;
 
 
-    protected $with = ['rawatJalanPoliPatient'];
+    protected $with = [
+        'rawatJalanPoliPatient', 
+        'perawatInitialAssesment', 
+        'laboratoriumRequests', 
+        'radiologiFormRequests',
+        'doctorInitialAssesment',
+        'diagnosticProcedurePatient',
+        'MedicineReceipt',
+        'soapDokter',
+        'patientActionReport',
+        'planControlPatient',
+        'KonsulInternal',
+        'RajalFarmasiPatient',
+        'kasirPatient',
+        'rajalGeneralConsent',
+    ];
 
     protected $fillable = [
         'patient_id',

@@ -63,7 +63,7 @@ class KasirController extends Controller
      */
     public function edit($id)
     {
-        $item = KasirPatient::find($id);
+        $item = KasirPatient::find(decrypt($id));
         $totalAkhir = $this->sumTotalPembayaran($item);
 
         return view('pages.pasienPembayaran.show', [

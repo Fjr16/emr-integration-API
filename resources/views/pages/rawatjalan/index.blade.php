@@ -1,18 +1,50 @@
 @extends('layouts.backend.main')
 
 @section('content')
-    @if (session()->has('success'))
-        <div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session()->has('forbidden'))
-        <div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute"
-            style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-            {{ session('forbidden') }}
-        </div>
-    @endif
+@if (session()->has('success'))
+<div class="alert alert-success d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('error'))
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>{{ session('error') }}</span>
+    </div>
+</div>
+@endif
+@if (session()->has('exceptions'))
+<div class="alert alert-danger d-flex" role="alert">
+<span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+<div class="d-flex flex-column ps-1">
+    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+    <span>
+    @foreach (session('exceptions') as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+    </span>
+</div>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger d-flex" role="alert">
+<span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+<div class="d-flex flex-column ps-1">
+    <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+    <span>
+    @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+    </span>
+</div>
+</div>
+@endif
     <div class="card p-3 pb-0 mt-5">
         <div class="card-header">
             <form action="{{ $routeToFilter }}" method="GET">

@@ -275,9 +275,8 @@ class RawatJalanController extends Controller
             //end kasir
 
             DB::commit();
-            return back()->with([
+            return redirect()->route('rajal/index')->with([
                 'success' => 'Status Pelayanan Berhasil Disimpan',
-                'btn' => 'finished',
             ]);
         } catch (ValidationException $th) {
             return back()->with([

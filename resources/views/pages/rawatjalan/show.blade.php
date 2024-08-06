@@ -61,6 +61,7 @@
                         <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
                     <h6 class="mb-1">{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
+                    <h6 class="mb-1">{{ $item->dpjp->poliklinik->name ?? '' }}<h6>
                     @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
                         <span class="badge bg-danger">BELUM DILAYANI</span>
                     @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
@@ -959,7 +960,7 @@
                                         <div class="tab-pane fade {{ session('penunjang') == 'radiologi' ? 'show active' : '' }}" id="navs-pills-justified-radiologi" role="tabpanel">
                                             @if (!$item->radiologiFormRequests()->where('status', '!=' ,'CANCEL')->orderBy('created_at', 'DESC')->first())    
                                                 <div class="text-end mb-2 me-2">
-                                                    <a href="{{ route('rajal/permintaan/radiologi.create', $item->id) }}"
+                                                    <a href="{{ route('rajal/permintaan/radiologi.create', encrypt($item->id)) }}"
                                                         class="btn btn-primary btn-sm"><i class="bx bx-plus"></i> Permintaan</a>
                                                 </div>
                                             @endif
@@ -989,16 +990,16 @@
                                                                             @if ($radiologi->status == 'FINISHED' || $radiologi->status == 'ONGOING' || $radiologi->status == 'ACCEPTED')
                                                                                 <li> <button class="dropdown-item text-info" onclick="showHasilRad({{ $radiologi->id }})"><i class='bx bx-file'></i> Hasil</button> </li>
                                                                             @elseif ($radiologi->status == 'WAITING' || $radiologi->status == 'DENIED')
-                                                                                <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
+                                                                                <li> <a class="dropdown-item text-warning" href="{{ route('rajal/permintaan/radiologi.edit', ['queue_id' => encrypt($item->id), 'radiologi_id' => encrypt($radiologi->id)]) }}"><i class="bx bx-edit"></i> Edit</a> </li>
                                                                                 <li>
-                                                                                    <form action="{{ route('rajal/permintaan/radiologi.destroy', $radiologi->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
+                                                                                    <form action="{{ route('rajal/permintaan/radiologi.destroy', encrypt($radiologi->id)) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
                                                                                         @method('DELETE')
                                                                                         @csrf
                                                                                         <button type="submit" class="dropdown-item text-danger"><i class="bx bx-x"></i> Batal</button>
                                                                                     </form>
                                                                                 </li>
                                                                             @endif
-                                                                            <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => $item->id, 'radiologi_id' => $radiologi->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
+                                                                            <li><a href="{{ route('rajal/permintaan/radiologi.show', ['queue_id' => encrypt($item->id), 'radiologi_id' => encrypt($radiologi->id)]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
                                                                         </ul>
                                                                     </div>
                                                                 @endif
@@ -1035,7 +1036,7 @@
                                         <div class="tab-pane fade {{ session('penunjang') == 'laboratorium' ? 'show active' : '' }}" id="navs-pills-justified-laboratorium" role="tabpanel">
                                             @if (!$item->laboratoriumRequests()->where('status', '!=', 'CANCEL')->orderBy('created_at', 'desc')->first())
                                                 <div class="text-end mb-2 me-2">
-                                                    <a href="{{ route('rajal/laboratorium/request.index', $item->id) }}"
+                                                    <a href="{{ route('rajal/laboratorium/request.index', encrypt($item->id)) }}"
                                                         class="btn btn-primary btn-sm"><i class="bx bx-plus"></i> Permintaan</a>
                                                 </div>
                                             @endif
@@ -1044,7 +1045,6 @@
                                                     <tr class="text-nowrap">
                                                         <th class="text-body">Action</th>
                                                         <th class="text-body">Dokter</th>
-                                                        <th class="text-body">Asal Ruang</th>
                                                         <th class="text-body">Diagnosa Klinis</th>
                                                         <th class="text-body">Kategori</th>
                                                         <th class="text-body">Tgl. Ambil Sampel</th>
@@ -1067,22 +1067,21 @@
                                                                             @if ($labor->status == 'FINISHED' || $labor->status == 'UNVALIDATE' || $labor->status == 'ACCEPTED')
                                                                                 <li> <button class="dropdown-item text-info" onclick="showHasilLab({{ $labor->id }})"><i class='bx bx-file'></i> Hasil</button> </li>
                                                                             @elseif ($labor->status == 'WAITING' || $labor->status == 'DENIED')
-                                                                                <li> <a class="dropdown-item text-warning" href="{{ route('rajal/laboratorium/request.edit', $labor->id) }}"><i class="bx bx-edit"></i> Edit</a> </li>
+                                                                                <li> <a class="dropdown-item text-warning" href="{{ route('rajal/laboratorium/request.edit', encrypt($labor->id)) }}"><i class="bx bx-edit"></i> Edit</a> </li>
                                                                                 <li>
-                                                                                    <form action="{{ route('rajal/laboratorium/request.destroy', $labor->id) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
+                                                                                    <form action="{{ route('rajal/laboratorium/request.destroy', encrypt($labor->id)) }}" method="POST" onsubmit="return confirm('Yakin Ingin Membatalkan Permintaan')">
                                                                                         @method('DELETE')
                                                                                         @csrf
                                                                                         <button type="submit" class="dropdown-item text-danger"><i class="bx bx-x"></i> Batal</button>
                                                                                     </form>
                                                                                 </li>
                                                                             @endif
-                                                                                <li><a href="{{ route('rajal/laboratorium/request.show', ['queue_id' => $item->id, 'labor_id' => $labor->id]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
+                                                                                <li><a href="{{ route('rajal/laboratorium/request.show', ['queue_id' => encrypt($item->id), 'labor_id' => encrypt($labor->id)]) }}" target="blank" class="dropdown-item text-success"><i class='bx bx-printer'></i> Print</a> </li>
                                                                         </ul>
                                                                     </div>
                                                                 @endif
                                                             </td>
                                                             <td>{{ ($labor->user->name ?? '') . ' (' .($labor->user->staff_id) . ')' }}</td>
-                                                            <td>{{ $labor->queue->dpjp->poliklinik->name ?? '' }}</td>
                                                             <td>{{ $labor->diagnosa ?? '' }}</td>
                                                             <td>{{ $labor->tipe_permintaan ?? '' }}</td>
                                                             <td>{{ $labor->tanggal_sampel ?? '' }}</td>
@@ -1567,10 +1566,12 @@
                                     <div class="d-flex justify-content-end">
                                         <h5 class="fw-bold me-2">Status Tagihan Tindakan :</h5>
                                         <div>
-                                            @if ($item->rawatJalanPoliPatient->actions_ready == false && !empty($item->kasirPatient->billingDoctorActions))                                 
+                                            @if ($item->rawatJalanPoliPatient->actions_ready == false && !$item->kasirPatient->billingDoctorActions->isEmpty())            
                                                 <span class="badge bg-danger">REVISI</span>
-                                            @elseif ($item->rawatJalanPoliPatient->actions_ready == true && !empty($item->kasirPatient->billingDoctorActions))
-                                                <span class="badge bg-info">DIKIRIM</span>
+                                            @elseif ($item->rawatJalanPoliPatient->actions_ready == true && !$item->kasirPatient->billingDoctorActions->isEmpty())
+                                                <span class="badge bg-primary">DIKIRIM</span>
+                                            @elseif ($item->rawatJalanPoliPatient->actions_ready == false && $item->kasirPatient->billingDoctorActions->isEmpty())    
+                                                <span class="badge bg-info">MENUNGGU VERIFIKASI</span>
                                             @else
                                                 <span class="badge bg-danger">TIDAK DIKETAHUI</span>
                                             @endif
@@ -1914,7 +1915,7 @@
                                                     <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->radiologies_ready ? '' : 'radiologies_ready' }}">Data permintaan pemeriksaan radiologi</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="laboratories_ready" id="laboratories_ready" value="1" onchange="laborReadyFunc(this)" {{ $item->rawatJalanPoliPatient->laboratories_ready ? 'checked' : '' }} style="{{ $item->rawatJalanPoliPatient->laboratories_ready ? 'pointer-events : none;' : '' }}"/>
+                                                    <input class="form-check-input" type="checkbox" name="laboratories_ready" id="laboratories_ready" value="1" {{ $item->rawatJalanPoliPatient->laboratories_ready ? 'checked' : '' }} style="pointer-events : none;"/>
                                                     <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->laboratories_ready ? '' : 'laboratories_ready' }}">Data permintaan pemeriksaan laboratorium</label>
                                                 </div>
                                             </div>
@@ -2182,56 +2183,6 @@
                 $(modal).modal('show');
             }
         }
-        function laborReadyFunc(element){
-            if (element.checked) { 
-                element.checked = false;
-                modal.innerHTML = `
-                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalScrollableTitle">Data Permintaan Pemeriksaan Laboratorium</h5>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table">
-                            <thead>
-                                <tr class="text-nowrap bg-primary">
-                                    <th>#</th>
-                                    <th>Nama Tindakan</th>
-                                    <th>Jumlah</th>
-                                    <th>Tarif</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($item->patientActionReport->patientActionReportDetails ?? [] as $detailTindakan)     
-                                    <tr>
-                                        <td>{{ $loop->iteration ?? '' }}</td>
-                                        <td>{{ $detailTindakan->action->name ?? '' }}</td>
-                                        <td>{{ $detailTindakan->jumlah ?? 0 }}</td>
-                                        <td>{{ number_format($detailTindakan->harga_satuan ?? 0) }}</td>
-                                        <td>{{ number_format($detail->sub_total ?? 0) }}</td>
-                                    </tr>
-                                @endforeach
-                                <tr class="fw-bold">
-                                    <td colspan="4" class="text-center">Total Akhir</td>
-                                    <td>{{ $item->patientActionReport ? (number_format($item->patientActionReport->patientActionReportDetails->sum('sub_total') ?? 0)) : '0' }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p class="mt-4 mb-0 text-white text-center fst-italic text-uppercase p-4 bg-warning">
-                        *) hati-hati dalam mengkonfirmasi data pemeriksaan Laboratorium !!! <br>setelah dikonfirmasi data permintaan akan diterima oleh petugas Laboratorium dan tidak bisa diedit kembali kecuali petugas Laboratorium menolak permintaan 
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-outline-primary" value="laboratorium" onclick="hideModalWithConfirm(this.value)">Konfirmasi</button>
-                    </div>
-                    </div>
-                </div>
-                `;
-                $(modal).modal('show');
-            }
-        }
         // end function untuk status peayanan
 
         // function untuk menutup modal
@@ -2315,6 +2266,21 @@
                     plann.value += dataPemeriksaan;
                 } else {
                     alertShow('Not Found !!', 'Data permintaan radiologi tidak ditemukan', elementAlert);
+                }
+            } else if(element.value == 'laboratorium'){
+                const checkLabor = @json($item->laboratoriumRequests);
+                const filteredData = checkLabor.filter(lab => lab.status != 'CANCEL' && lab.status != 'DENIED');
+                if (filteredData) {
+                    let dataPemeriksaan = '\r\n\nPemeriksaan Laboratorium : ';
+                    filteredData.forEach(function(itm){
+                        itm.laboratorium_request_details.forEach(function(detail){
+                            dataPemeriksaan += '\r\n- ' + detail.action.name ?? '';
+                        });
+                    });
+                    let plann = element.closest('.row').querySelector('#planning');
+                    plann.value += dataPemeriksaan;
+                } else {
+                    alertShow('Not Found !!', 'Data permintaan Laboratorium tidak ditemukan', elementAlert);
                 }
             }
             $(targetElement).val(contentTarget);

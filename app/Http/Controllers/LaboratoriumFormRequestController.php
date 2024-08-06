@@ -22,7 +22,7 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function index($id)
     {
-        $item = Queue::find($id);
+        $item = Queue::find(decrypt($id));
         $data = Action::where('jenis_tindakan', 'Laboratorium')->get();
         $templates = LaboratoriumMasterTemplate::all();
         return view('pages.permintaanLaboratorium.create', [
@@ -60,6 +60,11 @@ class LaboratoriumFormRequestController extends Controller
             $data['user_id'] =  Auth::user()->id;
             $data['queue_id'] =  $queue->id;
             $item = LaboratoriumRequest::create($data);
+            if($item->queue->rawatJalanPoliPatient->laboratories_ready == false){
+                $item->queue->rawatJalanPoliPatient()->update([
+                    'laboratories_ready' => true,
+                ]);
+            }
     
             //create Laboratorium Request Detail dan create template master lab pk
             $itemTemplate = null;
@@ -111,7 +116,7 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function edit($id)
     {
-        $item = LaboratoriumRequest::find($id);
+        $item = LaboratoriumRequest::find(decrypt($id));
         $data = Action::where('jenis_tindakan', 'Laboratorium')->with('actionRates')->get();
         $templates = LaboratoriumMasterTemplate::all();
         return view('pages.permintaanLaboratorium.edit', [
@@ -197,8 +202,8 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function show($queue_id, $id)
     {
-        $queue = Queue::find($queue_id);
-        $item = LaboratoriumRequest::find($id);
+        $queue = Queue::find(decrypt($queue_id));
+        $item = LaboratoriumRequest::find(decrypt($id));
         return view('pages.permintaanLaboratorium.show', [
             "title" => "Rawat Jalan",
             "menu" => "In Patient",
@@ -213,7 +218,7 @@ class LaboratoriumFormRequestController extends Controller
      */
     public function destroy($id)
     {
-        $item = LaboratoriumRequest::find($id);
+        $item = LaboratoriumRequest::find(decrypt($id));
         if ($item->status == 'FINISHED' || $item->status == 'UNVALIDATE' || $item->status == 'ACCEPTED') {
             return back()->with([
                 'error' => 'Data Tidak Dapat Dibatalkan !! Karena Permintaan telah diterima oleh petugas laboratorium',

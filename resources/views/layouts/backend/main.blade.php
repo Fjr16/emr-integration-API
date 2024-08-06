@@ -375,9 +375,10 @@
 
             $(elementID).html(contentAlert);
 
-            $(".alert").fadeTo(7000, 0).slideUp(1000, function() {
+            $(".alert").fadeTo(4000, 0).slideUp(1000, function() {
                 $(this).remove();
             });
+            window.scrollTo(0, 0);
         }
 
         // function untuk melakukan konversi satuan obat

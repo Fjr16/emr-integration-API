@@ -9,6 +9,8 @@ class LaboratoriumRequestDetail extends Model
 {
     use HasFactory;
 
+    protected $with = ['action'];
+
     protected $fillable = [
         'laboratorium_request_id',
         'action_id',

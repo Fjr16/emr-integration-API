@@ -123,19 +123,19 @@
             <td class="text-center">Rp. {{ number_format($jasaDokter->tarif ?? 0) }}</td>
           </tr>
           @endforeach
-          @if (!$item->queue->rawatJalanPoliPatient->actions_ready == false || !empty($item->billingDoctorActions))
+          @if (!$item->queue->rawatJalanPoliPatient->actions_ready == false || !$item->billingDoctorActions->isEmpty())
           <tr>
             <td colspan="5">
               <div class="d-flex justify-content-start m-0 p-0">
                 <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Tindakan Pelayanan Medis</h6>
-                @if ($item->queue->rawatJalanPoliPatient->actions_ready == true && !empty($item->billingDoctorActions))
+                @if ($item->queue->rawatJalanPoliPatient->actions_ready == true && !$item->billingDoctorActions->isEmpty())
                 <form action="{{ route('rajal/kasir/revisi/billing.tindakan', $item->queue->rawatJalanPoliPatient->id) }}" method="POST">
                   @method('PUT')
                   @csrf
                   <button type="submit" class="m-0 p-1 btn btn-sm btn-outline-warning small" onclick="return confirm('Apakah Anda Ingin mengajukan revisi Tagihan Tindakan ?')">Ajukan Revisi</button>
                 </form>
-                @elseif ($item->queue->rawatJalanPoliPatient->actions_ready == false && !empty($item->billingDoctorActions))
-                  <span class="m-0 p-1 badge bg-danger small">Menunggu Perbaikan</span>
+                @elseif ($item->queue->rawatJalanPoliPatient->actions_ready == false && !$item->billingDoctorActions->isEmpty())
+                  <span class="m-0 p-1 badge bg-danger small">REVISI</span>
                 @else
                   <span class="m-0 p-1 badge bg-danger small"><i class="bx bx-x"></i> Error</span>
                 @endif
@@ -153,7 +153,7 @@
             </tr>
           @endforeach
 
-          @if (!empty($item->billingRadiologies))
+          @if (!$item->billingRadiologies->isEmpty())
           <tr>
             <td colspan="5">
                 <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Pemeriksaan Radiologi</h6>
@@ -171,7 +171,7 @@
             </tr>
           @endforeach
 
-          @if (!empty($item->billingLaboratories))
+          @if (!$item->billingLaboratories->isEmpty())
           <tr>
             <td colspan="5">
                 <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Pemeriksaan Laboratorium</h6>
@@ -189,7 +189,7 @@
             </tr>
           @endforeach
 
-          @if (!empty($item->billingOfMedicineFees))
+          @if (!$item->billingOfMedicineFees->isEmpty())
           <tr>
             <td colspan="5">
                 <h6 class="align-self-center fw-bold fst-italic small text-uppercase me-2 m-0 p-0"># Resep Obat</h6>

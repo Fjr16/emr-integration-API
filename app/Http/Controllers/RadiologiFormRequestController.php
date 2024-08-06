@@ -22,7 +22,7 @@ class RadiologiFormRequestController extends Controller
     public function create($id)
     {
         $data = Action::where('jenis_tindakan', 'Radiologi')->with(['actionRates'])->get();
-        $item = Queue::findOrFail($id);
+        $item = Queue::findOrFail(decrypt($id));
         return view('pages.permintaanRadiologi.create', [
             'title' => 'Rawat Jalan',
             'menu' => 'Rawat Jalan',
@@ -96,8 +96,8 @@ class RadiologiFormRequestController extends Controller
      */
     public function show($queue_id, $radiologi_id)
     {
-        $itemQueue = Queue::find($queue_id);
-        $itemRadiologi = RadiologiFormRequest::find($radiologi_id);
+        $itemQueue = Queue::find(decrypt($queue_id));
+        $itemRadiologi = RadiologiFormRequest::find(decrypt($radiologi_id));
         return view('pages.permintaanRadiologi.show', [
             'title' => 'Rawat Jalan',
             'menu' => 'In Patient',
@@ -114,8 +114,8 @@ class RadiologiFormRequestController extends Controller
      */
     public function edit($id, $id2)
     {
-        $queue = Queue::findOrFail($id);
-        $item = RadiologiFormRequest::findOrFail($id2);
+        $queue = Queue::findOrFail(decrypt($id));
+        $item = RadiologiFormRequest::findOrFail(decrypt($id2));
         if ($item->status == 'FINISHED' || $item->status == 'ONGOING' || $item->status == 'ACCEPTED') {
             return back()->with([
                 'error' => 'Data Tidak Dapat Diubah !! Karena Permintaan Telah Diterima Oleh petugas Radiologi',
@@ -199,7 +199,7 @@ class RadiologiFormRequestController extends Controller
     public function destroy($id)
     {
         // code baru
-        $item = RadiologiFormRequest::find($id);
+        $item = RadiologiFormRequest::find(decrypt($id));
         if ($item->status == 'FINISHED' || $item->status == 'ONGOING' || $item->status == 'ACCEPTED') {
             return back()->with([
                 'error' => 'Data Tidak Dibatalkan !! Karena Permintaan Telah Diterima Oleh Petugas Radiologi',

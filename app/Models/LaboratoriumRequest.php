@@ -9,6 +9,8 @@ class LaboratoriumRequest extends Model
 {
     use HasFactory;
 
+    protected $with = ['laboratoriumRequestDetails'];
+
     protected $fillable = [
         'user_id',  //dokter yang membuat permintaan
         'queue_id',
