@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QueueStoreRequest;
 use App\Models\Queue;
 use App\Models\DoctorsSchedule;
 use App\Models\Patient;
@@ -10,6 +11,7 @@ use App\Models\PatientCategory;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 class QueueController extends Controller
@@ -91,40 +93,42 @@ class QueueController extends Controller
     /**
      * Perlu penambahan request validasi
      */
-    public function store(Request $request)
+    public function store(QueueStoreRequest $request)
     {
-        $item = User::find($request->doctor_id);
-        $today = now();
-        // $doctors = User::find($request->doctor_id);
-
-        $roomCode = $item->poliklinik->kode_antrian ?? '';
-        if ($roomCode) {
-            $lastQueue = Queue::whereDate('created_at', $today)
-                ->where('no_antrian', 'like', $roomCode . '%')
-                ->orderBy('no_antrian', 'desc')
-                ->first();
-            // mengambil antrian terakhir yang awalannya A
-            $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
-            // Format nomor antrian sesuai aturan
-            $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
-        }else{
-            return back()->with('error', 'Mohon Lengkapi Data Master Kode Antrian Dokter Anda !!');
+        try {
+            $data = $request->validated();
+            $item = User::findOrFail($request->doctor_id);
+            $today = now();
+    
+            $roomCode = $item->poliklinik->kode_antrian ?? '';
+            if ($roomCode) {
+                $lastQueue = Queue::whereDate('created_at', $today)
+                    ->where('no_antrian', 'like', $roomCode . '%')
+                    ->orderBy('no_antrian', 'desc')
+                    ->first();
+                // mengambil antrian terakhir yang awalannya A
+                $nextNumber = $lastQueue ? (int) substr($lastQueue->no_antrian, 1) + 1 : 1;
+                // Format nomor antrian sesuai aturan
+                $queueNumber = $roomCode . ($nextNumber <= 9 ? sprintf('%02d', $nextNumber) : $nextNumber);
+            }else{
+                return back()->with('error', 'Mohon Lengkapi Data Master Kode Antrian Dokter Anda !!');
+            }
+            
+            $data['user_id'] = Auth::user()->id;
+            $data['dokter_id'] = $item->id;
+            $data['status_antrian'] = 'WAITING';
+            $data['no_antrian'] = $queueNumber;
+    
+            $new = Queue::create($data);
+    
+            session()->flash('queue_id', $new->id);
+            return redirect()->route('antrian.create')->with('success', 'Antrian Berhasil Ditambahkan');
+        } catch (Exception $e) {
+            return redirect()->route('antrian.create')->with('error', $e->getMessage());
+        } catch (ModelNotFoundException $mn){
+            return redirect()->route('antrian.create')->with('error', $mn->getMessage());
         }
-        
-        $data['patient_id'] = $request['patient_id'] ?? '';
-        $data['user_id'] = Auth::user()->id;
-        $data['dokter_id'] = $item->id;
-        $data['status_antrian'] = 'WAITING';
-        $data['no_antrian'] = $queueNumber;
-        $data['tgl_antrian'] = $request['tgl_antrian'];
-        $data['patient_category_id'] = $request['patient_category_id'];
-        $data['no_rujukan'] = $request['no_rujukan'] ?? null;
-        $data['last_diagnostic'] = $request['last_diagnostic'] ?? null;
-
-        $new = Queue::create($data);
-
-        session()->flash('queue_id', $new->id);
-        return redirect()->route('antrian.create')->with('success', 'Antrian Berhasil Ditambahkan');
+       
     }
 
     /**
@@ -202,43 +206,46 @@ class QueueController extends Controller
                 'Kamis' => 'Thursday',
                 'Jumat' => 'Friday',
                 'Sabtu' => 'Saturday',
-                'Minggu' => 'Sunday'
+                'Minggu' => 'Sunday',
             ];
     
             $currentDate = Carbon::now(); // Inisialisasi tanggal saat ini di luar loop
-    
-            while (count($repeatedData) < 6) {
-                foreach ($data as $entry) {
+
+            while (count($repeatedData) < 6) {    
+                if (count($repeatedData) < 6) {
+                    // Set tanggal saat ini ke hari pertama dalam minggu berikutnya yang sesuai dengan harinya
+                    for ($i = 0; $i < 7; $i++) {
+                        $dayOfWeek = $currentDate->format('l');
+                        $findJadwal = $data->first(function ($itm) use ($dayOfWeek, $dayMapping) {
+                            $dayInJadwal = isset($dayMapping[$itm->day]) ? $dayMapping[$itm->day] : $itm->day;
+                            return $dayInJadwal === $dayOfWeek;
+                        });
                     
-                    if (count($repeatedData) < 6) {
-                        $desiredDay = isset($dayMapping[$entry->day]) ? $dayMapping[$entry->day] : $entry->day;
-                        
-                        // Set tanggal saat ini ke hari pertama dalam minggu berikutnya yang sesuai dengan harinya
-                        while ($currentDate->format('l') !== $desiredDay) {
+                        if ($findJadwal) {
+                            $date = $currentDate->copy()->toDateString();
+        
+                            $totalAntrian = Queue::whereIn('status_antrian', ['WAITING', 'ARRIVED', 'FINISHED'])
+                            ->whereDate('tgl_antrian', $date)
+                            ->where('dokter_id', $item->id)
+                            ->count();
+        
+                            // respon data
+                            $repeatedData[] = [
+                                'created_at' => $date,
+                                'ends_at' => $findJadwal->ends_at,
+                                'day' => $findJadwal->day,
+                                'totalAntrian' => $totalAntrian ?? 0
+                            ];
+
+                            // Tambahkan satu hari ke tanggal saat ini
+                            $currentDate->addDay();
+                            break;
+                        }else{
                             $currentDate->addDay();
                         }
-                        
-                        $date = $currentDate->copy()->toDateString();
-                        
-                        // Tambahkan satu hari ke tanggal saat ini
-                        $currentDate->addDay();
-    
-    
-                        $totalAntrian = Queue::whereIn('status_antrian', ['WAITING', 'ARRIVED', 'FINISHED'])
-                        ->whereDate('tgl_antrian', $date)
-                        ->where('dokter_id', $item->id)
-                        ->count();
-    
-                        // respon data
-                        $repeatedData[] = [
-                            'created_at' => $date,
-                            'ends_at' => $entry->ends_at,
-                            'day' => $entry->day,
-                            'totalAntrian' => $totalAntrian ?? 0
-                        ];
-                    } else {
-                        break;
                     }
+                } else {
+                    break;
                 }
             }
     

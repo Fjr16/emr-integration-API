@@ -3,13 +3,34 @@
 @section('content')
 
 @if (session()->has('success'))
-<div class="alert alert-success w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-    {{ session('success') }}
+<div class="alert alert-success d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-check-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">BERHASIL !!</h6>
+        <span>{{ session('success') }}</span>
+    </div>
 </div>
 @endif
 @if (session()->has('error'))
-<div class="alert alert-danger w-100 border mb-5 d-flex justify-content-center position-absolute" style="z-index:99; max-width:max-content;;left: 50%;transform: translate(-50%, -50%);" role="alert">
-    {{ session('error') }}
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>{{ session('error') }}</span>
+    </div>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+        </span>
+    </div>
 </div>
 @endif
 <div class="d-flex mb-3">
@@ -27,17 +48,17 @@
                     <select class="form-control select2" id="patient_id" name="patient_id" onchange="getPatient()">
                         <option value="" selected>Pilih</option>
                         @foreach ($patients as $patient)
-                        @if (old('patient_id') == $patient->id)
+                        {{-- @if (old('patient_id') == $patient->id)
                         <option value="{{ $patient->id }}" selected>
                             {{ implode('-', str_split(str_pad($patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                             / {{ $patient->name }}
                         </option>
-                        @else
+                        @else --}}
                         <option value="{{ $patient->id }}">
                             {{ implode('-', str_split(str_pad($patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
                             / {{ $patient->name }}
                         </option>
-                        @endif
+                        {{-- @endif --}}
                         @endforeach
                     </select>
                 </div>
