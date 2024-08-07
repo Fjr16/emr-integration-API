@@ -42,12 +42,12 @@ class RawatJalanController extends Controller
         $routeToFilter = route('rajal/index');
         $user = Auth::user();
         if ($user->hasRole('Dokter')) {
-            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)
+            $data = Queue::whereIn('status_antrian', ['ARRIVED', 'FINISHED'])->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)
             ->whereHas('dpjp', function ($query2) use ($user) {
                 $query2->where('dokter_id', $user->id);
             })->get();
         } else {
-            $data = Queue::where('status_antrian', 'ARRIVED')->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)->get();
+            $data = Queue::whereIn('status_antrian', ['ARRIVED', 'FINISHED'])->whereHas('rawatJalanPoliPatient')->whereDate('created_at', $filterDate)->get();
         }
         $data = $data->sortBy(function ($queue) {
             $status = $queue->rawatJalanPoliPatient->status ?? '';

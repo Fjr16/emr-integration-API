@@ -127,14 +127,16 @@
                                     <td>{{ $item->dpjp->poliklinik->name ?? '' }} / {{ $item->dpjp->name ?? '' }}</td>
                                 @endif
                                 <td>
-                                    @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
-                                        <span class="badge bg-danger">BELUM DILAYANI</span>
-                                    @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
-                                        <span class="badge bg-warning">DALAM PERAWATAN</span>
-                                    @elseif ($item->rawatJalanPoliPatient->status == 'FINISHED')
-                                        <span class="badge bg-success">SUDAH DILAYANI</span>
-                                    @else
-                                        <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                                    @if ($item->rawatJalanPoliPatient)     
+                                        @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
+                                            <span class="badge bg-danger">BELUM DILAYANI</span>
+                                        @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
+                                            <span class="badge bg-warning">DALAM PERAWATAN</span>
+                                        @elseif ($item->rawatJalanPoliPatient->status == 'FINISHED')
+                                            <span class="badge bg-success">SUDAH DILAYANI</span>
+                                        @else
+                                            <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                                        @endif
                                     @endif
                                 </td>
                                
