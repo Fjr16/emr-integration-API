@@ -1790,7 +1790,7 @@
                                 </div>
                             </div>
                             <div class="text-end my-4">
-                                <button type="submit" class="btn btn-primary btn-sm" onclick="openModal()"> {{ $item->soapDokter ? 'Update' : 'Submit' }}</button>
+                                <button type="submit" class="btn btn-primary btn-sm"> {{ $item->soapDokter ? 'Update' : 'Submit' }}</button>
                             </div>
                         </form>
                     </div>

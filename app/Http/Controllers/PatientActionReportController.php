@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PatientActionRequest;
-use App\Models\Action;
 use App\Models\Queue;
-use App\Models\KasirPatient;
 use Illuminate\Http\Request;
-use App\Models\DetailKasirPatient;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PatientActionReportDetail;
