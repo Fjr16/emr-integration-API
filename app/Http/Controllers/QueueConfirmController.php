@@ -37,23 +37,12 @@ class QueueConfirmController extends Controller
     public function store(Request $request, $id)
     {
         $status = $request->input('status_antrian');
-        $item = Queue::find($id);
+        $item = Queue::find(decrypt($id));
         $item->update([
             'status_antrian' => $status,
         ]);
 
-        return back()->with('success', 'Berhasil Diperbarui');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return back()->with('success', 'Berhasil Dibatalkan');
     }
 
     /**
@@ -81,7 +70,7 @@ class QueueConfirmController extends Controller
         DB::beginTransaction();
         $errors = [];
         try {
-            $item = Queue::findOrFail($id);
+            $item = Queue::findOrFail(decrypt($id));
             if ($item->status_antrian == 'WAITING') {
                 RawatJalanPoliPatient::create([
                     'queue_id' => $item->id,
@@ -120,7 +109,7 @@ class QueueConfirmController extends Controller
                 }
     
                 DB::commit();
-                return redirect()->route('rajal/general/consent.create', $id);
+                return redirect()->route('rajal/general/consent.create', encrypt($id));
             }
         } catch (ValidationException $th) {
             DB::rollBack();

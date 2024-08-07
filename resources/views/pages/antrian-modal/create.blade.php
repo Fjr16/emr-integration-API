@@ -1,4 +1,4 @@
-<form class="modal-content" action="{{ route('antrian/konfirmasi.store', $item->id) }}" method="POST">
+<form class="modal-content" action="{{ route('antrian/konfirmasi.store', encrypt($item->id)) }}" method="POST">
     @csrf
     <div class="modal-header">
         <h5 class="modal-title" id="backDropModalTitle">Detail Data Antrian</h5>

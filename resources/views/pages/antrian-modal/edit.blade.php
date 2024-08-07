@@ -42,6 +42,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="{{ route('antrian/konfirmasi.update', $item->id) }}" class="btn btn-outline-primary btn-sm">Konfirmasi</a>
+        <a href="{{ route('antrian/konfirmasi.update', encrypt($item->id)) }}" class="btn btn-outline-primary btn-sm">Konfirmasi</a>
     </div>
 </div>

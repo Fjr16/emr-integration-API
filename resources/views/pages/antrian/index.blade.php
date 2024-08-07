@@ -43,13 +43,13 @@
                 <thead>
                     <tr class="text-nowrap bg-dark">
                         <th class="text-center">Action</th>
-                        <th class="text-center">Status antrian</th>
                         <th>No Antrian</th>
                         <th>Norm</th>
                         <th>Tanggal Berobat</th>
                         <th>Nama</th>
                         <th>Poli / Dokter</th>
                         <th>No Kartu BPJS</th>
+                        <th class="text-center">Status antrian</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,7 @@
                                         <button type="button" class="btn btn-dark btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class='bx bx-info-circle'></i> Registrasi Ulang</button>
                                         <div class="dropdown-menu">
                                             <button class="dropdown-item text-success" onclick="registerQueue({{ $item->id }})"><i class="bx bx-check"></i> Konfirmasi</button>
-                                            <form action="{{ route('antrian/konfirmasi.store', $item->id) }}" class="d-inline"
+                                            <form action="{{ route('antrian/konfirmasi.store', encrypt($item->id)) }}" class="d-inline"
                                                 method="POST">
                                                 @csrf
                                                 <button class="dropdown-item text-danger" name="status_antrian"
@@ -81,7 +81,7 @@
                                                 <i class='bx bx-info-circle'></i> General Consent
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item text-warning" href="{{ route('rajal/general/consent.edit', $item->id) }}">
+                                                <a class="dropdown-item text-warning" href="{{ route('rajal/general/consent.edit', encrypt($item->id)) }}">
                                                     <i class='bx bx-edit-alt me-1'></i> General Consent
                                                 </a>
                                                 <form action="{{ route('rajal/general/consent.destroy', $item->id) }}" method="POST">
@@ -93,15 +93,15 @@
                                                     </button>
                                                 </form>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.show', $item->id ?? '') }}" target="_blank">
+                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.show', encrypt($item->id) ?? '') }}" target="_blank">
                                                     <i class='bx bx-printer me-1'></i>
                                                     General Consent
                                                 </a>
-                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.showtatatertib', $item->id ?? '') }}" target="_blank">
+                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.showtatatertib', encrypt($item->id) ?? '') }}" target="_blank">
                                                     <i class='bx bx-printer me-1'></i>
                                                     Tata Tertib
                                                 </a>
-                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.showhakdankewajiban', $item->id) }}" target="_blank">
+                                                <a class="dropdown-item" href="{{ route('rajal/general/consent.showhakdankewajiban', encrypt($item->id)) }}" target="_blank">
                                                     <i class='bx bx-printer me-1'></i>
                                                     Hak Dan Kewajiban
                                                 </a>
@@ -110,23 +110,10 @@
                                         </div>
                                     @else
                                         <a class="btn btn-success btn-sm mx-2"
-                                            href="{{ route('rajal/general/consent.create', $item->id) }}">
+                                            href="{{ route('rajal/general/consent.create', encrypt($item->id)) }}">
                                             <i class='bx bx-plus me-1'></i>
                                         </a>
                                     @endif
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                @if ($antrian->status_antrian == 'FINISHED')
-                                    <span class="badge bg-success">SUDAH DILAYANI</span>
-                                @elseif ($antrian->status_antrian == 'WAITING')
-                                    <span class="badge bg-warning">BELUM DILAYANI</span>
-                                @elseif ($antrian->status_antrian == 'ARRIVED')
-                                    <span class="badge bg-primary">SEDANG DILAYANI</span>
-                                @elseif ($antrian->status_antrian == 'CANCEL')
-                                    <span class="badge bg-danger">ANTRIAN BATAL</span>
-                                @else
-                                    <span class="badge bg-danger">TIDAK DIKETAHUI</span>
                                 @endif
                             </td>
                             <td>{{ $item->no_antrian ?? '' }}</td>
@@ -144,6 +131,19 @@
                                     {{ $item->patient->noka ?? '---' }}
                                 @else 
                                     <span class="badge bg-danger"><i class="bx bx-x"></i></span>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if ($item->status_antrian == 'FINISHED')
+                                    <span class="badge bg-success">SUDAH DILAYANI</span>
+                                @elseif ($item->status_antrian == 'WAITING')
+                                    <span class="badge bg-warning">BELUM DILAYANI</span>
+                                @elseif ($item->status_antrian == 'ARRIVED')
+                                    <span class="badge bg-primary">SEDANG DILAYANI</span>
+                                @elseif ($item->status_antrian == 'CANCEL')
+                                    <span class="badge bg-danger">ANTRIAN BATAL</span>
+                                @else
+                                    <span class="badge bg-danger">TIDAK DIKETAHUI</span>
                                 @endif
                             </td>
                             {{-- <td>{{ $item->last_diagnostic ?? '-' }}</td> --}}

@@ -43,7 +43,7 @@ class RajalGeneralConsentController extends Controller
             'Pria',
             'Wanita',
         ];
-        $item = Queue::find($id);
+        $item = Queue::find(decrypt($id));
         return view('pages.rajalGeneralConsent.create', [
             'title' => "General Consent",
             'menu' => 'Rawat Jalan',
@@ -106,7 +106,7 @@ class RajalGeneralConsentController extends Controller
      */
     public function show($id)
     {
-        $queue = Queue::find($id);
+        $queue = Queue::find(decrypt($id));
         $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.show', [
@@ -116,7 +116,7 @@ class RajalGeneralConsentController extends Controller
 
     public function showTataTertib($id)
     {
-        $queue = Queue::find($id);
+        $queue = Queue::find(decrypt($id));
         $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.tatatertib', [
@@ -126,7 +126,7 @@ class RajalGeneralConsentController extends Controller
 
     public function showHakDanKewajiban($id)
     {
-        $queue = Queue::find($id);
+        $queue = Queue::find(decrypt($id));
         $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.hakdankewajiban', [
@@ -158,7 +158,7 @@ class RajalGeneralConsentController extends Controller
             'Perempuan',
         ];
 
-        $queue = Queue::find($id);
+        $queue = Queue::find(decrypt($id));
         $item = RajalGeneralConsent::firstwhere('queue_id', $queue->id);
 
         return view('pages.rajalGeneralConsent.edit', [
