@@ -127,6 +127,7 @@ class PatientController extends Controller
     {
         $item = Patient::findOrFail($id);
         $data = $request->all();
+        // dd($data);
         $item->update($data);
         return redirect()->route('pasien.index')->with('success', 'Berhasil Diperbarui');
     }

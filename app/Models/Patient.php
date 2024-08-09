@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\Village;
 use Illuminate\Database\Eloquent\Model;
@@ -15,13 +14,16 @@ class Patient extends Model
 {
     use HasFactory;
 
+    protected $guarded = [
+        'no_rm',
+    ];
+
     protected $fillable = [
         'job_id',
         'province_id',
         'city_id',
         'district_id',
         'village_id',
-        'no_rm',
         'noka',
         'name',
         'tempat_lhr',
