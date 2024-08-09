@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-4">
                     <h4 class="mb-1 text-primary d-flex">
-                        {{ $item->patient->name }} ({{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
+                        {{ $item->patient->name }} ({{ $item->patient->no_rm ?? '' }})
                         <span class="ms-2 badge {{ $item->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
                     <h6>{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
@@ -73,7 +73,7 @@
                             <tr>
                                 <td>No Rekam Medis</td>
                                 <td class="px-2">:</td>
-                                <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                <td>{{ $item->patient->no_rm ?? '' }}
                                 </td>
                             </tr>
                             <tr>

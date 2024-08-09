@@ -13,7 +13,7 @@
         <div class="row mb-3">
             <label for="basic-default-name" class="col-sm-3 col-form-label">No RM / Nama</label>
             <div class="col-sm-9">
-                <input type="text" value="{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->patient->name ?? '....' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
+                <input type="text" value="{{ $item->patient->no_rm ?? '' }} / {{ $item->patient->name ?? '....' }}" class="form-control form-control-sm" id="basic-default-name" disabled />
             </div>
         </div>
         <div class="row mb-3">

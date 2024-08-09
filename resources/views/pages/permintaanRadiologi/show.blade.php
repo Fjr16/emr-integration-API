@@ -158,7 +158,7 @@
                                 <td class="fw-bold">No. RM</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
                                 <td>
-                                    {{ implode('-', str_split(str_pad($itemRadiologi->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                    {{ $itemRadiologi->queue->patient->no_rm ?? '' }}
                                 </td>
                             </tr>
                             <tr>

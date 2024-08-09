@@ -11,7 +11,7 @@
           <label class="col-sm-3 col-form-label" for="basic-default-name">No Rekam Medis</label>
           <input type="hidden" value="{{ $item->id }}" name="patient_id">
           <div class="col-sm-3">
-            <input type="text" value="{{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2))}}" class="form-control form-control-sm" id="basic-default-name" disabled />
+            <input type="text" value="{{ $item->no_rm ?? ''}}" class="form-control form-control-sm" id="basic-default-name" disabled />
           </div>
           /
           <div class="col-sm-5">

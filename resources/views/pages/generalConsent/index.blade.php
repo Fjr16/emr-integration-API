@@ -43,7 +43,7 @@
                     @foreach ($data as $item)
                         <tr>
                             <td>{{ $item->no_antrian ?? '-' }}</td>
-                            <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                            <td>{{ $item->patient->no_rm ?? '' }}
                             </td>
                             <td>{{ $item->patient->name ?? '-' }}</td>
                             <td>{{ $item->patientCategory->name ?? '-' }}</td>

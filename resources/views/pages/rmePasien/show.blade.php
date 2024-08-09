@@ -57,7 +57,7 @@
                                 <img class="img-fluid" src="{{ asset('assets/img/illustrations/profilerme.png') }}" alt="" style="max-width: 10rem">
                                 <div class="mx-auto border border-5 border-success w-75 rounded-pill">
                                     <div class="display-4 text-center py-2">
-                                        {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                        {{ $item->no_rm ?? '' }}
                                     </div>
                                 </div>
                             </div>

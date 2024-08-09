@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Laravolt\Indonesia\Models\Province;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Laravolt\Indonesia\Models\City;
-use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Village;
+use Illuminate\Database\Eloquent\Model;
+use Laravolt\Indonesia\Models\District;
+use Laravolt\Indonesia\Models\Province;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Patient extends Model
 {
@@ -75,7 +77,14 @@ class Patient extends Model
     protected static function booted()
     {
         static::creating(function ($patient) {
-            $patient->no_rm = static::max('no_rm') + 1;
+            $sequenceNumber = SequenceNumber::getNextNumber();
+            $today = Carbon::now();
+            $year = $today->format('y');
+            $month = $today->format('m');
+            $day = $today->format('d');
+            $medicalRecordNumber = "$year-$month-$day-$sequenceNumber";
+
+            $patient->no_rm = $medicalRecordNumber;
         });
     }
 

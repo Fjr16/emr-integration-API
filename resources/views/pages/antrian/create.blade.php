@@ -50,12 +50,12 @@
                         @foreach ($patients as $patient)
                         {{-- @if (old('patient_id') == $patient->id)
                         <option value="{{ $patient->id }}" selected>
-                            {{ implode('-', str_split(str_pad($patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                            {{ $patient->no_rm ?? '' }}
                             / {{ $patient->name }}
                         </option>
                         @else --}}
                         <option value="{{ $patient->id }}">
-                            {{ implode('-', str_split(str_pad($patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                            {{ $patient->no_rm ?? '' }}
                             / {{ $patient->name }}
                         </option>
                         {{-- @endif --}}
@@ -237,7 +237,7 @@
                         <td>{{ $antrian->no_antrian ?? '' }}</td>
                         <td>{{ \Carbon\Carbon::parse($antrian->tgl_antrian)->format('d-m-Y') ?? '' }}</td>
                         <td>{{ $antrian->patient->name ?? '' }}</td>
-                        <td>{{ implode('-', str_split(str_pad($antrian->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                        <td>{{ $antrian->patient->no_rm ?? '' }}
                         </td>
                         <td>{{ $antrian->dpjp->poliklinik->name ?? '' }}</td>
                         <td>{{ $antrian->last_diagnostic ?? 'TIDAK ADA' }}</td>

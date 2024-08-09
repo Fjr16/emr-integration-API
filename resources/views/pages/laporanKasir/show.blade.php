@@ -11,7 +11,7 @@
       <tr>
         <td style="width: 200px">Nomor Rekam Medis</td>
         <td>:</td>
-        <td>{{ implode('-', str_split(str_pad($item->rawatJalanPatient->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+        <td>{{ $item->rawatJalanPatient->queue->patient->no_rm ?? '' }}</td>
       </tr>
       <tr>
         <td>Nama Pasien</td>

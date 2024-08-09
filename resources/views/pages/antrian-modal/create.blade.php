@@ -27,7 +27,7 @@
             <label for="basic-default-name" class="col-sm-3 col-form-label">No RM</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control form-control-sm" id="basic-default-name"
-                    value="{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}"
+                    value="{{ $item->patient->no_rm ?? '' }}"
                     disabled />
             </div>
         </div>

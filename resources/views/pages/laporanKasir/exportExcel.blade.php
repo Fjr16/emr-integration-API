@@ -8,7 +8,7 @@
       <tr></tr>
       <tr>
           <td>Nama / No rm : </td>
-          <td>{{ $item->rawatJalanPatient->queue->patient->name ?? '' }} / {{ implode('-', str_split(str_pad($item->rawatJalanPatient->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+          <td>{{ $item->rawatJalanPatient->queue->patient->name ?? '' }} / {{ $item->rawatJalanPatient->queue->patient->no_rm ?? '' }}</td>
           <td>Tanggal Kunjungan : </td>
           <td>{{ $item->rawatJalanPatient->queue->tgl_antrian ?? '' }}</td>
           

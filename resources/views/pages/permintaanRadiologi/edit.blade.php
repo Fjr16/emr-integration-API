@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="col-4">
                     <h4 class="mb-1 text-primary d-flex">
-                        {{ $queue->patient->name }} ({{ implode('-', str_split(str_pad($queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
+                        {{ $queue->patient->name }} ({{ $queue->patient->no_rm ?? '' }})
                         <span class="ms-2 badge {{ $queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
                     <h6 class="mb-1">{{ $queue->dpjp->name }} ({{ $queue->dpjp->staff_id }}) / <span class="fw-bold">{{ $queue->dpjp->poliklinik->name ?? '' }}</span></h6>

@@ -119,7 +119,7 @@
               <span class="badge bg-danger">DATA ERROR !!</span>
             @endif
           </td>
-          <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->queue->patient->name ?? '-' }}</td>
+          <td>{{ $item->queue->patient->no_rm ?? }} / {{ $item->queue->patient->name ?? '-' }}</td>
           <td>{{ $item->queue->patientCategory->name ?? '-' }}</td>
           <td>{{ $item->tipe_permintaan ?? '-' }}</td>
           <td>{!! $item->diagnosa ?? '-' !!}</td>

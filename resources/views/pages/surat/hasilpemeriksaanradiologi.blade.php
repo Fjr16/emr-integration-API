@@ -109,7 +109,7 @@
                     <td style="width: 200px">No. RM / Nama</td>
                     <td style="width: 20px">:</td>
                     <td class="fw-bold">
-                        {{ implode('-', str_split(str_pad($item->radiologiFormRequest->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->radiologiFormRequest->queue->patient->name ?? '' }} 
+                        {{ $item->radiologiFormRequest->queue->patient->no_rm ?? '' }} / {{ $item->radiologiFormRequest->queue->patient->name ?? '' }} 
                     </td>
                 </tr>
                 <tr>

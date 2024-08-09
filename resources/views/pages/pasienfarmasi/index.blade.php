@@ -84,7 +84,7 @@
                   @endif
                 </td>
                 <td>{{ $item->queue->no_antrian ?? '' }}</td>
-                <td>{{ $item->queue->patient->name ?? '' }} / <span class="text-primary">{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</span></td>
+                <td>{{ $item->queue->patient->name ?? '' }} / <span class="text-primary">{{ $item->queue->patient->no_rm ?? }}</span></td>
                 <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
                 <td>{{ $item->queue->patient->jenis_kelamin ?? '' }}</td>
                 <td>

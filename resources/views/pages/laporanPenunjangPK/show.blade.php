@@ -6,7 +6,7 @@
             <div class="col-md-9">
                 <h4 class="align-self-center m-0">
                     Riwayat Pemeriksaan Laboratorium Patologi Klinik
-                    <span class="text-primary">{{ $item->name ?? '' }} / {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</span>
+                    <span class="text-primary">{{ $item->name ?? '' }} / {{ $item->no_rm ?? '' }}</span>
                 </h4>
             </div>
         </div>

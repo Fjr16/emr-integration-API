@@ -18,7 +18,7 @@
                             <label for="defaultFormControlInput" class="form-label">Nomor Rekam Medis</label>
                             <input type="text" name="no_rm" disabled class="form-control form-control-sm"
                                 id="defaultFormControlInput" placeholder="" aria-describedby="defaultFormControlHelp"
-                                value="{{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}"
+                                value="{{ $item->no_rm ?? '' }}"
                                 required />
                         </div>
                         <div class="mb-3">

@@ -133,7 +133,7 @@
                             <tr>
                                 <td class="fw-bold">Nama Pasien</td>
                                 <td class="ps-4 pe-1 fw-bold">:</td>
-                                <td>{{ $queue->patient->name ?? '' }} / {{ implode('-', str_split(str_pad($queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+                                <td>{{ $queue->patient->name ?? '' }} / {{ $queue->patient->no_rm ?? '' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Tgl. Lahir</td>

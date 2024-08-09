@@ -116,7 +116,7 @@
                 <a class="btn btn-success btn-sm" href="{{ route('radiologi/request.create', $item->id) }}">Edit Data</a>
               @endif
             </td>
-            <td>{{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }} / {{ $item->queue->patient->name ?? '' }}</td>
+            <td>{{ $item->queue->patient->no_rm ?? }} / {{ $item->queue->patient->name ?? '' }}</td>
             <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
             <td>{!! $item->diagnosa_klinis ?? '' !!}</td>
             <td>{{ ($item->created_at != null) ?  $item->created_at->format('Y-m-d / H:i') : '' }}</td>

@@ -135,7 +135,7 @@
                                 <td class="fs-8">No Rekam Medis</td>
                                 <td class="px-2 fs-8">:</td>
                                 <td class="fs-8">
-                                    {{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                    {{ $item->queue->patient->no_rm ?? }}
                                 </td>
                             </tr>
                             <tr>

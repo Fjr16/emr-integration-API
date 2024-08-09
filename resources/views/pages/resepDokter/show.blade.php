@@ -149,7 +149,7 @@
             <div class="row mt-3">
                 <div class="col-6">
                     <div class="d-flex flex-column">
-                        <span class="fw-bold">{{ $item->patient->name ?? '....' }} / {{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) ?? '....' }}</span>
+                        <span class="fw-bold">{{ $item->patient->name ?? '....' }} / {{ $item->patient->no_rm ?? '' ?? '....' }}</span>
                         @php
                             $tanggalLahir = new DateTime($item->patient->tanggal_lhr);
                             $now = new DateTime();

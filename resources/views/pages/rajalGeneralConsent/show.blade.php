@@ -150,7 +150,7 @@
                             <tr>
                                 <td class="fs-8">No Rekam Medis</td>
                                 <td class="px-2 fs-8">:</td>
-                                <td class="fs-8">{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                <td class="fs-8">{{ $item->patient->no_rm ?? '' }}
                                 </td>
                             </tr>
                             <tr>
@@ -450,7 +450,7 @@
                                 <td class="fs-8">No Rekam Medis</td>
                                 <td class="px-2 fs-8">:</td>
                                 <td class="fs-8">
-                                    {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                    {{ $item->no_rm ?? '' }}
                                 </td>
                             </tr>
                             <tr>

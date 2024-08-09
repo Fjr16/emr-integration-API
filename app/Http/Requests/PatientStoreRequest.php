@@ -41,7 +41,7 @@ class PatientStoreRequest extends FormRequest
             'alamat' => 'nullable|string',
             'rw' => 'nullable',
             'rt' => 'nullable',
-            'pendidikan' => 'nullable|in:TIDAK SEKOLAH,SD,SMP / MTS / SLTP SEDERAJAT,SMA / SMK / SLTA SEDERAJAT,D2,D3,S1,S2,S3|max:30',
+            'pendidikan' => 'nullable|in:TIDAK SEKOLAH,PAUD,TK,SD,SMP / MTS / SLTP SEDERAJAT,SMA / SMK / SLTA SEDERAJAT,D2,D3,S1,S2,S3|max:30',
             'status' => 'nullable|in:Belum Kawin,Kawin,Janda,Duda|max:20',
             'nm_ayah' => 'nullable|string|max:50',
             'nm_ibu' => 'nullable|string|max:50',

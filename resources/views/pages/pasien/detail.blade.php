@@ -24,7 +24,7 @@
                         </div>
                         <div class="col col-8">
                             <p class="mt-2 mb-0"> :
-                                &nbsp;&nbsp;&nbsp;{{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                &nbsp;&nbsp;&nbsp;{{ $item->no_rm ?? '' }}
                             </p>
                         </div>
 

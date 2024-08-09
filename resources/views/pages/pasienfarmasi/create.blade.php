@@ -114,7 +114,7 @@
             <div class="row">
                 <div class="col-4">
                     <h4 class="mb-1 text-primary d-flex">
-                        {{ $item->queue->patient->name }} ({{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }})
+                        {{ $item->queue->patient->name }} ({{ $item->queue->patient->no_rm ?? }})
                         <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                     </h4>
                     <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>
@@ -163,7 +163,7 @@
                             <div class="row mt-3">
                                 <div class="col-6">
                                     <div class="d-flex flex-column">
-                                        <span class="fw-bold">{{ $item->queue->patient->name ?? '....' }} / {{ implode('-', str_split(str_pad($item->queue->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) ?? '....' }}</span>
+                                        <span class="fw-bold">{{ $item->queue->patient->name ?? '....' }} / {{ $item->queue->patient->no_rm ?? ?? '....' }}</span>
                                         @php
                                             $tanggalLahir = new DateTime($item->queue->patient->tanggal_lhr);
                                             $now = new DateTime();

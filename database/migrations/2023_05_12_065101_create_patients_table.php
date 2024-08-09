@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('city_id')->nullable();
             $table->foreignId('district_id')->nullable();
             $table->foreignId('village_id')->nullable();
-            $table->unsignedBigInteger('no_rm')->unique();
+            $table->string('no_rm', 50)->unique()->required();
             $table->bigInteger('noka')->unique()->nullable();
             $table->string('name', 50)->nullable();
             $table->string('tempat_lhr', 100)->nullable();

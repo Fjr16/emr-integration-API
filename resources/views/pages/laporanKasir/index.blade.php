@@ -38,7 +38,7 @@
                 <tbody>
                     @foreach ($data as $item)
                         <tr>
-                            <td>{{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                            <td>{{ $item->no_rm ?? '' }}
                             </td>
                             <td>{{ $item->name ?? '-' }}</td>
                             <td>{{ $item->jenis_kelamin ?? '-' }}</td>

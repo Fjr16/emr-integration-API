@@ -119,7 +119,7 @@
                                     <tr>
                                         <td>No Rekam Medis</td>
                                         <td>:</td>
-                                        <td>{{ implode('-', str_split(str_pad($item->patient->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}
+                                        <td>{{ $item->patient->no_rm ?? '' }}
                                         </td>
                                     </tr>
                                     <tr>

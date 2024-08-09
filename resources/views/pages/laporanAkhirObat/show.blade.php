@@ -11,7 +11,7 @@
   
   <div class="d-flex">
     <h4 class="align-self-center m-0">Riwayat Penggunaan Obat
-      <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->name ?? '' }} / {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</span>
+      <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->name ?? '' }} / {{ $item->no_rm ?? '' }}</span>
       <a class="btn btn-sm btn-success text-end" href="{{ route('laporan/penggunaan/obat.exportExcel', $item->id) }}"><i class="bx bx-cloud-download"></i> Excel</a>
     </h4>
   </div>

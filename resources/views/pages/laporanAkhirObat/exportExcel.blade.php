@@ -33,7 +33,7 @@
       <tr></tr>
       <tr>
         <td>Nama / No rm : </td>
-        <td colspan="3">{{ $item->name ?? '' }} / {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</td>
+        <td colspan="3">{{ $item->name ?? '' }} / {{ $item->no_rm ?? '' }}</td>
         <td>Tanggal : </td>
         
         <td colspan="2">{{ isset($data[0]) ? $data[0]->created_at->format('Y/m/d') : '' }}</td>

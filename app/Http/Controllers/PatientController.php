@@ -16,13 +16,11 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $route = 'pasien.index';
         $data = Patient::latest()->get();
         return view('pages.pasien.index', [
             "title" => "Pasien",
             "menu" => "Pasien",
             "data" => $data,
-            "route" => $route
         ]);
     }
 
@@ -61,25 +59,11 @@ class PatientController extends Controller
      */
     public function store(PatientStoreRequest $request)
     {
-        // $this->validate($request, [
-        //     'noka' => 'required|unique:patients'
-        // ]);
         $data = $request->validated();
         $patient = new Patient($data);
         $patient->save();
 
         return redirect($request->previous)->with('success', 'Data Pasien Berhasil Disimpan');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     public function detail($id)
