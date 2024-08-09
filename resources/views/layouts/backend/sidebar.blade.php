@@ -14,9 +14,9 @@
     <ul class="menu-inner py-1">
 
         {{-- Main --}}
-        <li class="menu-header small text-uppercase">
+        {{-- <li class="menu-header small text-uppercase">
             <span class="menu-header-text text-white">Main</span>
-        </li>
+        </li> --}}
         <!-- Dashboard -->
         <li class="menu-item {{ $title === 'Dashboard' ? 'active' : '' }}">
             <a href="/" class="menu-link">
@@ -279,64 +279,37 @@
                     </ul>
                 </li>
             {{-- end Settings --}}
-
-            {{-- Poliklinik --}}
-                {{-- Poli --}}
-                <li class="menu-item {{ $menu == 'Poliklinik' ? 'open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bx-clinic"></i>
-                        <div>Poliklinik</div>
-                    </a>
-                    <ul class="menu-sub">
-                            <li class="menu-item {{ $title == 'Informasi Jadwal Dokter' ? 'active' : '' }}">
-                                <a href="{{ route('dokter/jadwal.all') }}" class="menu-link">
-                                    <div>Info Jadwal Poli</div>
-                                </a>
-                            </li>
-                    </ul>
-                </li>
-            {{-- end Poliklinik --}}
             {{-- end Master Data --}}
 
 
 
             {{-- Report --}}
-            <li class="menu-header small text-uppercase">
+            {{-- <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Report</span>
             </li>
-            {{-- Laporan --}}
-            {{-- @canany() --}}
             <li class="menu-item {{ $menu == 'Laporan' ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bxs-report"></i>
                     <div>Laporan</div>
                 </a>
                 <ul class="menu-sub">
-                    {{-- @can('master user simrs') --}}
                     <li class="menu-item {{ $title == 'Laporan Penggunaan Obat' ? 'active' : '' }}">
                         <a href="{{ route('laporan/penggunaan/obat.index') }}" class="menu-link">
                             <div>Penggunaan Obat Pasien</div>
                         </a>
                     </li>
-                    {{-- @endcan --}}
-                    {{-- @can('master laboratorium pk') --}}
                     <li class="menu-item {{ $title == 'Laporan Kasir' ? 'active' : '' }}">
                         <a href="{{ route('laporan/kasir.index') }}" class="menu-link">
                             <div>Kasir Report</div>
                         </a>
                     </li>
-                    {{-- @endcan --}}
-                    {{-- @can('master radiologi') --}}
                     <li class="menu-item {{ $title == 'Laporan Lab Pk' ? 'active' : '' }}">
                         <a href="{{ route('laporan/lab/patologi/klinik.index') }}" class="menu-link">
                             <div>Lab Patologi Klinik</div>
                         </a>
                     </li>
-                    {{-- @endcan --}}
                 </ul>
-            </li>
-            {{-- @endcanany --}}
-            {{-- end Laporan --}}
+            </li> --}}
             {{-- end Report --}}
         {{-- @endrole --}}
     </ul>

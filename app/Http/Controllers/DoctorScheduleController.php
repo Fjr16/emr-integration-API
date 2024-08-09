@@ -6,24 +6,9 @@ use App\Models\User;
 use App\Models\DoctorsSchedule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\JadwalPraktekRequest;
-use App\Models\Poliklinik;
 
 class DoctorScheduleController extends Controller
 {
-    public function all()
-    {
-        $dokters = User::where('isDokter', true)->get();
-        $polikliniks = Poliklinik::where('isActive', true)->get();
-        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-        return view('pages.informasijadwaldokter.index', [
-            'title' => 'Informasi Jadwal Dokter',
-            'menu' => 'Poliklinik',
-            'dokters' => $dokters,
-            'polikliniks' => $polikliniks,
-            'days' => $days,
-        ]);
-    }
-
     // new Controller
 
     public function create($id)
