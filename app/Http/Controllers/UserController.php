@@ -192,13 +192,8 @@ class UserController extends Controller
 
 
         if ($request->input('tanda_tangan')) {
-            $ttdImage = base64_decode(str_replace('data:image/png;base64,', '', $request->input('tanda_tangan')));
-
             $folder_path = 'assets/paraf-petugas/';
-            $file_name = $folder_path . uniqid() . '.png';
             Storage::makeDirectory('public/', $folder_path);
-            Storage::put('public/' . $file_name, $ttdImage);
-
             $ttdImage = base64_decode(str_replace('data:image/png;base64,', '', $request->input('tanda_tangan')));
             $file_name = $folder_path . uniqid() . '.png';
             Storage::put('public/' . $file_name, $ttdImage);
@@ -210,15 +205,6 @@ class UserController extends Controller
 
             if ($item->isDokter == true) {
                 $item->specialists()->sync($request->specialist_id);
-                // $checkSchedules = $item->doctorSchedules()->count();
-                // if ($item->room_detail_id && $checkSchedules == 0) {
-                //     $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-                //     foreach ($days as $day) {
-                //         $jadwal['user_id'] = $item->id;
-                //         $jadwal['day'] = $day;
-                //         DoctorsSchedule::create($jadwal);
-                //     }
-                // }
             } else {
                 $item->specialists()->detach();
             }

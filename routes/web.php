@@ -64,96 +64,9 @@ use App\Http\Controllers\PoliklinikController;
 |
 */
 
-
-Route::get('clear/user/tabel', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2014_10_12_000000_create_users_table.php');
-    Artisan::call('db:seed --class=UserSeeder');
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/tabel.user');
-
-Route::get('clear/permission', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_08_185341_create_permission_tables.php');
-    Artisan::call('db:seed --class=PermissionSeeder');
-    Artisan::call('db:seed --class=RoleSeeder');
-    // Artisan::call('db:seed --class=UserHasPermissionSeeder');
-    // Artisan::call('db:seed --class=PatientCategorySeeder'); //patient category
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear.permission');
-
-
-// migrate refresh rajal
-Route::get('/rajal/clear/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_09_141259_create_rajal_farmasi_obat_details_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_09_125456_create_rajal_farmasi_patients_table.php');
-    // resep dokter
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_09_122838_create_medicine_receipts_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_09_21_030025_create_medicine_receipt_details_table.php');
-    //rajal road patient
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_25_014621_create_rajal_road_patients_table.php');
-    return back()->with('success', 'Berhasil Di Reset');
-    //assesmen awal medis
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_170103_create_initial_assesments_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_165825_create_initial_assesment_physical_examinations_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_171249_create_initial_assesment_supporting_examination_results_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_171824_create_initial_asessment_plans_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_10_172247_create_initial_assesment_educational_needs_table.php');
-
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/rajal');
-
-//migrate refresh radiologi
-Route::get('/radiologi/clear/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_190333_create_radiologi_form_requests_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_07_15_191411_create_radiologi_form_request_details_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/radiologi/request/hasil');
-
-//migrate refresh labor pk
-Route::get('/labor/clear/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_26_172251_create_laboratorium_requests_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_08_26_173042_create_laboratorium_request_details_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('clear/labor/request/hasil');
-
-//Clear SBPK
-Route::get('/sbpk/clear', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_29_130314_create_surat_bukti_pelayanan_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_29_131100_create_surat_bukti_pelayanan_sekunder_diagnoses_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_29_131122_create_surat_bukti_pelayanan_sekunder_actions_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_10_29_131214_create_surat_bukti_pelayanan_patient_details_table.php');
-    return back()->with('success', 'SUKSES RESET');
-})->name('sbpk/clear');
-
-Route::get('/farmasi/gudang/clear/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_06_14_150904_create_medicine_stoks_table.php');
-    return back()->with('success', 'Berhasil Di Reset');
-})->name('clear/farmasi/medicine');
-
-// Migrate tabel diagnosis_patients, medicine_categories, medicines, units
-Route::get('/db/lama/migrate/database', function () {
-    Artisan::call('migrate:refresh --path=/database/migrations/2024_04_17_000520_create_diagnosis_patients_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_05_30_153110_create_medicine_categories_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_05_29_092250_create_medicines_table.php');
-    Artisan::call('migrate:refresh --path=/database/migrations/2023_06_02_081836_create_units_table.php');
-    // Artisan::call('migrate:refresh --path=/database/migrations/2023_07_08_185341_create_permission_tables.php');
-    return back()->with('success', 'SUKSES MIGRATE');
-})->name('migrate/db/lama');
-
-// Seeder untuk tabel diagnosis_patients, medicine_categories, medicines, roles, units
-Route::get('/db/lama/seed/database', function () {
-    Artisan::call('db:seed --class=DiagnosisPatientSeeder');
-    Artisan::call('db:seed --class=MedicineCategorieSeeder');
-    Artisan::call('db:seed --class=MedicineSeeder');
-    Artisan::call('db:seed --class=RoleSeeder');
-    Artisan::call('db:seed --class=UnitSeeder');
-    return back()->with('success', 'SUKSES SEED');
-})->name('seed/db/lama');
-
-
-// get TTD User
-Route::get('/get/Ttd', [OtherController::class, 'getTtdUser'])->name('ranap/cppt.getTtd');
-
 Route::group(['middleware' => 'auth'], function () {
+    // get TTD User
+    Route::get('/get/Ttd', [OtherController::class, 'getTtdUser'])->name('ranap/cppt.getTtd');
     //Konsultasi dan Tarif Konsultasi
     Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('konsultasi');
     Route::get('/konsultasi/create', [ConsultationController::class, 'create'])->name('konsultasi.create');
