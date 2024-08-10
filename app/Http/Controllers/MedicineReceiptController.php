@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\MedicineReceipt;
 use App\Models\MedicineReceiptDetail;
 use App\Models\Patient;
+use App\Http\Requests\MedicineReceiptRequest;
 
 class MedicineReceiptController extends Controller
 {
@@ -17,7 +18,7 @@ class MedicineReceiptController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function store(MedicineReceiptRequest $request, $id)
     {
         $item = Queue::find($id);
         if ($item->medicineReceipt) {
