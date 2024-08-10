@@ -98,11 +98,12 @@ class QueueController extends Controller
         try {
             $data = $request->validated();
             $item = User::findOrFail($request->doctor_id);
-            $today = now();
+            $tgl_berobat = Carbon::parse($request->tgl_antrian);
+            $today = $tgl_berobat ?? now();
     
             $roomCode = $item->poliklinik->kode_antrian ?? '';
             if ($roomCode) {
-                $lastQueue = Queue::whereDate('created_at', $today)
+                $lastQueue = Queue::whereDate('tgl_antrian', $today)
                     ->where('no_antrian', 'like', $roomCode . '%')
                     ->orderBy('no_antrian', 'desc')
                     ->first();
@@ -114,7 +115,7 @@ class QueueController extends Controller
                 return back()->with('error', 'Mohon Lengkapi Data Master Kode Antrian Dokter Anda !!');
             }
             
-            $data['user_id'] = Auth::user()->id;
+            $data['user_id'] = Auth::user()->id ?? $request->user_id;
             $data['dokter_id'] = $item->id;
             $data['status_antrian'] = 'WAITING';
             $data['no_antrian'] = $queueNumber;

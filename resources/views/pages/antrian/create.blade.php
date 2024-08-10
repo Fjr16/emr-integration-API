@@ -218,29 +218,28 @@
             <thead>
                 <tr class="text-nowrap bg-dark">
                     <th class="text-center">Action</th>
+                    <th>Poli</th>
                     <th>No Antrian</th>
                     <th>Tgl Berobat</th>
-                    <th>Nama</th>
-                    <th>Norm</th>
-                    <th>Poli</th>
-                    <th>Diagnosa Rujukan</th>
+                    <th>Nama / No. RM</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Alamat</th>
                     <th>status Antrian</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($antrians as $antrian)
-                    <tr>
-                        <td class="d-flex">
-                                <a class="btn btn-dark btn-sm text-white"
-                                    onclick="showAntrian({{ $antrian->id }})">Lihat</a>
-                        </td>
-                        <td>{{ $antrian->no_antrian ?? '' }}</td>
-                        <td>{{ \Carbon\Carbon::parse($antrian->tgl_antrian)->format('d-m-Y') ?? '' }}</td>
-                        <td>{{ $antrian->patient->name ?? '' }}</td>
-                        <td>{{ $antrian->patient->no_rm ?? '' }}
+                    <tr class="text-wrap">
+                        <td>
+                            <a class="btn btn-dark btn-sm text-white" onclick="showAntrian({{ $antrian->id }})">Lihat</a>
                         </td>
                         <td>{{ $antrian->dpjp->poliklinik->name ?? '' }}</td>
-                        <td>{{ $antrian->last_diagnostic ?? 'TIDAK ADA' }}</td>
+                        <td>{{ $antrian->no_antrian ?? '' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($antrian->tgl_antrian)->format('d-m-Y') ?? '' }}</td>
+                        <td>{{ ($antrian->patient->name ?? '') . ' / ' . ($antrian->patient->no_rm ?? '') }}</td>
+                        <td>{{ $antrian->patient->jenis_kelamin ?? '-' }}
+                        </td>
+                        <td>{{ ($antrian->patient->alamat ?? '-'). ', ' . ($antrian->patient->village->name ?? '-') . ', ' . ($antrian->patient->district->name ?? '-') . ', ' . ($antrian->patient->city->name ?? '-') . ' ' . ($antrian->patient->province->name ?? '-')  }}</td>
                         <td>
                             @if ($antrian->status_antrian == 'FINISHED')
                                 <span class="badge bg-success">SUDAH DILAYANI</span>
