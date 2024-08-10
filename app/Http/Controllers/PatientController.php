@@ -73,7 +73,7 @@ class PatientController extends Controller
         $jk = ['Pria', 'Wanita'];
         $agama = ['Islam', 'Budha', 'Kristen Protestan', 'Kristen Katolik', 'Hindu', 'Konghucu', 'dll'];
         $status = ['Belum Kawin', 'Kawin', 'Janda', 'Duda'];
-        $pendidikan = ['SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
+        $pendidikan = ['TIDAK SEKOLAH', 'PAUD', 'TK','SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
         $jobs = Job::all();
         return view('pages.pasien.detail', [
             "title" => "Pasien",
@@ -101,7 +101,7 @@ class PatientController extends Controller
         $jk = ['Pria', 'Wanita'];
         $agama = ['Islam', 'Budha', 'Kristen Protestan', 'Kristen Katolik', 'Hindu', 'Konghucu', 'dll'];
         $status = ['Belum Kawin', 'Kawin', 'Janda', 'Duda'];
-        $pendidikan = ['SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
+        $pendidikan = ['TIDAK SEKOLAH', 'PAUD', 'TK','SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
         $jobs = Job::all();
         return view('pages.pasien.edit', [
             "title" => "Pasien",
@@ -127,7 +127,6 @@ class PatientController extends Controller
     {
         $item = Patient::findOrFail($id);
         $data = $request->all();
-        // dd($data);
         $item->update($data);
         return redirect()->route('pasien.index')->with('success', 'Berhasil Diperbarui');
     }
