@@ -14,6 +14,7 @@ class PatientCategorySeeder extends Seeder
      */
     public function run()
     {
+        DB::table('patient_categories')->delete();
         $arr = [
             [
                 'id' => 1,
@@ -23,17 +24,17 @@ class PatientCategorySeeder extends Seeder
             [
                 'id' => 18,
                 'name' => 'BPJS',
-                'margin' => 0,
+                'margin' => 10,
             ],
             [
                 'id' => 19,
                 'name' => 'PT Semen Padang',
-                'margin' => 5,
+                'margin' => 10,
             ],
             [
                 'id' => 21,
                 'name' => 'Padang Eye Center',
-                'margin' => 5,
+                'margin' => 11,
             ],
             [
                 'id' => 22,
@@ -43,7 +44,7 @@ class PatientCategorySeeder extends Seeder
             [
                 'id' => 23,
                 'name' => 'PDAM SUMBAR',
-                'margin' => 10,
+                'margin' => 15,
             ],
         ];
         foreach ($arr as $item) {

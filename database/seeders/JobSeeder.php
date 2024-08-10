@@ -16,6 +16,7 @@ class JobSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('jobs')->delete();
         $json = file_get_contents(public_path('dbLama/listJob.json'));
         $data = json_decode($json, true);
 

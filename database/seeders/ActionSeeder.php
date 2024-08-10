@@ -88,6 +88,26 @@ class ActionSeeder extends Seeder
                 "jenis_tindakan" => 'Laboratorium',
                 "action_code" => "90.53",
             ],
+            [
+                "name" => "Hemoglobin (Hb)",
+                "jenis_tindakan" => 'Laboratorium',
+                "action_code" => "90.54",
+            ],
+            [
+                "name" => "Leukosit (Leu)",
+                "jenis_tindakan" => 'Laboratorium',
+                "action_code" => "90.55",
+            ],
+            [
+                "name" => "Eritrosit (Ert)",
+                "jenis_tindakan" => 'Laboratorium',
+                "action_code" => "90.56",
+            ],
+            [
+                "name" => "Trombosit (Trom)",
+                "jenis_tindakan" => 'Laboratorium',
+                "action_code" => "90.57",
+            ],
             // radiologi
             [
                 "name" => "Photo Abdomen 2 Posisi",

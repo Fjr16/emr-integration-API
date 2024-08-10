@@ -15,6 +15,7 @@ class UnitSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('units')->delete();
         $data = [
             ['name' => 'Pelayanan'],
             ['name' => 'Poliklinik'],

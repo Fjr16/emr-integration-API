@@ -33,7 +33,7 @@ class MedicineSeeder extends Seeder
                 'medium_unit' => $item['medium_unit'],
                 'medium_to_big' => $item['big_to_medium'] ?? null,
                 'big_unit' => $item['big_unit'],
-                'base_harga' => 0,  //integer Rp
+                'base_harga' => fake()->randomElement([10000, 15000, 20000, 25000, 30000, 35000, 40000]),  //integer Rp
                 'disc' => 0,    // integer Rp
                 'pajak' => 0,   // integer Rp
                 'created_at' => Carbon::now(),

@@ -8,7 +8,7 @@ use Laravolt\Indonesia\Seeds\CitiesSeeder;
 use Laravolt\Indonesia\Seeds\VillagesSeeder;
 use Laravolt\Indonesia\Seeds\DistrictsSeeder;
 use Laravolt\Indonesia\Seeds\ProvincesSeeder;
-use Spatie\Permission\Models\Permission;
+// use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,32 +20,31 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            // PermissionSeeder::class,
+            // Petugas Medis / user,
             RoleSeeder::class,
             PoliklinikSeeder::class,
+            UnitSeeder::class,
             UserSeeder::class,
-            // UserHasPermissionSeeder::class,
+            UserHasPermissionSeeder::class,
+            SpecialistSeeder::class,
+            // DoctorScheduleSeeder::class,
+            // obat
             MedicineCategorieSeeder::class,
             MedicineTypeSeeder::class,
             MedicineFormSeeder::class,
             MedicineSeeder::class,
-            PatientCategorySeeder::class,
-            SpecialistSeeder::class,
-            UserSpecialistSeeder::class,
             // TarifLayananSeeder::class,
-            DoctorScheduleSeeder::class,
             // seeder untuk daftar wilayah dari package laravolt
             ProvincesSeeder::class,
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
             // 
-            JobSeeder::class,
-            UnitSeeder::class,
             ActionSeeder::class,
+            PatientCategorySeeder::class,
+            JobSeeder::class,
             ProcedureSeeder::class,
             DiagnosticSeeder::class,
-            // RadiologiSeeder::class, buat seeder untuk request master radiologi terlebih dahulu
         ]);
     }
 }
