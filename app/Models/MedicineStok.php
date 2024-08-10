@@ -9,6 +9,7 @@ class MedicineStok extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'unit_id',
         'medicine_id',
@@ -22,7 +23,7 @@ class MedicineStok extends Model
         'satuan',
     ];
 
-    protected $with = ['medicine'];
+    protected $with = ['medicine', 'medicineDistributionDetails', 'rajalFarmasiObatDetails'];
 
     public function medicine(){
         return $this->belongsTo(Medicine::class);

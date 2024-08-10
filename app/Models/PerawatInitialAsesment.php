@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PerawatInitialAsesment extends Model
 {
     use HasFactory;
+
+    protected $with = ['detailPsikologis'];
+
     protected $fillable = [
         'queue_id',
         'patient_id',

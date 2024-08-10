@@ -9,6 +9,8 @@ class PatientActionReport extends Model
 {
     use HasFactory;
 
+    protected $with = ['patientActionReportDetails'];
+
     protected $fillable = [
         'user_id',
         'queue_id',

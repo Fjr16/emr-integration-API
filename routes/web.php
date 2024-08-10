@@ -325,7 +325,7 @@ Route::get('/rajal/kontrol/ulang/destroy/{id}', [KontrolUlangController::class, 
 Route::get('/rajal/kontrol/ulang/show/{id}', [KontrolUlangController::class, 'show'])->name('rajal/kontrol/ulang.show');
 // Route::get('/rajal/sbpk/update/ttd', [KontrolUlangController::class, 'getTtd'])->name('rajal/sbpk.ttd');
 
-// Route::group(['middleware' => ['permission:tambah rme perawat']], function(){
+// asesmen perawat DONE
 Route::get('/asesmen/awal/perawat/create_step_one/{id}', [AsesmentPerawatController::class, 'create_step_one'])->name('asesmen/awal/perawat.create_step_one');
 Route::post('/asesmen/awal/perawat/store_step_one/{id}', [AsesmentPerawatController::class, 'store_step_one'])->name('asesmen/awal/perawat.store_step_one');
 Route::post('/asesmen/awal/perawat/store_step_two/{id}', [AsesmentPerawatController::class, 'store_step_two'])->name('asesmen/awal/perawat.store_step_two');
