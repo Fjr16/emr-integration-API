@@ -111,10 +111,10 @@ class RawatJalanController extends Controller
         $procedures = Procedure::get();
         // obat
         // $medicines = MedicineStok::where('stok' ,'>', 0)->get();
-        $medicines = Medicine::whereHas('medicineStoks')->get();
+        $medicines = Medicine::whereHas('medicineStoks')->with('medicineStoks')->get();
         // resep 
         //tindakan
-        $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->get();
+        $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->with('actionRates')->get();
 
         return view('pages.rawatjalan.show', [
             "title" => decrypt($title),

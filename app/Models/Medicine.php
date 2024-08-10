@@ -9,13 +9,13 @@ class Medicine extends Model
 {
     use HasFactory;
 
-    protected $with = [
-        'medicineTransactions', 
-        'medicineStoks', 
-        'medicineDistributionDetails', 
-        'rajalFarmasiObatDetails', 
-        'medicineReceiptDetails'
-    ];
+    // protected $with = [
+    //     'medicineTransactions', 
+    //     'medicineStoks', 
+    //     'medicineDistributionDetails', 
+    //     'rajalFarmasiObatDetails', 
+    //     'medicineReceiptDetails'
+    // ];
 
     protected $fillable = [
         'medicine_type_id',

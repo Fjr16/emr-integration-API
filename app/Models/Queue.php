@@ -12,19 +12,8 @@ class Queue extends Model
 
     protected $with = [
         'rawatJalanPoliPatient', 
-        'perawatInitialAssesment', 
-        'laboratoriumRequests', 
-        'radiologiFormRequests',
         'doctorInitialAssesment',
-        'diagnosticProcedurePatient',
-        'MedicineReceipt',
         'soapDokter',
-        'patientActionReport',
-        'planControlPatient',
-        'KonsulInternal',
-        'RajalFarmasiPatient',
-        'kasirPatient',
-        'rajalGeneralConsent',
     ];
 
     protected $fillable = [

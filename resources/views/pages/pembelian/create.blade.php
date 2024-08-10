@@ -19,15 +19,28 @@
     </div>
 </div>
 @endif
-@if (session()->has('errors'))
+@if (session('exceptions'))
 <div class="alert alert-danger d-flex" role="alert">
     <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
     <div class="d-flex flex-column ps-1">
         <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
         <span>
-          @foreach (session('errors') as $err)
+          @foreach (session('exceptions') as $err)
             {{ $err ?? '' }} <br>
           @endforeach
+        </span>
+    </div>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger d-flex" role="alert">
+    <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+    <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+        <span>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
         </span>
     </div>
 </div>
