@@ -134,7 +134,7 @@ class UserSeeder extends Seeder
                 'unit_id' => null,
                 'password' => $password,
                 'status' => 'AKTIF',
-                'paraf' => '',
+                'paraf' => 'assets/paraf-petugas/66b7c9c499a59.png',
             ],
             [
                 'id' => 14,
@@ -493,6 +493,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65a7be9bc33fb.png',
                 'isDokter' => true,
                 'sip' => '1122/891/DKK/IV/2022',
+                'tarif' => 40000,
             ],
             [
                 'id' => 35,
@@ -525,6 +526,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65a7cdf5c74d3.png',
                 'isDokter' => true,
                 'sip' => '1123/891/DKK/IV/2022',
+                'tarif' => 50000,
             ],
             [
                 'id' => 36,
@@ -557,6 +559,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65a587c776efd.png',
                 'isDokter' => true,
                 'sip' => '733.1971/SIPD/DPMPTSP-PDG/VI/2023',
+                'tarif' => 40000,
             ],
             [
                 'id' => 37,
@@ -589,6 +592,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65a1530c366b2.png',
                 'isDokter' => true,
                 'sip' => '733.1972/SIPD/DPMPTSP-PDG/VI/2023',
+                'tarif' => 35000,
             ],
             [
                 'id' => 38,
@@ -621,6 +625,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65a92570a3062.png',
                 'isDokter' => true,
                 'sip' => '733.1173/SIPD/DPMPTSP-PDG/I/2023',
+                'tarif' => 45000,
             ],
             [
                 'id' => 39,
@@ -653,6 +658,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65a1512719add.png',
                 'isDokter' => true,
                 'sip' => '777/SDMK-JAMKES/DKK/III/2017',
+                'tarif' => 100000,
             ],
             [
                 'id' => 40,
@@ -685,6 +691,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65ae15a4c646f.png',
                 'isDokter' => true,
                 'sip' => '2222/SDMK-JASMKES/DKK/XI/2019',
+                'tarif' => 50000,
             ],
             [
                 'id' => 41,
@@ -717,6 +724,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/65ae2517bf6d3.png',
                 'isDokter' => true,
                 'sip' => '733.1111/SIPD/DP,PTSP-PDG/III/2023',
+                'tarif' => 60000,
             ],
             [
                 'id' => 42,
@@ -749,6 +757,7 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/66a7a9f867fee.png',
                 'isDokter' => true,
                 'sip' => '3333/SDMK-JAMKES/DKK/IX/2019',
+                'tarif' => 55000,
             ],
             [
                 'id' => 43,
@@ -781,10 +790,8 @@ class UserSeeder extends Seeder
                 'paraf' => 'assets/paraf-petugas/66a7a9f863575.png',
                 'isDokter' => true,
                 'sip' => '0909/Regdit-P.SDM/DKK/X/2015',
+                'tarif' => 35000,
             ],
-
-
-
         ];
 
         // dd($data);

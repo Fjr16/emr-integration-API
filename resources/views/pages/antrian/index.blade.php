@@ -19,6 +19,17 @@
         </div>
     </div>
     @endif
+    @if (session()->has('exceptions'))
+    <div class="alert alert-danger d-flex" role="alert">
+        <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
+        <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">ERROR !!</h6>
+            @foreach (session('exceptions') as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </div>
+    </div>
+    @endif
     @if ($errors->any())
     <div class="alert alert-danger d-flex" role="alert">
         <span class="alert-icon rounded-circle"><i class='bx bxs-x-circle' style="font-size: 40px"></i></span>
@@ -78,7 +89,7 @@
                                         <div class="btn-group dropend">
                                             <button type="button" class="btn btn-dark btn-sm dropdown-toggle hide-arrow"
                                                 data-bs-toggle="dropdown">
-                                                <i class='bx bx-info-circle'></i> General Consent
+                                                <i class='bx bx-book-bookmark'></i> General Consent
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item text-warning" href="{{ route('rajal/general/consent.edit', encrypt($item->id)) }}">
@@ -109,9 +120,9 @@
                                         </div>
                                         </div>
                                     @else
-                                        <a class="btn btn-success btn-sm mx-2"
+                                        <a class="btn btn-success btn-sm"
                                             href="{{ route('rajal/general/consent.create', encrypt($item->id)) }}">
-                                            <i class='bx bx-plus me-1'></i>
+                                            <i class='bx bx-plus'></i> General Consent
                                         </a>
                                     @endif
                                 @endif

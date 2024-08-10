@@ -45,7 +45,7 @@ return new class extends Migration
             $table->boolean('isDokter')->default(false);
             $table->string('paraf')->nullable();
             $table->string('sip', 50)->nullable();
-            $table->integer('tarif')->default(0);
+            $table->decimal('tarif', 10,2)->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

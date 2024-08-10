@@ -765,7 +765,6 @@
         }
 
         function openModalTtdBottom(element, elementImg, elementTextArea) {
-            console.log(element.closest('td'));
             tempElementImage = $(element).closest('.row').find('#' + elementImg);
             tempTextArea = $(element).closest('.row').find('#' + elementTextArea);
             $('#signaturePadModal').modal('show');

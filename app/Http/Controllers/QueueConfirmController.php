@@ -8,8 +8,8 @@ use App\Models\Queue;
 use Illuminate\Http\Request;
 use App\Models\RawatJalanPoliPatient;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class QueueConfirmController extends Controller
 {
@@ -86,7 +86,6 @@ class QueueConfirmController extends Controller
                     $errors[] = 'Data Dokter terkait Tidak Ditemukan, mohon periksa kembali master data dokter';
                 }
                 if (!$item->dpjp->tarif || $item->dpjp->tarif <= 0) {
-                    // $errors[] = 'Tarif Untuk Dokter '. $item->dpjp->name . ' Tidak Ditemukan, mohon periksa kembali master data dokter';
                     $errors[] = 'Tarif Dokter harus Antara Rp 0.01 hingga 99.999.999,99, mohon periksa kembali master data dokter';
                 }
                 
@@ -105,13 +104,13 @@ class QueueConfirmController extends Controller
 
                 if (!empty($errors)) {
                     DB::rollBack();
-                    return back()->with('errors', $errors);
+                    return back()->with('exceptions', $errors);
                 }
     
                 DB::commit();
-                return redirect()->route('rajal/general/consent.create', encrypt($id));
+                return redirect()->route('rajal/general/consent.create', $id);
             }
-        } catch (ValidationException $th) {
+        } catch (ModelNotFoundException $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         } catch (Exception $e){
