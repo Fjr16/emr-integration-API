@@ -103,18 +103,18 @@ class RawatJalanController extends Controller
 
         $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
         $reportActions = PatientActionReport::where('queue_id', $item->id)->first();
-        $radiologiResults = RadiologiFormRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->orWhere('status', 'ACCEPTED')->with('radiologiFormRequestDetails')->latest()->get();
-        $laboratoriumResults = LaboratoriumRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'UNVALIDATE')->orWhere('status', 'ACCEPTED')->with('laboratoriumRequestDetails')->latest()->get();
+        $radiologiResults = RadiologiFormRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'ONGOING')->orWhere('status', 'ACCEPTED')->latest()->get();
+        $laboratoriumResults = LaboratoriumRequest::where('queue_id', $item->id)->where('status', 'FINISHED')->orWhere('status', 'UNVALIDATE')->orWhere('status', 'ACCEPTED')->latest()->get();
 
         // diagnostic dan procedure
         $diagnostics = Diagnostic::orderBy('icd_x_code')->get();
         $procedures = Procedure::get();
         // obat
         // $medicines = MedicineStok::where('stok' ,'>', 0)->get();
-        $medicines = Medicine::whereHas('medicineStoks')->with('medicineStoks')->get();
+        $medicines = Medicine::whereHas('medicineStoks')->get();
         // resep 
         //tindakan
-        $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->with(['actionRates'])->get();
+        $dataTindakan = Action::where('jenis_tindakan', 'Tindakan Pelayanan Medis')->get();
 
         return view('pages.rawatjalan.show', [
             "title" => decrypt($title),

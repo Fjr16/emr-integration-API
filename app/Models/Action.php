@@ -9,6 +9,7 @@ class Action extends Model
 {
     use HasFactory;
 
+    protected $with = ['actionRates'];
     protected $fillable = ['jenis_tindakan', 'action_code', 'name'];
     
     public function actionRates(){
