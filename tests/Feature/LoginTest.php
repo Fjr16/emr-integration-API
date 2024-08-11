@@ -32,7 +32,8 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(RouteServiceProvider::HOME);
+        $response->assertRedirect(RouteServiceProvider::HOME)
+                 ->assertStatus(302);
     }
     
     public function test_login_post_failure()
