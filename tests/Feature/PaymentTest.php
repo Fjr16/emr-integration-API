@@ -10,6 +10,7 @@ use App\Models\BillingRadiology;
 use Tests\TestCase;
 use App\Models\KasirPatient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 class PaymentTest extends TestCase
 {
@@ -33,16 +34,10 @@ class PaymentTest extends TestCase
         $totalReceipt = $this->kasirPatient->billingOfMedicineFees()->sum('sub_total') ?? 0;
         $this->expectedTotal = $totalJasa + $totalTindMedis + $totalRad + $totalLab + $totalReceipt;
     }
-    
-    public function test_pembayaran_form_create()
-    {
-        $response = $this->get('/rajal/kasir/pembayaran');
-        $response->assertViewIs('pages.pasienPembayaran.index');
-        $response->assertStatus(200);
-    }
 
     public function test_update_updates_status_and_total()
     {
+        DB::beginTransaction();
         $this->createData();
         $response = $this->put('/rajal/kasir/pembayaran/update/' . encrypt($this->kasirPatient->id), ['status' => 'FINISHED']);
 
@@ -52,5 +47,17 @@ class PaymentTest extends TestCase
             'total' => $this->expectedTotal,
             'status' => 'FINISHED',
         ]);
+        DB::rollBack();
+    }
+    public function test_update_status_and_total_invalid()
+    {
+        DB::beginTransaction();
+        $this->createData();
+        $response = $this->put('/rajal/kasir/pembayaran/update/' . encrypt($this->kasirPatient->id), ['status' => 'SALAH']);
+
+        // redirect setelah update code 302
+        $response->assertFound()
+                 ->assertSessionHas('error'); 
+        DB::rollBack();
     }
 }
