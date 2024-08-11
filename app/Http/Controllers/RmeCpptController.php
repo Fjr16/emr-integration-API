@@ -7,6 +7,10 @@ use App\Models\RmeCppt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RawatJalanPoliPatient;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class RmeCpptController extends Controller
 {
@@ -33,34 +37,65 @@ class RmeCpptController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $item = Queue::find($id);
-        $subjectives = $request->input('subjective');
-        $objectives = $request->input('objective');
-        $asesmens = $request->input('asesmen');
-        $planings = $request->input('planning');
-        
-        $data['subjective'] = $subjectives;
-        $data['objective'] = $objectives;
-        $data['asesment'] = $asesmens;
-        $data['planning'] = $planings;
-        if (auth()->user()->id == $item->dpjp->id) {
-            $data['ttd'] = $item->dpjp->paraf;
-        }
+        DB::beginTransaction();
+        try {
 
-        if ($item->soapDokter) {
-            $soap = $item->soapDokter;
-            $soap->update($data);
-        }else{
-            $data['queue_id'] = $item->id;
-            $data['patient_id'] = $item->patient->id;
-            $data['user_id'] = Auth::user()->id;
-            RmeCppt::create($data);
+            $validatedData = $request->validate([
+                'subjective' => 'required|string',
+                'objective' => 'required|string',
+                'asesmen' => 'required|string',
+                'planning' => 'required|string',
+            ], [
+                'subjective.required' => 'Subjective Tidak Boleh Kosong',
+                'subjective.string' => 'Subjective tidak valid, hanya menerima text atau string',
+                'objective.required' => 'Objective Tidak Boleh Kosong',
+                'objective.string' => 'Objective tidak valid, hanya menerima text atau string',
+                'asesmen.required' => 'Asesmen Tidak Boleh Kosong',
+                'asesmen.string' => 'Asesmen tidak valid, hanya menerima text atau string',
+                'planning.required' => 'Planning Tidak Boleh Kosong',
+                'planning.string' => 'Planning tidak valid, hanya menerima text atau string',
+            ]);
+
+            $item = Queue::findOrFail($id);
+            $data['subjective'] = $validatedData['subjective'];
+            $data['objective'] = $validatedData['objective'];
+            $data['asesment'] = $validatedData['asesmen'];
+            $data['planning'] = $validatedData['planning'];
+            if (auth()->user()->id == $item->dpjp->id) {
+                $data['ttd'] = $item->dpjp->paraf;
+            }
+
+            if ($item->soapDokter) {
+                $soap = $item->soapDokter;
+                $soap->update($data);
+            }else{
+                $data['queue_id'] = $item->id;
+                $data['patient_id'] = $item->patient->id;
+                $data['user_id'] = Auth::user()->id;
+                RmeCppt::create($data);
+            }
+            
+            
+            DB::commit();
+            return back()->with([
+                'success' => 'Berhasil Diperbarui',
+                'btn' => 'cppt',
+            ]);
+            
+        } catch (ModelNotFoundException $mn) {
+            DB::rollBack();
+            return back()->with([
+                'error' => $mn->getMessage(),
+                'btn' => 'cppt',
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with([
+                'error' => $e->getMessage(),
+                'btn' => 'cppt',
+            ]);
         }
         
-        return back()->with([
-            'success' => 'Berhasil Diperbarui',
-            'btn' => 'cppt',
-        ]);
     }
 
     /**
