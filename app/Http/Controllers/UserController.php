@@ -224,12 +224,15 @@ class UserController extends Controller
     public function destroy($id)
     {
         $item = User::find($id);
+        if ($item->isDokter == true) {
+            $navTab = 'dokter';
+        }
         if ($item->delete()) {
             $item->specialists()->detach();
         }
         return redirect()->route('user.index')->with([
             'success' => 'User Berhasil Dihapus',
-            'navUser' => 'all',
+            'navUser' => $navTab ?? 'all',
         ]);
     }
 }

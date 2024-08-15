@@ -26,6 +26,7 @@
         </li>
         {{-- @hasanyrole(['Admin', 'Dokter Poli', 'Dokter Ranap', 'Dokter Jaga', 'Petugas Informasi', 'Rekam Medis Rajal',
             'Perawat Rajal', 'Apoteker', 'Kasir', 'DPJP Radiologi', 'DPJP Labor PK', 'DPJP Labor PA']) --}}
+            @unlessrole(['Administrator', 'Petugas Gudang'])
             {{-- RME --}}
             <li class="menu-item {{ $title == 'RME' ? 'active' : '' }}">
                 <a href="{{ route('rekam/medis/elektronik.index') }}" class="menu-link">
@@ -33,24 +34,20 @@
                     <div>RME Pasien</div>
                 </a>
             </li>
+            @endunlessrole
         {{-- @endhasanyrole --}}
         {{-- end Main --}}
-
-
-        {{-- Registrasi --}}
-        {{-- @hasanyrole(['Admin', 'Petugas Informasi', 'Rekam Medis Rajal']) --}}
+        @unlessrole(['Petugas Gudang', 'Administrator'])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Pasien</span>
             </li>
             {{-- pasien --}}
-            {{-- @canany('daftar pasien rumah sakit') --}}
             <li class="menu-item {{ $title == 'Pasien' ? 'active' : '' }}">
                 <a href="{{ route('pasien.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-male"></i>
                     <div>Daftar Pasien</div>
                 </a>
             </li>
-            {{-- @endcanany --}}
             {{-- end pasien --}}
 
             {{-- Antrian --}}
@@ -74,13 +71,14 @@
                 </ul>
             </li>
             @endhasanyrole
+        @endunlessrole
 
-        @hasanyrole(['Perawat', 'Dokter', 'Rekam Medis dan Casemix', 'Apoteker', 'Kasir'])
+        @hasanyrole(['Perawat', 'Dokter', 'Apoteker', 'Kasir'])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Rawatan</span>
             </li>
 
-            @hasanyrole(['Perawat', 'Dokter', 'Rekam Medis dan Casemix'])
+            @hasanyrole(['Perawat', 'Dokter'])
             <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
                 <a href="{{ route('rajal/index') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-accessibility"></i>
@@ -163,8 +161,10 @@
 
             {{-- Master Data --}}
             <li class="menu-header small text-uppercase">
-                <span class="menu-header-text text-white">Pengaturan</span>
+                <span class="menu-header-text text-white">{{ Auth::user()->hasRole('Administrator') ? 'Pengaturan Awal' : 'Lainnya' }}</span>
             </li>
+                @unlessrole(['Petugas Radiologi', 'Petugas Laboratorium', 'Validator Radiologi', 'Validator Laboratorium'])
+                @unlessrole('Administrator')
                 <li class="menu-item {{ $menu == 'Farmasi' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bxs-bong"></i>
@@ -172,6 +172,7 @@
                     </a>
                     <ul class="menu-sub">
                         {{-- Transaksi --}}
+                        @role(['Petugas Gudang'])
                         <li class="menu-item {{ $title == 'Pembelian' ? 'active' : '' }}">
                             <a href="{{ route('farmasi/obat/pembelian.index') }}" class="menu-link">
                                 <div>Pembelian</div>
@@ -182,6 +183,7 @@
                                 <div>Amprahan</div>
                             </a>
                         </li>
+                        @endrole
                         <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">
                             <a href="{{ route('farmasi/obat/stock.index') }}" class="menu-link">
                                 <div>Stock</div>
@@ -192,26 +194,31 @@
                                 <div>Total Stock Obat</div>
                             </a>
                         </li>
+                        @hasanyrole(['Petugas Gudang','Administrator', 'Apoteker'])
                         {{-- Konfigurasi Farmasi --}}
                         <li class="menu-item {{ $title == 'Master Obat' ? 'active' : '' }}">
                             <a href="{{ route('farmasi/obat.index') }}" class="menu-link">
                                 <div>Manajemen Obat</div>
                             </a>
                         </li>
+                        @endhasanyrole
                     </ul>
                 </li>
+                @endunlessrole
                 <li class="menu-item {{ $title == 'Poliklinik' ? 'active' : '' }}">
                     <a href="{{ route('poliklinik.index') }}" class="menu-link">
                         <i class='menu-icon tf-icons bx bxs-clinic'></i>
                         <div>Poli & Dokter</div>
                     </a>
                 </li>
+                @endunlessrole
                 <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
                     <a href="{{ route('user.index') }}" class="menu-link">
                         <i class='menu-icon tf-icons bx bxs-group'></i>
                         <div>Manajemen User</div>
                     </a>
                 </li>
+                @unlessrole('Petugas Gudang')
                 <li class="menu-item {{ $menu == 'Diagnosa-Tindakan' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bxs-blanket"></i>
@@ -231,8 +238,9 @@
                         </li>
                     </ul>
                 </li>
+                @endunlessrole
 
-            @role('Administrator')
+            @hasanyrole(['Administrator', 'Petugas Informasi', 'Rekam Medis dan Casemix'])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Master</span>
             </li>
@@ -242,30 +250,31 @@
                         <div>Master Data</div>
                     </a>
                     <ul class="menu-sub">
-                            <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
-                                <a href="{{ route('pasien/category') }}" class="menu-link">
-                                    <div>Kategori Pasien</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Unit' ? 'active' : '' }}">
-                                <a href="{{ route('unit.index') }}" class="menu-link">
-                                    <div>Unit / Departemen</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Specialist' ? 'active' : '' }}">
-                                <a href="{{ route('user/specialist.index') }}" class="menu-link">
-                                    <div>Spesialis</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Pekerjaan' ? 'active' : '' }}">
-                                <a href="{{ route('job.index') }}" class="menu-link">
-                                    <div>List Pekerjaan</div>
-                                </a>
-                            </li>
-                            
+                        <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
+                            <a href="{{ route('pasien/category') }}" class="menu-link">
+                                <div>Kategori Pasien</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Pekerjaan' ? 'active' : '' }}">
+                            <a href="{{ route('job.index') }}" class="menu-link">
+                                <div>List Pekerjaan</div>
+                            </a>
+                        </li>
+                        @role('Administrator')
+                        <li class="menu-item {{ $title == 'Unit' ? 'active' : '' }}">
+                            <a href="{{ route('unit.index') }}" class="menu-link">
+                                <div>Unit / Departemen</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Specialist' ? 'active' : '' }}">
+                            <a href="{{ route('user/specialist.index') }}" class="menu-link">
+                                <div>Spesialis</div>
+                            </a>
+                        </li>
+                        @endrole
                     </ul>
                 </li>
-            @endrole
+            @endhasanyrole
 
 
 

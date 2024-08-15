@@ -14,7 +14,7 @@ class DiagnosticController extends Controller
      */
     public function index()
     {
-        $data = Diagnostic::all();
+        $data = Diagnostic::limit(500)->latest()->get();
         return view('pages.diagnosa.index', [
             "title" => "Diagnosa",
             "menu" => "Diagnosa-Tindakan",

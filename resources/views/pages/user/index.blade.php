@@ -25,6 +25,7 @@
             <p class="m-0">Tenaga Medis / Kesehatan (Bukan Dokter)</p>
             </button>
           </li>
+          @role('Administrator')
           <li class="nav-item">
             <button id="btn-link" type="button" class="nav-link {{ session('navUser') == 'role' ? 'active' : '' }} d-flex justify-content-center"
             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-role"
@@ -32,12 +33,15 @@
             <p class="m-0">Role</p>
             </button>
           </li>
+          @endrole
         </ul>
         <div class="tab-content">
           <div class="tab-pane fade {{ session('navUser') == 'all' ? 'show active' : '' }}" id="navs-justified-all" role="tabpanel">
+            @role('Administrator')
             <div class="text-end mb-3">
               <a href="{{ route('user.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Tambah Staff</a>
             </div>
+            @endrole
             <div class="table-responsive">
               <table class="table text-nowrap" id="example">
                 <thead>
@@ -50,7 +54,9 @@
                     <th>Username</th>
                     <th>Role</th>
                     <th>Status</th>
+                    @role('Administrator')
                     <th>Action</th>
+                    @endrole
                   </tr>
                 </thead>
                 <tbody>
@@ -64,6 +70,7 @@
                       <td>{{ $item->email ?? '' }}</td>
                       <td>{{ $item->roles->first()->name ?? '' }}</td>
                       <td>{{ $item->status ?? '' }}</td>
+                      @role('Administrator')
                       <td>
                         <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -85,6 +92,7 @@
                           </div>
                         </div>
                       </td>
+                      @endrole
                     </tr>
                   @endforeach
                   </tbody>
@@ -92,9 +100,11 @@
             </div>
           </div>
           <div class="tab-pane fade {{ session('navUser') == 'dokter' ? 'show active' : '' }}" id="navs-justified-dokter" role="tabpanel">
+            @role('Administrator')
             <div class="text-end mb-3">
                 <a href="{{ route('user.create') }}" class="btn btn-success ms-auto btn-sm m-0">+ Tambah Staff</a>
             </div>
+            @endrole
             <div class="table-responsive text-nowrap">
               <table class="table text-nowrap" id="example2">
                 <thead>
@@ -108,7 +118,9 @@
                     <th>Username</th>
                     <th>Role</th>
                     <th>Status</th>
+                    @role('Administrator')
                     <th>Action</th>
+                    @endrole
                   </tr>
                 </thead>
                 <tbody>
@@ -123,6 +135,7 @@
                     <td>{{ $item->email ?? '' }}</td>
                     <td>{{ $item->roles->first()->name ?? '' }}</td>
                     <td>{{ $item->status ?? '' }}</td>
+                    @role('Administrator')
                     <td>
                       <div class="dropdown">
                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -144,12 +157,14 @@
                         </div>
                       </div>
                     </td>
+                    @endrole
                   </tr>
                 @endforeach
                   </tbody>
               </table>
             </div>
           </div>
+          @role('Administrator')
           <div class="tab-pane fade {{ session('navUser') == 'role' ? 'show active' : '' }}" id="navs-justified-role" role="tabpanel">
             <div class="text-end mb-3">
               <a href="{{ route('user/role.create') }}" class="btn btn-success btn-sm">Tambah Role</a>
@@ -184,6 +199,7 @@
               </table>
             </div>>
           </div>
+          @endrole
         </div>
       </div>
     </div>
