@@ -16,7 +16,7 @@ class SupplierController extends Controller
     {
         return view('pages.supplier.create', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
         ]);
     }
 
@@ -59,7 +59,7 @@ class SupplierController extends Controller
         $item = Supplier::find($id);
         return view('pages.supplier.edit', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
             'item' => $item
         ]);
     }

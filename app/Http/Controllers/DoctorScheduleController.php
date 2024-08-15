@@ -17,7 +17,7 @@ class DoctorScheduleController extends Controller
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
         return view('pages.jadwalDokter.create', [
             "title" => "Poliklinik",
-            "menu" => "Setting",
+            "menu" => "Poliklinik",
             "item" => $item,
             "days" => $days
         ]);

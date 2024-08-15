@@ -40,7 +40,7 @@
         {{-- Registrasi --}}
         {{-- @hasanyrole(['Admin', 'Petugas Informasi', 'Rekam Medis Rajal']) --}}
             <li class="menu-header small text-uppercase">
-                <span class="menu-header-text text-white">Registrasi</span>
+                <span class="menu-header-text text-white">Pasien</span>
             </li>
             {{-- pasien --}}
             {{-- @canany('daftar pasien rumah sakit') --}}
@@ -54,7 +54,7 @@
             {{-- end pasien --}}
 
             {{-- Antrian --}}
-            {{-- @canany(['daftar antrian', 'registrasi ulang antrian']) --}}
+            @hasanyrole(['Petugas Informasi', 'Rekam Medis dan Casemix'])
             <li class="menu-item {{ $menu == 'Antrian' ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-add-to-queue"></i>
@@ -73,50 +73,50 @@
                     </li>
                 </ul>
             </li>
+            @endhasanyrole
 
+        @hasanyrole(['Perawat', 'Dokter', 'Rekam Medis dan Casemix', 'Apoteker', 'Kasir'])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Rawatan</span>
             </li>
 
+            @hasanyrole(['Perawat', 'Dokter', 'Rekam Medis dan Casemix'])
             <li class="menu-item {{ $title == 'Rawat Jalan' ? 'active' : '' }}">
                 <a href="{{ route('rajal/index') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-accessibility"></i>
                     <div>Poliklinik</div>
                 </a>
             </li>
-            {{-- <li class="menu-item {{ $title == 'Rekam Medis' ? 'active' : '' }}">
-                <a href="{{ route('rajal/rekammedis.index') }}" class="menu-link">
-                    <i class='menu-icon tf-icons bx bxs-user-voice'></i>
-                    <div>Rekam Medis</div>
-                </a>
-            </li> --}}
+            @endhasanyrole
+            @role('Apoteker')
             <li class="menu-item {{ $title == 'Farmasi' ? 'active' : '' }}">
                 <a href="{{ route('rajal/farmasi/index') }}" class="menu-link">
                     <i class='menu-icon tf-icons bx bxs-capsule'></i>
                     <div>Apotek</div>
                 </a>
             </li>
+            @endrole
+            @role('Kasir')
             <li class="menu-item {{ $title == 'Pembayaran' ? 'active' : '' }}">
                 <a href="{{ route('rajal/kasir/pembayaran/index') }}" class="menu-link">
                     <i class='menu-icon tf-icons bx bxs-credit-card'></i>
                     <div>Pembayaran</div>
                 </a>
             </li>
+            @endrole
+        @endhasanyrole
 
         {{-- Penunjang --}}
-        {{-- @hasanyrole([
-            'Admin',
+        @hasanyrole([
             'Petugas Radiologi',
-            'Petugas Labor PK',
-            'DPJP Radiologi',
-            'DPJP Labor PK',
-            ]) --}}
+            'Petugas Laboratorium',
+            'Validator Radiologi',
+            'Validator Laboratorium',
+            ])
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Penunjang</span>
             </li>
-            {{-- @hasanyrole(['Admin', 'Petugas Radiologi', 'DPJP Radiologi']) --}}
-                {{-- Radiologi --}}
-                {{-- @canany(['list permintaan pemeriksaan radiologi', 'daftar jadwal pemeriksaan radiologi']) --}}
+            @hasanyrole(['Petugas Radiologi', 'Validator Radiologi'])
                 <li class="menu-item {{ $menu == 'Radiologi' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-bone"></i>
@@ -124,29 +124,20 @@
                     </a>
 
                     <ul class="menu-sub">
-                        {{-- @can('list permintaan pemeriksaan radiologi') --}}
                         <li class="menu-item {{ $title == 'Radiologi' ? 'active' : '' }}">
                             <a href="{{ route('radiologi/patient.index') }}" class="menu-link">
                                 <div>Daftar Permintaan Radiologi</div>
                             </a>
                         </li>
-                        {{-- @endcan --}}
-                        {{-- @can('daftar jadwal pemeriksaan radiologi') --}}
                         <li class="menu-item {{ $title == 'Antrian Radiologi' ? 'active' : '' }}">
                             <a href="{{ route('radiologi/patient/queue.index') }}" class="menu-link">
                                 <div>Antrian Radiologi</div>
                             </a>
                         </li>
-                        {{-- @endcan --}}
                     </ul>
                 </li>
-                {{-- @endcanany --}}
-                {{-- end Radiologi --}}
-            {{-- @endhasanyrole --}}
-
-            {{-- @hasanyrole(['Admin', 'Petugas Labor PK', 'DPJP Labor PK']) --}}
-                {{-- Laboratorium PK --}}
-                {{-- @canany(['daftar jadwal pemeriksaan laboratorium pk', 'list permintaan pemeriksaan laboratorium pk']) --}}
+            @endhasanyrole
+            @hasanyrole(['Petugas Laboratorium', 'Validator Laboratorium'])
                 <li class="menu-item {{ $menu == 'Laboratorium PK' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bxs-flask"></i>
@@ -154,100 +145,106 @@
                     </a>
 
                     <ul class="menu-sub">
-                        {{-- @can('list permintaan pemeriksaan laboratorium pk') --}}
                         <li class="menu-item {{ $title == 'Laboratorium PK' ? 'active' : '' }}">
                             <a href="{{ route('laboratorium/patient.index') }}" class="menu-link">
                                 <div>Daftar Permintaan Laboratorium</div>
                             </a>
                         </li>
-                        {{-- @endcan --}}
-                        {{-- @can('daftar jadwal pemeriksaan laboratorium pk') --}}
                         <li class="menu-item {{ $title == 'Antrian Laboratorium PK' ? 'active' : '' }}">
                             <a href="{{ route('laboratorium/patient/queue.index') }}" class="menu-link">
                                 <div>Antrian Laboratorium</div>
                             </a>
                         </li>
-                        {{-- @endcan --}}
                     </ul>
                 </li>
-                {{-- @endcanany --}}
-                {{-- end Laboratorium PK --}}
-            {{-- @endhasanyrole --}}
-        {{-- @endhasanyrole --}}
+            @endhasanyrole
+        @endhasanyrole
         {{-- end Penunjang --}}
-
-        {{-- @role('Admin') --}}
-            {{-- Instalasi --}}
-            <li class="menu-header small text-uppercase">
-                <span class="menu-header-text text-white">Instalasi</span>
-            </li>
-
-            {{-- Farmasi --}}
-                {{-- farmasi --}}
-                <li class="menu-item {{ $menu == 'Farmasi' ? 'open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bxs-capsule"></i>
-                        <div>Farmasi</div>
-                    </a>
-                    <ul class="menu-sub">
-                        {{-- Transaksi --}}
-                            <li class="menu-item {{ $title == 'Pembelian' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/pembelian.index') }}" class="menu-link">
-                                    <div>Pembelian</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Amprahan' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/amprahan.index') }}" class="menu-link">
-                                    <div>Amprahan</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/stock.index') }}" class="menu-link">
-                                    <div>Stock</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Total Stock Obat' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat/stock.all') }}" class="menu-link">
-                                    <div>Total Stock Obat</div>
-                                </a>
-                            </li>
-                    </ul>
-                </li>
-            {{-- end Farmasi --}}
-            {{-- end Instalasi --}}
-
-
 
             {{-- Master Data --}}
             <li class="menu-header small text-uppercase">
-                <span class="menu-header-text text-white">Master Data</span>
+                <span class="menu-header-text text-white">Pengaturan</span>
             </li>
-            {{-- Settings --}}
-                <li class="menu-item {{ $menu == 'Setting' ? 'open' : '' }}">
+                <li class="menu-item {{ $menu == 'Farmasi' ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bxs-cog"></i>
-                        <div>Setting</div>
+                        <i class="menu-icon tf-icons bx bxs-bong"></i>
+                        <div>Obat</div>
+                    </a>
+                    <ul class="menu-sub">
+                        {{-- Transaksi --}}
+                        <li class="menu-item {{ $title == 'Pembelian' ? 'active' : '' }}">
+                            <a href="{{ route('farmasi/obat/pembelian.index') }}" class="menu-link">
+                                <div>Pembelian</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Amprahan' ? 'active' : '' }}">
+                            <a href="{{ route('farmasi/obat/amprahan.index') }}" class="menu-link">
+                                <div>Amprahan</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Stock Obat' ? 'active' : '' }}">
+                            <a href="{{ route('farmasi/obat/stock.index') }}" class="menu-link">
+                                <div>Stock</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Total Stock Obat' ? 'active' : '' }}">
+                            <a href="{{ route('farmasi/obat/stock.all') }}" class="menu-link">
+                                <div>Total Stock Obat</div>
+                            </a>
+                        </li>
+                        {{-- Konfigurasi Farmasi --}}
+                        <li class="menu-item {{ $title == 'Master Obat' ? 'active' : '' }}">
+                            <a href="{{ route('farmasi/obat.index') }}" class="menu-link">
+                                <div>Manajemen Obat</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item {{ $title == 'Poliklinik' ? 'active' : '' }}">
+                    <a href="{{ route('poliklinik.index') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-clinic'></i>
+                        <div>Poli & Dokter</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
+                    <a href="{{ route('user.index') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-group'></i>
+                        <div>Manajemen User</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ $menu == 'Diagnosa-Tindakan' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-blanket"></i>
+                        <div>Diagnosa Tindakan</div>
                     </a>
 
                     <ul class="menu-sub">
-                            <li class="menu-item {{ $title == 'User' ? 'active' : '' }}">
-                                <a href="{{ route('user.index') }}" class="menu-link">
-                                    <div>Manajemen User</div>
-                                </a>
-                            </li>
+                        <li class="menu-item {{ $title == 'Diagnosa' ? 'active' : '' }}">
+                            <a href="{{ route('diagnosa.index') }}" class="menu-link">
+                                <div>Diagnosa</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
+                            <a href="{{ route('tindakan.index') }}" class="menu-link">
+                                <div>Tindakan</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            @role('Administrator')
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Master</span>
+            </li>
+                <li class="menu-item {{ $menu == 'Setting' ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-cog"></i>
+                        <div>Master Data</div>
+                    </a>
+                    <ul class="menu-sub">
                             <li class="menu-item {{ $title == 'Kategori Pasien' ? 'active' : '' }}">
                                 <a href="{{ route('pasien/category') }}" class="menu-link">
                                     <div>Kategori Pasien</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Tindakan' ? 'active' : '' }}">
-                                <a href="{{ route('tindakan.index') }}" class="menu-link">
-                                    <div>Tindakan</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $title == 'Poliklinik' ? 'active' : '' }}">
-                                <a href="{{ route('poliklinik.index') }}" class="menu-link">
-                                    <div>Poliklinik</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ $title == 'Unit' ? 'active' : '' }}">
@@ -265,21 +262,10 @@
                                     <div>List Pekerjaan</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ $title == 'Diagnosa' ? 'active' : '' }}">
-                                <a href="{{ route('diagnosa.index') }}" class="menu-link">
-                                    <div>Diagnosa</div>
-                                </a>
-                            </li>
-                        {{-- Konfigurasi Farmasi --}}
-                            <li class="menu-item {{ $title == 'Master Obat' ? 'active' : '' }}">
-                                <a href="{{ route('farmasi/obat.index') }}" class="menu-link">
-                                    <div>Manajemen Obat</div>
-                                </a>
-                            </li>
+                            
                     </ul>
                 </li>
-            {{-- end Settings --}}
-            {{-- end Master Data --}}
+            @endrole
 
 
 

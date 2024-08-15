@@ -58,7 +58,7 @@
               </a>
             </td>
             <td>{{ $item->queue->no_antrian ?? '' }}</td>
-            <td>{{ $item->queue->patient->no_rm ?? }} / {{ $item->queue->patient->name ?? '...'  }}</td>
+            <td>{{ $item->queue->patient->no_rm ?? '' }} / {{ $item->queue->patient->name ?? '...'  }}</td>
             <td>{{ $item->queue->patientCategory->name ?? '...'  }}</td>
             <td>{{ $item->queue->patient->jenis_kelamin ?? '...'  }}</td>
             <td>

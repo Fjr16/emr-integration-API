@@ -32,7 +32,7 @@ class MedicineController extends Controller
         $dataSupplier = Supplier::all();
         return view('pages.masterobat.index', [
             "title" => "Master Obat",
-            "menu" => "Setting",
+            "menu" => "Farmasi",
             "data" => $data,
             "dataJenis" => $dataJenis,
             "dataGol" => $dataGol,
@@ -54,7 +54,7 @@ class MedicineController extends Controller
         $sediaan = MedicineForm::all();
         return view('pages.masterobat.create', [
             "title" => "Master Obat",
-            "menu" => "Setting",
+            "menu" => "Farmasi",
             "jenis" => $jenis,
             "golongan" => $golongan,
             "sediaan" => $sediaan,
@@ -117,7 +117,7 @@ class MedicineController extends Controller
         $sediaan = MedicineForm::all();
         return view('pages.masterobat.edit', [
             "title" => "Master Obat",
-            "menu" => "Setting",
+            "menu" => "Farmasi",
             "item" => $item,
             "jenis" => $jenis,
             "golongan" => $golongan,

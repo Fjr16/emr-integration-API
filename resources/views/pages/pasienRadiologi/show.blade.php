@@ -17,7 +17,7 @@
       <div class="d-flex justify-content-between">
         <div class="">
           <h5 class="m-0">Hasil Permintaan Radiologi Pasien
-            <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->queue->patient->name ?? ''}} ({{ $item->queue->patient->no_rm ?? }})</span>
+            <span class="text text-primary text-uppercase fw-bold fs-7">{{ $item->queue->patient->name ?? ''}} ({{ $item->queue->patient->no_rm ?? '' }})</span>
           </h5>
           <h6 class="fw-bold mt-2">
             Status: 
@@ -99,7 +99,7 @@
                     <div class="row mb-3">
                       <label for="name" class="col-form-label col-3">No. RM / Name</label>
                       <div class="col-9">
-                        <input type="text" id="name" value="{{ $item->queue->patient->no_rm ?? }} / {{ $item->queue->patient->name ?? '' }}" class="form-control" disabled>
+                        <input type="text" id="name" value="{{ $item->queue->patient->no_rm ?? '' }} / {{ $item->queue->patient->name ?? '' }}" class="form-control" disabled>
                       </div>
                     </div>
                     <div class="row mb-3">

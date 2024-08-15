@@ -16,7 +16,7 @@ class MedicineFormController extends Controller
     {
         return view('pages.bentukSediaanObat.create', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
         ]);
     }
 
@@ -59,7 +59,7 @@ class MedicineFormController extends Controller
         $item = MedicineForm::find($id);
         return view('pages.bentukSediaanObat.edit', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
             'item' => $item
         ]);
     }

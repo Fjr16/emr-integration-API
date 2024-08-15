@@ -16,7 +16,7 @@ class MedicineCategoryController extends Controller
     {
         return view('pages.golonganObat.create', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
         ]);
     }
 
@@ -59,7 +59,7 @@ class MedicineCategoryController extends Controller
         $item = MedicineCategory::find($id);
         return view('pages.golonganObat.edit', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
             'item' => $item,
         ]);
     }

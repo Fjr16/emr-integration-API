@@ -125,7 +125,7 @@
             @endif
           </td>
           <td>{{ $item->no_reg_rad ?? '' }}</td>
-          <td>{{ $item->queue->patient->no_rm ?? }}</td>
+          <td>{{ $item->queue->patient->no_rm ?? '' }}</td>
           <td>{{ $item->queue->patient->name ?? '' }}</td>
           <td>{{ $item->queue->patientCategory->name ?? '' }}</td>
           <td>{!! $item->diagnosa_klinis ?? '' !!}</td>

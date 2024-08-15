@@ -139,7 +139,7 @@
                                 <tr>
                                     <td class="fw-bold" style="width: 100px">Nama / No RM</td>
                                     <td class="fw-bold" style="width: 10px">:</td>
-                                    <td>{{ $item->queue->patient->name ?? '' }} / {{ $item->queue->patient->no_rm ?? }}</td>
+                                    <td>{{ $item->queue->patient->name ?? '' }} / {{ $item->queue->patient->no_rm ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Tgl. Lahir</td>

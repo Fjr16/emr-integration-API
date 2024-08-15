@@ -17,7 +17,7 @@ class DiagnosticController extends Controller
         $data = Diagnostic::all();
         return view('pages.diagnosa.index', [
             "title" => "Diagnosa",
-            "menu" => "Setting",
+            "menu" => "Diagnosa-Tindakan",
             "data" => $data
         ]);
     }
@@ -31,7 +31,7 @@ class DiagnosticController extends Controller
     {
         return view('pages.diagnosa.create', [
             "title" => "Diagnosa",
-            "menu" => "Setting",
+            "menu" => "Diagnosa-Tindakan",
         ]);
     }
 
@@ -60,7 +60,7 @@ class DiagnosticController extends Controller
         $item = Diagnostic::find($id);
         return view('pages.diagnosa.edit', [
             "title" => "Diagnosa",
-            "menu" => "Setting",
+            "menu" => "Diagnosa-Tindakan",
             "item" => $item,
         ]);
     }

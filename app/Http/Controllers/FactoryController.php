@@ -16,7 +16,7 @@ class FactoryController extends Controller
     {
         return view('pages.pabrik.create', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
         ]);
     }
 
@@ -59,7 +59,7 @@ class FactoryController extends Controller
         $item = Factory::find($id);
         return view('pages.pabrik.edit', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
             'item' => $item
         ]);
     }

@@ -20,7 +20,7 @@ class ActionController extends Controller
         $data = Action::all();
         return view('pages.tindakan.index', [
             "title" => "Tindakan",
-            "menu" => "Setting",
+            "menu" => "Diagnosa-Tindakan",
             "data" => $data
         ]);
     }
@@ -40,7 +40,7 @@ class ActionController extends Controller
         $patientCategories = PatientCategory::all();
         return view('pages.tindakan.create', [
             "title" => "Tindakan",
-            "menu" => "Setting",
+            "menu" => "Diagnosa-Tindakan",
             "data" => $data,
             "patientCategories" => $patientCategories
         ]);
@@ -87,7 +87,7 @@ class ActionController extends Controller
         $patientCategories = PatientCategory::all();
         return view('pages.tindakan.edit', [
             "title" => "Tindakan",
-            "menu" => "Setting",
+            "menu" => "Diagnosa-Tindakan",
             "item" => $item,
             "data" => $data,
             "patientCategories" => $patientCategories

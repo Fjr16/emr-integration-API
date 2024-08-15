@@ -19,7 +19,7 @@ class RolesController extends Controller
         $permission = Permission::all();
         return view('pages.role.create', [
             "title" => "User",
-            "menu" => "Setting",
+            "menu" => "User",
             "data" => $data,
             "permission" => $permission
         ]);
@@ -66,7 +66,7 @@ class RolesController extends Controller
         $permission = Permission::all();
         return view('pages.role.edit', [
             "title" => "Role",
-            "menu" => "Setting",
+            "menu" => "User",
             "item" => $item,
             "permission" => $permission
         ]);

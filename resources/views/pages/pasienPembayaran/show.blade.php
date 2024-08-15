@@ -52,7 +52,7 @@
         <div class="row">
             <div class="col-4">
                 <h4 class="mb-1 text-primary d-flex">
-                    {{ $item->queue->patient->name }} ({{ $item->queue->patient->no_rm ?? }})
+                    {{ $item->queue->patient->name ?? '' }} ({{ $item->queue->patient->no_rm ?? '' }})
                     <span class="ms-2 badge {{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'bg-danger' : 'bg-info' }}">{{ $item->queue->patient->jenis_kelamin == 'Wanita' ? 'P' : 'L' }}</span> 
                 </h4>
                 <h6 class="mb-1">{{ $item->queue->dpjp->name }} ({{ $item->queue->dpjp->staff_id }})</h6>

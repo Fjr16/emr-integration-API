@@ -31,7 +31,7 @@ class UserController extends Controller
         $dataRole = Role::all();
         return view('pages.user.index', [
             "title" => "User",
-            "menu" => "Setting",
+            "menu" => "User",
             "data" => $data,
             "dataDokter" => $dataDokter,
             "dataRole" => $dataRole
@@ -54,7 +54,7 @@ class UserController extends Controller
         $polikliniks = Poliklinik::where('isActive', true)->get();
         return view('pages.user.create', [
             "title" => "User",
-            "menu" => "Setting",
+            "menu" => "User",
             "role" => $role,
             "units" => $units,
             "jk" => $jk,
@@ -141,7 +141,7 @@ class UserController extends Controller
         $pendidikan = ['SD', 'SMP / MTS / SLTP SEDERAJAT', 'SMA / SMK / SLTA SEDERAJAT', 'S1', 'S2', 'S3'];
         return view('pages.user.edit', [
             "title" => "User",
-            "menu" => "Setting",
+            "menu" => "User",
             "item" => $item,
             "role" => $role,
             "status" => $status,

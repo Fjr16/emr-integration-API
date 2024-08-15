@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PoliklinikStoreRequest;
 use App\Http\Requests\PoliklinikUpdateRequest;
-use App\Models\DoctorsSchedule;
 use App\Models\Poliklinik;
 use App\Models\User;
 use Exception;
@@ -25,7 +24,7 @@ class PoliklinikController extends Controller
         $dataDokters = User::where('isDokter', true)->whereNotNull('poliklinik_id')->get();
         return view('pages.poli.index', [
             "title" => "Poliklinik",
-            "menu" => "Setting",
+            "menu" => "Poliklinik",
             "data" => $data,
             "dataDokters" => $dataDokters,
         ]);
@@ -34,7 +33,7 @@ class PoliklinikController extends Controller
     {
         return view('pages.poli.create', [
             "title" => "Poliklinik",
-            "menu" => "Setting",
+            "menu" => "Poliklinik",
         ]);
     }
 
@@ -58,7 +57,7 @@ class PoliklinikController extends Controller
         $item = Poliklinik::find($id);
         return view('pages.poli.edit', [
             "title" => "Poliklinik",
-            "menu" => "Setting",
+            "menu" => "Poliklinik",
             "item" => $item,
         ]);
     }

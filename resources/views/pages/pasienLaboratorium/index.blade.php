@@ -137,7 +137,7 @@
           <td>{{ $item->no_reg ?? '-' }}</td>
           <td>{{ $item->tipe_permintaan ?? '-' }}</td>
           <td>{!! $item->diagnosa ?? '-' !!}</td>
-          <td>{{ $item->queue->patient->no_rm ?? }} / {{ $item->queue->patient->name ?? '-' }}</td>
+          <td>{{ $item->queue->patient->no_rm ?? '' }} / {{ $item->queue->patient->name ?? '-' }}</td>
           <td>{{ $item->queue->patientCategory->name ?? '-' }}</td>
           <td>{{ $item->petugas->name ?? '-' }}</td>
           <td>{{ $item->validator->name ?? '-' }}</td>

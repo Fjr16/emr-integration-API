@@ -135,7 +135,7 @@
                                 <td class="fs-8">No Rekam Medis</td>
                                 <td class="px-2 fs-8">:</td>
                                 <td class="fs-8">
-                                    {{ $item->queue->patient->no_rm ?? }}
+                                    {{ $item->queue->patient->no_rm ?? '' }}
                                 </td>
                             </tr>
                             <tr>

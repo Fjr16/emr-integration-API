@@ -16,7 +16,7 @@ class MedicineTypeController extends Controller
     {
         return view('pages.jenisObat.create', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
         ]);
     }
 
@@ -59,7 +59,7 @@ class MedicineTypeController extends Controller
         $item = MedicineType::find($id);
         return view('pages.jenisObat.edit', [
             'title' => 'Master Obat',
-            'menu' => 'Setting',
+            'menu' => 'Farmasi',
             'item' => $item,
         ]);
     }
