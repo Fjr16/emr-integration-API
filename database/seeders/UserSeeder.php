@@ -192,7 +192,7 @@ class UserSeeder extends Seeder
                 'unit_id' => null,
                 'password' => $password,
                 'status' => 'AKTIF',
-                'paraf' => 'assets/paraf/66b7d11c153a7.png',
+                'paraf' => 'assets/paraf-petugas/66b7d11c153a7.png',
             ],
             [
                 'id' => 16,

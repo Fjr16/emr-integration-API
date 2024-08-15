@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Faker\Provider\id_ID\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,29 +20,28 @@ class PatientFactory extends Factory
         return [
             'job_id' => fake()->randomDigit(),
             'province_id' => fake()->randomDigit(),
-            'city_id' => fake()->regexify('[A-Z]{5}[0-4]{3}'),
-            'district_id' => fake()->name(),
-            'village_id' => 1,
-            'no_rm' => 20000,
-            'name' => 20000,
-            'tempat_lhr' => 20000,
-            'tanggal_lhr' => 20000,
-            'jenis_kelamin' => 20000,
-            'telp' => 20000,
-            'agama' => 20000,
-            'alamat' => 20000,
-            'rw' => 20000,
-            'rt' => 20000,
-            'pendidikan' => 20000,
-            'nm_ayah' => 20000,
-            'nm_ibu' => 20000,
-            'nm_wali' => 20000,
-            'nik' => 20000,
-            'alergi_makanan' => 20000,
-            'alergi_obat' => 20000,
-            'suku' => 20000,
-            'bangsa' => 20000,
-            'status' => 20000,
+            'city_id' => fake()->randomDigit(),
+            'district_id' => fake()->randomDigit(),
+            'village_id' => fake()->randomDigit(),
+            'name' => fake()->name(),
+            'tempat_lhr' => fake()->city(),
+            'tanggal_lhr' => fake()->date(),
+            'jenis_kelamin' => Person::GENDER_MALE,
+            'telp' => fake()->phoneNumber(),
+            'agama' => 'Islam',
+            'alamat' => fake()->address(),
+            'rw' => '00',
+            'rt' => '00',
+            'pendidikan' => 'S1',
+            'nm_ayah' => fake()->name(),
+            'nm_ibu' => fake()->name(),
+            'nm_wali' => fake()->name(),
+            'nik' => fake()->nik(),
+            'alergi_makanan' => fake()->word(),
+            'alergi_obat' => fake()->word(),
+            'suku' => fake()->text(),
+            'bangsa' => fake()->country(),
+            'status' => fake()->text(),
         ];
     }
 }
