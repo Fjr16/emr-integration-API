@@ -72,7 +72,7 @@ class RawatJalanController extends Controller
     public function show($id, $title)
     {
         if (!session('btn')) {
-            session(['btn' => 'riwayat']);
+            session(['btn' => 'asesmen']);
         } else {
             session(['btn' => session('btn')]);
         }
@@ -81,6 +81,7 @@ class RawatJalanController extends Controller
         } else {
             session(['penunjang' => session('penunjang')]);
         }
+
         if (!session('asesmen')) {
             session(['asesmen' => 'dokter']);
         } else {
