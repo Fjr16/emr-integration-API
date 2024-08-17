@@ -106,7 +106,7 @@
                                             <i class='bx bx-pulse me-2'></i>Periksa
                                         </button>
                                         <ul class="dropdown-menu">
-                                          <li> <a class="dropdown-item" href="{{ route('rajal/show', ['id' => encrypt($item->id), 'title' => encrypt($title)]) }}">Riwayat Kunjungan</a> </li>
+                                          <li> <a class="dropdown-item" href="{{ route('rajal/detail/pemeriksaan.show', encrypt($item->id)) }}">Riwayat Kunjungan</a> </li>
                                           <li>
                                             <hr class="dropdown-divider">
                                           </li>

@@ -263,6 +263,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 //status Pelayanan Poli
     Route::put('/rajal/status/pelayanan/update/{id}', [RawatJalanController::class, 'update'])->name('rajal/status/pelayanan.update');
+    // detail pemeriksaan per satu antrian
+    Route::get('rajal/detail/pemeriksaan/{id}', [RawatJalanController::class, 'detailPemeriksaan'])->name('rajal/detail/pemeriksaan.show');
 
 //Rajal General Consent
 Route::get('rajal/general/consent/create/{id}', [RajalGeneralConsentController::class, 'create'])->name('rajal/general/consent.create');

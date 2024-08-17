@@ -291,4 +291,17 @@ class RawatJalanController extends Controller
             ]);
         }
     }
+
+
+    public function detailPemeriksaan($id){
+        $item = Queue::findOrFail(decrypt($id));
+        $riwKunjungans = Queue::where('patient_id', $item->patient->id)->where('status_antrian', 'ARRIVED')->orWhere('status_antrian', 'FINISHED')->latest()->get();
+
+        return view('pages.rawatjalan.detail', [
+            'item' => $item,
+            'riwKunjungans' => $riwKunjungans,
+            'title' => 'Rawat Jalan',
+            'menu' => 'In Patient',
+        ]);
+    }
 }

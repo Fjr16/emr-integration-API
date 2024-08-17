@@ -399,15 +399,6 @@
                 <ul class="nav nav-tabs nav-sm nav-fill" role="tablist">
                     <li class="nav-item">
                         <button id="btn-link" type="button"
-                            class="nav-link {{ session('btn') == 'riwayat' ? 'active' : '' }} d-flex justify-content-center"
-                            role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-riwayat"
-                            aria-controls="navs-justified-riwayat" aria-selected="false">
-                            <i class='bx bxs-book-open me-1'></i>
-                            <p class="m-0">Riwayat Poli</p>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="btn-link" type="button"
                             class="nav-link {{ session('btn') == 'asesmen' ? 'active' : '' }} d-flex justify-content-center"
                             role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-asesmen"
                             aria-controls="navs-justified-asesmen" aria-selected="false">
@@ -480,27 +471,6 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade {{ session('btn') == 'riwayat' ? 'show active' : '' }}" id="navs-justified-riwayat" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-2 col-12 mb-3 mb-md-0">
-                              <div class="list-group">
-                                <a class="list-group-item list-group-item-action active" id="list-kunj-terakhir-list" data-bs-toggle="list" href="#list-kunj-terakhir">Kunjungan Terakhir</a>
-                                <a class="list-group-item list-group-item-action" id="list-rencana-kontrol-list" data-bs-toggle="list" href="#list-rencana-kontrol">Rencana Kontrol</a>
-                                <a class="list-group-item list-group-item-action" id="list-rencana-kontrol-list" data-bs-toggle="list" href="#list-rencana-kontrol">Berkas</a>
-                              </div>
-                            </div>
-                            <div class="col-md-10 col-12 border">
-                              <div class="tab-content">
-                                <div class="tab-pane fade show active" id="list-kunj-terakhir">
-                                  Donut sugar plum sweet roll biscuit. Cake oat cake gummi bears. Tart wafer wafer halvah gummi bears cheesecake. Topping croissant cake sweet roll. Dessert fruitcake gingerbread halvah marshmallow pudding bear claw cheesecake. Bonbon dragée cookie gummies. Pudding marzipan liquorice. Sugar plum dragée cupcake cupcake cake dessert chocolate bar. Pastry lollipop lemon drops lollipop halvah croissant. Pastry sweet gingerbread lemon drops topping ice cream.
-                                </div>
-                                <div class="tab-pane fade" id="list-rencana-kontrol">
-                                    survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="tab-pane fade {{ session('btn') == 'asesmen' ? 'show active' : '' }}"
                         id="navs-justified-asesmen" role="tabpanel">
                         <div class="row">
@@ -525,7 +495,7 @@
                                                 Perawat
                                             </button>
                                         </li>
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <button type="button"
                                                 class="border nav-link {{ session('asesmen') == 'berkas' ? 'active' : '' }}"
                                                 role="tab" data-bs-toggle="tab"
@@ -533,7 +503,7 @@
                                                 aria-controls="navs-pills-justified-berkas" aria-selected="true">
                                                 Berkas
                                             </button>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane fade {{ session('asesmen') == 'dokter' ? 'show active' : '' }}" id="navs-pills-justified-dokter" role="tabpanel">
@@ -923,10 +893,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade {{ session('asesmen') == 'berkas' ? 'show active' : '' }}"
+                                        {{-- <div class="tab-pane fade {{ session('asesmen') == 'berkas' ? 'show active' : '' }}"
                                             id="navs-pills-justified-berkas" role="tabpanel">
                                           
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
