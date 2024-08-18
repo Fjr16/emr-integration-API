@@ -19,7 +19,8 @@ class ClearRanapSession
     public function handle(Request $request, Closure $next)
     {
         $currentUrl = $request->url();
-        $previousUrlPattern = 'rawat/inap/*';
+        $previousUrlPattern = 'asesmen/awal/perawat/*';
+        
 
         if ($request->is($previousUrlPattern) && $previousUrlPattern !== $currentUrl) {
             Session::flush();

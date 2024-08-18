@@ -194,6 +194,11 @@ class RawatJalanController extends Controller
                 if($request->radiologies_ready && $request->radiologies_ready == 1){
                     $data['laboratories_ready'] = true;
                 }
+                if (!$item->queue->ttd_verif) {
+                    $item->queue()->update([
+                        'ttd_verif' => $item->queue->dpjp->paraf ?? null,
+                    ]);
+                }
             }
             //end
             // update status pelayanan

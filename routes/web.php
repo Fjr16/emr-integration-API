@@ -50,6 +50,7 @@ use App\Http\Controllers\DoctorInitialAssesmentController;
 use App\Http\Controllers\LaboratoriumFormRequestController;
 use App\Http\Controllers\LaboratoriumPatientQueueController;
 use App\Http\Controllers\DiagnosticProcedurePatientController;
+use App\Http\Controllers\ManagementDataController;
 use App\Http\Controllers\MedicineTransactionPembelianController;
 use App\Http\Controllers\PoliklinikController;
 
@@ -408,5 +409,16 @@ Route::get('/laporan/kasir/exportExcel/{id}', [ReportCashierController::class, '
 Route::get('/laporan/lab/patologi/klinik', [ReportPenunjangController::class, 'indexPk'])->name('laporan/lab/patologi/klinik.index');
 Route::get('/laporan/lab/patologi/klinik/show/{id}', [ReportPenunjangController::class, 'showPk'])->name('laporan/lab/patologi/klinik.show');
 Route::get('/laporan/lab/patologi/klinik/exportExcel/{id}', [ReportPenunjangController::class, 'exportExcelPk'])->name('laporan/lab/patologi/klinik.exportExcel');
+
+// pengelolaan data
+
+//Radiologi Patient
+Route::get('/monitoring/data', [ManagementDataController::class, 'index'])->name('monitoring/data.index');
+Route::get('/monitoring/data/edit/{id}', [ManagementDataController::class, 'edit'])->name('monitoring/data.edit');
+Route::get('/verifikasi/data/pasien', [ManagementDataController::class, 'indexVerif'])->name('verifikasi/data/pasien.indexVerif');
+Route::get('/bridging/data/satusehat', [ManagementDataController::class, 'indexSatuSehat'])->name('bridging/data/satusehat.indexSatuSehat');
+// Route::put('/monitoring/data/hasil/update/{id}', [RadiologiPatientController::class, 'update'])->name('monitoring/data/hasil.update');
+// Route::put('/monitoring/data/validasiHasil/{id}', [RadiologiPatientController::class, 'validasiHasil'])->name('monitoring/data.validasiHasil');
+// Route::get('/monitoring/data/hasil/printAll/{id}', [RadiologiPatientController::class, 'printAll'])->name('monitoring/data/hasil.printAll');
 
 require __DIR__ . '/auth.php';

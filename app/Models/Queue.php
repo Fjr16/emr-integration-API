@@ -26,7 +26,8 @@ class Queue extends Model
         'patient_category_id',
         'no_rujukan',
         'last_diagnostic',
-        'created_at'
+        'created_at',
+        'ttd_verif'
     ];
 
     public function patient()

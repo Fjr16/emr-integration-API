@@ -1882,11 +1882,11 @@
                                             <div class="col-6">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="radiologies_ready" id="radiologies_ready" value="1" {{ $item->rawatJalanPoliPatient->radiologies_ready ? 'checked' : '' }} style="pointer-events : none;"/>
-                                                    <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->radiologies_ready ? '' : 'radiologies_ready' }}">Data permintaan pemeriksaan radiologi</label>
+                                                    <label class="form-check-label">Data permintaan pemeriksaan radiologi</label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="laboratories_ready" id="laboratories_ready" value="1" {{ $item->rawatJalanPoliPatient->laboratories_ready ? 'checked' : '' }} style="pointer-events : none;"/>
-                                                    <label class="form-check-label" for="{{ $item->rawatJalanPoliPatient->laboratories_ready ? '' : 'laboratories_ready' }}">Data permintaan pemeriksaan laboratorium</label>
+                                                    <label class="form-check-label">Data permintaan pemeriksaan laboratorium</label>
                                                 </div>
                                             </div>
                                         </div>

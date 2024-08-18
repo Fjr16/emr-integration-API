@@ -170,7 +170,7 @@
                             <div class="row mt-3">
                                 <div class="col-6">
                                     <div class="d-flex flex-column">
-                                        <span class="fw-bold">{{ $item->queue->patient->name ?? '....' }} / {{ $item->queue->patient->no_rm ?? ?? '....' }}</span>
+                                        <span class="fw-bold">{{ $item->queue->patient->name ?? '....' }} / {{ $item->queue->patient->no_rm ?? '....' }}</span>
                                         @php
                                             $tanggalLahir = new DateTime($item->queue->patient->tanggal_lhr);
                                             $now = new DateTime();

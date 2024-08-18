@@ -159,6 +159,29 @@
         @endhasanyrole
         {{-- end Penunjang --}}
 
+        {{-- Pengelolaan Data Kunjungan Pasien --}}
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text text-white">Pengelolaan Data</span>
+            </li>
+                <li class="menu-item {{ $title == 'Monitoring' ? 'active' : '' }}">
+                    <a href="{{ route('monitoring/data.index') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bx-tv'></i>
+                        <div>Monitoring</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ $title == 'Verifikasi' ? 'active' : '' }}">
+                    <a href="{{ route('verifikasi/data/pasien.indexVerif') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bx-check-shield'></i>
+                        <div>Verifikasi</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ $title == 'Satu Sehat' ? 'active' : '' }}">
+                    <a href="{{ route('bridging/data/satusehat.indexSatuSehat') }}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bx-sync'></i>
+                        <div>Bridging Satu Sehat</div>
+                    </a>
+                </li>
+
             {{-- Master Data --}}
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">{{ Auth::user()->hasRole('Administrator') ? 'Pengaturan Awal' : 'Lainnya' }}</span>
