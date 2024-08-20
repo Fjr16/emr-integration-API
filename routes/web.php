@@ -416,6 +416,7 @@ Route::get('/laporan/lab/patologi/klinik/exportExcel/{id}', [ReportPenunjangCont
 Route::get('/monitoring/data', [ManagementDataController::class, 'index'])->name('monitoring/data.index');
 Route::get('/monitoring/data/edit/{id}', [ManagementDataController::class, 'edit'])->name('monitoring/data.edit');
 Route::get('/verifikasi/data/pasien', [ManagementDataController::class, 'indexVerif'])->name('verifikasi/data/pasien.indexVerif');
+Route::get('/verifikasi/data/pasien/{id}', [ManagementDataController::class, 'showVerif'])->name('verifikasi/data/pasien.showVerif');
 Route::get('/bridging/data/satusehat', [ManagementDataController::class, 'indexSatuSehat'])->name('bridging/data/satusehat.indexSatuSehat');
 // Route::put('/monitoring/data/hasil/update/{id}', [RadiologiPatientController::class, 'update'])->name('monitoring/data/hasil.update');
 // Route::put('/monitoring/data/validasiHasil/{id}', [RadiologiPatientController::class, 'validasiHasil'])->name('monitoring/data.validasiHasil');

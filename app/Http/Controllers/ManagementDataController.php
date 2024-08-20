@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\Queue;
 use App\Models\Action;
 use App\Models\Procedure;
 use App\Models\Diagnostic;
-use Illuminate\Http\Request;
 use App\Models\PatientActionReport;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PerawatInitialAsesment;
 
 class ManagementDataController extends Controller
 {
+    // menghitung usia
+    private function getUsia($tglLhrPasien) {
+        if ($tglLhrPasien) {
+            $tanggalLahir = new DateTime($tglLhrPasien);
+            $now = new DateTime();
+            $ageDiff = $now->diff($tanggalLahir);
+            return $res = $ageDiff->format('%y tahun %m bulan');
+        }else{
+            return $res = 'Usia Tidak Diketahui';
+        }
+    }
+
     public function index(){
         $data = Queue::where('status_antrian', 'FINISHED')
                     ->whereNull('ttd_verif')
@@ -68,6 +81,18 @@ class ManagementDataController extends Controller
         return view('pages.manageVerifData.index' ,[
             'data' => $data,
             'user' => $user,
+            'title' => 'Verifikasi',
+            'menu' => 'Verifikasi',
+        ]);
+    }
+    public function showVerif($id){
+       $item = Queue::findOrFail(decrypt($id));
+       $usiaSaatBerkunjung = $this->getUsia($item->patient->tanggal_lhr);
+       $itemAss = PerawatInitialAsesment::where('queue_id', $item->id)->first();
+        return view('pages.manageVerifData.show' ,[
+            'item' => $item,
+            'itemAss' => $itemAss,
+            'usiaSaatBerkunjung' => $usiaSaatBerkunjung,
             'title' => 'Verifikasi',
             'menu' => 'Verifikasi',
         ]);

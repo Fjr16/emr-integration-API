@@ -53,7 +53,7 @@
                 <div class="col-3">
                     <div class="mx-auto border border-5 border-success w-75">
                         <div class="display-4 text-center py-2">
-                            {{ implode('-', str_split(str_pad($item->no_rm ?? '', 6, '0', STR_PAD_LEFT), 2)) }}</div>
+                            {{ $item->no_rm ?? '' }}</div>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                                             <td>{{ $dataRajal->queue->patient->name ?? '' }}</td>
                                             <td>{{ $dataRajal->queue->category ?? '' }}</td>
                                             <td>{{ $dataRajal->queue->status_antrian ?? '' }}</td>
-                                            <td><a href="{{ route('rajal/show', [$dataRajal->queue->id, 'RAWAT JALAN']) }}"
+                                            <td><a href="{{ route('rajal/show', [encrypt($dataRajal->queue->id), encrypt('RAWAT JALAN')]) }}"
                                                     class="btn btn-sm btn-success">Show</a></td>
                                         </tr>
                                     @endforeach
@@ -144,7 +144,7 @@
                     </div>
                 </div>
 
-                <div class="card accordion-item">
+                {{-- <div class="card accordion-item">
                     <h2 class="accordion-header" id="headingThree">
                         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                             data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree"
@@ -174,10 +174,9 @@
                                             <td>{{ $dataRanap->queue->no_antrian ?? '' }}</td>
                                             <td>{{ $dataRanap->queue->tgl_antrian ?? '' }}</td>
                                             <td>{{ $dataRanap->queue->patient->name ?? '' }}</td>
-                                            {{-- <td>{{ $dataRanap->queue->category ?? '' }}</td> --}}
                                             <td>RAWAT INAP</td>
                                             <td>{{ $dataRanap->queue->status_antrian ?? '' }}</td>
-                                            <td><a href="{{ route('rajal/show', [$dataRanap->queue->id, 'RAWAT INAP']) }}"
+                                            <td><a href="{{ route('rajal/show', [encrypt($dataRanap->queue->id), encrypt('RAWAT INAP')]) }}"
                                                     class="btn btn-sm btn-success">Show</a></td>
                                         </tr>
                                     @endforeach
@@ -185,9 +184,9 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="card accordion-item">
+                {{-- <div class="card accordion-item">
                     <h2 class="accordion-header" id="headingThree">
                         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                             data-bs-target="#accordionFour" aria-expanded="false" aria-controls="accordionFour"
@@ -217,7 +216,6 @@
                                             <td>{{ $dataKemo->queue->no_antrian ?? '' }}</td>
                                             <td>{{ $dataKemo->queue->tgl_antrian ?? '' }}</td>
                                             <td>{{ $dataKemo->queue->patient->name ?? '' }}</td>
-                                            {{-- <td>{{ $dataKemo->queue->category ?? '' }}</td> --}}
                                             <td>RAWAT INAP</td>
                                             <td>{{ $dataKemo->queue->status_antrian ?? '' }}</td>
                                             <td><a href="{{ route('kemoterapi/patient.show', $dataKemo->queue->id) }}"
@@ -228,7 +226,7 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
 
