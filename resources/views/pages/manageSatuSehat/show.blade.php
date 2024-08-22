@@ -62,14 +62,12 @@
                     </h4>
                     <h6 class="mb-1">{{ $item->dpjp->name }} ({{ $item->dpjp->staff_id }})</h6>
                     <h6 class="mb-1">{{ $item->dpjp->poliklinik->name ?? '' }}<h6>
-                    @if ($item->rawatJalanPoliPatient->status == 'WAITING')                                    
-                        <span class="badge bg-danger">BELUM DILAYANI</span>
-                    @elseif ($item->rawatJalanPoliPatient->status == 'ONGOING')
-                        <span class="badge bg-warning">DALAM PERAWATAN</span>
-                    @elseif ($item->rawatJalanPoliPatient->status == 'FINISHED')
-                        <span class="badge bg-success">SUDAH DILAYANI</span>
+                    @if ($item->stts_satu_sehat == 'FINISHED')
+                        <span class="badge bg-success">SUDAH DIKIRIM</span>
+                    @elseif ($item->stts_satu_sehat == 'WAITING')
+                        <span class="badge bg-warning">BELUM DIKIRIM</span>
                     @else
-                        <span class="badge bg-success">TIDAK DIKETAHUI</span>
+                        <span class="badge bg-danger">TIDAK DIKETAHUI</span>
                     @endif
                 </div>
                 <div class="col-8 text-end">
@@ -101,7 +99,7 @@
                 </div>
                 <div class="col-md-10 col-12 border">
                     <div class="row">
-                        <a href="{{ route('verifikasi/data/pasien/dokter.verifikasiDokter', encrypt($item->id)) }}" class="btn btn-dark btn-md" style="border-radius: 0%"><i class="bx bx-check"></i> Verifikasi</a>
+                        <a href="{{ route('bridging/data/satusehat.post', encrypt($item->id)) }}" class="btn btn-outline-primary btn-md" style="border-radius: 0%"><i class="bx bx-check"></i> Kirim Data</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="list-kunjungan">

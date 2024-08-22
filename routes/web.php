@@ -417,9 +417,9 @@ Route::get('/monitoring/data', [ManagementDataController::class, 'index'])->name
 Route::get('/monitoring/data/edit/{id}', [ManagementDataController::class, 'edit'])->name('monitoring/data.edit');
 Route::get('/verifikasi/data/pasien', [ManagementDataController::class, 'indexVerif'])->name('verifikasi/data/pasien.indexVerif');
 Route::get('/verifikasi/data/pasien/{id}', [ManagementDataController::class, 'showVerif'])->name('verifikasi/data/pasien.showVerif');
+Route::get('/verifikasi/data/pasien/dokter/{id}', [ManagementDataController::class, 'verifikasiDokter'])->name('verifikasi/data/pasien/dokter.verifikasiDokter');
 Route::get('/bridging/data/satusehat', [ManagementDataController::class, 'indexSatuSehat'])->name('bridging/data/satusehat.indexSatuSehat');
-// Route::put('/monitoring/data/hasil/update/{id}', [RadiologiPatientController::class, 'update'])->name('monitoring/data/hasil.update');
-// Route::put('/monitoring/data/validasiHasil/{id}', [RadiologiPatientController::class, 'validasiHasil'])->name('monitoring/data.validasiHasil');
-// Route::get('/monitoring/data/hasil/printAll/{id}', [RadiologiPatientController::class, 'printAll'])->name('monitoring/data/hasil.printAll');
+Route::get('/bridging/data/satusehat/{id}', [ManagementDataController::class, 'showSatuSehat'])->name('bridging/data/satusehat.show');
+Route::get('/bridging/data/satusehat/post/{id}', [ManagementDataController::class, 'postBridging'])->name('bridging/data/satusehat.post');
 
 require __DIR__ . '/auth.php';

@@ -27,7 +27,8 @@ class Queue extends Model
         'no_rujukan',
         'last_diagnostic',
         'created_at',
-        'ttd_verif'
+        'ttd_verif',
+        'stts_satu_sehat'
     ];
 
     public function patient()
@@ -107,5 +108,9 @@ class Queue extends Model
     // billing patient
     public function kasirPatient() {
         return $this->hasOne(KasirPatient::class);
+    }
+    // data satu sehat
+    public function satuSehatPatients() {
+        return $this->hasMany(SatuSehatPatient::class);
     }
 }
