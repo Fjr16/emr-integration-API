@@ -20,7 +20,7 @@ class ReportCashierController extends Controller
         $data = Patient::all();
         return view('pages.laporanKasir.index', [
             'menu' => 'Laporan',
-            'title' => 'Laporan Kasir',
+            'title' => 'Laporan Kunjungan',
             'data' => $data,
         ]);
     }
@@ -56,7 +56,7 @@ class ReportCashierController extends Controller
     {
         $item = Patient::find($id);
         return view('pages.laporanKasir.detail', [
-            "title" => "Laporan Kasir",
+            "title" => "Laporan Kunjungan",
             "menu" => "Laporan",
             "item" => $item,
         ]);
@@ -71,7 +71,7 @@ class ReportCashierController extends Controller
     {
         $item = KasirPatient::find($id);
         return view('pages.laporanKasir.show', [
-            "title" => "Laporan Kasir",
+            "title" => "Laporan Kunjungan",
             "menu" => "Laporan",
             "item" => $item,
         ]);
@@ -79,7 +79,7 @@ class ReportCashierController extends Controller
 
     public function exportExcel($id)
     {
-        return Excel::download(new KasirExport($id), 'riwayat-pembayaran-pasien.xlsx');
+        return Excel::download(new KasirExport($id), 'riwayat-kunjungan-pasien.xlsx');
     }
 
     /**

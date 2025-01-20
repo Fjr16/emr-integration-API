@@ -325,16 +325,16 @@
                             <div>Penggunaan Obat Pasien</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title == 'Laporan Kasir' ? 'active' : '' }}">
+                    <li class="menu-item {{ $title == 'Laporan Kunjungan' ? 'active' : '' }}">
                         <a href="{{ route('laporan/kasir.index') }}" class="menu-link">
-                            <div>Kasir Report</div>
+                            <div>Kunjungan Pasien</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title == 'Laporan Lab Pk' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title == 'Laporan Lab Pk' ? 'active' : '' }}">
                         <a href="{{ route('laporan/lab/patologi/klinik.index') }}" class="menu-link">
                             <div>Lab Patologi Klinik</div>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             {{-- end Report --}}

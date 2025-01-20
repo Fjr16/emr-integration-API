@@ -17,14 +17,15 @@
     {{-- nav tab --}}
     <div class="card">
         <div class="card-header">
-            <h4 class="m-0">Riwayat Pembayaran <span class="
+            <h4 class="m-0">Riwayat Kunjungan <span class="
                 text-primary">{{ $item->name }}</span></h4>
         </div>
         <div class="card-body">
             <table class="table">
                 <thead>
                     <tr class="text-nowrap bg-dark">
-                        <th class="">Tanggal</th>
+                        <th class="">Tgl. Kunjungan</th>
+                        <th class="">No. Rekam Medis</th>
                         <th class="">No Antrian</th>
                         <th class="">Petugas</th>
                         <th class="">status</th>
@@ -34,24 +35,23 @@
                 </thead>
                 <tbody>
                     @foreach ($item->queues as $queue)
-                        @if($queue->rawatJalanPatient)
-                            @if ($queue->rawatJalanPatient->kasirPatient)
-                                @if ($queue->rawatJalanPatient->kasirPatient->status == 'SELESAI')
-                                    <tr>
-                                        <td>{{ $queue->created_at->format('Y/m/d') }}</th>
-                                        <td>{{ $queue->no_antrian ?? '' }}</td>
-                                        <td>{{ $queue->rawatJalanPatient->kasirPatient->user->name ?? '' }}</td>
-                                        <td>{{ $queue->rawatJalanPatient->kasirPatient->status ?? '' }}</td>
-                                        <td>Rp. {{ number_format($queue->rawatJalanPatient->kasirPatient->total ?? '') }}</td>
-                                        <td>
-                                            <a class="btn btn-dark btn-sm"
-                                                href="{{ route('laporan/kasir.show', $queue->rawatJalanPatient->kasirPatient->id ?? '') }}">
-                                                <i class='bx bx-show-alt me-1'></i>
-                                                Show
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endif
+                        @if ($queue->kasirPatient)
+                            @if ($queue->kasirPatient->status == 'FINISHED')
+                                <tr>
+                                    <td>{{ $queue->created_at->format('Y/m/d') }}</th>
+                                    <td>{{ $queue->patient->no_rm ?? '' }}</td>
+                                    <td>{{ $queue->no_antrian ?? '' }}</td>
+                                    <td>{{ $queue->kasirPatient->user->name ?? '' }}</td>
+                                    <td>{{ $queue->kasirPatient->status ?? '' }}</td>
+                                    <td>Rp. {{ number_format($queue->kasirPatient->total ?? '') }}</td>
+                                    <td>
+                                        <a class="btn btn-dark btn-sm"
+                                            href="{{ route('laporan/kasir.show', $queue->kasirPatient->id ?? '') }}">
+                                            <i class='bx bx-show-alt me-1'></i>
+                                            Show
+                                        </a>
+                                    </td>
+                                </tr>
                             @endif
                         @endif
                     @endforeach

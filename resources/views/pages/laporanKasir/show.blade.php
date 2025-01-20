@@ -3,30 +3,38 @@
 @section('content')
 
   <div class="card p-3">
-    <h4 class="m-0 mb-2">Riwayat Pembayaran Kunjungan <span class="
-      text-primary">{{ $item->created_at->format('Y/m/d') }}</span>
-      <a href="{{ route('laporan/kasir.exportExcel', $item->id) }}" class="btn btn-sm btn-success">Export <i class="bx bxs-file-export"></i></a>
-    </h4>
+    <div class="card-header d-flex justify-content-between px-0 py-1">
+      <h4 class="m-0 mb-2">Riwayat Kunjungan
+        <a href="{{ route('laporan/kasir.exportExcel', $item->id) }}" class="btn btn-sm btn-success">Export <i class="bx bxs-file-export"></i></a>
+      </h4>
+      <div class="">
+        <a href="{{ route('laporan/kasir.list', $item->queue->patient->id) }}" class="btn btn-outline-danger btn-sm"><i class="bx bx-left-arrow"></i> Kembali</a>
+      </div>
+    </div>
     <table class="mb-3">
+      <tr>
+        <td style="width: 200px">Tgl. Kunjungan</td>
+        <td>:</td>
+        <td>{{ $item->created_at->format('Y/m/d') }}</td>
+      </tr>
       <tr>
         <td style="width: 200px">Nomor Rekam Medis</td>
         <td>:</td>
-        <td>{{ $item->rawatJalanPatient->queue->patient->no_rm ?? '' }}</td>
+        <td>{{ $item->queue->patient->no_rm ?? '' }}</td>
       </tr>
       <tr>
         <td>Nama Pasien</td>
         <td>:</td>
-        <td>{{ $item->rawatJalanPatient->queue->patient->name ?? ''  }}</td>
+        <td>{{ $item->queue->patient->name ?? ''  }}</td>
       </tr>
       <tr>
-        <td>Total</td>
-        <td>:</td>
-        <td>{{ number_format($item->total ?? '') }}</td>
+        <td><h4>Total Tagihan</h4></td>
+        <td><h4>:</h4></td>
+        <td><h4>Rp. {{ number_format($item->total ?? '-') }}</h4></td>
       </tr>
     </table>
 
-    @can('lihat detail pembayaran')
-    <h6 class="m-0 mb-2">Data Tindakan Pasien</h6>
+    <h5 class="m-0 mb-2 bg-label-dark text-dark fst-italic p-2"><i class="bx bxs-right-arrow"></i> Tindakan Pasien</h6>
     <table class="table mb-3" >
       <thead>
         <tr class="text-nowrap bg-dark">
@@ -36,35 +44,43 @@
         </tr>
       </thead>
       <tbody>
-        @foreach ($item->detailKasirPatients->where('category', 'Action') as $detail)
+        @if ($item->billingDoctorActions->isNotEmpty() && $item->billingDoctorConsultations->isNotEmpty())     
+          @foreach ($item->billingDoctorActions as $detailAction)
+          <tr>
+            <td>{{ $detailAction->nama_tindakan ?? '' }}</td>
+            <td>{{ date('Y/m/d H:i', strtotime($detailAction->tanggal ?? '')) }}</td>
+            <td>Rp. {{ number_format($detailAction->tarif ?? '') }}</td>
+          </tr>
+          @endforeach
+          @foreach ($item->billingDoctorConsultations as $detailConsultation)
+          <tr>
+            <td>Konsul dokter : <span class="fw-bold">{{ $detailConsultation->nama_dokter ?? '' }}</span></td>
+            <td>{{ date('Y/m/d H:i', strtotime($detailConsultation->tanggal ?? '')) }}</td>
+            <td>Rp. {{ number_format($detailConsultation->tarif ?? '') }}</td>
+          </tr>
+          @endforeach
+        @else
         <tr>
-          <td>{{ $detail->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detail->tarif ?? '') }}</td>
+          <td colspan="3" class="text-center fw-bold fst-italic">--- Tidak ada data tindakan pada pasien ---</td>
         </tr>
-        @endforeach
-        @foreach ($item->detailKasirPatients->where('category', 'Konsultasi') as $detail)
-        <tr>
-          <td>{{ $detail->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detail->tarif ?? '') }}</td>
-        </tr>
-        @endforeach
+        @endif
       </tbody>
       <tfoot>
+        @if ($item->billingDoctorActions->isNotEmpty() && $item->billingDoctorConsultations->isNotEmpty())
         <tr>
-          <td colspan="2" class="text-center">Total</td>
+          <td colspan="2" class="text-center fw-bold">Total</td>
           @php
-              $totalAction = $item->detailKasirPatients->where('category', 'Action')->sum('tarif');
-              $totalKonsultasi = $item->detailKasirPatients->where('category', 'Konsultasi')->sum('tarif');
+              $totalAction = $item->billingDoctorActions->sum('tarif');
+              $totalKonsultasi = $item->billingDoctorConsultations->sum('tarif');
               $totalOfBoth = $totalAction + $totalKonsultasi;
           @endphp
-          <td>{{ number_format($totalOfBoth) }}</td>
+          <td class="fw-bold">Rp. {{ number_format($totalOfBoth) }}</td>
         </tr>
+        @endif
       </tfoot>
     </table>
     <hr>
-    <h6 class="m-0 mb-2">Data Pemeriksaan Radiologi Pasien</h6>
+    <h5 class="m-0 mb-2 bg-label-dark text-dark fst-italic p-2"><i class="bx bxs-right-arrow"></i> Pemeriksaan Radiologi Pasien</h6>
     <table class="table mb-3" >
       <thead>
         <tr class="text-nowrap bg-dark">
@@ -74,23 +90,29 @@
         </tr>
       </thead>
       <tbody>
-        @foreach ($item->detailKasirPatients->where('category', 'Pemeriksaan Radiologi') as $detail)
+        @forelse ($item->billingRadiologies as $detailRadio)
         <tr>
-          <td>{{ $detail->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detail->tarif ?? '') }}</td>
+          <td>{{ $detailRadio->kode_tindakan ?? '-' }} / {{ $detailRadio->nama_tindakan ?? '-' }}</td>
+          <td>{{ date('Y/m/d H:i', strtotime($detailRadio->tanggal ?? '')) }}</td>
+          <td>Rp. {{ number_format($detailRadio->tarif ?? '') }}</td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+          <td colspan="3" class="text-center fw-bold fst-italic">--- Tidak ada data pemeriksaan radiologi ---</td>
+        </tr>
+        @endforelse
       </tbody>
       <tfoot>
+        @if ($item->billingRadiologies->isNotEmpty())
         <tr>
-          <td colspan="2" class="text-center">Total</td>
-          <td>{{ number_format($item->detailKasirPatients->where('category', 'Pemeriksaan Radiologi')->sum('tarif')) }}</td>
+          <td colspan="2" class="text-center fw-bold">Total</td>
+          <td class="fw-bold">Rp. {{ number_format($item->billingRadiologies->sum('tarif')) }}</td>
         </tr>
+        @endif
       </tfoot>
     </table>
     <hr>
-    <h6 class="m-0 mb-2">Data Pemeriksaan Laboratorium Patologi Klinik</h6>
+    <h5 class="m-0 mb-2 bg-label-dark text-dark fst-italic p-2"><i class="bx bxs-right-arrow"></i> Pemeriksaan Laboratorium</h6>
     <table class="table mb-3" >
       <thead>
         <tr class="text-nowrap bg-dark">
@@ -100,23 +122,29 @@
         </tr>
       </thead>
       <tbody>
-        @foreach ($item->detailKasirPatients->where('category', 'Pemeriksaan Laboratorium PK') as $detailPk)
+        @forelse ($item->billingLaboratories as $detailLabor)
         <tr>
-          <td>{{ $detailPk->name ?? '' }}</td>
-          <td>{{ date('Y/m/d H:i', strtotime($detailPk->tanggal ?? '')) }}</td>
-          <td>{{ number_format($detailPk->tarif ?? '') }}</td>
+          <td>{{ $detailLabor->kode_tindakan ?? '-' }} / {{ $detailLabor->nama_tindakan ?? '-' }}</td>
+          <td>{{ date('Y/m/d H:i', strtotime($detailLabor->tanggal ?? '')) }}</td>
+          <td>Rp. {{ number_format($detailLabor->tarif ?? '') }}</td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+          <td colspan="3" class="text-center fw-bold fst-italic">--- Tidak ada data pemeriksaan labor ---</td>
+        </tr>
+        @endforelse
       </tbody>
       <tfoot>
+        @if($item->billingLaboratories->isNotEmpty())
         <tr>
-          <td colspan="2" class="text-center">Total</td>
-          <td>{{ number_format($item->detailKasirPatients->where('category', 'Pemeriksaan Laboratorium PK')->sum('tarif')) }}</td>
+          <td colspan="2" class="text-center fw-bold">Total</td>
+          <td class="fw-bold">Rp. {{ number_format($item->billingLaboratories->sum('tarif')) }}</td>
         </tr>
+        @endif
       </tfoot>
     </table>
     <hr>
-    <h6 class="m-0 mb-2">Data Obat Pasien</h6>
+    <h5 class="m-0 mb-2 bg-label-dark text-dark fst-italic p-2"><i class="bx bxs-right-arrow"></i> Obat Pasien</h5>
     <table class="table mb-3" >
       <thead>
         <tr class="text-nowrap bg-dark">
@@ -130,27 +158,32 @@
         @php
             $grandTotalMedicine = 0;
         @endphp
-        @foreach ($item->detailKasirPatients->where('category', 'Medicine') as $detailMedicine)
+        @forelse ($item->billingOfMedicineFees as $detailMedicine)
         <tr>
-          <td>{{ $detailMedicine->name ?? '' }}</td>
-          <td>{{ number_format($detailMedicine->jumlah ?? '') }}</td>
-          <td>{{ number_format($detailMedicine->tarif ?? '') }}</td>
+          <td>{{ $detailMedicine->nama_obat ?? '' }}</td>
+          <td>{{ number_format($detailMedicine->jumlah ?? '') }} <span class="fw-bold">{{ $detailMedicine->satuan_obat ?? '-' }}</span></td>
+          <td>Rp. {{ number_format($detailMedicine->tarif ?? '') }}</td>
           @php
               $total_harga = $detailMedicine->jumlah * $detailMedicine->tarif;
               $grandTotalMedicine += $total_harga;
           @endphp
-          <td>{{ number_format($total_harga ?? '') }}</td>
+          <td>Rp. {{ number_format($total_harga ?? '') }}</td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+          <td colspan="4" class="text-center fw-bold fst-italic">--- Tidak ada data pembelian obat ---</td>
+        </tr>
+        @endforelse
       </tbody>
       <tfoot>
+        @if ($item->billingOfMedicineFees->isNotEmpty())
         <tr>
-          <td colspan="3" class="text-center">Total</td>
-          <td>{{ number_format($grandTotalMedicine ?? '') }}</td>
+          <td colspan="3" class="text-center fw-bold">Total</td>
+          <td class="fw-bold">Rp. {{ number_format($grandTotalMedicine ?? '') }}</td>
         </tr>
+        @endif
       </tfoot>
     </table>
-    @endcan
   </div>
 
 @endsection

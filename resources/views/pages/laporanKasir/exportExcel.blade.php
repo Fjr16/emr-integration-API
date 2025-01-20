@@ -2,20 +2,19 @@
   <tbody>
       <tr>
           <td colspan="4">
-              Riwayat Pembayaran Pasien
+              Riwayat Kunjungan Pasien
           </td>
       </tr>
       <tr></tr>
       <tr>
           <td>Nama / No rm : </td>
-          <td>{{ $item->rawatJalanPatient->queue->patient->name ?? '' }} / {{ $item->rawatJalanPatient->queue->patient->no_rm ?? '' }}</td>
+          <td>{{ $item->queue->patient->name ?? '' }} / {{ $item->queue->patient->no_rm ?? '' }}</td>
           <td>Tanggal Kunjungan : </td>
-          <td>{{ $item->rawatJalanPatient->queue->tgl_antrian ?? '' }}</td>
-          
+          <td>{{ $item->queue->tgl_antrian ?? '' }}</td>
       </tr>
       <tr>
           <td>No Antrian : </td>
-          <td>{{ $item->rawatJalanPatient->queue->no_antrian ?? '' }}</td>
+          <td>{{ $item->queue->no_antrian ?? '' }}</td>
           <td>Petugas : </td>
           <td>{!! $item->user->name ?? '' !!}</td>
       </tr>
@@ -27,7 +26,7 @@
     <tr>
       <td colspan="4">
         <b>
-          Data Tindakan Pasien
+          Tindakan Pasien
         </b>
       </td>
     </tr>
@@ -38,16 +37,16 @@
     </tr>
   </thead>
   <tbody>
-    @foreach ($item->detailKasirPatients->where('category', 'Action') as $detail)
+    @foreach ($item->billingDoctorActions as $detail)
     <tr>
-      <td colspan="2">{{ $detail->name ?? '' }}</td>
+      <td colspan="2">{{ $detail->nama_tindakan ?? '' }}</td>
       <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
       <td>{{ number_format($detail->tarif ?? '') }}</td>
     </tr>
     @endforeach
-    @foreach ($item->detailKasirPatients->where('category', 'Konsultasi') as $detail)
+    @foreach ($item->billingDoctorConsultations as $detail)
     <tr>
-      <td colspan="2">{{ $detail->name ?? '' }}</td>
+      <td colspan="2">Konsul Dokter : {{ $detail->nama_dokter ?? '' }}</td>
       <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
       <td>{{ number_format($detail->tarif ?? '') }}</td>
     </tr>
@@ -57,8 +56,8 @@
     <tr>
       <td colspan="3" class="text-center"><b></b> Total</td>
       @php
-          $totalAction = $item->detailKasirPatients->where('category', 'Action')->sum('tarif');
-          $totalKonsultasi = $item->detailKasirPatients->where('category', 'Konsultasi')->sum('tarif');
+          $totalAction = $item->billingDoctorActions->sum('tarif');
+          $totalKonsultasi = $item->billingDoctorConsultations->sum('tarif');
           $totalOfBoth = $totalAction + $totalKonsultasi;
       @endphp
       <td><b></b> {{ number_format($totalOfBoth) }}</td>
@@ -80,9 +79,9 @@
     </tr>
   </thead>
   <tbody>
-    @foreach ($item->detailKasirPatients->where('category', 'Pemeriksaan Radiologi') as $detail)
+    @foreach ($item->billingRadiologies as $detail)
     <tr>
-      <td colspan="2">{{ $detail->name ?? '' }}</td>
+      <td colspan="2">{{ $detail->kode_tindakan ?? '-' }} / {{ $detail->nama_tindakan ?? '-' }}</td>
       <td>{{ date('Y/m/d H:i', strtotime($detail->tanggal ?? '')) }}</td>
       <td>{{ number_format($detail->tarif ?? '') }}</td>
     </tr>
@@ -91,7 +90,7 @@
   <tfoot>
     <tr>
       <td colspan="3" class="text-center"><b></b>Total</td>
-      <td><b></b>{{ number_format($item->detailKasirPatients->where('category', 'Pemeriksaan Radiologi')->sum('tarif')) }}</td>
+      <td><b></b>{{ number_format($item->billingRadiologies->sum('tarif')) }}</td>
     </tr>
   </tfoot>
   {{-- labor PK --}}
@@ -99,20 +98,20 @@
     <tr>
       <td colspan="4">
         <b>
-          Data Pemeriksaan Laboratorium Patologi Klinik
+          Pemeriksaan Laboratorium
         </b>
       </td>
     </tr>
     <tr class="text-nowrap bg-dark">
-      <th colspan="2"><b></b>Pemeriksaan Labor PK</th>
+      <th colspan="2"><b></b>Pemeriksaan Labor</th>
       <th><b></b>Tanggal / Jam</th>
       <th><b></b>Tarif</th>
     </tr>
   </thead>
   <tbody>
-    @foreach ($item->detailKasirPatients->where('category', 'Pemeriksaan Laboratorium PK') as $detailPk)
+    @foreach ($item->billingLaboratories as $detailPk)
     <tr>
-      <td colspan="2">{{ $detailPk->name ?? '' }}</td>
+      <td>{{ $detailPk->kode_tindakan ?? '-' }} / {{ $detailPk->nama_tindakan ?? '-' }}</td>
       <td>{{ date('Y/m/d H:i', strtotime($detailPk->tanggal ?? '')) }}</td>
       <td>{{ number_format($detailPk->tarif ?? '') }}</td>
     </tr>
@@ -125,7 +124,7 @@
           Total
         </b>
       </td>
-      <td><b></b>{{ number_format($item->detailKasirPatients->where('category', 'Pemeriksaan Laboratorium PK')->sum('tarif')) }}</td>
+      <td><b></b>{{ number_format($item->billingLaboratories->sum('tarif')) }}</td>
     </tr>
   </tfoot>
   {{-- Pengambilan Obat --}}
@@ -133,7 +132,7 @@
     <tr>
       <td colspan="4">
         <b>
-          Data Obat Pasien
+          Obat Pasien
         </b>
       </td>
     </tr>
@@ -148,10 +147,10 @@
     @php
         $grandTotalMedicine = 0;
     @endphp
-    @foreach ($item->detailKasirPatients->where('category', 'Medicine') as $detailMedicine)
+    @foreach ($item->billingOfMedicineFees as $detailMedicine)
     <tr>
-      <td>{{ $detailMedicine->name ?? '' }}</td>
-      <td>{{ number_format($detailMedicine->jumlah ?? '') }}</td>
+      <td>{{ $detailMedicine->nama_obat ?? '-' }}</td>
+      <td>{{ number_format($detailMedicine->jumlah ?? '') }} &nbsp; &nbsp; <span class="fw-bold"><b> {{ $detailMedicine->satuan_obat ?? '-' }}</b></span></td>
       <td>{{ number_format($detailMedicine->tarif ?? '') }}</td>
       @php
           $total_harga = $detailMedicine->jumlah * $detailMedicine->tarif;
@@ -165,6 +164,10 @@
     <tr>
       <td colspan="3" class="text-center"><b></b>Total</td>
       <td><b></b>{{ number_format($grandTotalMedicine ?? '') }}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="text-center"><b></b>Total Akhir</td>
+      <td><b></b>Rp. {{ number_format($item->total ?? '-') }}</td>
     </tr>
   </tfoot>
 </table>
