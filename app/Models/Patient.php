@@ -111,4 +111,7 @@ class Patient extends Model
     public function perawatInitialAsesments() {
         return $this->hasMany(PerawatInitialAsesment::class);
     }
+    public function rajalFarmasiPatients() {
+        return $this->hasMany(RajalFarmasiPatient::class);
+    }
 }

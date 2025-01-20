@@ -39,8 +39,8 @@
         @foreach ($data as $invoice)
           <tr>
             <td>{{ $invoice->created_at->format('Y/m/d') ?? '' }}</td>
-            <td>{{ $invoice->rajalFarmasiPatient->rawatJalanPatient->queue->no_antrian ?? '' }}</td>
-            <td>{{ $invoice->rajalFarmasiPatient->rawatJalanPatient->queue->patientCategory->name ?? '' }}</td>
+            <td>{{ $invoice->queue->no_antrian ?? '' }}</td>
+            <td>{{ $invoice->queue->patientCategory->name ?? '' }}</td>
             <td>
               <table class="mx-auto">
                 @foreach ($invoice->rajalFarmasiObatDetails as $detail)
@@ -90,7 +90,7 @@
               <table class="mx-auto">
                 @foreach ($invoice->rajalFarmasiObatDetails as $detail)
                   <tr>
-                    <td>{{ number_format($detail->total_harga ?? '') }}</td>
+                    <td>{{ number_format($detail->sub_total ?? '') }}</td>
                   </tr>
                 @endforeach
               </table>

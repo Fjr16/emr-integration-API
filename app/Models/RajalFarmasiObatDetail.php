@@ -35,4 +35,7 @@ class RajalFarmasiObatDetail extends Model
     public function unit(){
         return $this->belongsTo(Unit::class);
     }
+    public function patientCategory(){
+        return $this->belongsTo(PatientCategory::class, 'ditanggung_asuransi');
+    }
 }

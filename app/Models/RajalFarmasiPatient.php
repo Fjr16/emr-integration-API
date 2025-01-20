@@ -25,6 +25,9 @@ class RajalFarmasiPatient extends Model
     public function queue(){
         return $this->belongsTo(Queue::class);
     }
+    public function patient(){
+        return $this->belongsTo(Patient::class);
+    }
     public function rajalFarmasiObatDetails(){
         return $this->hasMany(RajalFarmasiObatDetail::class);
     }

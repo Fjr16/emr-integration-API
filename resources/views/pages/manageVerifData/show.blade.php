@@ -231,7 +231,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if ($item->diagnosticProcedurePatient->diagnosticSecondary->isEmpty())
+                                            @if (!$item->diagnosticProcedurePatient || $item->diagnosticProcedurePatient->diagnosticSecondary->isEmpty())
                                                 <td colspan="2" class="bg-info text-white"><i class="bx bx-x"></i> Tidak Ditemukan</td>
                                             @else
                                                 @foreach ($item->diagnosticProcedurePatient->diagnosticSecondary as $diagSekunder)     

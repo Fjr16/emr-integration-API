@@ -41,9 +41,9 @@
       </tr>
       <tr>
         <td>No antrian : </td>
-        <td colspan="3">{{ $data[0]->rajalFarmasiPatient->rawatJalanPatient->queue->no_antrian ?? '' }}</td>
+        <td colspan="3">{{ $data[0]->queue->no_antrian ?? '' }}</td>
         <td>Tanggungan : </td>
-        <td colspan="2">{{ $data[0]->rajalFarmasiPatient->rawatJalanPatient->queue->patientCategory->name ?? '' }}</td>
+        <td colspan="2">{{ $data[0]->queue->patientCategory->name ?? '' }}</td>
       </tr>
   </tbody>
 </table>
@@ -73,7 +73,7 @@
               <td>{{ $detail->medicineStok->no_batch ?? '' }}</td>
               <td>{{ number_format($detail->harga_satuan ?? '' ) }}</td>
               <td>{{ $detail->jumlah ?? '' }}</td>
-              <td>{{ number_format($detail->total_harga ?? '') }}</td>
+              <td>{{ number_format($detail->sub_total ?? '') }}</td>
               <td class="text-center">{{ number_format($invoice->grand_total ?? '') }}</td>
               @php
               $total_all += $invoice->grand_total;

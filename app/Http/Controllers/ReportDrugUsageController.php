@@ -33,7 +33,8 @@ class ReportDrugUsageController extends Controller
     public function show($id)
     {
         $item = Patient::find($id);
-        $data = $item->rajalFarmasiObatInvoices;    //diganti menjadi rajalFarmasiPatient
+        $data = $item->rajalFarmasiPatients;    //diganti menjadi rajalFarmasiPatient
+        // dd($data);
         return view('pages.laporanAkhirObat.show', [
             'menu' => 'Laporan',
             'title' => 'Laporan Penggunaan Obat',

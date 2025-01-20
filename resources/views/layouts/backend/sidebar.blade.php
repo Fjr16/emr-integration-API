@@ -311,7 +311,7 @@
 
 
             {{-- Report --}}
-            {{-- <li class="menu-header small text-uppercase">
+            <li class="menu-header small text-uppercase">
                 <span class="menu-header-text text-white">Report</span>
             </li>
             <li class="menu-item {{ $menu == 'Laporan' ? 'open' : '' }}">
@@ -336,7 +336,7 @@
                         </a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
             {{-- end Report --}}
         {{-- @endrole --}}
     </ul>
